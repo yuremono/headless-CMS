@@ -1,0 +1,67 @@
+lib/http.ts
+  s_8002476f24f4e9::t_0275694f4a4e60 5-9
+lib/content/service.test.ts
+  s_8002476f24f4e9::t_55ce70c7554b23 3-7
+app/api/sites/[siteId]/content/[contentType]/[id]/route.test.ts
+  s_8002476f24f4e9::t_a51ac2aa987cbc 102
+  s_8002476f24f4e9::t_21ded51d20ad4d 4,9
+lib/content/delivery-tags.test.ts
+  s_8002476f24f4e9::t_a0e91bf04eef14 1-70
+lib/content/delivery-tags.ts
+  s_8002476f24f4e9::t_8935f448a2f575 1-64
+lib/content/store.ts
+  s_3137e3e02c8603::t_d1c417d2137448 293
+  s_3137e3e02c8603::t_a48c45308e8e76 412
+  s_3137e3e02c8603::t_2b4840c9c0a70b 370
+  s_8002476f24f4e9::t_ec8c6f6c810b20 4
+  s_8002476f24f4e9::t_a643c41c67519e 294,309-313,322-327
+  s_8002476f24f4e9::t_f980af8e9442bc 371
+  s_8002476f24f4e9::t_5060619f5bfae9 413
+  s_3137e3e02c8603::t_13100560d26397 22
+  s_3137e3e02c8603::t_21ba89a3b5746e 25-30
+  s_3137e3e02c8603::t_1ecaad6ceb8903 210
+  s_3137e3e02c8603::t_c52e952ef7ab45 17-21,23-24
+  s_8002476f24f4e9::t_532037be093cdf 31-39
+  s_8002476f24f4e9::t_723d79fae1c4cd 232-234
+  s_3137e3e02c8603::t_7bb706b7ae6ab9 265
+app/api/sites/[siteId]/content/[contentType]/route.test.ts
+  s_8002476f24f4e9::t_4a2c07130a1780 83
+  s_8002476f24f4e9::t_cdf742aba090c3 4,9
+lib/http.test.ts
+  s_8002476f24f4e9::t_2886ae4ebed7a2 84-85,88-89
+  s_8002476f24f4e9::t_de6a13f3f1d2c0 97
+lib/content/delivery.ts
+  s_8002476f24f4e9::t_0b80ab126fb409 49-64,74,76-97
+  s_3137e3e02c8603::t_6fb5285a25d70a 48,75
+  s_8002476f24f4e9::t_0f69f5c05b4c51 1,4-8,10-12
+  s_3137e3e02c8603::t_f565aaab28928c 2-3,9,13-47,65-73,98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "13709fa1a820491c983066bf8404d00715acf21a",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_3137e3e02c8603": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "8a393429-09c0-4794-8744-5d5fd5a8cd69",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_8002476f24f4e9": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "5e36d896-9e3f-4613-8719-adaced8535a7",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
