@@ -168,10 +168,22 @@ reference / array / object / sectionArray
 | 項目 | 規約 |
 |------|------|
 | 一覧 | ページネーション（limit / offset） |
-| キャッシュ | 公開APIは SSG / ISR 対応ヘッダを返せる構造 |
+| キャッシュ | 配信レスポンスは `no-store`（毎リクエストで APIキー認証を担保）。負荷対策は Next.js Data Cache（`unstable_cache` + タグ）で DB 読み取りを保護し、公開/更新/削除/公開取消/作成時に `revalidateTag(tag, { expire: 0 })` で即時失効 → フロントへ CDN の TTL 待ちなしでほぼ即時反映 |
 | エラー | `{ error: string, code: string }` |
 | 型定義 | `lib/schemas/` または `lib/types/` に集約 |
 | Prisma | APIレスポンス型と混同しない。必要なら変換レイヤー |
+
+### 配信キャッシュ戦略（オンデマンド失効）
+
+CDN の TTL（`s-maxage`）依存をやめ、**Data Cache + タグ失効**でほぼ即時反映と負荷抑制を両立する。
+
+| レイヤー | 役割 |
+|----------|------|
+| HTTP `Cache-Control` | 公開配信は `no-store`。CDN ヒットによる APIキー認証バイパスを防ぎ、毎回認証を通す |
+| Next.js Data Cache | `lib/content/delivery.ts` が公開読み取りを `unstable_cache`（item/list タグ・安全網 TTL 1h）でラップし DB を保護。ドラフト/プレビューは非キャッシュ |
+| 失効 | `lib/content/store.ts` の各ミューテーション → `lib/content/delivery-tags.ts` の `revalidateDeliveryContent` が `revalidateTag(tag, { expire: 0 })` を発行。Vercel 上では Data Cache と CDN を約 300ms で失効 |
+
+タグは正準サイト ID で正規化（スラッグ/ID どちらでも一致）。これにより公開保存後の次リクエストで最新が返り、CDN の TTL 待ち（旧仕様で最大 5 分）が解消される。
 
 ---
 

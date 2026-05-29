@@ -44,7 +44,7 @@ Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS �
 | `lib/db/` | Prisma クライアント・DB操作 |
 | `lib/auth/` | 認証・セッション・APIキー検証 |
 | `lib/admin/` | 管理画面 RSC 用 DB ローダー（`loader.ts`） |
-| `lib/content/` | コンテンツ store / service / mappers / types |
+| `lib/content/` | コンテンツ store / service / delivery / mappers / types。配信キャッシュ失効は `delivery-tags.ts`（`revalidateTag`）+ `delivery.ts`（`unstable_cache`） |
 | `lib/schemas/` | コンテンツモデル・フィールド型・バリデーション |
 | `lib/sanitize/` | richText HTML サニタイズ（`data_json` 向け） |
 | `lib/preview/` | プレビュー URL・トークン解決 |
@@ -71,7 +71,7 @@ Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS �
 | **Phase 1** | 完了 — Prisma（7テーブル）、`content-types/` 3種、seed、配信/管理 API、APIキー、簡易ログイン |
 | **Phase 2 MVP** | 完了 — SectionEditor、SEO UI、画像アップロード、メディア、プレビューリンク、`examples/preview/`、duplicate/unpublish、richText サニタイズ |
 | Next.js | App Router（管理画面 + API Route）、`npm run build` 成功 |
-| テスト | Vitest **236 件**（35 ファイル）。カバレッジ対象（`lib/**` + `app/api/**`）は **約 88%**（目標 80% 達成）。UI / E2E は対象外 |
+| テスト | Vitest **391 件**（65 ファイル）。カバレッジ対象は `lib/**` + `app/api/**`（目標 80% 維持）。UI / E2E は対象外 |
 | 未着手（Phase 3+） | 4ロール権限、本番認証（Supabase/Auth.js）、R2 本番運用、MCP/AI UI |
 | プロトタイプ目標 | 1サイト / 1ユーザー / 3モデル（topPage, page, news）/ セクション編集 / 公開API / プレビューAPI — **成立済み** |
 
