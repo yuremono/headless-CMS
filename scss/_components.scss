@@ -1,0 +1,95 @@
+// コンポーネント同名の PascalCase カスタムクラスを @apply で集約する。
+// 例:
+// .SectionEditor {
+//   @apply flex flex-col gap-4 p-6 bg-background rounded-lg;
+// }
+
+.AdminLayout {
+  @apply min-h-screen;
+}
+
+.AdminMain {
+  @apply min-w-0;
+}
+
+.AdminPageHeader {
+  @apply backdrop-blur;
+}
+
+.AdminCard {
+  @apply rounded-3xl border border-white/10 bg-white/5;
+}
+
+.AdminStatGrid {
+  @apply gap-4;
+}
+
+.ContentForm,
+.ContentList,
+.ContentTypeList,
+.DashboardOverview,
+.LoginForm,
+.SiteCreateForm {
+  @apply text-slate-100;
+}
+
+.SectionEditor {
+  @apply rounded-2xl border border-white/10 bg-slate-950/40 p-4;
+}
+
+.SectionEditor_item {
+  @apply overflow-hidden;
+}
+
+.SectionEditor_item_is_dragging {
+  @apply opacity-50;
+}
+
+.SectionEditor_item_drop_target {
+  @apply border-sky-400/60 ring-2 ring-sky-400/30;
+}
+
+.SectionEditor_dragHandle {
+  @apply cursor-grab rounded-lg border border-white/10 px-2 py-1 text-xs leading-none text-slate-400 transition hover:bg-white/5 active:cursor-grabbing;
+}
+
+.SectionEditor_itemHeader {
+  @apply bg-slate-950/30;
+}
+
+.SectionEditor_body {
+  @apply bg-slate-950/20;
+}
+
+.SectionFieldForm {
+  @apply text-slate-100;
+}
+
+.SectionArrayItemEditor_item {
+  @apply bg-slate-950/30;
+}
+
+.SeoFields {
+  @apply overflow-hidden rounded-2xl border border-white/10 bg-slate-950/40;
+}
+
+.SeoFields_header {
+  @apply bg-slate-950/30 px-4 py-3;
+}
+
+.SeoFields_body {
+  @apply border-t border-white/10 px-4 py-4;
+}
+
+.ImageFieldInput {
+  @apply text-slate-100;
+}
+
+.MediaLibrary,
+.AssetGrid {
+  @apply text-slate-100;
+}
+
+.FieldRenderer {
+  @apply text-slate-100;
+}

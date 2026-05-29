@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SiteMemberRole {
+  owner
+  admin
+  editor
+  viewer
+}
+
+enum ApiKeyKind {
+  public
+  admin
+}
+
+enum ContentTypeKind {
+  single
+  collection
+}
+
+enum ContentStatus {
+  draft
+  published
+  unpublished
+}
+
+model User {
+  id              String       @id @default(cuid())
+  name            String?
+  email           String?      @unique
+  emailVerified   DateTime?    @map("email_verified")
+  image           String?
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  siteMembers     SiteMember[]
+  createdContents Content[]    @relation("ContentCreatedBy")
+  updatedContents Content[]    @relation("ContentUpdatedBy")
+  assets          Asset[]      @relation("AssetCreatedBy")
+
+  @@map("users")
+}
+
+model Site {
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  members       SiteMember[]
+  apiKeys       ApiKey[]
+  contentModels ContentModel[]
+  contents      Content[]
+  assets        Asset[]
+
+  @@map("sites")
+}
+
+model SiteMember {
+  id        String        @id @default(cuid())
+  siteId    String        @map("site_id")
+  userId    String        @map("user_id")
+  role      SiteMemberRole @default(editor)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  site      Site          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([siteId, userId])
+  @@index([userId])
+  @@map("site_members")
+}
+
+model ApiKey {
+  id         String     @id @default(cuid())
+  siteId     String     @map("site_id")
+  name       String
+  kind       ApiKeyKind
+  prefix     String     @unique
+  keyHash    String     @map("key_hash")
+  lastUsedAt DateTime?  @map("last_used_at")
+  expiresAt  DateTime?  @map("expires_at")
+  revokedAt  DateTime?  @map("revoked_at")
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+  site       Site       @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, kind])
+  @@map("api_keys")
+}
+
+model ContentModel {
+  id         String   @id @default(cuid())
+  siteId     String   @map("site_id")
+  name       String
+  apiName    String   @map("api_name")
+  type       ContentTypeKind
+  schemaJson Json     @map("schema_json")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  site       Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  contents   Content[]
+
+  @@unique([siteId, apiName])
+  @@index([siteId, type])
+  @@map("content_models")
+}
+
+model Content {
+  id         String        @id @default(cuid())
+  siteId     String        @map("site_id")
+  modelId    String        @map("model_id")
+  slug       String?
+  title      String
+  status     ContentStatus @default(draft)
+  dataJson   Json          @map("data_json")
+  createdBy  String?       @map("created_by")
+  updatedBy  String?       @map("updated_by")
+  publishedAt DateTime?    @map("published_at")
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+  site       Site          @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  model      ContentModel  @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  creator    User?         @relation("ContentCreatedBy", fields: [createdBy], references: [id], onDelete: SetNull)
+  updater    User?         @relation("ContentUpdatedBy", fields: [updatedBy], references: [id], onDelete: SetNull)
+
+  @@index([siteId, modelId])
+  @@index([siteId, status])
+  @@index([modelId, slug])
+  @@map("contents")
+}
+
+model Asset {
+  id        String   @id @default(cuid())
+  siteId    String   @map("site_id")
+  url       String
+  filename  String
+  mimeType  String   @map("mime_type")
+  size      Int
+  width     Int?
+  height    Int?
+  alt       String?
+  createdBy String?  @map("created_by")
+  createdAt DateTime  @default(now()) @map("created_at")
+  site      Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  creator   User?    @relation("AssetCreatedBy", fields: [createdBy], references: [id], onDelete: SetNull)
+
+  @@index([siteId])
+  @@map("assets")
+}

@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;800&display=swap");
+
+html.Donuts {
+        --wid: 85%;
+        --logoW: calc(100% - var(--wid));
+        --Eng: var(--Ship);
+        ::-webkit-scrollbar{background-color: transparent;width: 0;height: 0;}
+}
+
+.CanvasEffect {
+        position: relative;
+        display: inline-block;
+        overflow: visible;
+        color: var(--BK70);
+        line-height: 1;
+}
+
+// .CanvasEffect[data-canvas-effect-bound="1"] {
+//         color: var(--WH);
+// }
+
+.CanvasEffectCanvas {
+        position: absolute;
+        pointer-events: none;
+        max-width: unset;
+        z-index: -1;
+
+}
+// html.Donuts {
+
+
+        
+        // ::-webkit-scrollbar{background-color: transparent;width: 0px;height: 0;}
+        
+
+
+            
+
+
+
+
+        
+
+// }

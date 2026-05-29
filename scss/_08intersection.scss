@@ -1,0 +1,221 @@
+@use "mixin"as *;
+
+
+
+// .Jsletter{//文字分割用
+//     @for $i from 1 through 60 {
+// 		&.show >*>*:nth-child(#{$i}){
+//             transition-delay: #{$i*0.05 + 0.05}s;
+//         }
+// 	}
+// }
+:root {
+        --first-delay: 1s;
+        --letter-delay: 0.025s;
+        --phrase-delay: 0.15s;
+}
+
+.JsLetter {
+
+        >span {
+                display: inline-block;
+                opacity: 0;
+                rotate: none;
+                transition: 0s;
+        }
+
+        &.show>span {
+                opacity: 1;
+        }
+}
+
+[class*=Js],
+[class*=JsCh]>* {
+
+        //リスト系のTRディレイ
+        @for $i from 1 through 9 {
+                &.show:nth-child(#{$i}) {
+                        transition-delay: #{$i*0.2 - 0.2}s;
+
+                        &:is(main>*, form>*) {
+                                transition-delay: 0s;
+                        }
+                }
+        }
+}
+
+.Js {
+
+        &Hide {
+                filter: blur(var(--jsBlur));
+                opacity: 0;
+                transition: var(--trt);
+
+                &.show {
+                        opacity: 1;
+                        filter: unset;
+                }
+        }
+
+        &CpL,
+        &CpR {
+                transition: var(--trt);
+                opacity: 0.1;
+
+                &.show {
+                        translate: none;
+                        opacity: unset;
+                        filter: unset;
+                }
+        }
+
+        &Scale {
+                opacity: 0;
+                transition: scale 1.8s, opacity 1.2s .4s !important;
+                scale: .8;
+
+                &.show {
+                        opacity: 1;
+                        scale: 1;
+                }
+        }
+
+        &Left,
+        &ChL>*,
+        &ChLR>:nth-child(odd) {
+                translate: calc(var(--transX)*-1) 0;
+        }
+
+        &Right,
+        &ChR>*,
+        &ChLR>:nth-child(even) {
+                translate: var(--transX) 0;
+        }
+
+        &Bottom,
+        &ChB>* {
+                translate: 0 var(--transY);
+        }
+
+        &Top,
+        &ChT>* {
+                translate: 0 calc(var(--transY)*-0.5);
+        }
+}
+
+.Js {
+        //show上書き
+        &Left,
+        &Right,
+        &Top,
+        &Bottom,
+        &ChB>*,
+        &ChL>*,
+        &ChR>*,
+        &ChT>*,
+        &ChLR>* // &artB article>*,&artL article>*,&artR article>*
+
+                {
+                transition: var(--trt);
+                opacity: 0;
+
+                // filter: blur(var(--jsBlur)) ;
+                &.show {
+                        opacity: 1;
+                        translate: unset;
+                        filter: unset;
+                }
+        }
+}
+
+.JsCpL {
+        clip-path: inset(0 90% 0 0);
+}
+
+.JsCpR {
+        clip-path: inset(0 0 0 90%);
+}
+
+.JsCpT {
+        clip-path: inset(0 0 90% 0);
+}
+
+.JsCpB {
+        clip-path: inset(90% 0 0 0);
+}
+
+.JsCpL,
+.JsCpR,
+.JsCpT,
+.JsCpB {
+        transition: var(--trt);
+        opacity: 0;
+
+        &.show {
+                opacity: 1;
+                clip-path: inset(0);
+        }
+}
+
+.BudouxScroll {
+        --BudouxScrollMin: 0.3;
+        --BudouxScrollTrigger: 0.68;
+        --BudouxScrollRange: 1;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+}
+
+.BudouxScrollPhrase {
+        display: inline-block;
+        opacity: var(--BudouxScrollMin);
+        transition: none;
+        vertical-align: baseline;
+}
+
+.BudouxShow {
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+}
+
+.BudouxShowPhrase {
+        display: inline-block;
+        opacity: 0;
+        transition-duration: 0s;
+        vertical-align: baseline;
+}
+
+.BudouxShow.show .BudouxShowPhrase {
+        opacity: 1;
+}
+
+
+
+// .JsbgFix{
+//     z-index: 1;
+//     display: flex;
+//     flex-direction: column;
+//     padding-inline: var(--inline);
+//     >*{margin-inline: auto;position: relative;
+//         max-width: unset;
+//     }
+//     transition: 1s;
+//     &:has(+.JsbgFix.show){
+//         opacity: 0;
+//     } 
+//     .bgFix{
+//         position: fixed;
+//         opacity: 0;pointer-events: none;
+//     }
+//     &.show .bgFix{
+//         opacity: 1;
+//     }
+//     .bgFix {
+//         margin-Top: unset;
+//         background: no-repeat center / cover;
+//         +*{margin-Top: unset;}
+
+//         @media (max-width : 960px){
+//             background: no-repeat 0 0 /cover;
+//         }
+//     }
+// }

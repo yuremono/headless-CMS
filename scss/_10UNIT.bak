@@ -1,0 +1,1160 @@
+@use "mixin"as *;
+
+
+// ********** ヒーロー (.Hero) **********
+:where(.Hero) {
+        display: grid;
+
+        >* {
+                grid-area: 1/1;
+                z-index: 1;
+        }
+
+        :where(.back) {
+                width: 100%;
+
+                >img {
+                        width: 100%;
+                        object-fit: cover;
+
+                        @include max-md {
+                                aspect-ratio: 1;
+                        }
+                }
+        }
+
+        .item {
+                margin-top: unset;
+                align-content: center;
+                padding-block: var(--PX);
+                padding-inline: var(--into);
+        }
+
+        // 削除禁止！！
+        @include max-sm {}
+
+        @include max-xs {}
+}
+
+// ********** カードシリーズ (.Cards) **********
+:where(.Cards) {
+        // --gap , --itemW
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--gap);
+
+
+        // --- 1. アイテム基本設定 (デフォルト: 1列 / Flex) ---
+        .item {
+                width: var(--itemW);
+                // display: flex;
+                // flex-direction: column;
+                margin-top: unset;
+
+                img {
+                        width: 100%;
+                }
+
+        }
+
+        // --- 2. モディファイア: レイヤー重ね合わせ (IsLayer) ---
+        &.IsLayer {
+                .item {
+                        display: grid;
+
+                        >* {
+                                grid-area: 1/1;
+                                z-index: 1;
+                        }
+
+                        figure {
+                                width: 100%;
+                                height: 100%;
+                                margin: 0;
+
+                                img {
+                                        height: 100%;
+                                        object-fit: cover;
+                                }
+                        }
+
+                }
+        }
+
+        &.IsGrow {
+                .item {
+                        flex: 1;
+                        width: auto;
+                }
+        }
+
+        // 固定幅
+        &.IsFix {
+                --itemW: 240px;
+                justify-content: center;
+
+                .item {
+                        width: var(--itemW);
+                }
+        }
+
+        &.IsIcon {
+                --iconW: 7.5em;
+
+                @include max-md {
+                        --iconW: 5em;
+                }
+
+                figure {
+                        min-height: var(--iconW);
+                        align-content: center;
+                }
+
+                svg,
+                img {
+                        max-width: var(--iconW);
+                        margin: auto;
+                }
+        }
+
+        &.IsRow {
+                .item {
+                        flex-direction: row;
+
+                        >div {
+                                flex: 1;
+                        }
+                }
+
+                figure {
+                        width: var(--imgW);
+                }
+
+                @include max-md {
+                        .box {
+                                flex-basis: 100%;
+                        }
+                }
+        }
+
+        &.IsShift {
+                --shift: var(--MY5);
+                --shift2: calc(var(--shift)*2);
+                --Nshift: calc(var(--shift)*-1);
+                --Nshift2: calc(var(--shift)*-2);
+
+                .item {
+                        &:nth-child(even) {
+                                margin-block: var(--shift) var(--Nshift);
+                        }
+
+                        &:last-child {
+                                margin-bottom: unset;
+                        }
+
+                        @include max-md {
+                                &:nth-child(even) {
+                                        margin-block: unset;
+                                }
+                        }
+                }
+
+        }
+
+        // デフォルト（PC）: 指定カラム数
+        @for $i from 1 through 6 {
+                &.col#{$i} {
+                        --itemW: calc((100% - (var(--gap) * #{$i - 1})) / #{$i});
+                }
+        }
+
+        @include max-lg {
+                &:is(.bp-lg)>.item {
+                        width: calc(50% - var(--gap)/2);
+                        flex: unset;
+                }
+        }
+        @include max-md {
+                &:not(.bp-sm)>.item {
+                        width: calc(50% - var(--gap)/2);
+                        flex: unset;
+                }
+        }
+        @include max-sm {
+
+                //     ！！！！デフォsmで100%に
+                &:not(.bp-sm)>.item {
+                        width: 100%;
+                        flex: unset;
+                }
+        }
+
+        @include max-xs {
+
+                // 最小状態 (max-xs): 1列
+                &:not(.min2)>.item {
+                        width: 100%;
+                }
+        }
+
+}
+
+:is(.card3, .card2, .card4, .card5, .cardflex, .cardfix) {
+
+        //追加の可能性があるModifierのストック
+        &.__flow {
+
+                .box:not(:last-child) {
+                        &:after {
+                                content: var(--btnAF);
+                                font-family: var(--btnIFF);
+                                font-weight: var(--btnAFFW);
+                                display: var(--btnAFdis);
+                                place-items: center;
+                                position: var(--btnAFPOS);
+                                right: var(--btnAFRT);
+                                place-items: center;
+                                line-height: var(--btnFZ);
+
+                                padding-inline: unset;
+                                width: calc(var(--gap) + 1em);
+                                line-height: calc(var(--gap) + 1.25em);
+                                aspect-ratio: 1;
+                                align-content: center;
+                                text-align: center;
+                                border-radius: 1000px;
+
+                                color: var(--SC);
+                                // background-color: var(--sc50);
+                                font-size: 2em;
+                                align-content: center;
+                                transition: var(--btnTR);
+                                position: absolute;
+                                left: calc(100% - 0.5em);
+                                top: 50%;
+                                transform: translateY(-50%);
+
+                        }
+                }
+
+                .box:is(#contents *):after {
+                        @media (max-width: 640px) {
+                                display: inline-block;
+                                inset: unset;
+                                top: calc(100%);
+                                left: 50%;
+                                transform: translate(-50%, -50%) rotate(90deg);
+                        }
+                }
+
+                :not(.__scrollX) .box:nth-child(even):after {
+                        @media (max-width: 834px) {
+                                left: 0%;
+                                top: 100%;
+                                transform: translate(-50%, -50%) rotate(135deg);
+                        }
+                }
+        }
+
+}
+
+:root {
+        // 最新ブラウザ向け：height: autoへのアニメーションを許可
+        interpolate-size: allow-keywords;
+}
+
+:where(.Toggle) {
+        // --bc, --WH, --imgW, --Eng, --mc, --rad, --ac
+        --bfFF: var(--Eng);
+        --bfC: var(--WH);
+        --bfBG: var(--MC);
+        --abfBG: var(--SC);
+        --bfRad: 4px;
+
+        &::details-content {
+                // 開閉アニメーション
+                transition: height 0.4s ease, content-visibility 0.4s allow-discrete;
+                height: 0;
+                overflow: hidden;
+        }
+
+        &[open]::details-content {
+                height: auto;
+        }
+
+        summary {
+                list-style: none;
+                outline: none;
+                cursor: pointer;
+                position: relative;
+                background-color: var(--qBG);
+                padding: 1em;
+                padding-right: 2.5em; // 矢印用の余白
+                transition: .4s;
+
+                &:hover {
+                        opacity: 0.8;
+                }
+
+                &::-webkit-details-marker {
+                        display: none;
+                }
+
+                .ToggleIcon {
+                        // 矢印アイコン（React コンポーネント）
+                        font-size: 1.5em;
+                        position: absolute;
+                        right: 1em;
+                        top: 50%;
+                        translate: 0 -50%;
+                        transition: 0.4s;
+                }
+        }
+
+        &[open] summary .ToggleIcon {
+                scale: 1 -1;
+        }
+
+        >div {
+                position: relative;
+                padding: 1em;
+                background-color: var(--aBG);
+        }
+
+        .has_img {
+                // 画像レイアウト（.has_img > figure + div の構造に対応）
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 1em;
+                width: 100%;
+
+                figure {
+                        max-width: 100%;
+                        order: 1;
+                        width: var(--imgW, 30%);
+                        margin-left: auto;
+
+                        img {
+                                width: 100%;
+                                height: auto;
+                                display: block;
+                        }
+                }
+
+                >div {
+                        flex: 1;
+                }
+
+                @include max-md {
+                        &:not(.bp-sm) {
+                                figure {
+                                        width: 100%;
+                                        margin-left: unset;
+                                }
+                        }
+                }
+
+                @include max-sm {
+                        &:is(.bp-sm) {
+                                figure {
+                                        width: 100%;
+                                        margin-left: unset;
+                                }
+                        }
+                }
+        }
+
+        &.IsQa {// --- モディファイア: IsQa (Q&Aスタイル) ---
+                summary,
+                >div {
+                        padding-left: 4em;
+
+                        &:before {
+                                content: "";
+                                font-family: var(--bfFF);
+                                color: var(--bfC);
+                                background-color: var(--bfBG);
+                                display: block;
+                                position: absolute;
+                                left: 1em;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                border-radius: var(--bfRad);
+                                width: 2em;
+                                aspect-ratio: 1;
+                                align-content: center;
+                                text-align: center;
+                        }
+                }
+
+                summary:before {
+                        content: "Q";
+                }
+
+                >div:before {
+                        content: "A";
+                        background-color: var(--abfBG);
+                }
+        }
+        &.IsSmall {// --- モディファイア: IsQa (Q&Aスタイル) ---
+                width: fit-content;
+                summary{
+                        color: var(--gr);
+                        font-size: 1.2em;
+                        display: inline-block;
+                        padding-inline: 0em 1em;
+                        padding-block: unset;
+                        &:after {
+                                content: "+";
+                                font-family: var(--icon, inherit);
+                                color: #888;
+                                display: inline-block;
+                                transform-origin: 100% 50%;
+                                color: inherit;
+                                position: absolute;right: 0;
+                        }
+                }
+                &[open] summary:after {
+                        content: "-";
+                        scale: 1.5 1; 
+                }
+                >div {
+                        padding: unset;
+                        position: relative;
+                        font-size: 0.875em;
+                }
+                summary:hover {
+                        color: var(--AC);
+                }
+        }
+}
+
+// **********パネル=縦並びコンテンツ 画像任意 IsFlow IsRev imgW可変*************--gap --few
+:where(.Panel) {
+        // --MY5, --bc, --mc, --sc, --rad, --gap, --imgW
+        position: relative;
+        --MY: 0em;
+        --bg: var(--un);
+        --beforeFZ: 75%;
+        --beforeC: var(--MC);
+        --afterW: 2em;
+        --afterBG: var(--WH20);
+        --imgW: 30%;
+
+        .item {
+                background-color: var(--bg);
+                counter-increment: cnt;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                border-radius: var(--rad);
+                padding: var(--PX);
+                gap: var(--gap);
+                position: relative;
+
+                +.item {
+                        margin-top: var(--MY);
+                }
+
+                figure {
+                        width: var(--imgW, 30%);
+
+                        &:where(.Panel .IsRev *) {
+                                order: 1;
+                        }
+
+                        img {
+                                width: 100%;
+                                height: auto;
+                                display: block;
+                        }
+                }
+
+                >div {
+                        flex: 1;
+                }
+
+                @include max-md {
+                        &:not(.bp-sm) {
+                                figure {
+                                        width: 100%;
+                                        order: -1;
+                                }
+                        }
+                }
+
+                @include max-sm {
+                        &:is(.bp-sm) {
+                                figure {
+                                        width: 100%;
+                                        order: -1;
+
+                                }
+                        }
+                }
+        }
+
+        @for $i from 2 through 5 {
+                // --- 画像サイズユーティリティ (img20〜img50) ---
+                $size: $i * 10;
+
+                &.img#{$size} {
+                        --imgW: #{$size + "%"};
+                }
+        }
+
+        &.IsFlow {
+
+                // --- IsFlow modifier (矢印ありの流れ) ---
+                .item {
+
+
+                        &:after {
+                                content: "";
+                                display: block;
+                                position: absolute;
+                                top: calc(100% + calc(var(--MY)/2));
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                width: var(--afterW);
+                                aspect-ratio: 1;
+                                background-color: var(--afterBG);
+                                clip-path: polygon(0 15%, 50% 100%, 100% 15%);
+                        }
+
+                        &:last-of-type:after {
+                                display: none;
+                        }
+                }
+        }
+}
+
+// **********Flex Ratio 左右子要素の比率を指定*************--gap --few
+:where(.Flex55) {
+
+        // --few, --gap
+        >* {
+                width: calc(50% - var(--gap)/2);
+        }
+}
+
+:where(.Flex46) {
+        // --few, --gap
+        --few: 40%;
+
+        >:where(:nth-child(1)) {
+                width: calc(var(--few));
+        }
+
+        >:where(:nth-child(2)) {
+                width: calc(100% - var(--few) - var(--gap));
+        }
+}
+
+:where(.Flex64) {
+        // --few, --gap
+        --few: 40%;
+
+        >:where(:nth-child(1)) {
+                width: calc(100% - var(--few) - var(--gap));
+        }
+
+        >:where(:nth-child(2)) {
+                width: calc(var(--few));
+        }
+}
+
+:where(.Flex37) {
+        // --few, --gap
+        --few: 30%;
+
+        >:where(:nth-child(1)) {
+                width: calc(var(--few));
+        }
+
+        >:where(:nth-child(2)) {
+                width: calc(100% - var(--few) - var(--gap));
+        }
+}
+
+:where(.Flex73) {
+        // --few, --gap
+        --few: 30%;
+
+        >:where(:nth-child(1)) {
+                width: calc(100% - var(--few) - var(--gap));
+        }
+
+        >:where(:nth-child(2)) {
+                width: calc(var(--few));
+        }
+}
+
+:where(.Flex28) {
+        // --few, --gap
+        --few: 20%;
+
+        >:where(:nth-child(1)) {
+                width: calc(var(--few));
+        }
+
+        >:where(:nth-child(2)) {
+                width: calc(100% - var(--few) - var(--gap));
+        }
+}
+
+:where(.Flex82) {
+        // --few, --gap
+        --few: 20%;
+
+        >:where(:nth-child(1)) {
+                width: calc(100% - var(--few) - var(--gap));
+        }
+
+        >:where(:nth-child(2)) {
+                width: calc(var(--few));
+        }
+}
+
+:where(.Flex55, .Flex28, .Flex37, .Flex46, .Flex64, .Flex73, .Flex82) {
+        // --gap
+        gap: var(--gap);
+        display: flex;
+        flex-wrap: wrap;
+
+        img {
+                width: 100%;
+        }
+
+        @include max-md {
+                &:not(.bp-sm)>* {
+                        width: 100%;
+                }
+
+                &:not(.bp-sm)>figure {
+                        order: -1;
+                }
+        }
+
+        @include max-sm {
+                &:is(.bp-sm)>* {
+                        width: 100%;
+                }
+
+                &:is(.bp-sm)>figure {
+                        order: -1;
+                }
+        }
+}
+
+:where(.Wrap) {
+        // --MY, --out
+        padding-block: var(--MY);
+        margin-inline: var(--out);
+        max-width: unset;
+        width: unset;
+        position: relative;
+
+        >* {
+                margin-inline: auto;
+                max-width: 100%;
+        }
+
+        >*+* {
+                margin-top: var(--MY5);
+        }
+
+        +.Wrap {
+                margin-top: unset;
+        }
+}
+
+// **********Stick*************--gap --few
+:where(.Stick) {
+        // --item = stiky item width , --shift = overlapping width　, --shift must be less than --item.
+        // --item: 50%;
+        // --scr: calc(100% - var(--item) + var(--shift));
+        --scr: 50%;
+        --shift: calc(100% - var(--item) + var(--scr));
+        --shift: 12.5%;
+        --Nshift: calc(var(--shift)*-1);
+
+        @include max-md {
+                --Nshift: 0;
+        }
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+
+        &.IsColumn {
+                flex-direction: column;
+
+                >* {
+                        flex: unset;
+                        width: 100%;
+                        margin-inline: auto;
+                }
+        }
+
+        .StickItem {
+                flex: 1;
+                // width: var(--item);
+                // padding-block: var(--head);
+                vertical-align: top;
+                text-align: center;
+                position: sticky;
+                top: 0;
+
+                // margin-inline: var(--Nshift) ;
+
+
+                img {
+                        width: 100%;
+                }
+        }
+
+        .StickScr {
+                position: relative;
+                z-index: 1;
+
+                width: var(--scr);
+                margin-top: unset;
+                margin-inline: var(--Nshift) 0;
+
+        }
+
+        &.IsColumn {
+                display: block;
+
+                >* {
+                        flex: unset;
+                        width: 100%;
+                        margin-inline: auto;
+                }
+        }
+
+        &.IsRev .StickScr {
+                order: -1;
+                margin-inline: 0 var(--Nshift);
+        }
+
+        >* {
+                width: calc(50% - var(--gap)/2);
+        }
+
+        @include max-xl {
+                        --Nshift: 0;
+                &:is(.bp-xl)>* {
+                        width: 100%;
+                        flex: unset;
+                }
+                &:is(.bp-xl)>figure {
+                        order: -1;
+                }
+        }
+        @include max-lg {
+                        --Nshift: 0;
+                &:is(.bp-lg)>* {
+                        width: 100%;
+                        flex: unset;
+                }
+                &:is(.bp-lg)>figure {
+                        order: -1;
+                }
+        }
+        @include max-md {
+                &:not(.bp-sm)>* {
+                        flex: unset;
+                        width: 100%;
+                }
+
+                &:not(.bp-sm)>figure {
+                        order: -1;
+                }
+        }
+
+        @include max-sm {
+                &:is(.bp-sm)>* {
+                        flex: unset;
+                        width: 100%;
+                }
+
+                &:is(.bp-sm)>figure {
+                        order: -1;
+                }
+        }
+}
+
+// **********PathDraw*************--gap --few
+// .hira{
+//         path{
+//                 fill:currentColor;
+//         }
+// }
+/* スクロール連動のラッパー（複数配置可） */
+:where(.PathDraw) {
+        --PDS: 0.5;
+        --PES: 0.55;
+        --PVM: 0.5;
+        --stw: 1;
+        --stc: var(--cur);
+        /* display: flex; */
+        min-height: 55vh;
+
+        svg {
+                display: block;
+        }
+
+        path {
+                fill: none;
+                stroke: var(--stc);
+                stroke-width: var(--stw);
+                stroke-linecap: round;
+                stroke-linejoin: round;
+        }
+}
+
+/* BorderDraw: --PVM=中央Y比、--PDS=要素中心が「中央+帯」から「中央」へ動く区間(vh比)で線が引き切れる */
+:where(.BorderDraw) {
+        --PDS: 0.2;
+        // --PES: 0.75;
+        --PVM: 0.345;
+        --stw: 1px;
+        --stc: var(--cur);
+        position: relative;
+
+        >.BorderDrawSvg {
+                display: block;
+                pointer-events: none;
+                overflow: visible;
+        }
+
+        >.BorderDrawSvg path {
+                stroke: var(--stc);
+                stroke-width: var(--stw);
+                stroke-linecap: buttom;
+        }
+
+        >.BorderDrawSvg {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: var(--stw);
+        }
+
+        /* IsDown: 先端を載せる基準線は --PVM（0.5=画面縦中央）。--PDS/--PES は縦ロジックでは未使用 */
+        &.IsDown {
+                --PVM: 0.5;
+        }
+
+        &.IsDown>.BorderDrawSvg {
+                position: absolute;
+                left: 0;
+                top: 0;
+                // bottom: unset;
+                width: var(--stw);
+                height: 100%;
+
+                &.Right {
+                        left: unset;
+                        right: 0;
+                }
+        }
+
+}
+
+:where(.RgbShift) {
+        --stw: 20;
+        --stc: var(--cur);
+        --RgbShiftRX: -10px;
+        --RgbShiftRY: -5px;
+        --RgbShiftBX: 10px;
+        --RgbShiftBY: 5px;
+        --delay: 0ms;
+        --beat: 6s;
+
+        --shift: .5em;
+        --xl: var(--shift);
+        --x0: 0px;
+        --xs: calc(var(--xl)*0.5);
+        --yl: 0px;
+        --y0: 0px;
+        --ys: calc(var(--yl)*0.5);
+
+        svg {
+                display: block;
+        }
+
+        path {
+                fill: none;
+                stroke: var(--stc);
+                stroke-width: var(--stw);
+                stroke-linecap: round;
+                stroke-linejoin: round;
+        }
+
+        .RgbShiftStack {
+                display: grid;
+                isolation: isolate;
+        }
+
+        .RgbShiftLayer {
+                grid-area: 1 / 1;
+                mix-blend-mode: screen;
+                will-change: transform;
+                animation-delay: var(--delay);
+        }
+
+        .RgbShiftR {
+                transform: translate(var(--RgbShiftRX), var(--RgbShiftRY));
+                pointer-events: none;
+                // --xl: -20px;
+                // --xl: -5px;
+                // --yl: 0px;
+                // --ys: 0px;
+                --xl: calc(var(--shift)*-1);
+                --x0: 0px;
+                --xs: calc(var(--xl)*0.5);
+                --yl: 0px;
+                --y0: 0px;
+                --ys: calc(var(--yl)*0.5);
+
+                &:is(.IsBeat *) {
+                        transform: unset;
+                        animation: RgbShift var(--beat) var(--delay) infinite;
+                }
+
+                &:is(.IsBeatY *) {
+                        transform: unset;
+                        animation: RgbShiftY var(--beat) var(--delay) infinite;
+                }
+        }
+
+        .RgbShiftG {
+                transform: translate(0, 0);
+                pointer-events: none;
+        }
+
+        // --xl: 20px;
+        // --x0: 0px;
+        // --xs: calc(var(--xl)*0.5 );
+        // --yl: 20px;
+        // --y0: 0px;
+        // --ys: calc(var(--yl)*0.5 );
+        .RgbShiftB {
+                transform: translate(var(--RgbShiftBX), var(--RgbShiftBY));
+                pointer-events: auto;
+
+                &:is(.IsBeat *) {
+                        transform: unset;
+                        animation: RgbShift 3s infinite;
+                }
+
+                &:is(.IsBeatY *) {
+                        transform: unset;
+                        animation: RgbShiftY 3s infinite;
+                }
+        }
+
+        @keyframes RgbShift {
+                1% {
+                        transform: translate(var(--xl), var(--yl))
+                }
+
+                2% {
+                        transform: translate(var(--x0), var(--y0))
+                }
+
+                5% {
+                        transform: translate(var(--xs), var(--ys))
+                }
+
+                100% {
+                        transform: translate(0px, 0px)
+                }
+        }
+
+        @keyframes RgbShiftY {
+                1% {
+                        transform: translate(var(--yl), var(--xl))
+                }
+
+                2% {
+                        transform: translate(var(--y0), var(--x0))
+                }
+
+                5% {
+                        transform: translate(var(--ys), var(--xs))
+                }
+
+                100% {
+                        transform: translate(0px, 0px)
+                }
+        }
+}
+
+:where(.LottieScroll) {
+        //animation demo用
+        --canvasH: 100lvh;
+
+        canvas {
+                min-height: var(--canvasH);
+        }
+
+        &.IsDemo {
+                // filter: brightness(1.5);
+                animation: IsDemo 6s linear forwards;
+
+                @keyframes IsDemo {
+                        0% {
+                                filter: brightness(105%);
+                        }
+
+                        100% {
+                                filter: brightness(150%);
+                        }
+                }
+        }
+}
+
+.StickyStep {
+        --top: calc(100vh - 2.5em);
+        --step: 4em;
+        width: fit-content;
+        max-width: 100%;
+        margin-inline: auto;
+        display: flex;
+        align-items: flex-start;
+        padding-block: 1em;
+
+        >* {
+                position: sticky;
+                top: var(--top);
+                margin-inline: 0.5em;
+
+                @for $i from 2 through 9 {
+                        &:nth-child(#{$i}) {
+                                margin-top: calc(var(--step) * #{$i - 1});
+                        }
+                }
+        }
+
+        @include max-md {
+                --top: calc(100vh - var(--head)*3);
+                padding-bottom: 4em;
+
+                >* {
+                        margin-inline: .125em;
+                }
+        }
+
+}
+
+:root {
+        --spring-easing: linear(0, 0.004, 0.016, 0.035, 0.063, 0.098, 0.141 13.6%, 0.25, 0.391, 0.563, 0.765,
+                        1, 0.891 40.9%, 0.848, 0.813, 0.785, 0.766, 0.754, 0.75, 0.754, 0.766, 0.785,
+                        0.813, 0.848, 0.891 68.2%, 1 72.7%, 0.973, 0.953, 0.941, 0.938, 0.941, 0.953,
+                        0.973, 1, 0.988, 0.984, 0.988, 1);
+        --spring-duration: 1.333s;
+}
+
+:where(.RandomRects) {
+        position: relative;
+        .item {
+                position: absolute;
+                transform: translate(-50%, -50%);
+        }
+}
+
+.GeneratedShapes {
+        >:not(g),
+        >g>*:not(line){
+                transform-box: fill-box;
+                transform-origin: center; 
+                rotate: var(--GSR);
+        }
+}
+.MarkDown{//~/projects/0413portfolio/src/pages/Activity.tsx
+        ul{
+                padding-left: 1em;
+        }
+        li{
+                list-style: disc;
+                ::marker{
+                        margin-right: -8px;
+                }
+        }
+        pre{overflow: auto;}
+}
+
+// ***************画像テキスト ImgText*****************.img??で画像サイズ可変
+$imgW: ("100": 100%, "95": 95%, "90": 90%, "875": 87.5%, "85": 85%, "80": 80%,
+        "75": 75%, "70": 70%, "66": 66%, "65": 65%, "60": 60%, "55": 55%,
+        "50": 50%, "45": 45%, "40": 40%, "35": 35%, "33": 33%, "30": 30%,
+        "25": 25%, "20": 20%, "10": 10%);
+
+@each $key,
+$val in $imgW {
+
+        // --- 画像サイズユーティリティ ---
+        .img#{$key} {
+                --imgW: #{$val};
+        }
+}
+
+:where(.ImgText) {
+        // --gap, --imgW
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--gap);
+
+        // PCでのデフォルト画像幅
+        --imgW: calc(50% - var(--gap)/2);
+
+
+
+        figure {
+                width: var(--imgW, calc(50% - var(--gap)/2));
+                margin-inline: auto;
+
+                >a,
+                img {
+                        display: block;
+                        width: 100%;
+                        height: auto;
+                }
+        }
+
+        >div {
+                flex: 1;
+        }
+
+        &.IsRev figure {
+                // --- 反転設定 ---
+                order: 1;
+        }
+
+        @include max-md {
+                &:not(.bp-sm) {
+                        figure {
+                                order: -1;
+                                width: 100%;
+                        }
+                }
+        }
+
+        @include max-sm {
+                &:is(.bp-sm) {
+
+                        figure {
+                                order: -1;
+                                width: 100%;
+                        }
+
+                }
+        }
+}

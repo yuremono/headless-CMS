@@ -1,0 +1,482 @@
+@use "./scss/globals" as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+//tailwind recovery
+@layer base{
+
+        .inline-size {container-type: inline-size;}
+        .rtl {direction: rtl;}
+        .ltr {direction: ltr;}
+        .text-align-last-justify{text-align-last: justify;}
+        .translateYH{translate: 0 -50%;}
+        .translateXH{translate: -50% 0;}
+        .translateXYH{translate: -50% -50%;}
+        .corner-bevel{corner-shape: bevel;}
+}
+.BabelRightDown{
+        border-radius: var(--rad) 0 var(--rad) 0;
+        corner-shape: bevel;
+}
+.BabelLeft{
+        border-radius: var(--rad) 0 0 var(--rad) ;
+        corner-shape: bevel;
+}
+html{
+        font-size: var(--FZ);
+}
+:where(.PageRoot),
+:where(#root)>div {//index.scss tailwind overwrite
+	overflow-x: clip;
+	font-family: var(--FF);
+	font-weight: var(--FW);
+	line-height: var(--LH);
+	letter-spacing: var(--LS);
+	color: var(--foreground);
+	font-style: normal;
+	background-color: var(--background);
+        transition: 600ms;
+}
+:root{
+        --pageTR: 0.5s;
+        --initial-loading-min: 1000ms;
+}
+
+// :where(*) {//FireFox
+// 	scrollbar-color: color-mix(in srgb, transparent, var(--foreground) 20%) transparent;
+// 	scrollbar-width: thin;
+// }
+
+:where(*)::-webkit-scrollbar {
+	width: 0.375rem;
+	height: 0.25rem;
+	background-color: transparent;
+}
+
+:where(*)::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+:where(*)::-webkit-scrollbar-thumb {
+	border-radius: var(--rad);
+	background-color: color-mix(in srgb, transparent, var(--foreground) 30%);
+}
+
+html.PageTransitionScrollSmooth {
+	scroll-behavior: smooth;
+}
+
+html.PageTransitionScrollInstant {
+	scroll-behavior: auto !important;
+}
+
+.PageTransition {
+	/* InitialLoading と同じトークンで canvas ラベルを揃える */
+	--initial-loading-font-style: normal;
+	--initial-loading-font-weight: 300;
+	--initial-loading-line-height: 1;
+	--initial-loading-font-size: calc(var(--mmFZ) * 3);
+	--initial-loading-text: var(--WH);
+	--page-rect-bg: var(--MC);
+	--page-rect-size: 0.01;
+	position: relative;
+	isolation: isolate;
+	min-height: 100lvh;
+	background-color: var(--background);
+}
+
+.PageTransitionRunning {
+	min-height: 100lvh;
+}
+
+.PageTransitionOverlay {
+	position: fixed;
+	inset: 0;
+	z-index: 2147483647;
+	pointer-events: none;
+}
+
+body.SiteTransitionPending #root > :not(.InitialLoading) {
+	visibility: hidden;
+}
+
+body.SiteTransitionPending #root > .InitialLoading {
+	display: block !important;
+	visibility: visible;
+}
+
+.PageTransitionCanvas {
+	display: block;
+	width: 100vw;
+	height: 100lvh;
+	pointer-events: none;
+}
+
+.InitialLoading {
+        --initial-loading-font-style: normal;
+	--initial-loading-font-weight: 300;
+	--initial-loading-line-height: 1;
+        //overwrite
+	--initial-loading-font-size: calc(var(--mmFZ)*3);
+	--initial-loading-text: var(--background);
+
+	--page-rect-bg: var(--MC);
+	--page-rect-size: 0.01;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+.InitialLoadingDone {
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.InitialLoadingLayer {
+	background-color: transparent;
+	z-index: 2147483647;
+}
+
+.InitialLoadingCanvas {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	display: block;
+	width: 100vw;
+	height: 100lvh;
+	pointer-events: none;
+}
+
+.InitialLoadingTextProbe {
+	position: fixed;
+	left: -100vw;
+	top: -100vh;
+	z-index: -1;
+	visibility: hidden;
+	width: calc(var(--wid) / 2);
+	padding: 1rem 1.5rem;
+	background-color: var(--background);
+	color: var(--initial-loading-text);
+	font-family: var(--Eng);
+	font-size: var(--initial-loading-font-size);
+	font-style: var(--initial-loading-font-style);
+	font-weight: var(--initial-loading-font-weight);
+	line-height: var(--initial-loading-line-height);
+	text-align: center;
+	pointer-events: none;
+}
+
+svg {display: inline-block;}
+b,strong{font-weight: 500;}
+
+
+h1,.h1FZ {font-size: var(--h1FZ);}
+h2,.h2FZ {font-size: var(--h2FZ);}
+h3,.h3FZ {font-size: var(--h3FZ);}
+.largeFZ {font-size: var(--largeFZ);}
+h4,h5,h6 {font-size: inherit;}
+h1,h2,h3,h4,h5,h6,.largeFZ {
+        font-family: var(--HFF);
+        font-weight: var(--HFW);
+        line-height: var(--HLH);
+        letter-spacing: var(--HLS);
+}
+
+.wid {width: var(--wid);}
+.PX {padding-inline: var(--PX);}
+.PY {padding-block: var(--PY);}
+.PX2 {padding-inline: var(--PX2);}
+.MY {margin-block: var(--MY);}
+.gap{gap: var(--gap);}
+.gapH{gap: var(--gapH);}
+
+
+:where(.BorderT) {border-top   : var(--line);}
+:where(.BorderB) {border-bottom: var(--line);}
+:where(.BorderL) {border-left  : var(--line);}
+:where(.BorderR) {border-right : var(--line);}
+:where(.BorderY) {border-block : var(--line);}
+:where(.BorderX) {border-inline: var(--line);} 
+:where(.BorderXY) {border: var(--line);} 
+:where(.BorderXY2) {border: var(--line2);} 
+:where(.BorderXY3) {border: var(--line3);} 
+.TS {text-shadow: var(--TS);}
+.DS {filter: drop-shadow(var(--DS));}
+.BS {box-shadow: var(--BS);}
+.WTS {-webkit-text-stroke: var(--WTS);paint-order: stroke;}
+.BGgrad {background: var(--BGgrad);}
+.TS2 {text-shadow: var(--TS2);}
+.DS2 {filter: drop-shadow(var(--DS2));}
+.BS2 {box-shadow: var(--BS2);}
+.WTS2 {-webkit-text-stroke: var(--ST2);paint-order: stroke;}
+.BGgrad2 {background: var(--BGgrad2);}
+.TS3 {text-shadow: var(--TS3);}
+.DS3 {filter: drop-shadow(var(--DS3));}
+.BS3 {box-shadow: var(--BS3);}
+.WTS3 {-webkit-text-stroke: var(--ST3);paint-order: stroke;}
+.BGgrad3 {background: var(--BGgrad3);}
+
+
+.UL {
+        @apply text-center [width:--wid];
+        li{
+                @apply inline-block p-[--PX] align-top;
+                box-shadow: inset -1px -1px  #000, -1px -1px #000;
+                // box-shadow: inset 0 0 1px #000, -1px -1px #000;
+        }
+        h3{
+                @apply [font-size:--h2FZ] leading-none;
+        }
+        details{
+                @apply w-auto inline-block ;
+                transition: var(--trans);
+                *{
+                        @apply text-left;
+                }
+                &[open] {
+                        @apply w-[calc(var(--wid)-12rem)];
+                }
+                &[open]:last-of-type ,
+                &[open]:first-of-type {
+                        @apply w-[calc(var(--wid)-6rem)];
+                }
+                &[open]+details:not([open]) {
+                        @apply w-[6rem];
+                }
+                &:has(+details[open]):not([open])  {
+                        @apply w-[6rem];
+                }
+        }
+}
+
+
+dialog{
+        top: 0;
+        opacity: 0;
+        pointer-events: none;
+        &:not(.BBox *){
+                display: block;
+        }
+
+        transition: 0s;
+        &[open]{
+                transition: var(--trans);
+                opacity: 1;
+                pointer-events: auto;
+        }
+}
+
+//Generator Page Controller
+div.tp-rotv {
+        font-size: inherit;
+        /* --tp-base-background-color: var(--GR); */
+        --tp-base-border-radius: 6px;
+        --tp-base-font-family: system-ui, sans-serif;
+        --tp-base-shadow-color: rgba(0, 0, 0, 0.2);
+        --cnt-fg: var(--TC);
+        --lbl-fg: var(--TC);
+        --btn-fg: var(--WH);
+        --cnt-usz: 2em;
+        /* Random Rects 等で実際に効く色 (--MC に一旦統一) */
+        --tp-base-background-color: var(--WH80);
+        /* --tp-base-shadow-color: var(--AC); */
+        /* --tp-button-background-color: var(--SC); */
+        /* --tp-button-background-color-hover: var(--AC); */
+        /* --tp-button-background-color-focus: var(--AC); */
+        /* --tp-button-background-color-active: var(--AC); */
+        /* --tp-button-foreground-color: var(--AC); */
+        /* --tp-container-background-color: var(--AC); */
+        /* --tp-container-foreground-color: var(--AC); */
+        /* --tp-container-background-color-hover: var(--AC); */
+        /* --tp-container-background-color-focus: var(--AC); */
+        /* --tp-container-background-color-active: var(--AC); */
+        /* --tp-input-background-color: var(--AC); */
+        --tp-input-foreground-color: var(--TC);
+        /* --tp-input-background-color-hover: var(--AC); */
+        /* --tp-input-background-color-focus: var(--AC); */
+        /* --tp-input-background-color-active: var(--AC); */
+        /* --tp-label-foreground-color: var(--AC); */
+        /* モニター・区切りブレード未使用時（値は --AC 想定で保持） */
+        /* --tp-monitor-background-color: var(--AC); */
+        /* --tp-monitor-foreground-color: var(--AC); */
+        /* --tp-groove-foreground-color: var(--AC); */
+
+}
+
+.tp-fldv-expanded .tp-lblv_l {
+        text-align: right;
+}
+
+div.tp-lblv_v {
+        flex: unset;
+        width: unset;
+}
+
+/* plugin-essentials の radiogrid は幅が無いとGridが描画されない（上の unset を打ち消す） */
+div.tp-lblv_v:has(.tp-radgridv) {
+        width: var(--bld-vw);
+        min-width: var(--bld-vw);
+        flex: 0 0 auto;
+        align-self: flex-start;
+}
+
+.tp-rotv_b {
+        min-width: 25.5em;
+}
+
+.HeaderItems>div {
+        scrollbar-gutter: stable;
+}
+
+.HeaderItems>div::-webkit-scrollbar {
+        background-color: transparent;
+        width: o;
+        height: 0;
+}
+
+.HeaderItems>div:has(.tp-cntv.tp-rotv-expanded) {
+        opacity: 0.5;
+}
+
+.HeaderItems>div:has(.tp-cntv.tp-rotv-expanded):hover {
+        opacity: 1;
+}
+
+
+@layer base {
+        :root {
+	--mmFZ: 2rem;
+	--mmWobbleAmp: 32;
+	--mmWobbleAmpX: 32;
+	--mmWobbleAmpY: 32;
+	// --mmWobbleFreqX: 0.00024;
+	// --mmWobbleFreqY: 0.00014;
+	--mmWobbleFreqX: 0.0005;
+	--mmWobbleFreqY: 0.0003;
+
+                @media (max-width: 1560px) {
+                        --mmFZ: 1.25rem;
+                }
+                @media (max-width: 640px) {
+                        --mmFZ: 0.875rem;
+                }
+        }
+        .mindMap {
+                @apply content-center text-[length:--mmFZ] min-h-lvh font-[family-name:--Eng];
+        }
+
+        .mindMap>* {
+                display: inline-block;
+                cursor: default;
+                transition: 0.4s;
+                line-height: 1;
+        }
+
+        // @media (max-width: 834px) {
+        //         .mindMap>*:not(h1, h2, .about_tx, .about_p, .experience_tx) {
+        //                 pointer-events: none;
+        //         }
+        // }
+
+        .mindWobble {
+                @apply relative text-[length:--mmFZ]  font-[family-name:--Eng] z-10 leading-[0.8em];
+                font-size: calc(var(--mmFZ) * 5.5);
+                --mmWobbleAmp: 15;
+                --mmWobbleAmpX: 32;
+                --mmWobbleAmpY: 32;
+                --mmWobbleFreqX: 0.0005;
+                --mmWobbleFreqY: 0.0003;
+                
+        }
+
+
+
+
+
+
+        // @media (max-width: 1080px) {
+        //         .about_tx {
+        //                 padding: 1em;
+        //                 position: relative;
+        //                 inset: unset;
+        //                 translate: unset;
+        //         }
+        // }
+
+
+        
+
+
+        .creative_tx {
+                line-height: 2;
+                left: 50%;
+                top: 50%;
+                translate: 0 -50%;
+                z-index: 1;
+        }
+
+        @media (max-width: 960px) {
+                .creative_tx {
+                        padding: 1em;
+                        position: relative;
+                        inset: unset;
+                        translate: unset;
+                }
+        }
+
+        .creative .mindWobble {
+                pointer-events: none;
+        }
+
+        .creative_bottom {
+                width: 100%;
+                background-color: var(--GR);
+                color: var(--WH);
+        }
+
+
+
+
+
+
+}
+
+@property --dot-spacing {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 20px;
+}
+
+@property --dot-fade-offset {
+        syntax: "<percentage>";
+        inherits: false;
+        initial-value: 0%;
+}
+
+@property --dot-color {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: #fc466b;
+}
+
+.houdini-polka-card {
+        cursor: pointer;
+        animation: houdini-polka-pulse 2s ease-out infinite alternate paused;
+
+        &:hover,
+        &:focus-visible {
+                animation-play-state: running;
+        }
+}
+
+@keyframes houdini-polka-pulse {
+        from {
+                --dot-fade-offset: 0%;
+                --dot-color: #fc466b;
+        }
+        to {
+                --dot-fade-offset: 100%;
+                --dot-color: #3f5efb;
+        }
+}

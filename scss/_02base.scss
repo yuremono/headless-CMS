@@ -1,0 +1,149 @@
+@use "mixin" as *;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+summary { list-style: none; }
+summary::-webkit-details-marker {
+        display: none;
+}
+::details-content {
+        transition: height 0.4s ease, content-visibility 0.4s allow-discrete;
+        height: 0;
+        overflow: hidden;
+}
+[open]::details-content {
+        height: auto;
+}
+
+
+html{
+    font-size: 100% ;
+    text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -webkit-text-size-adjust: none;
+//     overflow-x: hidden;
+//     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    &:has(.h.active, .policy-wrap.active, .modal.active) {
+        overflow: hidden;
+    }
+}
+
+// body {//index.scss tailwind overwrite
+// 	font-size: var(--FZ);
+// 	overflow-x: hidden;
+// 	font-family: var(--FF);
+// 	font-weight: var(--FW);
+// 	line-height: var(--LH);
+// 	letter-spacing: var(--LS);
+// 	color: var(--TC);
+// 	font-style: normal;
+// 	background-color: var(--background);
+// }
+
+.Ser {font-family: var(--Ser);}
+.San {font-family: var(--San);}
+.Eng {
+        font-family: var(--Eng);
+}
+.sub {//タイトルタグ内の小さい文字
+	font-size: 0.875rem;
+	color: var(--GR);
+        font-weight: 500;
+        font-family: var(--Eng);
+        line-height: var(--LH);
+        &.block{
+                margin-bottom: .5rem;
+        }
+}
+// body {
+//     counter-reset: number 0;
+//     min-height: 100lvh;
+// }
+span {display: inline-block;}
+small{font-size: 62.5%;}
+
+:where(*){
+        max-width: 100%;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+    display: inline-block;
+}
+img, video {
+        object-fit: cover;
+}
+// h1,.h1FZ {// --h1FZ
+//     font-size: var(--h1FZ);
+// }
+// h2,.h2FZ {// --h2FZ
+//     font-size: var(--h2FZ);
+// }
+// h3,.h3FZ {// --h3FZ
+//     font-size: var(--h3FZ);
+// }
+// h5,
+// h4 {// --h3FZ
+//     font-size: var(--h3FZ);
+// }
+// main {// --PX
+// 	padding-inline: var(--PX);
+
+// }
+
+:where(main>*) {
+
+	// --wid, --MY
+	//ページ内コンテンツ div の初期設定_
+	// width: var(--wid);
+	// max-width: 100%;
+	// margin-inline: auto;
+	// position: relative;
+
+	// +* {
+	// 	margin-top: var(--MY);
+	// }
+
+	&:is(script, input[type="hidden"]) {
+		margin-top: unset;
+	}
+}
+    
+
+
+// *****レイアウト ラッパー制御  主要変数クラス
+.into {// --into
+	padding-inline: var(--into);
+} 
+
+.intoL {// --into
+	padding-left: var(--into);
+
+}
+
+.intoR {// --into
+	padding-right: var(--into);
+}
+
+.out {// --out
+	margin-inline: var(--out);
+	max-width: unset;
+	width: unset;
+}
+
+.outR {
+	margin-right: var(--out);
+	max-width: unset;
+}
+
+.outL {
+	margin-left: var(--out);
+	max-width: unset;
+}
+

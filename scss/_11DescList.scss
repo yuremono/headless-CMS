@@ -1,0 +1,187 @@
+@use "mixin" as *;
+
+.DescList {
+	--PY: 0.5em;
+	--PX: 1em;
+	--dtBG: var(--TR);
+	--dtW: 20%;
+	--ddW: calc(100% - var(--dtW));
+	--dtFW: 600;
+	--bdc: currentColor;
+	--bdw: 1px;
+
+	@include max-sm {
+		--PY: 0.5em;
+	}
+        @include max-sm {
+		dt, dd { width: 100%; }
+		dd { padding-top: 0; }
+	}
+
+	dl {
+                @apply flex flex-wrap;
+	}
+	dt {
+                @apply w-[--dtW] font-[--dtFW] py-[--PY] px-[--PX] bg-[--dtBG];
+	}
+	dd {
+                @apply w-[--ddW] py-[--PY] px-[--PX];
+	}
+
+
+	// --------- Modifiers ---------
+
+	&.IsSimple {
+		dt, dd {
+                        @apply border-b-[--line];
+		}
+		@include max-sm {
+			dt { border-bottom: none; }
+		}
+	}
+
+	&.IsZebra {
+                --oddBG: var(--BC);
+		dt:nth-of-type(odd),
+		dd:nth-of-type(odd) {
+                        @apply bg-[--oddBG];
+		}
+		dt, dd {
+                        @apply px-[--PX];
+		}
+		@include max-sm {
+			dt { border-bottom: none; }
+		}
+	}
+
+        &.IsBorder {
+                --dtBG: var(--BC);
+		dl {
+			border-top: var(--bdw) solid var(--bdc);
+			border-left: var(--bdw) solid var(--bdc);
+		}
+		dt, dd {
+                        border-bottom: var(--bdw) solid var(--bdc);
+                        border-right: var(--bdw) solid var(--bdc);
+		}
+		@include max-sm {
+			dl { flex-wrap: wrap; }
+			dt, dd {
+				width: 100%;
+			}
+		}
+	}
+
+	&.IsHead {//下線装飾のためdt,dd一と組づつdlでwrap
+                --dtBG: var(--MC);
+		dl {
+			padding-block: var(--PY);
+			border-bottom: 2px solid var(--MC);
+		}
+		dt {
+			border-radius: var(--radH);
+			text-align: center;
+		}
+		dt, dd {
+			border: none;
+		}
+		@include max-sm {
+			dl { flex-wrap: wrap; }
+			dt, dd { width: 100%; }
+		}
+	}
+
+	&.IsColumn {
+		dl {
+			flex-direction: column;
+			padding-block: var(--PY);
+		}
+		dt, dd {
+                        width: 100%;
+			padding-block: calc(var(--PY) / 2);
+		}
+		dd {
+                        border-bottom: var(--bdw) solid var(--bdc);
+		}
+	}
+
+	&.IsTimeline {
+		--pl: 6vmin;
+		position: relative;
+                
+		dl {
+                        padding-left: var(--pl);
+			position: relative;
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 1px;
+				transform: translateX(-50%);
+				height: 100%;
+				background: var(--MC);
+			}
+		}
+
+		dt {
+			position: relative;
+			min-width: 10em;
+			padding: 1em;
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: calc(var(--pl) * -1);
+				transform: translateX(-50%);
+				display: block;
+				width: calc(var(--pl) / 4);
+				height: calc(var(--pl) / 4);
+				margin: auto;
+				border-radius: 100px;
+				background: var(--MC);
+			}
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: calc(var(--pl) * -1);
+				display: block;
+				width: var(--pl);
+				height: 1px;
+				margin: auto;
+				background: var(--MC);
+				z-index: -1;
+			}
+		}
+		dd {
+			padding: 1em;
+			border: none;
+		}
+		@include max-sm {
+			dt, dd { width: 100%; }
+			dt { min-width: unset; }
+		}
+	}
+
+	&.IsCenter {
+                --dtW: 50%;
+		dt {
+			text-align: right;
+			justify-content: flex-end;
+		}
+                @include max-sm {
+			dt, dd { width: var(--dtW); }
+		}
+                @include max-sm {
+                        dd { padding-top: var(--PY); }
+                }
+	}
+	&.IsDdright {
+		dd {
+			text-align: right;
+		}
+	}
+}

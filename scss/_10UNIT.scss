@@ -1,0 +1,1120 @@
+@use "mixin"as *;
+
+
+// ********** ヒーロー (.Hero) **********
+:where(.Hero) {
+        @apply grid;
+
+        >* {
+                @apply z-[1] [grid-area:1/1];
+        }
+
+        :where(.back) {
+                @apply w-full;
+
+                >img {
+                        @apply w-full object-cover aspect-square md:aspect-auto;
+                }
+        }
+
+        .item {
+                @apply mt-0 content-center py-[--PX] px-[--into];
+        }
+}
+
+// ********** ホバー波形プレビュー (.WaveHover) **********
+// WaveHoverBody / WaveHoverCanvas は WaveHover.tsx が出力
+:where(.WaveHover) {
+        @apply relative isolate;
+
+        >.WaveHoverCanvas {
+                @apply pointer-events-none fixed left-0 top-[--head] z-[3] block bg-transparent opacity-0 transition-opacity duration-200;
+        }
+
+        &:has(a:hover)>.WaveHoverCanvas {
+                @apply opacity-100;
+        }
+}
+
+// ********** カードシリーズ (.Cards) **********
+:where(.Cards) {
+        // --gap , --itemW
+        @apply flex flex-wrap gap-[--gap];
+
+
+        // --- 1. アイテム基本設定 (デフォルト: 1列 / Flex) ---
+        .item {
+                @apply w-[--itemW] mt-0;
+
+                img {
+                        @apply w-full;
+                }
+
+        }
+
+        // --- 2. モディファイア: レイヤー重ね合わせ (IsLayer) ---
+        &.IsLayer {
+                .item {
+                        @apply grid;
+
+                        >* {
+                                @apply z-[1] [grid-area:1/1];
+                        }
+
+                        figure {
+                                @apply w-full h-full m-0;
+
+                                img {
+                                        @apply h-full object-cover;
+                                }
+                        }
+
+                }
+        }
+
+        &.IsGrow {
+                .item {
+                        @apply flex-1 w-auto;
+                }
+        }
+
+        // 固定幅
+        &.IsFix {
+                --itemW: 240px;
+                @apply justify-center;
+
+                .item {
+                        @apply w-[--itemW];
+                }
+        }
+
+        &.IsIcon {
+                --iconW: 5em;
+                @apply md:[--iconW:7.5em];
+
+                figure {
+                        @apply min-h-[--iconW] content-center;
+                }
+
+                svg,
+                img {
+                        @apply max-w-[--iconW] mx-auto;
+                }
+        }
+        &.IsScrollX {
+                flex-wrap: nowrap !important;
+                overflow-x: scroll;
+                justify-content: start !important;
+                padding-bottom: 1em;
+                --thumbC: var(--TC20);
+                --thumbW: 8px;
+                .item {
+                        flex-shrink: 0;
+                }
+        }
+
+        &.IsRow {
+                .item {
+                        @apply flex-row;
+
+                        >div {
+                                @apply flex-1;
+                        }
+                }
+
+                figure {
+                        @apply w-[--imgW];
+                }
+
+                .box {
+                        @apply basis-full md:basis-auto;
+                }
+        }
+
+        &.IsShift {
+                --shift: var(--MY5);
+                --shift2: calc(var(--shift)*2);
+                --Nshift: calc(var(--shift)*-1);
+                --Nshift2: calc(var(--shift)*-2);
+
+                .item {
+                        &:nth-child(even) {
+                                @apply md:[margin-block:var(--shift)_var(--Nshift)];
+                        }
+
+                        &:last-child {
+                                @apply mb-0;
+                        }
+                }
+
+        }
+
+        // デフォルト（PC）: 指定カラム数
+        @for $i from 1 through 6 {
+                &.col#{$i} {
+                        --itemW: calc((100% - (var(--gap) * #{$i - 1})) / #{$i});
+                }
+        }
+        
+        @include max-lg {
+                &:is(.bp-lg)>.item {
+                        width: calc(50% - var(--gap)/2);
+                        flex: unset;
+                }
+        }
+        @include max-md {
+                &:not(.bp-sm)>.item {
+                        width: calc(50% - var(--gap)/2);
+                        flex: unset;
+                }
+        }
+        @include max-sm {
+                &:not(.bp-sm)>.item {
+                        width: 100%;
+                        flex: unset;
+                }
+        }
+
+        @include max-xs {
+                &:not(.min2)>.item {
+                        width: 100%;
+                }
+        }
+
+        // tailwind w-上書きできない為失敗！！！レスポンシブ幅制御 (モバイルファースト)
+        // 通常 (not .bp-sm): モバイル = 100%, sm 以上 = 50%, md 以上 = --itemW
+        // &:not(.bp-lg) > .item {
+        //         @apply w-full flex-initial sm:w-[calc(50%-var(--gap)/2)] md:w-[--itemW] md:flex-initial;
+        // }
+        // // .min2: xs 以下でも 2 カラム (デフォルトを 50% に上書き)
+        // &.min2 > .item {
+        //         @apply w-[calc(50%-var(--gap)/2)];
+        // }
+        // // .bp-sm: sm breakpoint まで 1 カラム、sm 以上で --itemW
+        // &.bp-sm > .item {
+        //         @apply w-full flex-initial sm:w-[--itemW] sm:flex-initial;
+        // }
+        // // .bp-lg: lg まで 2 カラム、lg 以上で --itemW
+        // &.bp-lg > .item {
+        //         @apply w-[calc(50%-var(--gap)/2)] flex-initial lg:w-[--itemW] lg:flex-initial;
+        // }
+
+}
+
+
+
+:root {
+        // 最新ブラウザ向け：height: autoへのアニメーションを許可
+        interpolate-size: allow-keywords;
+}
+
+:where(.Toggle) {
+        // --bc, --WH, --imgW, --Eng, --mc, --rad, --ac
+        --bfFF: var(--Eng);
+        --bfC: var(--WH);
+        --bfBG: var(--MC);
+        --abfBG: var(--SC);
+        --bfRad: 4px;
+        --trans: 400ms ;
+
+        &::details-content {
+                // 開閉アニメーション
+                // @apply h-0 overflow-hidden [transition:height_0.4s_ease,content-visibility_0.4s_allow-discrete];
+                @apply h-0 overflow-hidden [transition:var(--trans)_allow-discrete];
+                
+        }
+
+        &[open]::details-content {
+                @apply h-auto;
+        }
+
+        summary {
+                @apply list-none outline-none cursor-pointer relative bg-[--qBG] p-[1em] pr-[2.5em] transition-all duration-[.4s];
+
+                &:hover {
+                        @apply opacity-80;
+                }
+
+                &::-webkit-details-marker {
+                        @apply hidden;
+                }
+
+                .ToggleIcon {
+                        // 矢印アイコン（React コンポーネント）
+                        @apply text-[1.5em] absolute right-[1em] top-1/2 [translate:0_-50%] transition-all duration-[.4s];
+                }
+        }
+
+        &[open] summary .ToggleIcon {
+                @apply [scale:1_-1];
+        }
+
+        >div {
+                @apply relative p-[1em] bg-[--aBG];
+        }
+
+        .has_img {
+                // 画像レイアウト（.has_img > figure + div の構造に対応）
+                @apply flex flex-row items-center flex-wrap gap-[1em] w-full;
+
+                figure {
+                        @apply max-w-full order-1 w-[var(--imgW,30%)] ml-auto;
+
+                        img {
+                                @apply w-full h-auto block;
+                        }
+                }
+
+                >div {
+                        @apply flex-1;
+                }
+
+                // 旧 max-md (not .bp-sm): モバイル figure 100% ml:0, md 以上で復元
+                &:not(.bp-sm) figure {
+                        @apply w-full ml-0 md:w-[var(--imgW,30%)] md:ml-auto;
+                }
+
+                // 旧 max-sm (.bp-sm): モバイル figure 100% ml:0, sm 以上で復元
+                &.bp-sm figure {
+                        @apply w-full ml-0 sm:w-[var(--imgW,30%)] sm:ml-auto;
+                }
+        }
+
+        &.IsQa {// --- モディファイア: IsQa (Q&Aスタイル) ---
+                summary,
+                >div {
+                        @apply pl-[4em];
+
+                        &:before {
+                                content: "";
+                                @apply font-[family-name:var(--bfFF)] text-[--bfC] bg-[--bfBG] block absolute left-[1em] top-1/2 -translate-y-1/2 rounded-[--bfRad] w-[2em] aspect-square content-center text-center;
+                        }
+                }
+
+                summary:before {
+                        content: "Q";
+                }
+
+                >div:before {
+                        content: "A";
+                        @apply bg-[--abfBG];
+                }
+        }
+
+        &.IsSmall {// --- モディファイア: IsSmall ---
+                @apply w-fit;
+                summary{
+                        @apply text-[--gr] text-[1.2em] inline-block pl-0 pr-[1em] py-0;
+                        &:after {
+                                content: "+";
+                                @apply font-[family-name:var(--icon,inherit)] text-[#888] inline-block [transform-origin:100%_50%] text-[color:inherit] absolute right-0;
+                        }
+                }
+                &[open] summary:after {
+                        content: "-";
+                        @apply [scale:1.5_1];
+                }
+                >div {
+                        @apply p-0 relative text-[0.875em];
+                }
+                summary:hover {
+                        @apply text-[--AC];
+                }
+        }
+}
+
+// **********パネル=縦並びコンテンツ 画像任意 IsFlow IsRev imgW可変*************--gap --few
+:where(.Panel) {
+        // --MY5, --bc, --mc, --sc, --rad, --gap, --imgW
+        @apply relative;
+        --MY: 0em;
+        --bg: var(--UN);
+        --beforeFZ: 75%;
+        --beforeC: var(--MC);
+        --afterW: 2em;
+        --afterBG: var(--WH20);
+        --imgW: 30%;
+
+        .item {
+                @apply bg-[--bg] w-full flex flex-wrap rounded-[--rad] p-[--PX] gap-[--gap] relative [counter-increment:cnt];
+
+                +.item {
+                        @apply mt-[--MY];
+                }
+
+                figure {
+                        @apply w-[var(--imgW,30%)];
+
+                        &:where(.Panel .IsRev *) {
+                                @apply order-1;
+                        }
+
+                        img {
+                                @apply w-full h-auto block;
+                        }
+                }
+
+                >div {
+                        @apply flex-1;
+                }
+
+                // 旧 max-md (not .bp-sm): モバイル figure 100% order -1, md 以上で復元
+                &:not(.bp-sm) figure {
+                        @apply w-full  md:w-[var(--imgW,30%)] ;
+                }
+
+                // 旧 max-sm (.bp-sm): モバイル figure 100% order -1, sm 以上で復元
+                &.bp-sm figure {
+                        @apply w-full -order-1 sm:w-[var(--imgW,30%)] sm:[order:revert];
+                }
+        }
+
+        @for $i from 2 through 5 {
+                // --- 画像サイズユーティリティ (img20〜img50) ---
+                $size: $i * 10;
+
+                &.img#{$size} {
+                        --imgW: #{$size + "%"};
+                }
+        }
+
+        &.IsFlow {
+
+                // --- IsFlow modifier (矢印ありの流れ) ---
+                .item {
+
+
+                        &:after {
+                                content: "";
+                                @apply block absolute left-1/2 w-[--afterW] aspect-square bg-[--afterBG] [top:calc(100%+calc(var(--MY)/2))] [transform:translate(-50%,-50%)] [clip-path:polygon(0_15%,50%_100%,100%_15%)];
+                        }
+
+                        &:last-of-type:after {
+                                @apply hidden;
+                        }
+                }
+        }
+}
+
+// **********Flex Ratio 左右子要素の比率を指定*************--gap --few
+// モバイルファースト: モバイル = 全要素 100%, md (or sm .bp-sm時) 以上で各比率に切替
+:where(.Flex55) {
+        // --few, --gap
+        >* {
+                @apply w-full md:w-[calc(50%-var(--gap)/2)];
+        }
+        &.bp-sm > * {
+                @apply w-full sm:w-[calc(50%-var(--gap)/2)] md:w-[calc(50%-var(--gap)/2)];
+        }
+}
+
+:where(.Flex46) {
+        // --few, --gap
+        --few: 40%;
+
+        >:where(:nth-child(1)) {
+                @apply w-full md:w-[calc(var(--few))];
+        }
+
+        >:where(:nth-child(2)) {
+                @apply w-full md:w-[calc(100%-var(--few)-var(--gap))];
+        }
+
+        &.bp-sm > :where(:nth-child(1)) {
+                @apply sm:w-[calc(var(--few))];
+        }
+        &.bp-sm > :where(:nth-child(2)) {
+                @apply sm:w-[calc(100%-var(--few)-var(--gap))];
+        }
+}
+
+:where(.Flex64) {
+        // --few, --gap
+        --few: 40%;
+
+        >:where(:nth-child(1)) {
+                @apply w-full md:w-[calc(100%-var(--few)-var(--gap))];
+        }
+
+        >:where(:nth-child(2)) {
+                @apply w-full md:w-[calc(var(--few))];
+        }
+
+        &.bp-sm > :where(:nth-child(1)) {
+                @apply sm:w-[calc(100%-var(--few)-var(--gap))];
+        }
+        &.bp-sm > :where(:nth-child(2)) {
+                @apply sm:w-[calc(var(--few))];
+        }
+}
+
+:where(.Flex37) {
+        // --few, --gap
+        --few: 30%;
+
+        >:where(:nth-child(1)) {
+                @apply w-full md:w-[calc(var(--few))];
+        }
+
+        >:where(:nth-child(2)) {
+                @apply w-full md:w-[calc(100%-var(--few)-var(--gap))];
+        }
+
+        &.bp-sm > :where(:nth-child(1)) {
+                @apply sm:w-[calc(var(--few))];
+        }
+        &.bp-sm > :where(:nth-child(2)) {
+                @apply sm:w-[calc(100%-var(--few)-var(--gap))];
+        }
+}
+
+:where(.Flex73) {
+        // --few, --gap
+        --few: 30%;
+
+        >:where(:nth-child(1)) {
+                @apply w-full md:w-[calc(100%-var(--few)-var(--gap))];
+        }
+
+        >:where(:nth-child(2)) {
+                @apply w-full md:w-[calc(var(--few))];
+        }
+
+        &.bp-sm > :where(:nth-child(1)) {
+                @apply sm:w-[calc(100%-var(--few)-var(--gap))];
+        }
+        &.bp-sm > :where(:nth-child(2)) {
+                @apply sm:w-[calc(var(--few))];
+        }
+}
+
+:where(.Flex28) {
+        // --few, --gap
+        --few: 20%;
+
+        >:where(:nth-child(1)) {
+                @apply w-full md:w-[calc(var(--few))];
+        }
+
+        >:where(:nth-child(2)) {
+                @apply w-full md:w-[calc(100%-var(--few)-var(--gap))];
+        }
+
+        &.bp-sm > :where(:nth-child(1)) {
+                @apply sm:w-[calc(var(--few))];
+        }
+        &.bp-sm > :where(:nth-child(2)) {
+                @apply sm:w-[calc(100%-var(--few)-var(--gap))];
+        }
+}
+
+:where(.Flex82) {
+        // --few, --gap
+        --few: 20%;
+
+        >:where(:nth-child(1)) {
+                @apply w-full md:w-[calc(100%-var(--few)-var(--gap))];
+        }
+
+        >:where(:nth-child(2)) {
+                @apply w-full md:w-[calc(var(--few))];
+        }
+
+        &.bp-sm > :where(:nth-child(1)) {
+                @apply sm:w-[calc(100%-var(--few)-var(--gap))];
+        }
+        &.bp-sm > :where(:nth-child(2)) {
+                @apply sm:w-[calc(var(--few))];
+        }
+}
+
+:where(.Flex55, .Flex28, .Flex37, .Flex46, .Flex64, .Flex73, .Flex82) {
+        // --gap
+        @apply flex flex-wrap gap-[--gap];
+
+        img {
+                @apply w-full;
+        }
+
+        // 旧 max-md (not .bp-sm): figure モバイル order -1, md 以上で復元
+        &:not(.bp-sm) > figure {
+                @apply -order-1 md:[order:revert];
+        }
+        // 旧 max-sm (.bp-sm): figure モバイル order -1, sm 以上で復元
+        &.bp-sm > figure {
+                @apply -order-1 sm:[order:revert];
+        }
+}
+
+:where(.Wrap) {
+        // --MY, --out
+        @apply py-[--MY] mx-[--out] max-w-none w-auto relative;
+
+        >* {
+                @apply mx-auto max-w-full;
+        }
+
+        >*+* {
+                @apply mt-[--MY5];
+        }
+
+        +.Wrap {
+                @apply mt-0;
+        }
+}
+
+// **********Stick*************--gap --few
+:where(.Stick) {
+        // --item = stiky item width , --shift = overlapping width　, --shift must be less than --item.
+        // --item: 50%;
+        // --scr: calc(100% - var(--item) + var(--shift));
+        // --Nshift: calc(var(--shift)*-1);
+        
+        
+        --Nshift: 0;
+        --scr: 50%;
+        --shift: calc(100% - var(--item) + var(--scr));
+        --shift: 12.5%;
+        @media (min-width: 768px) { 
+        }
+
+
+
+
+
+        .StickItem {
+                @apply align-top text-center sticky top-0 ;
+                img {
+                        @apply w-full;
+                }
+        }
+
+        .StickScr {
+                @apply relative z-[1] mt-0 mr-0;
+        }
+
+        &.IsColumn {
+                @apply block;
+                >* {
+                        @apply flex-initial w-full mx-auto;
+                }
+        }
+
+        &.IsRev .StickScr {
+                @apply ml-0;
+        }
+
+        //  breakpoint 以上 : 重なり・並び替えをまとめて適用
+        @media (min-width: 1280px) {
+                @apply flex  items-start [--Nshift:calc(var(--shift)*-1)];
+                .StickItem {
+                        @apply flex-1;
+                }
+                .StickScr {
+                        @apply w-[--scr] ml-[--Nshift];
+                }
+                &.IsRev .StickScr {
+                        @apply mr-[--Nshift];
+                }
+                &.IsRev .StickItem {
+                        @apply order-1;
+                }
+        }
+        &.bp-lg {
+                @media (min-width: 1024px) {
+                        @apply flex  items-start [--Nshift:calc(var(--shift)*-1)];
+
+                        .StickItem {
+                                @apply flex-1;
+                        }
+                        .StickScr {
+                                @apply w-[--scr] ml-[--Nshift];
+                        }
+                        &.IsRev .StickScr {
+                                @apply mr-[--Nshift];
+                        }
+                        &.IsRev .StickItem {
+                                @apply order-1;
+                        }
+                }
+        }
+        &.bp-md {
+                @media (min-width: 768px) {
+                        @apply flex  items-start [--Nshift:calc(var(--shift)*-1)];
+                        .StickItem {
+                                @apply flex-1;
+                        }
+                        .StickScr {
+                                @apply w-[--scr] ml-[--Nshift];
+                        }
+                        &.IsRev .StickScr {
+                                @apply mr-[--Nshift];
+                        }
+                        &.IsRev .StickItem {
+                                @apply order-1;
+                        }
+                }
+        }
+        &.bp-sm {
+                @media (min-width: 640px) {
+                        @apply flex  items-start [--Nshift:calc(var(--shift)*-1)];
+                        .StickItem {
+                                @apply flex-1;
+                        }
+                        .StickScr {
+                                @apply w-[--scr] ml-[--Nshift];
+                        }
+                        &.IsRev .StickScr {
+                                @apply mr-[--Nshift];
+                        }
+                        &.IsRev .StickItem {
+                                @apply order-1;
+                        }
+                }
+        }
+        &.IsColumn {
+                @apply flex-col;
+                >* {
+                        @apply flex-initial w-full mx-auto;
+                }
+        }
+        
+}
+// :where(.Stick) {
+//         // --item = stiky item width , --shift = overlapping width　, --shift must be less than --item.
+//         // --item: 50%;
+//         // --scr: calc(100% - var(--item) + var(--shift));
+//         --scr: 50%;
+//         --shift: calc(100% - var(--item) + var(--scr));
+//         --shift: 12.5%;
+//         --Nshift: calc(var(--shift)*-1);
+
+//         @include max-md {
+//                 --Nshift: 0;
+//         }
+
+//         @apply flex flex-wrap items-start;
+
+//         &.IsColumn {
+//                 @apply flex-col;
+
+//                 >* {
+//                         @apply flex-initial w-full mx-auto;
+//                 }
+//         }
+
+//         .StickItem {
+//                 @apply  align-top text-center sticky top-0;
+//                 img {
+//                         @apply w-full;
+//                 }
+//         }
+
+//         .StickScr {
+//                 @apply relative z-[1] w-[--scr] mt-0 ml-[--Nshift] mr-0;
+
+//         }
+
+//         &.IsColumn {
+//                 display: block;
+
+//                 >* {
+//                         flex: unset;
+//                         width: 100%;
+//                         margin-inline: auto;
+//                 }
+//         }
+
+//         &.IsRev .StickScr {
+//                 margin-inline: 0 var(--Nshift);
+//                 order: -1;
+//                 @include max-md {
+//                         order: unset;
+
+//                 }
+//         }
+
+//         >* {
+//                 width: calc(50% - var(--gap)/2);
+//         }
+
+//         @include max-xl {
+//                         --Nshift: 0;
+//                 &:is(.bp-xl)>* {
+//                         width: 100%;
+//                         flex: unset;
+//                 }
+//                 &:is(.bp-xl)>figure {
+//                         order: -1;
+//                 }
+//         }
+//         @include max-lg {
+//                         --Nshift: 0;
+//                 &:is(.bp-lg)>* {
+//                         width: 100%;
+//                         flex: unset;
+//                 }
+//                 &:is(.bp-lg)>figure {
+//                         order: -1;
+//                 }
+//         }
+//         @include max-md {
+//                 &:not(.bp-sm)>* {
+//                         flex: unset;
+//                         width: 100%;
+//                 }
+
+//                 &:not(.bp-sm)>figure {
+//                         order: -1;
+//                 }
+//         }
+
+//         @include max-sm {
+//                 &:is(.bp-sm)>* {
+//                         flex: unset;
+//                         width: 100%;
+//                 }
+
+//                 &:is(.bp-sm)>figure {
+//                         order: -1;
+//                 }
+//         }
+// }
+
+// **********PathDraw*************--gap --few
+/* スクロール連動のラッパー（複数配置可） */
+:where(.PathDraw) {
+        --PDS: 0.5;
+        --PES: 0.55;
+        --PVM: 0.5;
+        --stw: 1;
+        --stc: var(--CC);
+        @apply min-h-[55vh];
+
+        svg {
+                @apply block;
+        }
+
+        path {
+                @apply fill-none;
+                stroke: var(--stc);
+                stroke-width: var(--stw);
+                stroke-linecap: round;
+                stroke-linejoin: round;
+        }
+}
+
+/* BorderDraw: --PVM=中央Y比、--PDS=要素中心が「中央+帯」から「中央」へ動く区間(vh比)で線が引き切れる */
+:where(.BorderDraw) {
+        --PDS: 0.2;
+        --PVM: 0.345;
+        --stw: 1px;
+        --stc: var(--CC);
+        @apply relative;
+
+        >.BorderDrawSvg {
+                @apply block pointer-events-none overflow-visible absolute left-0 bottom-0 w-full h-[--stw];
+        }
+
+        >.BorderDrawSvg path {
+                stroke: var(--stc);
+                stroke-width: var(--stw);
+                stroke-linecap: buttom;
+        }
+
+        /* IsDown: 先端を載せる基準線は --PVM（0.5=画面縦中央）。--PDS/--PES は縦ロジックでは未使用 */
+        &.IsDown {
+                --PVM: 0.5;
+        }
+
+        &.IsDown>.BorderDrawSvg {
+                @apply absolute left-0 top-0 w-[--stw] h-full;
+
+                &.Right {
+                        @apply left-auto right-0;
+                }
+        }
+
+}
+
+:where(.RgbShift) {
+        --stw: 20;
+        --stc: var(--CC);
+        --RgbShiftRX: -10px;
+        --RgbShiftRY: -5px;
+        --RgbShiftBX: 10px;
+        --RgbShiftBY: 5px;
+        --delay: 0ms;
+        --beat: 6s;
+
+        --shift: .5em;
+        --xl: var(--shift);
+        --x0: 0px;
+        --xs: calc(var(--xl)*0.5);
+        --yl: 0px;
+        --y0: 0px;
+        --ys: calc(var(--yl)*0.5);
+
+        svg {
+                @apply block;
+        }
+
+        path {
+                @apply fill-none;
+                stroke: var(--stc);
+                stroke-width: var(--stw);
+                stroke-linecap: round;
+                stroke-linejoin: round;
+        }
+
+        .RgbShiftStack {
+                @apply grid isolate;
+        }
+
+        .RgbShiftLayer {
+                @apply mix-blend-screen will-change-transform [grid-area:1/1];
+                animation-delay: var(--delay);
+        }
+
+        .RgbShiftR {
+                @apply pointer-events-none [transform:translate(var(--RgbShiftRX),var(--RgbShiftRY))];
+                --xl: calc(var(--shift)*-1);
+                --x0: 0px;
+                --xs: calc(var(--xl)*0.5);
+                --yl: 0px;
+                --y0: 0px;
+                --ys: calc(var(--yl)*0.5);
+
+                &:is(.IsBeat *) {
+                        transform: unset;
+                        animation: RgbShift var(--beat) var(--delay) infinite;
+                }
+
+                &:is(.IsBeatY *) {
+                        transform: unset;
+                        animation: RgbShiftY var(--beat) var(--delay) infinite;
+                }
+        }
+
+        .RgbShiftG {
+                @apply pointer-events-none [transform:translate(0,0)];
+        }
+
+        .RgbShiftB {
+                @apply pointer-events-auto [transform:translate(var(--RgbShiftBX),var(--RgbShiftBY))];
+
+                &:is(.IsBeat *) {
+                        transform: unset;
+                        animation: RgbShift 3s infinite;
+                }
+
+                &:is(.IsBeatY *) {
+                        transform: unset;
+                        animation: RgbShiftY 3s infinite;
+                }
+        }
+
+        @keyframes RgbShift {
+                1% {
+                        transform: translate(var(--xl), var(--yl))
+                }
+
+                2% {
+                        transform: translate(var(--x0), var(--y0))
+                }
+
+                5% {
+                        transform: translate(var(--xs), var(--ys))
+                }
+
+                100% {
+                        transform: translate(0px, 0px)
+                }
+        }
+
+        @keyframes RgbShiftY {
+                1% {
+                        transform: translate(var(--yl), var(--xl))
+                }
+
+                2% {
+                        transform: translate(var(--y0), var(--x0))
+                }
+
+                5% {
+                        transform: translate(var(--ys), var(--xs))
+                }
+
+                100% {
+                        transform: translate(0px, 0px)
+                }
+        }
+}
+
+:where(.MaskMosaique) {
+        // canvasに描くモザイクの色。
+        --mosaique-color: var(--MC);
+        // 対象要素の幅・高さに対する分割係数。大きいほど細かいマスになる。
+        --mosaique-size-factor: 0.02;
+        // 全マスが消え始めるまでの時間幅。大きいほどゆっくり現れる。
+        --mosaique-stagger: 800;
+        @apply relative isolate overflow-hidden;
+
+        >.MaskMosaiqueCanvas {
+                @apply pointer-events-none absolute inset-0  ;
+        }
+}
+
+:where(.LottieScroll) {
+        //animation demo用
+        --canvasH: 100lvh;
+
+        canvas {
+                @apply min-h-[--canvasH];
+        }
+
+        &.IsDemo {
+                animation: IsDemo 6s linear forwards;
+
+                @keyframes IsDemo {
+                        0% {
+                                filter: brightness(105%);
+                        }
+
+                        100% {
+                                filter: brightness(150%);
+                        }
+                }
+        }
+}
+
+.StickyStep {
+        // モバイル (max-md 相当): --top/padding-bottom/内側の margin を狭く
+        --top: calc(100vh - var(--head)*3);
+        --step: 4em;
+        @apply md:[--top:calc(100vh-2.5em)];
+
+        @apply w-fit max-w-full mx-auto flex items-start py-[1em] pb-[4em] ;
+
+        >* {
+                @apply sticky top-[--top] mx-[.125em] md:mx-[0.5em];
+
+                @for $i from 2 through 9 {
+                        &:nth-child(#{$i}) {
+                                margin-top: calc(var(--step) * #{$i - 1});
+                        }
+                }
+        }
+
+}
+
+:root {
+        --spring-easing: linear(0, 0.004, 0.016, 0.035, 0.063, 0.098, 0.141 13.6%, 0.25, 0.391, 0.563, 0.765,
+                        1, 0.891 40.9%, 0.848, 0.813, 0.785, 0.766, 0.754, 0.75, 0.754, 0.766, 0.785,
+                        0.813, 0.848, 0.891 68.2%, 1 72.7%, 0.973, 0.953, 0.941, 0.938, 0.941, 0.953,
+                        0.973, 1, 0.988, 0.984, 0.988, 1);
+        --spring-duration: 1.333s;
+}
+
+:where(.RandomRects) {
+        @apply relative;
+        .item {
+                @apply absolute [transform:translate(-50%,-50%)];
+        }
+}
+
+.GeneratedShapes {
+        >:not(g),
+        >g>*:not(line){
+                @apply [transform-box:fill-box] origin-center;
+                rotate: var(--GSR);
+        }
+}
+.MarkDown{//~/projects/0413portfolio/src/pages/Activity.tsx
+        ul{
+                @apply pl-[1em] py-4;
+
+        }
+        li{
+                @apply list-disc;
+                ::marker{
+                        @apply -mr-2;
+                }
+        }
+        pre{
+                @apply overflow-auto;
+        }
+}
+
+// ***************画像テキスト ImgText*****************.img??で画像サイズ可変
+$imgW: ("100": 100%, "95": 95%, "90": 90%, "875": 87.5%, "85": 85%, "80": 80%,
+        "75": 75%, "70": 70%, "66": 66%, "65": 65%, "60": 60%, "55": 55%,
+        "50": 50%, "45": 45%, "40": 40%, "35": 35%, "33": 33%, "30": 30%,
+        "25": 25%, "20": 20%, "10": 10%);
+
+@each $key,
+$val in $imgW {
+
+        // --- 画像サイズユーティリティ ---
+        .img#{$key} {
+                --imgW: #{$val};
+        }
+}
+
+:where(.ImgText) {
+        // --gap, --imgW
+        @apply flex flex-wrap gap-[--gap];
+
+        // PCでのデフォルト画像幅
+        --imgW: calc(50% - var(--gap)/2);
+
+        figure {
+                @apply w-[var(--imgW,calc(50%-var(--gap)/2))] mx-auto;
+
+                >a,
+                img {
+                        @apply block w-full h-auto;
+                }
+        }
+
+        >div {
+                @apply flex-1;
+        }
+
+        &.IsRev figure {
+                // --- 反転設定 ---
+                @apply order-1;
+        }
+
+        // 旧 max-md (not .bp-sm): モバイル figure order -1 / 100%、md 以上で復元
+        &:not(.bp-sm) figure {
+                @apply -order-1 w-full md:[order:revert] md:w-[var(--imgW,calc(50%-var(--gap)/2))];
+        }
+
+        // 旧 max-sm (.bp-sm): モバイル figure order -1 / 100%、sm 以上で復元
+        &.bp-sm figure {
+                @apply -order-1 w-full sm:[order:revert] sm:w-[var(--imgW,calc(50%-var(--gap)/2))];
+        }
+}
+
+:is(.BarBFAF, .BarBF, .BarAF){
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .5rem;
+        @media (max-width: 640px){
+        }
+        &:before,
+        &:after{
+                content: "";
+                height: var(--bdw);
+                flex: 1;
+                background-color: var(--CC);
+        }
+}
+:is( .BarBF):after{
+        display: none;
+}
+:is(.BarAF):before{
+        display: none;
+}

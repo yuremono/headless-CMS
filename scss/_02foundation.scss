@@ -1,0 +1,282 @@
+@use "mixin" as *;
+
+html{//基本コンテンツ幅 index.htmlにページクラス home 
+    --base:1200px;
+    @media (max-width : 1560px){--base:1080px;} 
+
+}
+// :root{--bodyFZ:clamp(16px,1.6vw,24px);}
+:root{
+    --bodyFZ:1rem;//16px
+    // --bodyFZ:0.875rem;//14px
+    // --bodyFZ:0.75rem;//12px
+    // --bodyFZ:0.675rem;//10px
+    // --bodyFZ:0.5rem;//8px
+    // --bodyFZ:1.125rem;//18px
+    // --bodyFZ:1.25rem;//20px
+    // --bodyFZ:1.375rem;//22px
+    // --bodyFZ:1.5rem;//24px
+    // @media (max-width: 1320px){
+    //     --bodyFZ:1rem;
+    // }
+    @media (max-width: 1200px){
+        // --bodyFZ:1rem;//16px
+        --bodyFZ:0.875rem;//14px
+    }
+}
+body{
+    font-size: var(--bodyFZ); 
+    overflow-x: hidden;
+    overflow: unset;
+    font-family: var(--bodyFF);
+    font-weight: 400;
+    line-height: 2.25;
+    letter-spacing: 0.025em; 
+    color: var(--tx);
+    font-style: normal;
+}
+:root{//ヘディングタグ sub~はsmall,i,uなどで使用
+    --hcolor: var(--IN);
+    --hfw: 500;
+    --hff:var(--Eng);
+    --subC: var(--mc);
+    --subFW: 500;
+    --subFF: var(--Eng); 
+    --hlh:2;
+    --hls:0.025em;
+    --emFZ: clamp(32px, 5vw, 76px); 
+
+    --h1FZ:clamp(20px, 2.4vw, 24px);
+    --h2FZ:clamp(22px, 3vw, 32px);
+    --h3FZ:clamp(18px, 2.0vw, 20px);
+    --PFZ:clamp(18px, 2.0vw, 20px);
+
+    --h3EN:clamp(20px, 3vw, 32px);
+}
+:root{//space 
+
+    --footerMT:var(--block);
+    --wrapperPY:var(--block);
+    --Schild:var(--block);
+    --Wchild:var(--block5);    
+    --Hafter:30px;  
+    // --linkC:var(--AC);
+
+    --block:120px;
+    --inline:72px;
+    --inline2:calc(var(--inline) * 2);
+    --gap:40px;
+    --gapN:calc(var(--gap)*-1);  
+    --gapH:calc(var(--gap)/2);
+    @media (max-width : 960px){
+        // --inline:40px;
+        --inline:48px;
+        --gap:24px;
+    }
+    @media (max-width : 834px){
+        --block:80px;
+        // --gap:24px;
+        --inline:24px;
+    }
+    @media (max-width : 480px){
+        --gap: 14px;
+    }
+}
+.inline{padding-inline: var(--inline);}
+.inline2{padding-inline: var(--inline2);}
+
+// :where(section,form) :where(img,iframe,figure){border-radius: var(--rad);}
+// :where(section,form) iframe{aspect-ratio: 16 / 9;height: unset;}
+
+
+
+
+
+
+
+.BF,.beforeF,.beforeFooter{margin-bottom: calc(var(--footerMT)*-1 );}
+.f{margin-top: var(--footerMT);}
+// .Hafter{margin-top: var(--Hafter)}
+// .Schild{margin-top: var(--Schild)}
+
+#contents_wrap, section.blog{
+	position: relative;
+	z-index: 1;
+    max-width: 100%;
+    min-width: unset;
+    margin-block-start: var(--contMT);
+    &:is(.page-shop *){
+        margin-block-start: calc(var(--contMT)*1.25 );
+    }
+}
+#contents {
+    background-color: unset;
+    padding-inline: var(--inline);
+    &:is(.blog *){
+        --contMT: 0;
+    }
+}
+
+// #main,
+section{
+    @extend %base; 
+}
+section>*,form>*:where(:not(.page-shop *)){
+    max-width: 100%;
+    margin-inline: auto;
+    position: relative;
+    +*{
+        margin-top: var(--Schild);
+        &.box{margin-top: 0;}
+    }
+    >*{max-width: 100%;}
+}
+
+
+
+i,a:after{font-weight: 900;line-height: inherit;}
+b,strong{
+    font-weight: 700; 
+}
+u{
+    text-decoration-thickness: 1px;text-underline-offset: .25em;
+}
+mark{
+    padding-inline: 0.5em;
+    --bdc:var(--MC);
+    display: inline-block;
+    color: inherit;
+    background: linear-gradient(transparent 50%,var(--bdc) 50%);
+}
+// .markMC mark{--bdc:var(--mc);}
+// .markSC mark{--bdc:var(--SC);}
+// .markBC mark{--bdc:var(--BC);}
+// .markAC mark{--bdc:var(--AC);}
+hr {
+	border-bottom: var(--line);
+	margin-top: 1em;
+}
+.PFZ,p:not(:has(>a)){
+    @extend %Hfont;
+    font-size: var(--PFZ);
+    letter-spacing: unset;
+}
+h1,.h1FZ{
+    @extend %h1FZ;
+    @extend %Hfont;
+}
+h2,.h2FZ{
+    @extend %h2FZ;
+    @extend %Hfont;
+}
+h3,.h3FZ{	
+    @extend %h3FZ;
+    @extend %Hfont;
+}
+h5,h4{	
+    @extend %Hfont;
+    font-size: 1.25em;
+}
+.img100 :is(a,img){
+    width: 100%!important;
+    height: auto!important;
+}
+#contents .slick-list{width: 100%;}
+:target,[id]{//アンカーリンク用 ヘッダー幅を確保
+	scroll-margin-top: calc(var(--head) * 1.5);
+}
+.box:has(iframe){
+    :is(article>div,iframe){
+        height: 100%;
+    }
+}
+// メール送信画面 .confirm,.message,.error ,.entry
+#contents .form_wrap{
+    dl dt{
+        flex-direction: row;
+    }
+    &:is(.confirm,.message,.error){
+        font-size: var(--f16);
+        --bdc:#ccc;
+        *:not(label){
+            color: #111!important;
+        }
+    }
+    &:is(.confirm,.message,.error){
+        --tx: #000;
+        margin-top: calc(var(--head) * 1.2)!important;
+        margin-inline: auto!important;
+        dl:last-of-type dt,
+        dl:last-of-type dd{
+            border-color: #ccc;
+        }
+    }
+    &:is(.entry){
+        --tx: #111;
+        dl:last-of-type dt,
+        dl:last-of-type dd{
+            border-color: #ccc;
+        }
+    }
+}
+section div.form_wrap dl dt label{font-size: inherit;}
+p.annot{
+    width: var(--base);
+    margin-inline: auto!important;
+    max-width: 100%;
+}
+.pankuzu,
+.pan1 {
+    &.__center ul{justify-content: center;}
+    &.__right ul{justify-content: flex-end;}
+    &.__left ul{justify-content: flex-start;}
+    &:is(.title1+*){margin-top: calc(var(--Schild)/2 );}
+    // ul li a:any-link::after{
+    //     content: var(--Home);
+    //     font-family: var(--icon);
+    //     margin-inline-start: .5em;
+    //     display: var(--panAF);
+    // }
+    position: relative;z-index: 1;
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1em;
+        max-width: var(--base);
+        display: inline-flex;
+        li {
+            &:not(:first-child) {
+                pointer-events: none;
+                a{
+                    text-decoration: none;
+                    color: currentColor;
+                    background: none;
+                }
+            }
+        }
+        a:any-link {
+            text-decoration: none;
+            color: var(--linkC);
+        }
+    }
+}
+.ph,.la,.fa-solid{
+    font-family: var(--icon);
+    color: inherit;
+}
+
+div#form_calendar div.head span:nth-of-type(5), div.calendar div.head span:nth-of-type(5),
+div#form_calendar div.head span:nth-of-type(1), div.calendar div.head span:nth-of-type(1){
+	width: unset;font-size: 1.5em;
+	transition: .4s;
+	&:hover{
+		color: inherit;
+		opacity: 0.7;
+	}
+}
+div#form_calendar table tbody tr td.open.level1 span{
+	border-color: var(--GR);
+}
+div#form_calendar table tbody tr td label, div.calendar table tbody tr td label,
+div#form_calendar table tbody tr td.close span{font-size: unset;}
+.dis {display: none;}

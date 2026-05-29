@@ -1,0 +1,145 @@
+{
+  "apiName": "page",
+  "label": "下層ページ",
+  "type": "collection",
+  "description": "会社概要やサービス紹介などの下層ページを管理するコレクション",
+  "listViewFields": ["title", "slug"],
+  "fields": [
+    { "name": "slug", "label": "スラッグ", "type": "text", "required": true },
+    { "name": "title", "label": "ページタイトル", "type": "text", "required": true },
+    { "name": "summary", "label": "要約", "type": "textarea" },
+    {
+      "name": "sections",
+      "label": "セクション",
+      "type": "sectionArray",
+      "required": true,
+      "allowedSections": [
+        { "type": "hero", "label": "ヒーロー" },
+        { "type": "titleGroup", "label": "タイトル群" },
+        {
+          "type": "textBlock",
+          "label": "テキストブロック",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        },
+        {
+          "type": "imageText",
+          "label": "画像とテキスト",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        },
+        {
+          "type": "cardList",
+          "label": "カード一覧",
+          "fields": [
+            { "name": "title", "label": "セクションタイトル", "type": "text" },
+            {
+              "name": "cards",
+              "label": "カード",
+              "type": "array",
+              "item": {
+                "name": "card",
+                "label": "カード",
+                "type": "object",
+                "fields": [
+                  { "name": "body", "label": "本文", "type": "richText" },
+                  { "name": "description", "label": "説明", "type": "richText" }
+                ]
+              }
+            }
+          ]
+        },
+        { "type": "featureList", "label": "特徴一覧" },
+        {
+          "type": "faq",
+          "label": "FAQ",
+          "fields": [
+            { "name": "title", "label": "セクションタイトル", "type": "text" },
+            {
+              "name": "items",
+              "label": "FAQ項目",
+              "type": "array",
+              "item": {
+                "name": "item",
+                "label": "FAQ項目",
+                "type": "object",
+                "fields": [{ "name": "answer", "label": "回答", "type": "richText" }]
+              }
+            }
+          ]
+        },
+        {
+          "type": "cta",
+          "label": "CTA",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        },
+        {
+          "type": "newsList",
+          "label": "お知らせ一覧",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        },
+        {
+          "type": "gallery",
+          "label": "ギャラリー",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        },
+        {
+          "type": "companyProfile",
+          "label": "会社情報",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        },
+        {
+          "type": "access",
+          "label": "アクセス",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        },
+        {
+          "type": "contactLead",
+          "label": "お問い合わせ導線",
+          "fields": [
+            { "name": "title", "label": "タイトル", "type": "text" },
+            { "name": "body", "label": "本文", "type": "richText" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "seo",
+      "label": "SEO",
+      "type": "object",
+      "fields": [
+        { "name": "title", "label": "SEOタイトル", "type": "text" },
+        { "name": "description", "label": "SEO説明", "type": "textarea" },
+        { "name": "ogTitle", "label": "OGタイトル", "type": "text" },
+        { "name": "ogDescription", "label": "OG説明", "type": "textarea" },
+        { "name": "ogImage", "label": "OG画像", "type": "image" },
+        { "name": "canonicalUrl", "label": "canonical URL", "type": "url" },
+        {
+          "name": "noindex",
+          "label": "noindex",
+          "type": "boolean",
+          "defaultValue": false
+        }
+      ]
+    }
+  ]
+}

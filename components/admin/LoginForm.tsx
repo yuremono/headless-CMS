@@ -1,0 +1,83 @@
+'use client';
+
+import { useEffect, useState, type FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { ADMIN_DEV_SESSION_TOKEN, hasPersistedAdminSession, persistAdminSession } from './admin-api';
+
+interface LoginFormProps {
+  email: string;
+  password: string;
+  redirectTo: string;
+  sessionToken?: string;
+}
+
+export function LoginForm({ email, password, redirectTo, sessionToken = ADMIN_DEV_SESSION_TOKEN }: LoginFormProps) {
+  const router = useRouter();
+  const [formEmail, setFormEmail] = useState(email);
+  const [formPassword, setFormPassword] = useState(password);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (hasPersistedAdminSession()) {
+      router.replace(redirectTo);
+    }
+  }, [redirectTo, router]);
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (formEmail === email && formPassword === password) {
+      persistAdminSession(sessionToken);
+      router.push(redirectTo);
+      return;
+    }
+
+    setMessage('メールアドレスまたはパスワードが一致しません。');
+  }
+
+  return (
+    <form className="LoginForm space-y-5 rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl shadow-slate-950/20" onSubmit={handleSubmit}>
+      <div>
+        <h2 className="text-2xl font-semibold text-white">ログイン</h2>
+        <p className="mt-2 text-sm text-slate-300">
+          MVP 用の簡易ログインです。成功時に `x-session-token` 用セッションを保存し、管理 API リクエストへ付与します。
+        </p>
+      </div>
+
+      <label className="block">
+        <span className="text-sm font-medium text-white">メールアドレス</span>
+        <input
+          className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+          value={formEmail}
+          onChange={(event) => setFormEmail(event.target.value)}
+          placeholder="admin@example.com"
+        />
+      </label>
+
+      <label className="block">
+        <span className="text-sm font-medium text-white">パスワード</span>
+        <input
+          className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+          type="password"
+          value={formPassword}
+          onChange={(event) => setFormPassword(event.target.value)}
+          placeholder="admin1234"
+        />
+      </label>
+
+      {message ? <p className="rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">{message}</p> : null}
+
+      <button type="submit" className="w-full rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100">
+        ログイン
+      </button>
+
+      <p className="text-xs leading-5 text-slate-500">
+        デフォルト値は `<code>{email}</code>` / `<code>{password}</code>` です。
+      </p>
+    </form>
+  );
+}

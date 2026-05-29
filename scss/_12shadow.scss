@@ -1,0 +1,90 @@
+@use "mixin" as *;
+:root{//シャドウ デコレーション等
+        --tsW: .5rem; 
+        --txshwh: 0 0 var(--tsW)  var(--WH);
+        --txshbk: 0 0 var(--tsW)  var(--BK);
+        --txshmc: 0 0 var(--tsW)  var(--MC); 
+        --txshsc: 0 0 var(--tsW)  var(--SC); 
+        --txshtx: 0 0 var(--tsW)  var(--TX); 
+        // --txshbc: 0 0 var(--tsW)  var(--BC); 
+    
+        --dsW: 0.5rem;
+        --dswh: drop-shadow(0 0px var(--dsW) var(--WH)); 
+        --dsbk: drop-shadow(0 0px var(--dsW) var(--BK)); 
+        --dsmc: drop-shadow(0 0px var(--dsW) var(--MC));  
+        --dsbc: drop-shadow(0 0px var(--dsW) var(--BC)) drop-shadow(0 0px var(--dsW) var(--BC)) drop-shadow(0 0px var(--dsW) var(--BC))  drop-shadow(0 0px var(--dsW) var(--BC)) ; 
+        // --dstx: drop-shadow(0 0px var(--dsW) var(--tx)); 
+        --dsgr: drop-shadow(0 0px var(--dsW) var(--GR)); 
+        // --dssc: drop-shadow(0 0px var(--dsW) var(--SC)); 
+    
+        // --pxshmc:1px 1px var(--mc);
+        // --pxshac:1px 1px var(--ac30);
+        --pxshwh:0px 1px var(--WH);
+        // --pxshbk:1px 1px var(--BK);
+        // --pxshgr:1px 1px var(--GR);
+        // --pxshbc:1px 1px var(--BC);
+    
+        --pxdswh:drop-shadow(1px 1px var(--WH));
+        // --pxdsbk:drop-shadow(1px 1px var(--BK));
+        // --pxdsmc:drop-shadow(1px 1px var(--mc));
+        // --pxdstx:drop-shadow(1px 1px var(--tx)); 
+        // --pxdsbc:drop-shadow(1px 1px var(--BC)); 
+    
+        // // --bs2:0px 2px 8px #1119; 
+        --bsW:4px;
+        // --NbsW:calc(var(--bsW)*-1 );
+        // --bxshwh:  0  var(--bsW) calc(var(--bsW)*2 )  var(--WH10); 
+        --bxshbk:  0  var(--bsW) calc(var(--bsW)*2 )  var(--bk20); 
+        // --bxshmc:  0  var(--bsW) calc(var(--bsW)*2 )  var(--mc10); 
+        // --bxshbc:  0  var(--bsW) calc(var(--bsW)*2 )  var(--bc10); 
+        // --bxshtx:  0  var(--bsW) calc(var(--bsW)*2 )  var(--tx10); 
+        // --bxshgr:  0  var(--bsW) calc(var(--bsW)*2 )  var(--gr10); 
+        // --bxshsc:  0  var(--bsW) calc(var(--bsW)*2 )  var(--sc10); 
+        // // --bxshgr:5px 5px 0px var(--GR); 
+        // --bxshbtn: inset 2px 2px 4px var(--WH40),
+        // inset -2px -2px 4px var(--tx20); 
+    
+        // --bxshblur:0 0 10px  #11100088;
+}
+
+// .bxshwh{box-shadow: var(--bxshwh);}
+.bxshbk{box-shadow: var(--bxshbk);}
+// .bxshmc{box-shadow: var(--bxshmc);}
+// .bxshsc{box-shadow: var(--bxshsc);}
+// .bxshac{box-shadow: var(--bxshac);}
+// .bxshtx{box-shadow: var(--bxshtx);}
+// .bxshgr{box-shadow: var(--bxshgr);}
+
+.txshwh{text-shadow: var(--txshwh);}
+.txshbk{text-shadow: var(--txshbk);}
+.txshmc{text-shadow: var(--txshmc);}
+.txshsc{text-shadow: var(--txshsc);}
+.txshtx{text-shadow: var(--txshtx);}
+// .txshbc{text-shadow: var(--txshbc);}
+
+.txstwh{-webkit-text-stroke: var(--stw) var(--WH);paint-order: stroke;}
+.txstbk{-webkit-text-stroke: var(--stw) var(--BK);paint-order: stroke;}  
+// .txstmc{-webkit-text-stroke: var(--stw) var(--mc);paint-order: stroke;}
+.txstsc{-webkit-text-stroke: var(--stw) var(--SC);paint-order: stroke;}
+// .txstbc{-webkit-text-stroke: var(--stw) var(--BC);paint-order: stroke;}
+
+// .pxtsmc{text-shadow: var(--pxtsmc);}
+// .pxtssc{text-shadow: var(--pxtssc);}
+// .pxtsac{text-shadow: var(--pxtsac);}
+.pxtswh{text-shadow: var(--pxtswh);}
+// .pxtsbk{text-shadow: var(--pxtsbk);}
+// .pxtsgr{text-shadow: var(--pxtsgr);}
+// .pxtsbc{text-shadow: var(--pxtsbc);}
+
+.dswh{filter: var(--dswh);}
+.dsbk{filter: var(--dsbk);}
+.dsmc{filter: var(--dsmc);}
+.dsbc{filter: var(--dsbc);}
+// .dstx{filter: var(--dstx);}
+.dsgr{filter: var(--dsgr);}
+
+.pxdswh{filter: var(--pxdswh);}
+.pxdsbk{filter: var(--pxdsbk);}
+.pxdsmc{filter: var(--pxdsmc);}
+// .pxdstx{filter: var(--pxdstx);}
+// .pxdsbc{filter: var(--pxdsbc);}

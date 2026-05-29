@@ -1,0 +1,442 @@
+import type { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/db/prisma";
+import { resolveSiteId } from "@/lib/db/site-resolver";
+import { clonePlainObject, isPlainObject } from "@/lib/http";
+import { sanitizeContentDataJson } from "@/lib/sanitize";
+import { toContentModelRecord, toContentRecord } from "./mappers";
+import type {
+  ContentCollectionResult,
+  ContentModelRecord,
+  ContentRecord,
+  ContentStatus,
+  CreateContentInput,
+  ListContentsInput,
+  UpdateContentInput,
+} from "./types";
+
+function normalizeStatus(status: unknown): ContentStatus {
+  if (status === "published" || status === "unpublished") {
+    return status;
+  }
+
+  return "draft";
+}
+
+async function getContentModel(siteId: string, contentType: string) {
+  return prisma.contentModel.findUnique({
+    where: {
+      siteId_apiName: {
+        siteId,
+        apiName: contentType,
+      },
+    },
+  });
+}
+
+export async function listSchemas(siteIdOrSlug: string): Promise<ContentModelRecord[]> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return [];
+  }
+
+  const models = await prisma.contentModel.findMany({
+    where: { siteId },
+    orderBy: { apiName: "asc" },
+  });
+
+  return models.map(toContentModelRecord);
+}
+
+export async function upsertSchema(
+  siteIdOrSlug: string,
+  schema: Omit<ContentModelRecord, "id" | "siteId" | "createdAt" | "updatedAt"> & { id?: string },
+): Promise<ContentModelRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await prisma.contentModel.upsert({
+    where: {
+      siteId_apiName: {
+        siteId,
+        apiName: schema.apiName,
+      },
+    },
+    update: {
+      name: schema.name,
+      type: schema.type,
+      schemaJson: schema.schemaJson as Prisma.InputJsonValue,
+    },
+    create: {
+      id: schema.id,
+      siteId,
+      name: schema.name,
+      apiName: schema.apiName,
+      type: schema.type,
+      schemaJson: schema.schemaJson as Prisma.InputJsonValue,
+    },
+  });
+
+  return toContentModelRecord(model);
+}
+
+export async function getSchema(siteIdOrSlug: string, contentType: string): Promise<ContentModelRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  return model ? toContentModelRecord(model) : null;
+}
+
+export async function listContents(input: ListContentsInput): Promise<ContentCollectionResult> {
+  const siteId = await resolveSiteId(input.siteId);
+  if (!siteId) {
+    return { items: [], total: 0, limit: input.limit, offset: input.offset };
+  }
+
+  const model = await getContentModel(siteId, input.contentType);
+  if (!model) {
+    return { items: [], total: 0, limit: input.limit, offset: input.offset };
+  }
+
+  const where: Prisma.ContentWhereInput = {
+    siteId,
+    modelId: model.id,
+  };
+
+  if (!input.includeDraft) {
+    where.status = "published";
+  }
+
+  if (input.slug !== undefined && input.slug !== null && input.slug !== "") {
+    where.slug = input.slug;
+  }
+
+  const [rows, total] = await Promise.all([
+    prisma.content.findMany({
+      where,
+      orderBy: { updatedAt: "desc" },
+      skip: input.offset,
+      take: input.limit,
+    }),
+    prisma.content.count({ where }),
+  ]);
+
+  return {
+    items: rows.map((row) => toContentRecord(row, input.contentType)),
+    total,
+    limit: input.limit,
+    offset: input.offset,
+  };
+}
+
+export async function getContent(
+  siteIdOrSlug: string,
+  contentType: string,
+  idOrSlug: string,
+  includeDraft: boolean,
+): Promise<ContentRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  if (!model) {
+    return null;
+  }
+
+  const row = await prisma.content.findFirst({
+    where: {
+      siteId,
+      modelId: model.id,
+      OR: [{ id: idOrSlug }, { slug: idOrSlug }],
+    },
+  });
+
+  if (!row) {
+    return null;
+  }
+
+  if (!includeDraft && row.status !== "published") {
+    return null;
+  }
+
+  return toContentRecord(row, contentType);
+}
+
+export async function createContent(
+  siteIdOrSlug: string,
+  contentType: string,
+  input: CreateContentInput,
+): Promise<ContentRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  if (!model) {
+    return null;
+  }
+
+  const status = normalizeStatus(input.status);
+  const dataJson = sanitizeContentDataJson(
+    input.dataJson ? clonePlainObject(input.dataJson) : {},
+    asRecord(model.schemaJson),
+  );
+  const title =
+    input.title ??
+    (typeof dataJson.title === "string" && dataJson.title.trim() ? dataJson.title : "Untitled");
+
+  const row = await prisma.content.create({
+    data: {
+      siteId,
+      modelId: model.id,
+      slug: input.slug ?? null,
+      title,
+      status,
+      dataJson: dataJson as Prisma.InputJsonValue,
+      createdBy: input.createdBy ?? null,
+      updatedBy: input.updatedBy ?? input.createdBy ?? null,
+      publishedAt: status === "published" ? new Date() : null,
+    },
+  });
+
+  return toContentRecord(row, contentType);
+}
+
+export async function updateContent(
+  siteIdOrSlug: string,
+  contentType: string,
+  id: string,
+  input: UpdateContentInput,
+): Promise<ContentRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  if (!model) {
+    return null;
+  }
+
+  const current = await prisma.content.findFirst({
+    where: {
+      id,
+      siteId,
+      modelId: model.id,
+    },
+  });
+
+  if (!current) {
+    return null;
+  }
+
+  const dataJson = sanitizeContentDataJson(
+    input.dataJson ? clonePlainObject(input.dataJson) : asRecord(current.dataJson),
+    asRecord(model.schemaJson),
+  );
+  const nextStatus = input.status ?? normalizeStatus(current.status);
+  const title =
+    input.title ??
+    current.title ??
+    (typeof dataJson.title === "string" && dataJson.title.trim() ? dataJson.title : current.title);
+
+  const row = await prisma.content.update({
+    where: { id: current.id },
+    data: {
+      slug: input.slug === undefined ? current.slug : input.slug,
+      title,
+      status: nextStatus,
+      dataJson: dataJson as Prisma.InputJsonValue,
+      updatedBy: input.updatedBy ?? current.updatedBy,
+      publishedAt:
+        nextStatus === "published"
+          ? current.publishedAt ?? new Date()
+          : nextStatus === "draft"
+            ? null
+            : current.publishedAt,
+    },
+  });
+
+  return toContentRecord(row, contentType);
+}
+
+export async function deleteContent(siteIdOrSlug: string, contentType: string, id: string): Promise<boolean> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return false;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  if (!model) {
+    return false;
+  }
+
+  const result = await prisma.content.deleteMany({
+    where: {
+      id,
+      siteId,
+      modelId: model.id,
+    },
+  });
+
+  return result.count > 0;
+}
+
+export async function publishContent(
+  siteIdOrSlug: string,
+  contentType: string,
+  id: string,
+  updatedBy?: string | null,
+): Promise<ContentRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  if (!model) {
+    return null;
+  }
+
+  const current = await prisma.content.findFirst({
+    where: {
+      id,
+      siteId,
+      modelId: model.id,
+    },
+  });
+
+  if (!current) {
+    return null;
+  }
+
+  const row = await prisma.content.update({
+    where: { id: current.id },
+    data: {
+      status: "published",
+      updatedBy: updatedBy ?? current.updatedBy,
+      publishedAt: new Date(),
+    },
+  });
+
+  return toContentRecord(row, contentType);
+}
+
+export async function unpublishContent(
+  siteIdOrSlug: string,
+  contentType: string,
+  id: string,
+  updatedBy?: string | null,
+): Promise<ContentRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  if (!model) {
+    return null;
+  }
+
+  const current = await prisma.content.findFirst({
+    where: {
+      id,
+      siteId,
+      modelId: model.id,
+    },
+  });
+
+  if (!current) {
+    return null;
+  }
+
+  const row = await prisma.content.update({
+    where: { id: current.id },
+    data: {
+      status: "unpublished",
+      updatedBy: updatedBy ?? current.updatedBy,
+    },
+  });
+
+  return toContentRecord(row, contentType);
+}
+
+function buildDuplicateSlug(slug: string | null): string | null {
+  if (!slug || slug.trim().length === 0) {
+    return null;
+  }
+
+  const suffix = Date.now().toString(36);
+  const base = slug.replace(/-copy(?:-[a-z0-9]+)?$/i, "");
+  return `${base}-copy-${suffix}`;
+}
+
+function buildDuplicateTitle(title: string | null): string {
+  const base = title?.trim() || "Untitled";
+  return `${base} (コピー)`;
+}
+
+export async function duplicateContent(
+  siteIdOrSlug: string,
+  contentType: string,
+  id: string,
+  actorId?: string | null,
+): Promise<ContentRecord | null> {
+  const siteId = await resolveSiteId(siteIdOrSlug);
+  if (!siteId) {
+    return null;
+  }
+
+  const model = await getContentModel(siteId, contentType);
+  if (!model) {
+    return null;
+  }
+
+  const current = await prisma.content.findFirst({
+    where: {
+      id,
+      siteId,
+      modelId: model.id,
+    },
+  });
+
+  if (!current) {
+    return null;
+  }
+
+  const dataJson = clonePlainObject(asRecord(current.dataJson));
+
+  const row = await prisma.content.create({
+    data: {
+      siteId,
+      modelId: model.id,
+      slug: buildDuplicateSlug(current.slug),
+      title: buildDuplicateTitle(current.title),
+      status: "draft",
+      dataJson: dataJson as Prisma.InputJsonValue,
+      createdBy: actorId ?? current.createdBy,
+      updatedBy: actorId ?? current.updatedBy,
+      publishedAt: null,
+    },
+  });
+
+  return toContentRecord(row, contentType);
+}
+
+function asRecord(value: unknown): Record<string, unknown> {
+  return isPlainObject(value) ? clonePlainObject(value) : {};
+}
+
+export async function seedSchema(
+  siteIdOrSlug: string,
+  schema: Omit<ContentModelRecord, "id" | "siteId" | "createdAt" | "updatedAt"> & { id?: string },
+): Promise<ContentModelRecord | null> {
+  return upsertSchema(siteIdOrSlug, schema);
+}
