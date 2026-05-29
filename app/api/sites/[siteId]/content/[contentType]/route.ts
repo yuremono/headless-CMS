@@ -1,5 +1,5 @@
-import { errorResponse, jsonResponse } from "@/lib/http";
-import { getDeliveryContent, listDeliveryContents, resolveDeliveryRequest } from "@/lib/content/service";
+import { deliveryErrorResponse, deliveryJsonResponse } from "@/lib/http";
+import { listDeliveryContents, resolveDeliveryRequest } from "@/lib/content/service";
 
 export async function GET(
   request: Request,
@@ -10,9 +10,13 @@ export async function GET(
   const resolved = await resolveDeliveryRequest(request, siteId, url.searchParams);
 
   if (!resolved.auth.ok) {
-    return errorResponse(resolved.auth.failure.status, resolved.auth.failure.code, resolved.auth.failure.error);
+    return deliveryErrorResponse(
+      resolved.auth.failure.status,
+      resolved.auth.failure.code,
+      resolved.auth.failure.error,
+    );
   }
 
   const collection = await listDeliveryContents(siteId, contentType, url.searchParams, resolved.includeDraft);
-  return jsonResponse(collection);
+  return deliveryJsonResponse(collection, resolved.includeDraft, "collection");
 }

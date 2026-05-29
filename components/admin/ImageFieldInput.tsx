@@ -11,12 +11,13 @@ interface ImageFieldInputProps {
   helpText?: string;
   value: ImageFieldValue;
   onChange: (value: ImageFieldValue) => void;
+  readOnly?: boolean;
 }
 
 const inputClassName =
   'mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20';
 
-export function ImageFieldInput({ siteId, label, required, helpText, value, onChange }: ImageFieldInputProps) {
+export function ImageFieldInput({ siteId, label, required, helpText, value, onChange, readOnly = false }: ImageFieldInputProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
@@ -107,32 +108,36 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
       </div>
 
       <div className="ImageFieldInput_controls mt-3 flex flex-wrap items-center gap-3">
-        <input
-          ref={fileInputRef}
-          className="sr-only"
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/gif"
-          onChange={(event) => {
-            const file = event.target.files?.[0] ?? null;
-            void handleFileSelected(file);
-            event.target.value = '';
-          }}
-        />
-        <button
-          type="button"
-          className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
-          onClick={() => fileInputRef.current?.click()}
-          disabled={isUploading}
-        >
-          {isUploading ? 'アップロード中…' : '画像をアップロード'}
-        </button>
-        <button
-          type="button"
-          className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
-          onClick={() => setIsLibraryOpen(true)}
-        >
-          ライブラリから選択
-        </button>
+        {!readOnly ? (
+          <>
+            <input
+              ref={fileInputRef}
+              className="sr-only"
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null;
+                void handleFileSelected(file);
+                event.target.value = '';
+              }}
+            />
+            <button
+              type="button"
+              className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+            >
+              {isUploading ? 'アップロード中…' : '画像をアップロード'}
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+              onClick={() => setIsLibraryOpen(true)}
+            >
+              ライブラリから選択
+            </button>
+          </>
+        ) : null}
         {value.url ? (
           <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-100">
             登録済み
@@ -158,6 +163,8 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
           placeholder="/uploads/site-id/example.jpg"
           value={value.url}
           onChange={(event) => onChange({ ...value, url: event.target.value })}
+          disabled={readOnly}
+          readOnly={readOnly}
         />
       </label>
 
@@ -169,6 +176,8 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
           placeholder="画像の説明"
           value={value.alt}
           onChange={(event) => onChange({ ...value, alt: event.target.value })}
+          disabled={readOnly}
+          readOnly={readOnly}
         />
       </label>
 

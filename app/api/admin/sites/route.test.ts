@@ -13,6 +13,11 @@ vi.mock("@/lib/db/create-site", () => ({
   createSite: vi.fn(),
 }));
 
+vi.mock("@/lib/audit/log", () => ({
+  recordAuditLog: vi.fn(),
+  auditMetadataFromContext: vi.fn(() => ({})),
+}));
+
 import { resolveGlobalAdminRequest } from "@/lib/content/service";
 import { createSite } from "@/lib/db/create-site";
 import { listSiteSummaries } from "@/lib/db/sites";

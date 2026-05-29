@@ -7,7 +7,7 @@ import {
   type AdminAccessOptions,
   type AuthResult,
 } from "@/lib/auth";
-import { resolveActorSiteRole } from "@/lib/auth/site-role";
+import { resolveActorSiteRole, resolveGlobalActorRole } from "@/lib/auth/site-role";
 import {
   getAdminContent,
   listAdminContentTypes,
@@ -154,8 +154,17 @@ export async function resolveAdminRequest(
   return applySitePermission(auth, siteRole, options?.permission);
 }
 
-export async function resolveGlobalAdminRequest(request: Request): Promise<AuthResult> {
-  return validateGlobalAdminAccess(request);
+export async function resolveGlobalAdminRequest(
+  request: Request,
+  options?: AdminAccessOptions,
+): Promise<AuthResult> {
+  const auth = await validateGlobalAdminAccess(request);
+  if (!auth.ok) {
+    return auth;
+  }
+
+  const siteRole = await resolveGlobalActorRole(auth.context);
+  return applySitePermission(auth, siteRole, options?.permission);
 }
 
 export async function getSchemas(siteId: string) {
@@ -217,6 +226,30 @@ export async function patchAdminAsset(
 
   return { asset };
 }
+
+const MEMBER_MANAGE_PERMISSION = { permission: "member:manage" as const };
+
+export async function getAdminMembers(siteId: string) {
+  const { listSiteMembers } = await import("@/lib/db/members");
+  return listSiteMembers(siteId);
+}
+
+export async function inviteAdminMember(siteId: string, body: Record<string, unknown>) {
+  const { inviteSiteMember } = await import("@/lib/db/members");
+  return inviteSiteMember(siteId, body);
+}
+
+export async function patchAdminMember(siteId: string, memberId: string, body: Record<string, unknown>) {
+  const { updateSiteMemberRole } = await import("@/lib/db/members");
+  return updateSiteMemberRole(siteId, memberId, body);
+}
+
+export async function deleteAdminMember(siteId: string, memberId: string) {
+  const { removeSiteMember } = await import("@/lib/db/members");
+  return removeSiteMember(siteId, memberId);
+}
+
+export { MEMBER_MANAGE_PERMISSION };
 
 export async function listDeliveryContents(
   siteId: string,

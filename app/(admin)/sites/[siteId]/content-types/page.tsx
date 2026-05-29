@@ -4,6 +4,7 @@ import { AdminPageHeader } from '../../../../../components/admin/AdminPageHeader
 import { AdminApiNotice } from '../../../../../components/admin/AdminApiNotice';
 import { ContentTypeList } from '../../../../../components/admin/ContentTypeList';
 import { loadContentTypes, loadContents, resolveSiteSummary } from '../../../../../components/admin/AdminData';
+import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
 
 interface ContentTypesPageProps {
   params: Promise<{ siteId: string }>;
@@ -19,6 +20,8 @@ export default async function ContentTypesPage({ params }: ContentTypesPageProps
     loadContents(siteId, 'news'),
   ]);
 
+  const access = await getAdminUiAccess(siteId);
+
   return (
     <AdminLayout site={site}>
       <AdminPageHeader
@@ -29,8 +32,11 @@ export default async function ContentTypesPage({ params }: ContentTypesPageProps
             <Link href={`/sites/${siteId}`} className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white">
               サイト概要
             </Link>
-            <Link href={`/sites/${siteId}/contents/topPage`} className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950">
-              トップページ編集
+            <Link
+              href={`/sites/${siteId}/contents/topPage`}
+              className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950"
+            >
+              {access.readOnly ? 'トップページ詳細' : 'トップページ編集'}
             </Link>
           </>
         }

@@ -30,6 +30,7 @@ describe("GET /api/sites/[siteId]/content/[contentType]", () => {
     });
 
     expect(response.status).toBe(401);
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
     await expect(response.json()).resolves.toEqual({
       code: "missing_api_key",
       error: "API key is required.",
@@ -37,7 +38,7 @@ describe("GET /api/sites/[siteId]/content/[contentType]", () => {
     expect(mockedListDeliveryContents).not.toHaveBeenCalled();
   });
 
-  it("認証成功時はコレクション JSON を返す", async () => {
+  it("公開一覧は Cache-Control 付きコレクション JSON を返す", async () => {
     mockedResolveDeliveryRequest.mockResolvedValue({
       auth: {
         ok: true,
@@ -79,6 +80,7 @@ describe("GET /api/sites/[siteId]/content/[contentType]", () => {
     );
 
     expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toBe("public, max-age=30, s-maxage=120");
     await expect(response.json()).resolves.toMatchObject({
       total: 1,
       items: [{ id: "content-1", contentType: "news" }],
@@ -89,5 +91,35 @@ describe("GET /api/sites/[siteId]/content/[contentType]", () => {
       expect.any(URLSearchParams),
       false,
     );
+  });
+
+  it("draft プレビュー時は no-store を返す", async () => {
+    mockedResolveDeliveryRequest.mockResolvedValue({
+      auth: {
+        ok: true,
+        context: {
+          mode: "preview",
+          siteId: "site-1",
+          token: "preview-token",
+          scope: "read",
+          actorId: "preview:site-1",
+        },
+      },
+      includeDraft: true,
+    });
+    mockedListDeliveryContents.mockResolvedValue({
+      items: [],
+      total: 0,
+      limit: 20,
+      offset: 0,
+    });
+
+    const response = await GET(
+      new Request("https://example.com/api/sites/site-1/content/news?draft=1"),
+      { params: Promise.resolve({ siteId: "site-1", contentType: "news" }) },
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
   });
 });

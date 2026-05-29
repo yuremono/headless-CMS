@@ -10,6 +10,7 @@ vi.mock("@/lib/auth", () => ({
 
 vi.mock("@/lib/auth/site-role", () => ({
   resolveActorSiteRole: vi.fn(),
+  resolveGlobalActorRole: vi.fn(),
 }));
 
 vi.mock("@/lib/content/store", () => ({
@@ -47,7 +48,7 @@ import {
   validatePreviewToken,
   validatePublicApiKey,
 } from "@/lib/auth";
-import { resolveActorSiteRole } from "@/lib/auth/site-role";
+import { resolveActorSiteRole, resolveGlobalActorRole } from "@/lib/auth/site-role";
 import {
   createContent,
   deleteContent,
@@ -90,6 +91,7 @@ const mockedPreviewAuth = vi.mocked(validatePreviewToken);
 const mockedAdminAuth = vi.mocked(validateAdminAccess);
 const mockedGlobalAdminAuth = vi.mocked(validateGlobalAdminAccess);
 const mockedResolveActorSiteRole = vi.mocked(resolveActorSiteRole);
+const mockedResolveGlobalActorRole = vi.mocked(resolveGlobalActorRole);
 const mockedApplySitePermission = vi.mocked(applySitePermission);
 const mockedListSchemas = vi.mocked(listSchemas);
 const mockedGetSchema = vi.mocked(getSchema);
@@ -187,6 +189,7 @@ describe("resolveDeliveryRequest", () => {
 describe("resolveAdminRequest / resolveGlobalAdminRequest", () => {
   beforeEach(() => {
     mockedResolveActorSiteRole.mockResolvedValue("owner");
+    mockedResolveGlobalActorRole.mockResolvedValue("owner");
     mockedApplySitePermission.mockImplementation((auth, siteRole) => ({
       ok: true,
       context: { ...auth.context, siteRole },
@@ -206,12 +209,17 @@ describe("resolveAdminRequest / resolveGlobalAdminRequest", () => {
     expect(result.ok).toBe(true);
   });
 
-  it("グローバル管理認証を委譲する", async () => {
+  it("グローバル管理認証・ロール解決・権限適用を行う", async () => {
     mockedGlobalAdminAuth.mockResolvedValue(okAuth);
 
-    await resolveGlobalAdminRequest(new Request("https://example.com"));
+    const result = await resolveGlobalAdminRequest(new Request("https://example.com"), {
+      permission: "site:write",
+    });
 
     expect(mockedGlobalAdminAuth).toHaveBeenCalled();
+    expect(mockedResolveGlobalActorRole).toHaveBeenCalledWith(okAuth.context);
+    expect(mockedApplySitePermission).toHaveBeenCalledWith(okAuth, "owner", "site:write");
+    expect(result.ok).toBe(true);
   });
 });
 

@@ -89,6 +89,41 @@ export interface ApiSiteSummary {
   updatedAt: string;
 }
 
+
+export interface ApiSiteMemberRecord {
+  id: string;
+  siteId: string;
+  userId: string;
+  email: string | null;
+  name: string | null;
+  role: 'owner' | 'admin' | 'editor' | 'viewer';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApiSiteMemberCollection {
+  items: ApiSiteMemberRecord[];
+  total: number;
+}
+
+export interface ApiAuditLogRecord {
+  id: string;
+  siteId: string;
+  userId: string | null;
+  action: string;
+  resource: string;
+  resourceId: string | null;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface ApiAuditLogCollection {
+  items: ApiAuditLogRecord[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
 export interface ApiCreateSiteResponse {
   site: ApiSiteSummary;
   apiKeys: {

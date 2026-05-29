@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAdminAccess } from './AdminAccessContext';
 import { AdminActionNotice } from './AdminActionNotice';
 import { adminFetch, type ApiCreateSiteResponse } from './admin-api';
 import { siteRouteKey } from './admin-data-utils';
@@ -21,6 +22,7 @@ function previewSlug(name: string): string {
 }
 
 export function SiteCreateForm() {
+  const { canManageSite } = useAdminAccess();
   const router = useRouter();
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
@@ -66,6 +68,10 @@ export function SiteCreateForm() {
     setSlug('');
     setSlugTouched(false);
     router.refresh();
+  }
+
+  if (!canManageSite) {
+    return null;
   }
 
   if (createdSite) {

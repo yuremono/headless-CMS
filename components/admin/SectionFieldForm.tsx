@@ -1,11 +1,13 @@
 'use client';
 
 import { CardListItemsEditor, FaqItemsEditor, FeatureListItemsEditor } from './SectionArrayItemEditor';
+import { useAdminAccess } from './AdminAccessContext';
 
 interface SectionFieldFormProps {
   type: string;
   data: Record<string, unknown>;
   onChange: (data: Record<string, unknown>) => void;
+  readOnly?: boolean;
 }
 
 interface FieldProps {
@@ -47,6 +49,7 @@ function writeNested(
 }
 
 function SectionInput({ label, value, onChange, multiline, placeholder }: FieldProps) {
+  const { readOnly } = useAdminAccess();
   const className =
     'mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20';
 
@@ -60,6 +63,8 @@ function SectionInput({ label, value, onChange, multiline, placeholder }: FieldP
           value={value}
           placeholder={placeholder}
           onChange={(event) => onChange(event.target.value)}
+          disabled={readOnly}
+          readOnly={readOnly}
         />
       ) : (
         <input
@@ -68,6 +73,8 @@ function SectionInput({ label, value, onChange, multiline, placeholder }: FieldP
           value={value}
           placeholder={placeholder}
           onChange={(event) => onChange(event.target.value)}
+          disabled={readOnly}
+          readOnly={readOnly}
         />
       )}
     </label>
@@ -77,9 +84,11 @@ function SectionInput({ label, value, onChange, multiline, placeholder }: FieldP
 function ImageFields({
   data,
   onChange,
+  readOnly = false,
 }: {
   data: Record<string, unknown>;
   onChange: (data: Record<string, unknown>) => void;
+  readOnly?: boolean;
 }) {
   return (
     <div className="SectionFieldForm_image grid gap-3 sm:grid-cols-2">
@@ -102,9 +111,11 @@ function ImageFields({
 function ButtonFields({
   data,
   onChange,
+  readOnly = false,
 }: {
   data: Record<string, unknown>;
   onChange: (data: Record<string, unknown>) => void;
+  readOnly?: boolean;
 }) {
   return (
     <div className="SectionFieldForm_button grid gap-3 sm:grid-cols-2">
@@ -147,7 +158,7 @@ function GenericFields({
   );
 }
 
-export function SectionFieldForm({ type, data, onChange }: SectionFieldFormProps) {
+export function SectionFieldForm({ type, data, onChange, readOnly = false }: SectionFieldFormProps) {
   if (type === 'hero') {
     return (
       <div className="SectionFieldForm grid gap-3">
@@ -162,8 +173,8 @@ export function SectionFieldForm({ type, data, onChange }: SectionFieldFormProps
           multiline
           onChange={(value) => onChange({ ...data, lead: value })}
         />
-        <ImageFields data={data} onChange={onChange} />
-        <ButtonFields data={data} onChange={onChange} />
+        <ImageFields data={data} onChange={onChange} readOnly={readOnly} />
+        <ButtonFields data={data} onChange={onChange} readOnly={readOnly} />
       </div>
     );
   }
@@ -225,6 +236,7 @@ export function SectionFieldForm({ type, data, onChange }: SectionFieldFormProps
             className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
             value={readString(data, 'imagePosition') || 'right'}
             onChange={(event) => onChange({ ...data, imagePosition: event.target.value })}
+            disabled={readOnly}
           >
             <option value="left">左</option>
             <option value="right">右</option>

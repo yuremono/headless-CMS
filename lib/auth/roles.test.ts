@@ -30,11 +30,22 @@ describe("hasPermission", () => {
     expect(hasPermission("editor", "member:manage")).toBe(false);
   });
 
-  it("admin は種類・メンバー管理と公開操作を許可", () => {
+  it("admin は site:write と種類・メンバー管理を許可", () => {
+    expect(hasPermission("admin", "site:write")).toBe(true);
     expect(hasPermission("admin", "content_type:manage")).toBe(true);
     expect(hasPermission("admin", "member:manage")).toBe(true);
+    expect(hasPermission("admin", "audit:read")).toBe(true);
     expect(hasPermission("admin", "site:delete")).toBe(false);
     expect(hasPermission("admin", "api_key:manage")).toBe(false);
+  });
+
+  it("editor / viewer は audit:read を拒否", () => {
+    expect(hasPermission("editor", "audit:read")).toBe(false);
+    expect(hasPermission("viewer", "audit:read")).toBe(false);
+  });
+
+  it("editor は site:write を拒否", () => {
+    expect(hasPermission("editor", "site:write")).toBe(false);
   });
 });
 

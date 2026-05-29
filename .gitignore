@@ -22,6 +22,7 @@ public/uploads/*
 
 # Temp / agent artifacts
 tmp/
+tmp/backups/
 
 # Logs
 *.log

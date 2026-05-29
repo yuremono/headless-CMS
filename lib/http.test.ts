@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
 import {
   clonePlainObject,
+  deliveryErrorResponse,
+  deliveryJsonResponse,
   errorResponse,
   isPlainObject,
   jsonResponse,
   parseBooleanQuery,
   parsePagination,
   readJsonBody,
+  resolveDeliveryCacheControl,
 } from "./http";
 
 describe("parsePagination", () => {
@@ -69,6 +72,40 @@ describe("isPlainObject / clonePlainObject", () => {
     const cloned = clonePlainObject(source);
     cloned.nested.value = 2;
     expect(source.nested.value).toBe(1);
+  });
+});
+
+describe("resolveDeliveryCacheControl", () => {
+  it("draft/preview 時は no-store を返す", () => {
+    expect(resolveDeliveryCacheControl(true, "collection")).toBe("no-store");
+    expect(resolveDeliveryCacheControl(true, "item")).toBe("no-store");
+  });
+
+  it("公開一覧は短めの CDN キャッシュを返す", () => {
+    expect(resolveDeliveryCacheControl(false, "collection")).toBe("public, max-age=30, s-maxage=120");
+  });
+
+  it("公開単体は長めの CDN キャッシュを返す", () => {
+    expect(resolveDeliveryCacheControl(false, "item")).toBe("public, max-age=60, s-maxage=300");
+  });
+});
+
+describe("deliveryJsonResponse / deliveryErrorResponse", () => {
+  it("deliveryJsonResponse は Cache-Control を付与する", async () => {
+    const response = deliveryJsonResponse({ ok: true }, false, "item");
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toBe("public, max-age=60, s-maxage=300");
+    await expect(response.json()).resolves.toEqual({ ok: true });
+  });
+
+  it("deliveryErrorResponse は no-store を付与する", async () => {
+    const response = deliveryErrorResponse(401, "missing_api_key", "API key is required.");
+    expect(response.status).toBe(401);
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
+    await expect(response.json()).resolves.toEqual({
+      code: "missing_api_key",
+      error: "API key is required.",
+    });
   });
 });
 

@@ -12,13 +12,14 @@ interface FieldRendererProps {
   value: FieldDraftValue;
   sectionTemplates?: string[];
   onChange: (key: string, value: FieldDraftValue) => void;
+  readOnly?: boolean;
 }
 
 function isImageFieldValue(value: FieldDraftValue): value is ImageFieldValue {
   return typeof value === 'object' && value !== null && 'url' in value && 'alt' in value;
 }
 
-export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange }: FieldRendererProps) {
+export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange, readOnly = false }: FieldRendererProps) {
   const fieldKey = getFieldKey(field);
   const baseClass =
     'mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20';
@@ -43,6 +44,7 @@ export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange
         sectionTemplates={sectionTemplates}
         helpText={field.helpText}
         onChange={(nextValue) => onChange(fieldKey, nextValue)}
+        readOnly={readOnly}
       />
     );
   }
@@ -58,6 +60,7 @@ export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange
         helpText={field.helpText}
         value={imageValue}
         onChange={(nextValue) => onChange(fieldKey, nextValue)}
+        readOnly={readOnly}
       />
     );
   }
@@ -72,8 +75,15 @@ export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange
           placeholder={field.placeholder}
           value={String(value ?? '')}
           onChange={(event) => onChange(fieldKey, event.target.value)}
+          disabled={readOnly}
+          readOnly={readOnly}
         />
       ) : field.type === 'boolean' ? (
+        readOnly ? (
+          <p className="mt-2 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white">
+            {Boolean(value) ? '有効' : '無効'}
+          </p>
+        ) : (
         <button
           type="button"
           className="mt-2 flex w-full items-center justify-between rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-left text-sm text-white"
@@ -84,11 +94,13 @@ export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange
             {Boolean(value) ? '有効' : '無効'}
           </span>
         </button>
+        )
       ) : field.type === 'select' ? (
         <select
           className={baseClass}
           value={String(value ?? '')}
           onChange={(event) => onChange(fieldKey, event.target.value)}
+          disabled={readOnly}
         >
           <option value="">選択してください</option>
           {field.options?.map((option) => (
@@ -105,6 +117,8 @@ export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange
           placeholder={field.placeholder}
           value={String(value ?? '')}
           onChange={(event) => onChange(fieldKey, field.type === 'number' ? event.target.value : event.target.value)}
+          disabled={readOnly}
+          readOnly={readOnly}
         />
       )}
       {field.helpText ? <p className="mt-2 text-xs leading-5 text-slate-400">{field.helpText}</p> : null}

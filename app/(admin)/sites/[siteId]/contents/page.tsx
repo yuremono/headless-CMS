@@ -3,6 +3,7 @@ import { AdminLayout } from '../../../../../components/admin/AdminLayout';
 import { AdminPageHeader } from '../../../../../components/admin/AdminPageHeader';
 import { AdminApiNotice } from '../../../../../components/admin/AdminApiNotice';
 import { getSiteDefinition, loadContents, resolveSiteSummary } from '../../../../../components/admin/AdminData';
+import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
 
 interface ContentsHubPageProps {
   params: Promise<{ siteId: string }>;
@@ -21,6 +22,7 @@ export default async function ContentsHubPage({ params }: ContentsHubPageProps) 
   const [pages, news] = await Promise.all([loadContents(siteId, 'page'), loadContents(siteId, 'news')]);
   const items = [...pages.data, ...news.data].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
   const meta = pages.meta.source === 'demo' ? pages.meta : news.meta;
+  const access = await getAdminUiAccess(siteId);
 
   return (
     <AdminLayout site={site}>
@@ -70,7 +72,7 @@ export default async function ContentsHubPage({ params }: ContentsHubPageProps) 
                         href={`/sites/${siteId}/contents/${item.contentType}/${item.id}`}
                         className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-white"
                       >
-                        編集
+                        {access.readOnly ? '詳細' : '編集'}
                       </Link>
                       <Link
                         href={`/sites/${siteId}/contents/${item.contentType}`}

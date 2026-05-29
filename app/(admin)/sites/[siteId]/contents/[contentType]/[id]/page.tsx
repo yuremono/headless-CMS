@@ -7,6 +7,7 @@ import { ContentForm } from '../../../../../../../components/admin/ContentForm';
 import { PreviewLink } from '../../../../../../../components/admin/PreviewLink';
 import { loadContent, resolveContentTypeDefinition, resolveSiteSummary } from '../../../../../../../components/admin/AdminData';
 import { buildPreviewUrl } from '../../../../../../../lib/preview';
+import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
 
 interface ContentEditPageProps {
   params: Promise<{ siteId: string; contentType: string; id: string }>;
@@ -34,11 +35,12 @@ export default async function ContentEditPage({ params }: ContentEditPageProps) 
     contentId: definition.kind === 'single' ? record.data.id : undefined,
     slug: definition.kind === 'collection' ? record.data.slug : undefined,
   });
+  const access = await getAdminUiAccess(siteId);
 
   return (
     <AdminLayout site={site}>
       <AdminPageHeader
-        title={`${definition.label} 編集`}
+        title={access.readOnly ? `${definition.label} 詳細` : `${definition.label} 編集`}
         subtitle={`対象コンテンツ: ${record.data.title}`}
         actions={
           <>

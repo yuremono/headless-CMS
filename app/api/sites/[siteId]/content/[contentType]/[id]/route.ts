@@ -1,4 +1,4 @@
-import { errorResponse, jsonResponse } from "@/lib/http";
+import { deliveryErrorResponse, deliveryJsonResponse } from "@/lib/http";
 import { getDeliveryContent, resolveDeliveryRequest } from "@/lib/content/service";
 
 export async function GET(
@@ -10,13 +10,17 @@ export async function GET(
   const resolved = await resolveDeliveryRequest(request, siteId, url.searchParams);
 
   if (!resolved.auth.ok) {
-    return errorResponse(resolved.auth.failure.status, resolved.auth.failure.code, resolved.auth.failure.error);
+    return deliveryErrorResponse(
+      resolved.auth.failure.status,
+      resolved.auth.failure.code,
+      resolved.auth.failure.error,
+    );
   }
 
   const content = await getDeliveryContent(siteId, contentType, id, resolved.includeDraft);
   if (!content) {
-    return errorResponse(404, "content_not_found", "Content not found.");
+    return deliveryErrorResponse(404, "content_not_found", "Content not found.");
   }
 
-  return jsonResponse(content);
+  return deliveryJsonResponse(content, resolved.includeDraft, "item");
 }

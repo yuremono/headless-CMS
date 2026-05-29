@@ -8,6 +8,10 @@ vi.mock("@/lib/content/service", () => ({
   createAdminContent: vi.fn(),
 }));
 
+vi.mock("@/lib/audit/log", () => ({
+  recordAuditFromContext: vi.fn(),
+}));
+
 import {
   createAdminContent,
   listAdminContents,

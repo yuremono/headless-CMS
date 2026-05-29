@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { useAdminAccess } from './AdminAccessContext';
 import { AdminActionNotice } from './AdminActionNotice';
 import { adminFetch, mapApiContentRecord, type ApiContentRecord } from './admin-api';
 import type { ContentRecord, ContentTypeDefinition } from './admin-data-types';
@@ -20,6 +21,7 @@ function formatDate(value: string) {
 }
 
 export function ContentList({ siteId, contentType, records }: ContentListProps) {
+  const { readOnly } = useAdminAccess();
   const [items, setItems] = useState(records);
   const [keyword, setKeyword] = useState('');
   const [status, setStatus] = useState<'all' | 'draft' | 'published' | 'unpublished'>('all');
@@ -100,9 +102,11 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
             <p className="mt-2 text-sm text-slate-300">単一ページとして編集します。</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href={`/sites/${siteId}/contents/${contentType.slug}/new`} className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950">
-              新規作成
-            </Link>
+            {!readOnly ? (
+              <Link href={`/sites/${siteId}/contents/${contentType.slug}/new`} className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950">
+                新規作成
+              </Link>
+            ) : null}
           </div>
         </div>
 
@@ -120,25 +124,29 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link href={`/sites/${siteId}/contents/${contentType.slug}/${current.id}`} className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white">
-                  編集
+                  {readOnly ? '詳細' : '編集'}
                 </Link>
-                <button
-                  type="button"
-                  className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-100"
-                  onClick={() => void mutateRecord(current, 'publish')}
-                  disabled={isPending || current.status === 'published'}
-                >
-                  公開
-                </button>
-                {current.status === 'published' ? (
-                  <button
-                    type="button"
-                    className="rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-2 text-sm font-medium text-amber-100"
-                    onClick={() => void mutateRecord(current, 'unpublish')}
-                    disabled={isPending}
-                  >
-                    非公開
-                  </button>
+                {!readOnly ? (
+                  <>
+                    <button
+                      type="button"
+                      className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-sm font-medium text-emerald-100"
+                      onClick={() => void mutateRecord(current, 'publish')}
+                      disabled={isPending || current.status === 'published'}
+                    >
+                      公開
+                    </button>
+                    {current.status === 'published' ? (
+                      <button
+                        type="button"
+                        className="rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-2 text-sm font-medium text-amber-100"
+                        onClick={() => void mutateRecord(current, 'unpublish')}
+                        disabled={isPending}
+                      >
+                        非公開
+                      </button>
+                    ) : null}
+                  </>
                 ) : null}
               </div>
             </div>
@@ -163,9 +171,11 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
           <p className="mt-2 text-sm text-slate-300">キーワード検索、ステータス絞り込み、削除、公開をここで操作できます。</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link href={`/sites/${siteId}/contents/${contentType.slug}/new`} className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950">
-            新規作成
-          </Link>
+          {!readOnly ? (
+            <Link href={`/sites/${siteId}/contents/${contentType.slug}/new`} className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950">
+              新規作成
+            </Link>
+          ) : null}
         </div>
       </div>
 
@@ -214,42 +224,46 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
                 <td className="px-4 py-4">
                   <div className="flex flex-wrap gap-2">
                     <Link href={`/sites/${siteId}/contents/${contentType.slug}/${item.id}`} className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-white">
-                      編集
+                      {readOnly ? '詳細' : '編集'}
                     </Link>
-                    <button
-                      type="button"
-                      className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-slate-100"
-                      onClick={() => void mutateRecord(item, 'duplicate')}
-                      disabled={isPending}
-                    >
-                      複製
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1.5 text-xs font-medium text-emerald-100 disabled:cursor-not-allowed disabled:opacity-40"
-                      onClick={() => void mutateRecord(item, 'publish')}
-                      disabled={isPending || item.status === 'published'}
-                    >
-                      公開
-                    </button>
-                    {item.status === 'published' ? (
-                      <button
-                        type="button"
-                        className="rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1.5 text-xs font-medium text-amber-100"
-                        onClick={() => void mutateRecord(item, 'unpublish')}
-                        disabled={isPending}
-                      >
-                        非公開
-                      </button>
+                    {!readOnly ? (
+                      <>
+                        <button
+                          type="button"
+                          className="rounded-full border border-white/15 px-3 py-1.5 text-xs font-medium text-slate-100"
+                          onClick={() => void mutateRecord(item, 'duplicate')}
+                          disabled={isPending}
+                        >
+                          複製
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-3 py-1.5 text-xs font-medium text-emerald-100 disabled:cursor-not-allowed disabled:opacity-40"
+                          onClick={() => void mutateRecord(item, 'publish')}
+                          disabled={isPending || item.status === 'published'}
+                        >
+                          公開
+                        </button>
+                        {item.status === 'published' ? (
+                          <button
+                            type="button"
+                            className="rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1.5 text-xs font-medium text-amber-100"
+                            onClick={() => void mutateRecord(item, 'unpublish')}
+                            disabled={isPending}
+                          >
+                            非公開
+                          </button>
+                        ) : null}
+                        <button
+                          type="button"
+                          className="rounded-full border border-rose-400/40 bg-rose-400/10 px-3 py-1.5 text-xs font-medium text-rose-100"
+                          onClick={() => void mutateRecord(item, 'delete')}
+                          disabled={isPending}
+                        >
+                          削除
+                        </button>
+                      </>
                     ) : null}
-                    <button
-                      type="button"
-                      className="rounded-full border border-rose-400/40 bg-rose-400/10 px-3 py-1.5 text-xs font-medium text-rose-100"
-                      onClick={() => void mutateRecord(item, 'delete')}
-                      disabled={isPending}
-                    >
-                      削除
-                    </button>
                   </div>
                 </td>
               </tr>

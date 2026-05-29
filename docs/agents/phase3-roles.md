@@ -31,7 +31,7 @@ Prisma: `SiteMemberRole` enum + `site_members.role`（init migration 済み）�
 
 - 既定: **強制しない**（全 API は従来どおり通過）
 - `PHASE3_ENFORCE_ROLES=true` のときのみ `resolveAdminRequest(..., { permission })` で 403
-- ルートへの `permission` 付与は未着手（段階的にマッピング）
+- 全管理 API route に `permission` マッピング済み（`site:write` は owner/admin のみ）
 
 ## デモログイン
 
@@ -40,7 +40,7 @@ Prisma: `SiteMemberRole` enum + `site_members.role`（init migration 済み）�
 ## 未実装（残タスク）
 
 - [ ] 本番認証と `AuthContext.userId` の連携
-- [ ] 管理 API ルートごとの `AdminPermission` マッピング
+- [x] 管理 API ルートごとの `AdminPermission` マッピング
 - [ ] メンバー CRUD UI / API
 - [ ] `viewer` 向け管理画面の読取専用 UI
 - [ ] API キーとロールの分離（公開キー読取 / 管理キー書込は既存、ユーザー権限とは別軸）

@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ siteId: string }> },
 ): Promise<Response> {
   const { siteId } = await params;
-  const resolved = await resolveAdminRequest(request, siteId);
+  const resolved = await resolveAdminRequest(request, siteId, { permission: "content:read" });
 
   if (!resolved.ok) {
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);

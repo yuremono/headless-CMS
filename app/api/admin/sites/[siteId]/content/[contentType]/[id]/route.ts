@@ -6,13 +6,14 @@ import {
   resolveAdminRequest,
   updateAdminContent,
 } from "@/lib/content/service";
+import { recordAuditFromContext } from "@/lib/audit/log";
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ siteId: string; contentType: string; id: string }> },
 ): Promise<Response> {
   const { siteId, contentType, id } = await params;
-  const resolved = await resolveAdminRequest(request, siteId);
+  const resolved = await resolveAdminRequest(request, siteId, { permission: "content:read" });
 
   if (!resolved.ok) {
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);
@@ -40,7 +41,7 @@ export async function PATCH(
   { params }: { params: Promise<{ siteId: string; contentType: string; id: string }> },
 ): Promise<Response> {
   const { siteId, contentType, id } = await params;
-  const resolved = await resolveAdminRequest(request, siteId);
+  const resolved = await resolveAdminRequest(request, siteId, { permission: "content:write" });
 
   if (!resolved.ok) {
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);
@@ -52,6 +53,11 @@ export async function PATCH(
     return errorResponse(404, "content_not_found", "Content not found.");
   }
 
+  await recordAuditFromContext(resolved.context, siteId, "content.update", "content", id, {
+    contentType,
+    title: content.title,
+  });
+
   return jsonResponse(content);
 }
 
@@ -60,7 +66,7 @@ export async function DELETE(
   { params }: { params: Promise<{ siteId: string; contentType: string; id: string }> },
 ): Promise<Response> {
   const { siteId, contentType, id } = await params;
-  const resolved = await resolveAdminRequest(request, siteId);
+  const resolved = await resolveAdminRequest(request, siteId, { permission: "content:write" });
 
   if (!resolved.ok) {
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);
@@ -70,6 +76,10 @@ export async function DELETE(
   if (!deleted) {
     return errorResponse(404, "content_not_found", "Content not found.");
   }
+
+  await recordAuditFromContext(resolved.context, siteId, "content.delete", "content", id, {
+    contentType,
+  });
 
   return new Response(null, { status: 204 });
 }

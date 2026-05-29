@@ -8,6 +8,7 @@ export type SiteRole = SiteMemberRole;
 /** 管理 API / 管理画面でチェックする操作（Phase 3 で段階的に適用） */
 export const ADMIN_PERMISSIONS = [
   "site:read",
+  "site:write",
   "site:delete",
   "api_key:manage",
   "content_type:manage",
@@ -15,6 +16,7 @@ export const ADMIN_PERMISSIONS = [
   "content:read",
   "content:write",
   "content:publish",
+  "audit:read",
 ] as const;
 
 export type AdminPermission = (typeof ADMIN_PERMISSIONS)[number];
@@ -31,11 +33,13 @@ const PERMISSIONS_BY_ROLE: Record<SiteRole, ReadonlySet<AdminPermission>> = {
   owner: new Set(ADMIN_PERMISSIONS),
   admin: new Set([
     "site:read",
+    "site:write",
     "content_type:manage",
     "member:manage",
     "content:read",
     "content:write",
     "content:publish",
+    "audit:read",
   ]),
   editor: new Set(["site:read", "content:read", "content:write", "content:publish"]),
   viewer: new Set(["site:read", "content:read"]),

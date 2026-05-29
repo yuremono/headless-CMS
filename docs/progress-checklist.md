@@ -1,8 +1,8 @@
 # 進捗チェックリスト
 
-**最終更新:** 2026-05-29 21:35 JST  
+**最終更新:** 2026-05-29 21:40 JST  
 **参照:** [SPEC.md](../SPEC.md) v0.2（§12 Phase 定義・§16 プロトタイプ）  
-**検証:** `npm test` / `npm run test:coverage` / `npm run build` を本日実行して反映
+**検証:** `npm test` / `npm run test:coverage` を本日再実行して反映（build は前回成功のまま）
 
 ---
 
@@ -15,7 +15,7 @@
 | **Phase 3**（納品運用） | **骨格のみ** | 4 ロール定義・権限チェック関数はあるが API/UI 未適用 |
 | **Phase 4**（AI 編集） | **未着手** | — |
 | **§16 プロトタイプ** | **成立** | 3 種類・編集→プレビュー→公開 API のデモライン到達 |
-| **テスト** | **249 件 / 37 ファイル** | スコープ内カバレッジ **91.8%**（Lines、`lib/**` + `app/api/**`、目標 80% 達成） |
+| **テスト** | **263 件 / 40 ファイル** | スコープ内カバレッジ **89.4%**（Lines、`lib/**` + `app/api/**`、目標 80% 達成） |
 | **ビルド** | **成功** | `npm run build`（Next.js 16.2.6） |
 
 ---
@@ -135,14 +135,14 @@
 
 ### 4.1 Phase 3：納品運用
 
-- [ ] 4 ロールの API 強制（`PHASE3_ENFORCE_ROLES=true` + ルート別 permission）— 骨格のみ（`lib/auth/roles.ts` 等）
+- [x] 4 ロールの API 強制（`PHASE3_ENFORCE_ROLES=true` + ルート別 permission）— 全管理 API route に適用済み
 - [ ] メンバー CRUD UI / API
 - [ ] viewer 向け読取専用管理画面
-- [ ] API キーローテーション UI
-- [ ] 操作ログ
+- [x] API キーローテーション UI — サイト概要 `SiteApiKeyRotatePanel`（owner / admin）
+- [x] 操作ログ — API `GET /api/admin/sites/{siteId}/audit-logs` + サイト概要 `SiteAuditLogsPanel`（owner / admin）
 - [ ] バックアップ / DB エクスポート手順・自動化
 - [ ] コンテンツ / サイトエクスポート
-- [ ] 納品用簡易ドキュメント（案件向け）
+- [x] 納品用簡易ドキュメント（案件向け）— `docs/delivery-guide.md`
 - [ ] 本番認証（Supabase Auth / Auth.js）と `AuthContext.userId` 連携
 
 ### 4.2 Phase 4：AI 編集対応
@@ -197,8 +197,8 @@
 
 | 項目 | 状態 | 備考 |
 |------|------|------|
-| **Supabase DB 接続** | 未接続 | ローカル PostgreSQL で開発。接続・migrate は**ユーザー作業**（`.env.example` に Direct/Pooler 例） |
-| **git リポジトリ** | 未初期化 | `.git` なし（2026-05-29 確認）。初回 commit はユーザー判断 |
+| **Supabase DB 接続** | 未接続 | `.env` は **ローカル PostgreSQL**（`localhost:5432/headless_cms`）。Supabase 接続は**ユーザー作業**（下記手順） |
+| **git リポジトリ** | **初期化済み・push 済み** | [github.com/yuremono/headless-CMS](https://github.com/yuremono/headless-CMS) — `main` / `e39f5cd`（Initial commit） |
 | **本番認証** | 未導入 | デモセッション + 開発用 API キー |
 | **R2 ストレージ** | stub | `STORAGE_PROVIDER=local` が MVP 既定 |
 | **Phase 3 権限強制** | オフ既定 | `PHASE3_ENFORCE_ROLES` 未設定時は全操作許可 |
@@ -206,6 +206,29 @@
 | **Next.js middleware** | 暫定 | `middleware.mjs`（将来 proxy 移行検討） |
 | **seed ID 変動** | 運用注意 | 再 seed 後は `examples/preview/js/config.js` の contentId 更新が必要 |
 | **dev/build 同時起動** | 運用注意 | 複数 `next dev` / `next build` でロックエラー |
+| **未カバー API ルート** | 低優先 | `api-keys/rotate`・`lib/db/api-keys.ts` が 0%（Phase 3 骨格） |
+
+### Supabase 接続手順（ユーザー作業）
+
+現状 `.env` の `DATABASE_URL` はローカル PG のため、Supabase への migrate/seed は**未実行**。接続時は以下:
+
+1. Supabase プロジェクト作成 → Settings → Database で接続文字列を取得
+2. **migrate / seed 用** — Direct 接続（`:5432`、`db.[ref].supabase.co`）を `.env` の `DATABASE_URL` に一時設定
+3. 実行:
+   ```bash
+   npx prisma migrate deploy
+   npx tsx prisma/seed.ts    # npm run prisma:seed が失敗する環境あり
+   ```
+4. **アプリ runtime 用** — Pooler 接続（`:6543`、`pooler.supabase.com`、`pgbouncer=true`）に `DATABASE_URL` を切替（`.env.example` 参照）
+5. 再 seed 後は `examples/preview/js/config.js` の siteId / contentId を更新
+
+### ローカル PostgreSQL 開発（現状）
+
+```bash
+brew services start postgresql@17   # または既存 Postgres
+# DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headless_cms
+npx prisma migrate deploy && npx tsx prisma/seed.ts
+```
 
 ---
 
@@ -247,6 +270,6 @@ npm test && npm run test:coverage && npm run build
 
 1. **Phase 列は SPEC §12 の 4 段階に厳密対応** — MVP 必須との対応表（§12 冒頭）も Phase 1–2 にマッピング。
 2. **§16 は独立セクション** — プロトタイプデモの Go/No-Go ラインとして、Phase 2 完了とは別に成功条件テーブルで追跡。
-3. **完了判定は実装確認ベース** — 本ファイル作成時に `npm test`（249 passed）、`npm run test:coverage`（91.8% Lines）、`npm run build`（成功）、`.git` 未初期化を実行確認。
+3. **完了判定は実装確認ベース** — 2026-05-29 再検証: `npm test`（263 passed / 40 files）、`npm run test:coverage`（89.4% Lines）、git 初期化・push 済み（`yuremono/headless-CMS`）。
 4. **部分完了は `[ ]` + 注記** — 署名付き previewToken、汎用 object フィールド UI、権限骨格など。
-5. **更新タイミング** — 再 seed・Phase 3 着手・Supabase 接続・git 初期化後にサマリー表と §6 を更新する。
+5. **更新タイミング** — 再 seed・Phase 3 着手・Supabase 接続後にサマリー表と §6 を更新する。

@@ -1,6 +1,6 @@
 import type { AuthContext, AuthMode } from "./index";
 import { authDevTokens } from "./index";
-import type { SiteRole } from "./roles";
+import { roleRank, type SiteRole } from "./roles";
 
 const DEMO_SESSION_EMAIL = process.env.ADMIN_DEMO_EMAIL ?? "admin@example.com";
 
@@ -76,4 +76,43 @@ export async function resolveActorSiteRole(
 
   const memberRole = await lookupSiteMemberRole(resolvedSiteId, userId);
   return memberRole ?? "editor";
+}
+
+async function lookupHighestMemberRole(userId: string): Promise<SiteRole | null> {
+  const { prisma } = await import("@/lib/db/prisma");
+  const members = await prisma.siteMember.findMany({
+    where: { userId },
+    select: { role: true },
+  });
+
+  if (members.length === 0) {
+    return null;
+  }
+
+  return members.reduce<SiteRole>(
+    (best, member) => (roleRank(member.role) > roleRank(best) ? member.role : best),
+    members[0].role,
+  );
+}
+
+/**
+ * サイト非依存の管理 API（サイト一覧・作成など）向けロール解決。
+ */
+export async function resolveGlobalActorRole(context: AuthContext): Promise<SiteRole> {
+  const modeRole = roleForAuthMode(context.mode);
+  if (modeRole) {
+    return modeRole;
+  }
+
+  if (context.mode === "session" && isDevSessionToken(context.token)) {
+    return "owner";
+  }
+
+  const userId = context.userId ?? (await resolveDemoUserId());
+  if (!userId) {
+    return "editor";
+  }
+
+  const highestRole = await lookupHighestMemberRole(userId);
+  return highestRole ?? "editor";
 }

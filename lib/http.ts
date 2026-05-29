@@ -1,5 +1,40 @@
+export type DeliveryCacheScope = "collection" | "item";
+
+const DELIVERY_CACHE_NO_STORE = "no-store";
+const DELIVERY_CACHE_COLLECTION = "public, max-age=30, s-maxage=120";
+const DELIVERY_CACHE_ITEM = "public, max-age=60, s-maxage=300";
+
+export function resolveDeliveryCacheControl(includeDraft: boolean, scope: DeliveryCacheScope): string {
+  if (includeDraft) {
+    return DELIVERY_CACHE_NO_STORE;
+  }
+
+  return scope === "collection" ? DELIVERY_CACHE_COLLECTION : DELIVERY_CACHE_ITEM;
+}
+
 export function jsonResponse(body: unknown, init: ResponseInit = {}): Response {
   return Response.json(body, init);
+}
+
+export function deliveryJsonResponse(
+  body: unknown,
+  includeDraft: boolean,
+  scope: DeliveryCacheScope,
+  init: ResponseInit = {},
+): Response {
+  const headers = new Headers(init.headers);
+  headers.set("Cache-Control", resolveDeliveryCacheControl(includeDraft, scope));
+  return jsonResponse(body, { ...init, headers });
+}
+
+export function deliveryErrorResponse(status: number, code: string, error: string): Response {
+  return jsonResponse(
+    { error, code },
+    {
+      status,
+      headers: { "Cache-Control": DELIVERY_CACHE_NO_STORE },
+    },
+  );
 }
 
 export function errorResponse(status: number, code: string, error: string): Response {

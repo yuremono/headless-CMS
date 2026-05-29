@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { AdminLayout } from '../../../../../../../components/admin/AdminLayout';
 import { AdminPageHeader } from '../../../../../../../components/admin/AdminPageHeader';
 import { AdminApiNotice } from '../../../../../../../components/admin/AdminApiNotice';
 import { ContentForm } from '../../../../../../../components/admin/ContentForm';
 import { resolveContentTypeDefinition, resolveSiteSummary } from '../../../../../../../components/admin/AdminData';
+import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
 
 interface ContentNewPageProps {
   params: Promise<{ siteId: string; contentType: string }>;
@@ -18,6 +19,11 @@ export default async function ContentNewPage({ params }: ContentNewPageProps) {
 
   if (!definition) {
     notFound();
+  }
+
+  const access = await getAdminUiAccess(siteId);
+  if (access.readOnly) {
+    redirect(`/sites/${siteId}/contents/${contentType}`);
   }
 
   return (

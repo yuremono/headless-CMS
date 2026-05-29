@@ -1,27 +1,10 @@
-import { createHash, randomBytes } from "node:crypto";
 import { prisma } from "@/lib/db/prisma";
+import { createApiKeySecret } from "@/lib/db/api-keys";
 import { getSiteSummary } from "@/lib/db/sites";
 import { buildContentModelSeedRecords, readContentTypeDefinitions } from "@/lib/schemas";
 import type { SiteSummary } from "@/lib/content/types";
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
-function hashSecret(secret: string): string {
-  return createHash("sha256").update(secret).digest("hex");
-}
-
-function createApiKeySecret(prefix: string): {
-  prefix: string;
-  secret: string;
-  keyHash: string;
-} {
-  const secret = `${prefix}_${randomBytes(24).toString("hex")}`;
-  return {
-    prefix: secret.slice(0, 12),
-    secret,
-    keyHash: hashSecret(secret),
-  };
-}
 
 export function slugifySiteName(name: string): string {
   const slug = name

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAdminAccess } from './AdminAccessContext';
 import { AdminActionNotice } from './AdminActionNotice';
 import { adminFetch, buildContentWriteBody, formatFieldDraftValue, getFieldKey, mapApiContentRecord, readFieldValue, writeFieldValue, type ApiContentRecord, type FieldDraftValue, type ImageFieldValue } from './admin-api';
 import { FieldRenderer } from './FieldRenderer';
@@ -96,6 +97,7 @@ function normalizePayload(contentType: ContentTypeDefinition, draft: Record<stri
 
 export function ContentForm({ siteId, contentType, record, mode, previewUrl }: ContentFormProps) {
   const router = useRouter();
+  const { readOnly } = useAdminAccess();
   const initialState = useMemo(() => buildInitialState(contentType, record), [contentType, record]);
   const [draft, setDraft] = useState<Record<string, FieldDraftValue>>(initialState);
   const [statusMessage, setStatusMessage] = useState('');
@@ -177,9 +179,15 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{contentType.kind}</p>
           <h3 className="mt-2 text-2xl font-semibold text-white">
-            {mode === 'create' ? `${contentType.label} を新規作成` : `${contentType.label} を編集`}
+            {readOnly
+              ? `${contentType.label} の詳細`
+              : mode === 'create'
+                ? `${contentType.label} を新規作成`
+                : `${contentType.label} を編集`}
           </h3>
-          <p className="mt-2 text-sm text-slate-300">スキーマに従ってフィールドを自動生成しています。</p>
+          <p className="mt-2 text-sm text-slate-300">
+            {readOnly ? '閲覧専用です。編集操作は表示されません。' : 'スキーマに従ってフィールドを自動生成しています。'}
+          </p>
         </div>
         <div className="flex items-center gap-3 text-sm text-slate-300">
           <span className="rounded-full border border-white/10 px-3 py-1">{contentType.schemaJson.fields.length} fields</span>
@@ -187,9 +195,11 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
         </div>
       </div>
 
-      <div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
-        下書き保存・公開は管理 API へ POST / PATCH / publish を送信します。`x-session-token` が必要です。
-      </div>
+      {!readOnly ? (
+        <div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
+          下書き保存・公開は管理 API へ POST / PATCH / publish を送信します。`x-session-token` が必要です。
+        </div>
+      ) : null}
 
       <div className="grid gap-5 lg:grid-cols-2">
         <label className="block">
@@ -199,6 +209,8 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
             value={String(draft.title ?? '')}
             onChange={(event) => updateField('title', event.target.value)}
             placeholder="タイトルを入力"
+            disabled={readOnly}
+            readOnly={readOnly}
           />
         </label>
         <label className="block">
@@ -208,6 +220,8 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
             value={String(draft.slug ?? '')}
             onChange={(event) => updateField('slug', event.target.value)}
             placeholder="slug"
+            disabled={readOnly}
+            readOnly={readOnly}
           />
         </label>
       </div>
@@ -228,34 +242,39 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
               value={draft[fieldKey] ?? ''}
               sectionTemplates={contentType.schemaJson.sectionTemplates}
               onChange={updateField}
+              readOnly={readOnly}
             />
             );
           })}
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
-        <SeoFields draft={draft} onChange={updateField} />
+        <SeoFields draft={draft} onChange={updateField} readOnly={readOnly} />
       </div>
 
       <AdminActionNotice kind={statusKind} message={statusMessage} />
 
       <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-          onClick={() => void persist('save')}
-          disabled={isPending}
-        >
-          下書きを保存
-        </button>
-        <button
-          type="button"
-          className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
-          onClick={() => void persist('publish')}
-          disabled={isPending || mode === 'create'}
-        >
-          公開
-        </button>
+        {!readOnly ? (
+          <>
+            <button
+              type="button"
+              className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => void persist('save')}
+              disabled={isPending}
+            >
+              下書きを保存
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => void persist('publish')}
+              disabled={isPending || mode === 'create'}
+            >
+              公開
+            </button>
+          </>
+        ) : null}
         {mode === 'edit' && previewUrl ? (
           <a
             href={previewUrl}

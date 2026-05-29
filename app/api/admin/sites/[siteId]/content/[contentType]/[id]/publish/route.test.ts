@@ -6,6 +6,10 @@ vi.mock("@/lib/content/service", () => ({
   publishAdminContent: vi.fn(),
 }));
 
+vi.mock("@/lib/audit/log", () => ({
+  recordAuditFromContext: vi.fn(),
+}));
+
 import { publishAdminContent, resolveAdminRequest } from "@/lib/content/service";
 
 const mockedResolve = vi.mocked(resolveAdminRequest);

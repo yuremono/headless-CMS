@@ -6,7 +6,7 @@ export async function POST(
   { params }: { params: Promise<{ siteId: string; contentType: string; id: string }> },
 ): Promise<Response> {
   const { siteId, contentType, id } = await params;
-  const resolved = await resolveAdminRequest(request, siteId);
+  const resolved = await resolveAdminRequest(request, siteId, { permission: "content:publish" });
 
   if (!resolved.ok) {
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);

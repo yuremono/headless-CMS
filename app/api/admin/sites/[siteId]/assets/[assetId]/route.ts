@@ -6,7 +6,7 @@ export async function PATCH(
   { params }: { params: Promise<{ siteId: string; assetId: string }> },
 ): Promise<Response> {
   const { siteId, assetId } = await params;
-  const resolved = await resolveAdminRequest(request, siteId);
+  const resolved = await resolveAdminRequest(request, siteId, { permission: "content:write" });
 
   if (!resolved.ok) {
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);

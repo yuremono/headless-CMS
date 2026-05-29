@@ -5,6 +5,7 @@ import { AdminLayout } from '../../../../../components/admin/AdminLayout';
 import { AdminPageHeader } from '../../../../../components/admin/AdminPageHeader';
 import { loadAssets, resolveSiteSummary, siteRouteKey } from '../../../../../components/admin/AdminData';
 import { MediaLibrary } from '../../../../../components/admin/MediaLibrary';
+import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
 
 interface MediaPageProps {
   params: Promise<{ siteId: string }>;
@@ -20,12 +21,17 @@ export default async function MediaPage({ params }: MediaPageProps) {
 
   const siteKey = siteRouteKey(site);
   const assets = await loadAssets(siteKey);
+  const access = await getAdminUiAccess(siteKey);
 
   return (
     <AdminLayout site={site}>
       <AdminPageHeader
         title="メディアライブラリ"
-        subtitle="アップロード済みアセットの一覧表示、代替テキスト編集、新規アップロードを行います。"
+        subtitle={
+          access.readOnly
+            ? 'アップロード済みアセットの一覧表示と確認ができます。'
+            : 'アップロード済みアセットの一覧表示、代替テキスト編集、新規アップロードを行います。'
+        }
         actions={
           <>
             <Link
@@ -38,7 +44,7 @@ export default async function MediaPage({ params }: MediaPageProps) {
               href={`/sites/${siteKey}/contents/topPage`}
               className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950"
             >
-              コンテンツ編集
+              {access.readOnly ? 'コンテンツ詳細' : 'コンテンツ編集'}
             </Link>
           </>
         }

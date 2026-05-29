@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import type { ContentRecord, ContentTypeDefinition } from './admin-data-types';
+import { useAdminAccess } from './AdminAccessContext';
 
 interface ContentTypeListProps {
   siteId: string;
@@ -8,6 +11,7 @@ interface ContentTypeListProps {
 }
 
 export function ContentTypeList({ siteId, contentTypes, records }: ContentTypeListProps) {
+  const { readOnly } = useAdminAccess();
   const countByType = new Map<string, number>();
   records.forEach((record) => {
     countByType.set(record.contentType, (countByType.get(record.contentType) ?? 0) + 1);
@@ -41,9 +45,11 @@ export function ContentTypeList({ siteId, contentTypes, records }: ContentTypeLi
             <Link href={`/sites/${siteId}/contents/${type.slug}`} className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950">
               一覧を見る
             </Link>
-            <Link href={`/sites/${siteId}/contents/${type.slug}/new`} className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white">
-              新規作成
-            </Link>
+            {!readOnly ? (
+              <Link href={`/sites/${siteId}/contents/${type.slug}/new`} className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white">
+                新規作成
+              </Link>
+            ) : null}
           </div>
         </article>
       ))}

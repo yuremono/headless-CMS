@@ -9,6 +9,10 @@ vi.mock("@/lib/content/service", () => ({
   removeAdminContent: vi.fn(),
 }));
 
+vi.mock("@/lib/audit/log", () => ({
+  recordAuditFromContext: vi.fn(),
+}));
+
 import {
   getAdminContentRecord,
   getDeliveryContent,

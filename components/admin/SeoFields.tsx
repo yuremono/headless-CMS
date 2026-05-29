@@ -78,9 +78,10 @@ interface SeoFieldsProps {
   draft: Record<string, FieldDraftValue>;
   onChange: (key: string, value: FieldDraftValue) => void;
   defaultOpen?: boolean;
+  readOnly?: boolean;
 }
 
-export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsProps) {
+export function SeoFields({ draft, onChange, defaultOpen = false, readOnly = false }: SeoFieldsProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const previewTitle = String(draft['seo.title'] ?? '').trim() || '（SEOタイトル未入力）';
 
@@ -112,6 +113,8 @@ export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsPro
                 value={String(draft['seo.title'] ?? '')}
                 onChange={(event) => onChange('seo.title', event.target.value)}
                 placeholder="検索結果に表示されるタイトル"
+                disabled={readOnly}
+                readOnly={readOnly}
               />
             </label>
 
@@ -122,6 +125,8 @@ export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsPro
                 value={String(draft['seo.ogTitle'] ?? '')}
                 onChange={(event) => onChange('seo.ogTitle', event.target.value)}
                 placeholder="SNS シェア時のタイトル"
+                disabled={readOnly}
+                readOnly={readOnly}
               />
             </label>
 
@@ -133,6 +138,8 @@ export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsPro
                 value={String(draft['seo.description'] ?? '')}
                 onChange={(event) => onChange('seo.description', event.target.value)}
                 placeholder="検索結果に表示される説明文"
+                disabled={readOnly}
+                readOnly={readOnly}
               />
             </label>
 
@@ -144,6 +151,8 @@ export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsPro
                 value={String(draft['seo.ogDescription'] ?? '')}
                 onChange={(event) => onChange('seo.ogDescription', event.target.value)}
                 placeholder="SNS シェア時の説明文"
+                disabled={readOnly}
+                readOnly={readOnly}
               />
             </label>
 
@@ -154,6 +163,8 @@ export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsPro
                 value={String(draft['seo.ogImage'] ?? '')}
                 onChange={(event) => onChange('seo.ogImage', event.target.value)}
                 placeholder="https://example.com/og.jpg"
+                disabled={readOnly}
+                readOnly={readOnly}
               />
               <p className="mt-2 text-xs leading-5 text-slate-400">画像 URL を入力</p>
             </label>
@@ -166,11 +177,18 @@ export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsPro
                 value={String(draft['seo.canonicalUrl'] ?? '')}
                 onChange={(event) => onChange('seo.canonicalUrl', event.target.value)}
                 placeholder="https://example.com/page"
+                disabled={readOnly}
+                readOnly={readOnly}
               />
             </label>
 
             <div className="block lg:col-span-2">
               <span className="text-sm font-medium text-white">noindex</span>
+              {readOnly ? (
+                <p className="mt-2 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white lg:max-w-sm">
+                  {Boolean(draft['seo.noindex']) ? 'noindex' : 'index'}
+                </p>
+              ) : (
               <button
                 type="button"
                 className="mt-2 flex w-full items-center justify-between rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-left text-sm text-white lg:max-w-sm"
@@ -183,6 +201,7 @@ export function SeoFields({ draft, onChange, defaultOpen = false }: SeoFieldsPro
                   {Boolean(draft['seo.noindex']) ? 'noindex' : 'index'}
                 </span>
               </button>
+              )}
             </div>
           </div>
         </div>

@@ -16,6 +16,7 @@ interface SectionEditorProps {
   sectionTemplates?: string[];
   helpText?: string;
   onChange: (value: string) => void;
+  readOnly?: boolean;
 }
 
 const SECTION_TYPE_LABELS: Record<string, string> = {
@@ -163,7 +164,7 @@ function reorderSection(sections: SectionItem[], fromIndex: number, toIndex: num
   return next;
 }
 
-export function SectionEditor({ label, value, sectionTemplates = [], helpText, onChange }: SectionEditorProps) {
+export function SectionEditor({ label, value, sectionTemplates = [], helpText, onChange, readOnly = false }: SectionEditorProps) {
   const sections = useMemo(() => parseSectionArray(value), [value]);
   const [openIds, setOpenIds] = useState<Record<string, boolean>>({});
   const [selectedType, setSelectedType] = useState(sectionTemplates[0] ?? 'hero');
@@ -282,21 +283,23 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
                 }}
               >
                 <header className="SectionEditor_itemHeader flex flex-wrap items-center gap-2 px-4 py-3">
-                  <button
-                    type="button"
-                    draggable
-                    className="SectionEditor_dragHandle shrink-0"
-                    aria-label="並び替え（ドラッグ）"
-                    onDragStart={(event) => {
-                      event.dataTransfer.effectAllowed = 'move';
-                      event.dataTransfer.setData('text/plain', String(index));
-                      setDragIndex(index);
-                      setDropIndex(index);
-                    }}
-                    onDragEnd={clearDragState}
-                  >
-                    <span aria-hidden="true">⋮⋮</span>
-                  </button>
+                  {!readOnly ? (
+                    <button
+                      type="button"
+                      draggable
+                      className="SectionEditor_dragHandle shrink-0"
+                      aria-label="並び替え（ドラッグ）"
+                      onDragStart={(event) => {
+                        event.dataTransfer.effectAllowed = 'move';
+                        event.dataTransfer.setData('text/plain', String(index));
+                        setDragIndex(index);
+                        setDropIndex(index);
+                      }}
+                      onDragEnd={clearDragState}
+                    >
+                      <span aria-hidden="true">⋮⋮</span>
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     className="SectionEditor_toggle flex min-w-0 flex-1 items-center gap-3 text-left"
@@ -317,6 +320,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
                     <span className="truncate text-xs text-slate-500">{section.id}</span>
                   </button>
 
+                  {!readOnly ? (
                   <div className="SectionEditor_actions flex items-center gap-1">
                     <button
                       type="button"
@@ -365,6 +369,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
                       削除
                     </button>
                   </div>
+                  ) : null}
                 </header>
 
                 {isOpen ? (
@@ -373,6 +378,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
                       type={section.type}
                       data={section.data}
                       onChange={(data) => handleDataChange(index, data)}
+                      readOnly={readOnly}
                     />
                   </div>
                 ) : null}
@@ -382,6 +388,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
         )}
       </div>
 
+      {!readOnly ? (
       <div className="SectionEditor_add mt-4 flex flex-wrap items-end gap-3">
         <label className="block min-w-[12rem] flex-1">
           <span className="text-xs font-medium text-slate-300">追加する型</span>
@@ -405,6 +412,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
           セクションを追加
         </button>
       </div>
+      ) : null}
     </div>
   );
 }

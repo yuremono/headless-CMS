@@ -10,6 +10,7 @@ interface AssetGridProps {
   selectedUrl?: string;
   onSelect?: (asset: ApiAssetRecord) => void;
   onAssetUpdated?: (asset: ApiAssetRecord) => void;
+  readOnly?: boolean;
 }
 
 function formatFileSize(bytes: number): string {
@@ -39,6 +40,7 @@ export function AssetGrid({
   selectedUrl,
   onSelect,
   onAssetUpdated,
+  readOnly = false,
 }: AssetGridProps) {
   const [draftAlts, setDraftAlts] = useState<Record<string, string>>(() =>
     Object.fromEntries(assets.map((asset) => [asset.id, asset.alt ?? ''])),
@@ -140,48 +142,50 @@ export function AssetGrid({
                 </div>
               </dl>
 
-              {!selectable ? (
-                <label className="block">
-                  <span className="text-xs font-medium text-slate-300">代替テキスト</span>
-                  <input
-                    className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-                    type="text"
-                    value={draftAlts[asset.id] ?? ''}
-                    placeholder="画像の説明"
-                    onChange={(event) =>
-                      setDraftAlts((current) => ({
-                        ...current,
-                        [asset.id]: event.target.value,
-                      }))
-                    }
-                    onBlur={() => {
+              {selectable ? (
+                <>
+                  <p className="text-xs text-slate-400">{asset.alt?.trim() ? asset.alt : '代替テキスト未設定'}</p>
+                  <button
+                    type="button"
+                    className="w-full rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+                    onClick={() => onSelect?.(asset)}
+                  >
+                    この画像を使う
+                  </button>
+                </>
+              ) : readOnly ? (
+                <p className="text-xs text-slate-400">{asset.alt?.trim() ? asset.alt : '代替テキスト未設定'}</p>
+              ) : (
+                <>
+                  <label className="block">
+                    <span className="text-xs font-medium text-slate-300">代替テキスト</span>
+                    <input
+                      className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+                      type="text"
+                      value={draftAlts[asset.id] ?? ''}
+                      placeholder="画像の説明"
+                      onChange={(event) =>
+                        setDraftAlts((current) => ({
+                          ...current,
+                          [asset.id]: event.target.value,
+                        }))
+                      }
+                      onBlur={() => {
+                        void saveAlt(asset);
+                      }}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+                    disabled={isSaving || (draftAlts[asset.id] ?? '') === (asset.alt ?? '')}
+                    onClick={() => {
                       void saveAlt(asset);
                     }}
-                  />
-                </label>
-              ) : (
-                <p className="text-xs text-slate-400">{asset.alt?.trim() ? asset.alt : '代替テキスト未設定'}</p>
-              )}
-
-              {selectable ? (
-                <button
-                  type="button"
-                  className="w-full rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
-                  onClick={() => onSelect?.(asset)}
-                >
-                  この画像を使う
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
-                  disabled={isSaving || (draftAlts[asset.id] ?? '') === (asset.alt ?? '')}
-                  onClick={() => {
-                    void saveAlt(asset);
-                  }}
-                >
-                  {isSaving ? '保存中…' : '代替テキストを保存'}
-                </button>
+                  >
+                    {isSaving ? '保存中…' : '代替テキストを保存'}
+                  </button>
+                </>
               )}
 
               {errors[asset.id] ? <p className="text-xs text-rose-300">{errors[asset.id]}</p> : null}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useAdminAccess } from './AdminAccessContext';
 import { AdminActionNotice } from './AdminActionNotice';
 import { adminFetch, type ApiAssetCollection, type ApiAssetRecord } from './admin-api';
 import { AssetGrid } from './AssetGrid';
@@ -12,6 +13,7 @@ interface MediaLibraryProps {
 }
 
 export function MediaLibrary({ siteId, initialAssets }: MediaLibraryProps) {
+  const { readOnly } = useAdminAccess();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [assets, setAssets] = useState<ApiAssetRecord[]>(initialAssets.items);
   const [total, setTotal] = useState(initialAssets.total);
@@ -79,25 +81,29 @@ export function MediaLibrary({ siteId, initialAssets }: MediaLibraryProps) {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <input
-            ref={fileInputRef}
-            className="sr-only"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            onChange={(event) => {
-              const file = event.target.files?.[0] ?? null;
-              void handleFileSelected(file);
-              event.target.value = '';
-            }}
-          />
-          <button
-            type="button"
-            className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={isUploading}
-          >
-            {isUploading ? 'アップロード中…' : '画像をアップロード'}
-          </button>
+          {!readOnly ? (
+            <>
+              <input
+                ref={fileInputRef}
+                className="sr-only"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={(event) => {
+                  const file = event.target.files?.[0] ?? null;
+                  void handleFileSelected(file);
+                  event.target.value = '';
+                }}
+              />
+              <button
+                type="button"
+                className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+              >
+                {isUploading ? 'アップロード中…' : '画像をアップロード'}
+              </button>
+            </>
+          ) : null}
           <button
             type="button"
             className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
@@ -110,7 +116,7 @@ export function MediaLibrary({ siteId, initialAssets }: MediaLibraryProps) {
         </div>
       </div>
 
-      <AssetGrid siteId={siteId} assets={assets} onAssetUpdated={handleAssetUpdated} />
+      <AssetGrid siteId={siteId} assets={assets} onAssetUpdated={handleAssetUpdated} readOnly={readOnly} />
     </div>
   );
 }

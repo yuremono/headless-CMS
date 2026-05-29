@@ -1,5 +1,6 @@
 'use client';
 
+import { useAdminAccess } from './AdminAccessContext';
 interface ArrayFieldDef {
   key: string;
   label: string;
@@ -34,6 +35,8 @@ export function SectionArrayItemEditor({
   itemLabel,
   onChange,
 }: SectionArrayItemEditorProps) {
+  const { readOnly } = useAdminAccess();
+
   function updateItem(index: number, key: string, value: string) {
     onChange(
       items.map((item, itemIndex) => (itemIndex === index ? { ...item, [key]: value } : item)),
@@ -92,6 +95,7 @@ export function SectionArrayItemEditor({
               >
                 <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
                   <p className="truncate text-sm font-medium text-white">{heading}</p>
+                  {!readOnly ? (
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
@@ -120,6 +124,7 @@ export function SectionArrayItemEditor({
                       削除
                     </button>
                   </div>
+                  ) : null}
                 </header>
 
                 <div className="grid gap-3">
@@ -133,6 +138,8 @@ export function SectionArrayItemEditor({
                           value={readString(item, field.key)}
                           placeholder={field.placeholder}
                           onChange={(event) => updateItem(index, field.key, event.target.value)}
+                          disabled={readOnly}
+                          readOnly={readOnly}
                         />
                       ) : (
                         <input
@@ -141,6 +148,8 @@ export function SectionArrayItemEditor({
                           value={readString(item, field.key)}
                           placeholder={field.placeholder}
                           onChange={(event) => updateItem(index, field.key, event.target.value)}
+                          disabled={readOnly}
+                          readOnly={readOnly}
                         />
                       )}
                     </label>
@@ -152,6 +161,7 @@ export function SectionArrayItemEditor({
         </div>
       )}
 
+      {!readOnly ? (
       <button
         type="button"
         className="rounded-full border border-sky-400/40 bg-sky-400/10 px-3 py-1.5 text-xs font-medium text-sky-100 transition hover:bg-sky-400/20"
@@ -159,6 +169,7 @@ export function SectionArrayItemEditor({
       >
         項目を追加
       </button>
+      ) : null}
     </div>
   );
 }
