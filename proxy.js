@@ -7,9 +7,9 @@ function getAllowedOrigin() {
 function buildCorsHeaders(origin) {
   return {
     "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "GET, HEAD, POST, PATCH, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
     "Access-Control-Allow-Headers":
-      "Content-Type, Authorization, x-api-key, x-admin-api-key, x-public-api-key, x-preview-token, x-session-token",
+      "Content-Type, Authorization, x-api-key, x-public-api-key, x-preview-token, x-session-token",
     "Access-Control-Max-Age": "86400",
   };
 }
@@ -19,6 +19,15 @@ function applyCorsHeaders(response, origin) {
     response.headers.set(key, value);
   }
   return response;
+}
+
+function resolveCorsOrigin(request) {
+  const allowedOrigin = getAllowedOrigin();
+  const requestOrigin = request.headers.get("origin");
+  if (requestOrigin === allowedOrigin) {
+    return requestOrigin;
+  }
+  return null;
 }
 
 function isAdminLoginEnforced() {
@@ -57,9 +66,14 @@ function hasCmsSessionToken(request) {
 }
 
 function handleApiCors(request) {
-  const allowedOrigin = getAllowedOrigin();
-  const requestOrigin = request.headers.get("origin");
-  const corsOrigin = requestOrigin === allowedOrigin ? requestOrigin : allowedOrigin;
+  const corsOrigin = resolveCorsOrigin(request);
+
+  if (!corsOrigin) {
+    if (request.method === "OPTIONS") {
+      return new NextResponse(null, { status: 204 });
+    }
+    return NextResponse.next();
+  }
 
   if (request.method === "OPTIONS") {
     return applyCorsHeaders(new NextResponse(null, { status: 204 }), corsOrigin);
@@ -69,7 +83,7 @@ function handleApiCors(request) {
   return applyCorsHeaders(response, corsOrigin);
 }
 
-export function middleware(request) {
+export function proxy(request) {
   const { pathname } = request.nextUrl;
 
   if (pathname.startsWith("/api/")) {

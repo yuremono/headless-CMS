@@ -49,7 +49,7 @@ describe("POST /api/admin/.../publish", () => {
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toMatchObject({ status: "published" });
-    expect(mockedPublish).toHaveBeenCalledWith("site-1", "news", "content-1", "admin:site-1");
+    expect(mockedPublish).toHaveBeenCalledWith("site-1", "news", "content-1", null);
   });
 
   it("対象なし 404", async () => {

@@ -94,7 +94,7 @@ describe("POST /api/admin/sites/[siteId]/content/[contentType]", () => {
       "site-1",
       "news",
       { title: "Draft" },
-      "admin:site-1",
+      null,
     );
   });
 

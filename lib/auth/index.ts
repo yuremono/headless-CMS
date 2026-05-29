@@ -29,6 +29,7 @@ export {
 } from "./roles";
 export { applySitePermission, checkSitePermission } from "./admin-access";
 export type { AdminAccessOptions } from "./admin-access";
+export { resolveContentUserId } from "./content-user";
 
 export interface AuthFailure {
   status: 401 | 403;

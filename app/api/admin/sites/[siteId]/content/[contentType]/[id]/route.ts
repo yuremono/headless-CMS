@@ -1,3 +1,4 @@
+import { resolveContentUserId } from "@/lib/auth/content-user";
 import { errorResponse, jsonResponse, readJsonBody } from "@/lib/http";
 import {
   getAdminContentRecord,
@@ -48,7 +49,13 @@ export async function PATCH(
   }
 
   const body = await readJsonBody(request);
-  const content = await updateAdminContent(siteId, contentType, id, body, resolved.context.actorId);
+  const content = await updateAdminContent(
+    siteId,
+    contentType,
+    id,
+    body,
+    resolveContentUserId(resolved.context),
+  );
   if (!content) {
     return errorResponse(404, "content_not_found", "Content not found.");
   }

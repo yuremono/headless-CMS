@@ -4,7 +4,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import type { CmsAuthProvider } from '../../lib/auth/production-config';
 import { authProviderLabel } from '../../lib/auth/production-config';
-import { ADMIN_DEV_SESSION_TOKEN, hasPersistedAdminSession, persistAdminSession } from './admin-api';
+import { ADMIN_DEV_SESSION_TOKEN, adminFetch, hasPersistedAdminSession, persistAdminSession } from './admin-api';
 
 interface LoginFormProps {
   email: string;
@@ -25,6 +25,7 @@ export function LoginForm({
   const [formEmail, setFormEmail] = useState(email);
   const [formPassword, setFormPassword] = useState(password);
   const [message, setMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -36,16 +37,39 @@ export function LoginForm({
     }
   }, [redirectTo, router]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setMessage('');
+    setSubmitting(true);
 
-    if (formEmail === email && formPassword === password) {
-      persistAdminSession(sessionToken);
-      router.push(redirectTo);
-      return;
+    try {
+      if (authProvider === 'authjs') {
+        const result = await adminFetch<{ sessionToken: string }>('/api/admin/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formEmail, password: formPassword }),
+        });
+
+        if (!result.ok || !result.data?.sessionToken) {
+          setMessage(result.error ?? 'メールアドレスまたはパスワードが一致しません。');
+          return;
+        }
+
+        persistAdminSession(result.data.sessionToken);
+        router.push(redirectTo);
+        return;
+      }
+
+      if (formEmail === email && formPassword === password) {
+        persistAdminSession(sessionToken);
+        router.push(redirectTo);
+        return;
+      }
+
+      setMessage('メールアドレスまたはパスワードが一致しません。');
+    } finally {
+      setSubmitting(false);
     }
-
-    setMessage('メールアドレスまたはパスワードが一致しません。');
   }
 
   return (
@@ -57,7 +81,7 @@ export function LoginForm({
         </p>
         {authProvider !== 'none' ? (
           <p className="mt-3 rounded-2xl border border-sky-400/20 bg-sky-400/10 px-4 py-3 text-xs leading-5 text-sky-100">
-            本番認証プロバイダ: {authProviderLabel(authProvider)}（フェーズ B までデモログインを利用）
+            本番認証プロバイダ: {authProviderLabel(authProvider)}
           </p>
         ) : null}
       </div>
@@ -85,8 +109,12 @@ export function LoginForm({
 
       {message ? <p className="rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">{message}</p> : null}
 
-      <button type="submit" className="w-full rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100">
-        ログイン
+      <button
+        type="submit"
+        disabled={submitting}
+        className="w-full rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:opacity-60"
+      >
+        {submitting ? 'ログイン中…' : 'ログイン'}
       </button>
 
       <p className="text-xs leading-5 text-slate-500">

@@ -1,3 +1,4 @@
+import { validateAppSession } from "./app-session";
 import { getAuthProvider } from "./production-config";
 
 export interface ProductionSession {
@@ -9,10 +10,25 @@ export interface ProductionSession {
 /** Phase 3-B: Auth.js / Supabase 実装をここに集約 */
 export async function resolveProductionSession(
   _request: Request,
-  _token: string,
+  token: string,
 ): Promise<ProductionSession | null> {
-  if (getAuthProvider() === "none") {
+  const provider = getAuthProvider();
+  if (provider === "none") {
     return null;
   }
+
+  if (provider === "authjs") {
+    const session = await validateAppSession(token);
+    if (!session) {
+      return null;
+    }
+
+    return {
+      userId: session.userId,
+      sessionToken: session.sessionToken,
+      email: session.email ?? undefined,
+    };
+  }
+
   return null;
 }

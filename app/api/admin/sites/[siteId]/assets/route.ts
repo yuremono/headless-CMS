@@ -1,3 +1,4 @@
+import { resolveContentUserId } from "@/lib/auth/content-user";
 import { errorResponse, jsonResponse } from "@/lib/http";
 import { getAdminAssets, patchAdminAsset, resolveAdminRequest } from "@/lib/content/service";
 import { mapUploadError, uploadSiteAsset } from "@/lib/storage/upload-asset";
@@ -47,6 +48,7 @@ export async function POST(
       file: fileEntry,
       alt: formData.get("alt"),
       actorId: resolved.context.actorId,
+      userId: resolved.context.userId,
     });
 
     return jsonResponse(asset, { status: 201 });

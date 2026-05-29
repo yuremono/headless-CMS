@@ -1,3 +1,4 @@
+import { resolveContentUserId } from "@/lib/auth/content-user";
 import { errorResponse, jsonResponse, readJsonBody } from "@/lib/http";
 import { patchAdminSection, resolveAdminRequest } from "@/lib/content/service";
 import { recordAuditFromContext } from "@/lib/audit/log";
@@ -18,7 +19,14 @@ export async function PATCH(
   }
 
   const body = await readJsonBody(request);
-  const result = await patchAdminSection(siteId, contentType, id, sectionId, body, resolved.context.actorId);
+  const result = await patchAdminSection(
+    siteId,
+    contentType,
+    id,
+    sectionId,
+    body,
+    resolveContentUserId(resolved.context),
+  );
 
   if (!result.ok) {
     const message =

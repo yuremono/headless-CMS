@@ -1,3 +1,4 @@
+import { resolveContentUserId } from "@/lib/auth/content-user";
 import { createAsset } from "@/lib/db/assets";
 import { resolveSiteId } from "@/lib/db/site-resolver";
 import { getStorageProvider, validateImageUpload } from "@/lib/storage";
@@ -12,19 +13,12 @@ function normalizeAlt(value: FormDataEntryValue | null): string | null {
   return trimmed.length > 0 ? trimmed : null;
 }
 
-function normalizeActorId(actorId: string): string | null {
-  if (!actorId || actorId.includes(":")) {
-    return null;
-  }
-
-  return actorId;
-}
-
 export async function uploadSiteAsset(input: {
   siteIdOrSlug: string;
   file: File;
   alt?: FormDataEntryValue | null;
   actorId: string;
+  userId?: string;
 }): Promise<AssetUploadResult> {
   const siteId = await resolveSiteId(input.siteIdOrSlug);
   if (!siteId) {
@@ -54,7 +48,7 @@ export async function uploadSiteAsset(input: {
     width: stored.width,
     height: stored.height,
     alt: normalizeAlt(input.alt ?? null),
-    createdBy: normalizeActorId(input.actorId),
+    createdBy: resolveContentUserId({ actorId: input.actorId, userId: input.userId }),
   });
 }
 

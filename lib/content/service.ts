@@ -305,7 +305,7 @@ export async function createAdminContent(
   siteId: string,
   contentType: string,
   body: unknown,
-  actorId: string,
+  userId: string | null,
 ): Promise<ContentRecord | null> {
   if (!isPlainObject(body)) {
     return null;
@@ -321,8 +321,8 @@ export async function createAdminContent(
     title,
     status,
     dataJson,
-    createdBy: actorId,
-    updatedBy: actorId,
+    createdBy: userId,
+    updatedBy: userId,
   } satisfies CreateContentInput);
 }
 
@@ -331,7 +331,7 @@ export async function updateAdminContent(
   contentType: string,
   id: string,
   body: unknown,
-  actorId: string,
+  userId: string | null,
 ): Promise<ContentRecord | null> {
   if (!isPlainObject(body)) {
     return null;
@@ -347,7 +347,7 @@ export async function updateAdminContent(
     title,
     status,
     dataJson,
-    updatedBy: actorId,
+    updatedBy: userId,
   } satisfies UpdateContentInput);
 }
 
@@ -359,27 +359,27 @@ export async function publishAdminContent(
   siteId: string,
   contentType: string,
   id: string,
-  actorId: string,
+  userId: string | null,
 ): Promise<ContentRecord | null> {
-  return publishContent(siteId, contentType, id, actorId);
+  return publishContent(siteId, contentType, id, userId);
 }
 
 export async function unpublishAdminContent(
   siteId: string,
   contentType: string,
   id: string,
-  actorId: string,
+  userId: string | null,
 ): Promise<ContentRecord | null> {
-  return unpublishContent(siteId, contentType, id, actorId);
+  return unpublishContent(siteId, contentType, id, userId);
 }
 
 export async function duplicateAdminContent(
   siteId: string,
   contentType: string,
   id: string,
-  actorId: string,
+  userId: string | null,
 ): Promise<ContentRecord | null> {
-  return duplicateContent(siteId, contentType, id, actorId);
+  return duplicateContent(siteId, contentType, id, userId);
 }
 
 export { patchContentSection as patchAdminSection } from "@/lib/content/section-patch";

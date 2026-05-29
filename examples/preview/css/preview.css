@@ -276,3 +276,36 @@ code {
     order: 2;
   }
 }
+
+.preview_generated h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+}
+
+.preview_generated__steps {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.preview_generated__list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.preview_generated__list a {
+  color: #1d4ed8;
+}
+
+.preview_generated__empty,
+.preview_generated__meta {
+  margin: 0 0 1rem;
+  color: #4b5563;
+}
+
+.preview_generated__api {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+}

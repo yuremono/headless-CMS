@@ -103,7 +103,7 @@ export async function patchContentSection(
   contentId: string,
   sectionId: string,
   body: unknown,
-  actorId: string,
+  userId: string | null,
 ): Promise<PatchSectionResult> {
   if (!isPlainObject(body)) {
     return { ok: false, error: "invalid_body", status: 400 };
@@ -157,7 +157,7 @@ export async function patchContentSection(
 
   const content = await updateContent(siteId, contentType, contentId, {
     dataJson: nextDataJson,
-    updatedBy: actorId,
+    updatedBy: userId,
   });
 
   if (!content) {

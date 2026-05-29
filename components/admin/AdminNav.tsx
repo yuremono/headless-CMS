@@ -1,15 +1,17 @@
 import Link from 'next/link';
+import type { CmsAuthProvider } from '@/lib/auth/production-config';
 import type { SiteSummary } from './admin-data-types';
 import { siteRouteKey } from './admin-data-utils';
 import { LogoutButton } from './LogoutButton';
 
 interface AdminNavProps {
   site?: SiteSummary | null;
+  authProvider?: CmsAuthProvider;
 }
 
 const navItems = [{ href: '/', label: 'ダッシュボード' }];
 
-export function AdminNav({ site }: AdminNavProps) {
+export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
   const siteKey = site ? siteRouteKey(site) : '';
   const siteItems = site
     ? [
@@ -76,7 +78,7 @@ export function AdminNav({ site }: AdminNavProps) {
 
       <div className="mt-auto space-y-2 border-t border-white/10 pt-5">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Account</p>
-        <LogoutButton />
+        <LogoutButton authProvider={authProvider} />
       </div>
     </nav>
   );

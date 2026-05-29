@@ -48,7 +48,7 @@ describe("POST /api/admin/.../duplicate", () => {
       id: "content-copy",
       status: "draft",
     });
-    expect(mockedDuplicate).toHaveBeenCalledWith("site-1", "news", "content-1", "admin:site-1");
+    expect(mockedDuplicate).toHaveBeenCalledWith("site-1", "news", "content-1", null);
   });
 
   it("元が無い場合 404", async () => {

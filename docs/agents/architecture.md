@@ -95,7 +95,7 @@ reference / array / object / sectionArray
 
 | 項目 | 方針 |
 |------|------|
-| 認証 | 管理画面ログイン + APIキー必須 |
+| 認証 | 管理画面ログイン（デモ / **Auth.js**）+ APIキー必須 |
 | APIキー | 公開=読取専用、管理=書込可 |
 | CORS | サイトごとに許可ドメイン設定 |
 | 入力 | バリデーション、SQLi / XSS 対策 |
@@ -148,8 +148,12 @@ reference / array / object / sectionArray
 | 管理 | `GET /api/admin/sites/{siteId}/assets` | メディア一覧 |
 | 管理 | `POST /api/admin/sites/{siteId}/assets` | アップロード |
 | 管理 | `PATCH /api/admin/sites/{siteId}/assets/{assetId}` | メタ更新 |
+| 管理 | `PATCH /api/admin/sites/{siteId}/content/{contentType}/{id}/sections/{sectionId}` | セクション部分更新（Phase 4） |
+| 管理 | `POST /api/admin/auth/login` | Auth.js 有効時: Credentials → アプリセッショントークン |
+| 管理 | `POST /api/admin/auth/logout` | アプリセッション無効化 |
+| Auth.js | `/api/auth/[...nextauth]` | NextAuth v5 ハンドラ（`lib/auth/authjs.ts`） |
 
-**未実装（設計のみ）**: `PATCH .../sections/{sectionId}`（AI 差分更新用）
+**本番認証（Phase B）**: `CMS_AUTH_PROVIDER=authjs` 時は `POST /api/admin/auth/login` → DB `Session` → cookie `cms_session` / `x-session-token`。`lib/auth/session-bridge.ts` 経由で `AuthContext.userId` を付与。`CMS_ENFORCE_ADMIN_LOGIN=true` で管理 UI を middleware がガード。
 
 ### エンドポイント例（クエリ・認証）
 

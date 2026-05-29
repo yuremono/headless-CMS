@@ -1,3 +1,4 @@
+import { resolveContentUserId } from "@/lib/auth/content-user";
 import { errorResponse, jsonResponse } from "@/lib/http";
 import { resolveAdminRequest, unpublishAdminContent } from "@/lib/content/service";
 
@@ -12,7 +13,12 @@ export async function POST(
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);
   }
 
-  const content = await unpublishAdminContent(siteId, contentType, id, resolved.context.actorId);
+  const content = await unpublishAdminContent(
+    siteId,
+    contentType,
+    id,
+    resolveContentUserId(resolved.context),
+  );
   if (!content) {
     return errorResponse(404, "content_not_found", "Content not found.");
   }

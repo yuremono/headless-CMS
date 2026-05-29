@@ -1,5 +1,7 @@
 import { defaultConfig } from "./config.js";
 import { buildStatusLabel, fetchContent } from "./api.js";
+import { renderGeneratedHub } from "./generated-hub.js";
+import { detectPreviewMode, isStandaloneGeneratedPage, PreviewMode } from "./mode.js";
 import { renderPageHero, renderSections } from "./sections.js";
 
 const QUERY_KEYS = [
@@ -88,7 +90,13 @@ function setError(message) {
   setMainHtml(`<div class="preview_error" role="alert"><p>${escapeHtml(message)}</p></div>`);
 }
 
-async function bootstrap() {
+async function bootstrapGeneratedHub() {
+  setStatus("Generated HTML");
+  document.title = "Preview — Generated HTML";
+  setMainHtml(await renderGeneratedHub());
+}
+
+async function bootstrapApi() {
   const config = resolveConfig();
 
   try {
@@ -113,6 +121,19 @@ async function bootstrap() {
     const message = error instanceof Error ? error.message : "Unknown error";
     setError(message);
   }
+}
+
+async function bootstrap() {
+  if (isStandaloneGeneratedPage()) {
+    return;
+  }
+
+  if (detectPreviewMode() === PreviewMode.GeneratedHub) {
+    await bootstrapGeneratedHub();
+    return;
+  }
+
+  await bootstrapApi();
 }
 
 bootstrap();

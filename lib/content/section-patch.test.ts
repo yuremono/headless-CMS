@@ -173,7 +173,7 @@ describe("patchContentSection", () => {
       "content-1",
       "sec_text_001",
       { title: "Updated", visible: false },
-      "admin:site-1",
+      null,
     );
 
     expect(result.ok).toBe(true);
@@ -188,7 +188,7 @@ describe("patchContentSection", () => {
       "page",
       "content-1",
       expect.objectContaining({
-        updatedBy: "admin:site-1",
+        updatedBy: null,
         dataJson: expect.objectContaining({
           sections: [
             {

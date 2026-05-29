@@ -47,14 +47,17 @@
 | パス | 状態 | 内容 |
 |------|------|------|
 | `lib/auth/production-config.ts` | 骨格 | `CMS_AUTH_PROVIDER`, `CMS_ENFORCE_ADMIN_LOGIN` |
-| `lib/auth/session-bridge.ts` | 骨格 | 本番セッション → `{ userId, sessionToken }`（スタブ） |
+| `lib/auth/session-bridge.ts` | 実装済 | 本番セッション → `{ userId, sessionToken }`（Auth.js: DB `Session`） |
+| `lib/auth/app-session.ts` | 実装済 | アプリセッション作成・検証・失効 |
+| `lib/auth/authjs.ts` | 実装済 | Auth.js + Credentials + Prisma Adapter |
+| `app/api/admin/auth/login` | 実装済 | ログイン → `cms_session` 用トークン発行 |
 | `lib/auth/admin-route-guard.ts` | 骨格 | 管理 UI パス判定・リダイレクト URL |
 | `lib/auth/index.ts` | 拡張 | 本番解決成功時に `userId` を `AuthContext` に付与 |
 | `middleware.mjs` | 拡張 | `CMS_ENFORCE_ADMIN_LOGIN=true` 時のみ未ログイン UI を `/login` へ |
 | `components/admin/LoginForm.tsx` | 拡張 | `authProvider` 表示（デモログイン動作は不変） |
 | `.env.example` | 追記 | `CMS_AUTH_PROVIDER`, `CMS_ENFORCE_ADMIN_LOGIN` |
 
-**意図的に未着手**: Auth.js / Supabase のパッケージ追加、OAuth プロバイダ、メール送信、パスワードリセット UI。
+**意図的に未着手**: Supabase Auth 実装、OAuth プロバイダ、メール送信、パスワードリセット UI。
 
 ## 実装ステップ
 
@@ -123,7 +126,8 @@
 - [x] `phase3-auth-plan.md` に Auth.js 推奨と Supabase 代替が記載されている
 - [x] デモログイン・`session-dev-token`・既存管理 API が動作する
 - [x] `AuthContext.userId` を本番 bridge から設定できる骨格がある
-- [ ] Auth.js または Supabase の実ログイン（フェーズ B）
+- [x] Auth.js 実ログイン（フェーズ B: Credentials + DB Session + `cms_session`）
+- [ ] Supabase Auth の実ログイン
 - [ ] `PHASE3_ENFORCE_ROLES` 本番有効化
 
 ## 関連ドキュメント

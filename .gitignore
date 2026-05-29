@@ -20,6 +20,12 @@ public/uploads/*
 !public/uploads/.gitkeep
 /uploads/
 
+# Preview static export (track placeholders only)
+examples/preview/generated/*
+!examples/preview/generated/.gitkeep
+!examples/preview/generated/README.md
+!examples/preview/generated/index.html
+
 # Temp / agent artifacts
 tmp/
 tmp/backups/

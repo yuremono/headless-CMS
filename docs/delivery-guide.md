@@ -30,6 +30,8 @@
 
 同梱の [examples/preview/](../examples/preview/README.md) は API 検証用デモであり、案件フロントではありません。
 
+**デモ用静的 HTML エクスポート（計画・最優先）:** CMS 保存・公開時に `examples/preview/` へ静的 HTML を自動生成する機能を追加予定。これは**ローカル／検証用の副産物**であり、クライアント納品物ではありません。案件の本番サイトは引き続き配信 API（JSON）から各フロントが取得・描画します。
+
 ---
 
 ## 2. 初期セットアップ
@@ -54,7 +56,10 @@ cp .env.example .env.local   # 本番はホスティング側の環境変数に�
 | `DATABASE_URL` | PostgreSQL 接続文字列 |
 | `APP_URL` | CMS の公開 URL（例: `https://cms.example.com`） |
 | `FRONTEND_BASE_URL` | 案件フロントの origin（プレビューリンク・CORS 用） |
-| `ADMIN_DEMO_EMAIL` / `ADMIN_DEMO_PASSWORD` | 開発・納品初期の管理画面ログイン（本番認証は Phase 3） |
+| `ADMIN_DEMO_EMAIL` / `ADMIN_DEMO_PASSWORD` | 開発用デモログイン（`CMS_AUTH_PROVIDER=none` 時）。seed の bcrypt ハッシュにも使用 |
+| `AUTH_SECRET` | Auth.js セッション署名（本番必須） |
+| `CMS_AUTH_PROVIDER` | `none`（デモ） / `authjs`（本番推奨） / `supabase`（未実装） |
+| `CMS_ENFORCE_ADMIN_LOGIN` | `true` で未ログイン時に管理 UI を `/login` へ（本番推奨） |
 | `CMS_PUBLIC_API_KEY` / `CMS_ADMIN_API_KEY` | 本番用 API キー（未設定時は開発フォールバックのみ） |
 | `CMS_PREVIEW_TOKEN` または `PREVIEW_TOKEN_SECRET` | プレビュー認証 |
 | `STORAGE_PROVIDER` | MVP 既定は `local`（画像はサーバー内保存） |
@@ -100,11 +105,23 @@ npm run start
 | ダッシュボード | `/` |
 | サイト概要 | `/sites/{slug}`（例: `/sites/main-site`） |
 
-### ログイン（現行）
+### ログイン
 
-現時点の認証は **デモセッション** です。ログイン情報は環境変数 `ADMIN_DEMO_EMAIL` と `ADMIN_DEMO_PASSWORD` で設定します（ [.env.example](../.env.example) 参照）。
+| モード | 設定 | 動作 |
+|--------|------|------|
+| **本番（推奨）** | `CMS_AUTH_PROVIDER=authjs` | `/login` → `POST /api/admin/auth/login`（Credentials + bcrypt）→ cookie `cms_session` |
+| **開発** | `CMS_AUTH_PROVIDER=none`（既定） | デモメール/パスワード一致で `session-dev-token`（`NODE_ENV=production` では不可） |
 
-> **Phase 3（未着手）:** Supabase Auth / Auth.js による本番認証、メンバー CRUD UI、viewer 向け読取専用画面を予定しています。本番納品前に本番認証の導入を検討してください。
+本番の最小 env 例:
+
+```env
+CMS_AUTH_PROVIDER=authjs
+AUTH_SECRET=<long-random>
+CMS_ENFORCE_ADMIN_LOGIN=true
+ADMIN_DEMO_PASSWORD=<strong-password>   # seed 再実行後に admin@example.com で使用
+```
+
+migrate 後は `npx tsx prisma/seed.ts` で `admin@example.com` に bcrypt ハッシュが入ります。
 
 ### 基本的な編集フロー
 
@@ -232,7 +249,7 @@ curl -s \
 | single（例: topPage） | `siteId`, `contentType`, `contentId`, `previewToken` |
 | collection（例: page） | `siteId`, `contentType`, `slug`, `previewToken` |
 
-案件フロントが別 origin から fetch する場合、CMS の CORS（`middleware.mjs`）で `FRONTEND_BASE_URL` を許可する必要があります。
+案件フロントが別 origin から fetch する場合、CMS の CORS（`proxy.js`）で `FRONTEND_BASE_URL` を許可する必要があります。
 
 ---
 
@@ -250,7 +267,16 @@ curl -s \
 
 ### 7.2 実装パターン（例）
 
-**ビルド時取得（SSG）**
+**プレーン HTML + JavaScript（CSR・最小構成）**
+
+- 静的 HTML/JS を任意ホストに置き、ブラウザから配信 API（JSON）を `fetch` する
+- CMS: `FRONTEND_BASE_URL` に案件サイトの origin を設定（CORS）。`x-api-key` に公開 API キーを付与
+- 管理画面で **公開** すると API は即時反映。ユーザーがページを再読み込みすれば最新（ビルド不要）
+- 参考クライアント: [examples/preview/](../examples/preview/README.md)（API 検証用。案件納品物ではない）
+
+**ビルド時取得（SSG・将来・代替）**
+
+Astro 等でビルド時に API を取得する SSG も選択可能（下記 curl 例と同様の URL・キー）。
 
 ```bash
 curl -s \
@@ -274,6 +300,14 @@ curl -s \
 ### 7.3 検証用デモ
 
 同梱デモ [examples/preview/](../examples/preview/README.md) で API 接続を確認できます。
+
+| 観点 | 本番・案件納品 | 同梱デモ（`examples/preview/`） |
+|------|----------------|----------------------------------|
+| 配信形式 | JSON API のみ | 現状: ブラウザから CMS API を fetch。予定: 保存時に静的 HTML を自動生成 |
+| 用途 | クライアントサイトのデータソース | API 検証・編集後プレビューの手早い確認 |
+| 納品に含めるか | はい（API 仕様・キー運用） | **いいえ**（リポジトリ同梱の検証用） |
+
+静的 HTML の自動生成が入っても、**ヘッドレス原則は変わりません**。CMS は本番向けに HTML を配信せず、生成ファイルはデモディレクトリ内に限定します。
 
 ```bash
 # ターミナル 1: CMS
@@ -362,7 +396,8 @@ Supabase 利用時はダッシュボードの Backup 機能も併用できます
 - [ ] `PREVIEW_TOKEN_SECRET` または `CMS_PREVIEW_TOKEN` を設定
 - [ ] `APP_URL` / `FRONTEND_BASE_URL` を本番 URL に設定
 - [ ] `DATABASE_URL` は Pooler URL（runtime）
-- [ ] デモパスワードを本番用に変更、または Phase 3 本番認証を導入
+- [ ] `CMS_AUTH_PROVIDER=authjs`・`AUTH_SECRET`・`CMS_ENFORCE_ADMIN_LOGIN=true` を設定
+- [ ] `ADMIN_DEMO_PASSWORD` を強固にし seed 再実行（または DB で `password_hash` 更新）
 - [ ] 公開 API キーを案件フロントのサーバー環境変数のみに配置
 
 ---
@@ -375,8 +410,10 @@ Supabase 利用時はダッシュボードの Backup 機能も併用できます
 | [SPEC.md](../SPEC.md) | 要件定義・Phase 計画 |
 | [docs/agents/architecture.md](agents/architecture.md) | API 一覧・セキュリティ |
 | [docs/agents/project.md](agents/project.md) | 技術スタック・ディレクトリ |
+| [docs/agents/handoff-2026-05-29-2247JST.md](agents/handoff-2026-05-29-2247JST.md) | 引き継ぎ（最新） |
 | [examples/preview/README.md](../examples/preview/README.md) | プレビューデモ詳細 |
 | [.env.example](../.env.example) | 環境変数一覧 |
+| [docs/vercel-deploy.md](vercel-deploy.md) | Vercel + Supabase デプロイ（CMS・フロント） |
 
 ---
 
@@ -384,12 +421,12 @@ Supabase 利用時はダッシュボードの Backup 機能も併用できます
 
 | 項目 | 現状 |
 |------|------|
-| 本番認証 | デモログインのみ（Phase 3） |
-| API キーローテーション | API のみ（管理 UI 未実装） |
-| 操作ログ | 未実装 |
+| 本番認証 | Auth.js（Credentials + DB Session）。`none` 時はデモのみ |
+| API キーローテーション | サイト概要 UI（owner / admin） |
+| 操作ログ | API + サイト概要 UI（owner / admin） |
 | DB バックアップ | `scripts/backup-db.sh`（手動 / cron）。自動エクスポート UI は未実装 |
 | 画像ストレージ | MVP は `local`。R2 は stub |
 | 権限強制 | `PHASE3_ENFORCE_ROLES=true` で有効化可能（既定オフ） |
 | コンテンツ種類の GUI 追加 | Phase 2 以降（MVP は `content-types/*.json`） |
 
-不明点は [docs/agents/handoff-2026-05-29.md](agents/handoff-2026-05-29.md) の引き継ぎメモも参照してください。
+不明点は [handoff-2026-05-29-2247JST.md](agents/handoff-2026-05-29-2247JST.md) を参照してください。

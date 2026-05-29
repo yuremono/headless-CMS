@@ -69,7 +69,7 @@ describe("PATCH /api/admin/.../sections/[sectionId]", () => {
       "content-1",
       "sec_text_001",
       { title: "Updated" },
-      "admin:site-1",
+      null,
     );
     await expect(response.json()).resolves.toMatchObject({ id: "content-1" });
   });

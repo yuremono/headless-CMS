@@ -261,7 +261,33 @@ export async function adminFetch<T>(
       return { ok: true, data: null, status: 204 };
     }
 
-    const body = (await response.json()) as T | ApiErrorBody;
+    const text = await response.text();
+    if (!text.trim()) {
+      if (!response.ok) {
+        return {
+          ok: false,
+          data: null,
+          status: response.status,
+          error: `HTTP ${response.status}`,
+          code: 'empty_response',
+        };
+      }
+
+      return { ok: true, data: null, status: response.status };
+    }
+
+    let body: T | ApiErrorBody;
+    try {
+      body = JSON.parse(text) as T | ApiErrorBody;
+    } catch {
+      return {
+        ok: false,
+        data: null,
+        status: response.status,
+        error: 'Invalid JSON response',
+        code: 'invalid_json',
+      };
+    }
 
     if (!response.ok) {
       const errorBody = body as ApiErrorBody;

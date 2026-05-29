@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db/prisma";
 import { resolveSiteId } from "@/lib/db/site-resolver";
 import { clonePlainObject, isPlainObject } from "@/lib/http";
 import { sanitizeContentDataJson } from "@/lib/sanitize";
+import { scheduleContentExport } from "@/lib/static-export/hook";
 import { toContentModelRecord, toContentRecord } from "./mappers";
 import type {
   ContentCollectionResult,
@@ -264,7 +265,9 @@ export async function updateContent(
     },
   });
 
-  return toContentRecord(row, contentType);
+  const record = toContentRecord(row, contentType);
+  scheduleContentExport(record);
+  return record;
 }
 
 export async function deleteContent(siteIdOrSlug: string, contentType: string, id: string): Promise<boolean> {
@@ -326,7 +329,9 @@ export async function publishContent(
     },
   });
 
-  return toContentRecord(row, contentType);
+  const record = toContentRecord(row, contentType);
+  scheduleContentExport(record);
+  return record;
 }
 
 export async function unpublishContent(
@@ -365,7 +370,9 @@ export async function unpublishContent(
     },
   });
 
-  return toContentRecord(row, contentType);
+  const record = toContentRecord(row, contentType);
+  scheduleContentExport(record);
+  return record;
 }
 
 function buildDuplicateSlug(slug: string | null): string | null {

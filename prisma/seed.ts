@@ -1,9 +1,11 @@
 import { createHash, randomBytes } from "node:crypto";
+import bcrypt from "bcrypt";
 import { prisma } from "../lib/db/prisma";
 import {
   buildContentModelSeedRecords,
   readContentTypeDefinitions,
 } from "../lib/schemas";
+import { exportSiteContent } from "../lib/static-export";
 
 function hashSecret(secret: string): string {
   return createHash("sha256").update(secret).digest("hex");
@@ -25,6 +27,8 @@ function createApiKeySecret(prefix: string): {
 async function main() {
   const definitions = await readContentTypeDefinitions();
   const siteSlug = "main-site";
+  const adminPassword = process.env.ADMIN_DEMO_PASSWORD ?? "admin1234";
+  const passwordHash = await bcrypt.hash(adminPassword, 10);
 
   const [adminUser] = await prisma.$transaction(async (tx) => {
     const user = await tx.user.upsert({
@@ -32,10 +36,12 @@ async function main() {
       update: {
         name: "Editorial Admin",
         image: null,
+        passwordHash,
       },
       create: {
         email: "admin@example.com",
         name: "Editorial Admin",
+        passwordHash,
       },
     });
 
@@ -257,6 +263,9 @@ async function main() {
   });
 
   void adminUser;
+
+  const exportResult = await exportSiteContent(siteSlug, { includeDraft: true });
+  console.log(`Static preview export: ${exportResult.exported} file(s) for "${exportResult.siteSlug}"`);
 }
 
 main()
