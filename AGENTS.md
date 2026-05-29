@@ -9,6 +9,7 @@
 | ヘッドレス | CMSはHTMLを出力しない。JSONを返す |
 | セクション | 表示責任を持たない。構造化データのみ |
 | スキーマ駆動 | 管理画面・配信API・AI操作APIを同一スキーマで統一 |
+| 即時配信 | 配信は `no-store` + Data Cache。公開操作で `revalidateTag` 失効し、フロントへほぼ即時反映（詳細 `docs/agents/architecture.md`） |
 
 ## ドキュメント参照ガイド
 
