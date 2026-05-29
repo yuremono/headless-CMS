@@ -1,0 +1,133 @@
+.gitignore
+  s_3137e3e02c8603::t_03ebc7d015592e 8,10
+  s_3137e3e02c8603::t_86922971230113 63
+app/api/admin/sites/[siteId]/content/[contentType]/route.ts
+  s_3137e3e02c8603::t_42eb7ebca0384d 11-12
+next-env.d.ts
+  s_3137e3e02c8603::t_34808e8f6a7dd2 3
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/route.ts
+  s_3137e3e02c8603::t_2600e4611e1edb 53-64,66-69,71-76
+  s_3137e3e02c8603::t_b26a5980266172 12-13
+app/api/ping/route.ts
+  s_3137e3e02c8603::t_c99406b908bd57 1-3
+lib/content/service.ts
+  s_3137e3e02c8603::t_c761b1e7e5654b 14
+  s_3137e3e02c8603::t_a1d63348c0b190 46-51
+components/admin/AssetGrid.tsx
+  h_53dad1e32c3c71 84,99-103,106,170,184,195,213-214,220,225,229
+components/admin/ContentTypeList.tsx
+  s_3137e3e02c8603::t_ac6ffa8135a165 21-75
+lib/sanitize/data-json.test.ts
+  s_3137e3e02c8603::t_3f35cce9cec159 74
+  s_3137e3e02c8603::t_b4c7978cbff836 93
+  s_3137e3e02c8603::t_8ff806b709b030 60,70,84,113,160,172,201,210
+  s_3137e3e02c8603::t_4024b7d9605df5 204
+  s_3137e3e02c8603::t_844404bc4adae9 170
+  s_3137e3e02c8603::t_aaea69a1b886cf 65
+  s_3137e3e02c8603::t_8f32fade3d61d3 176
+  s_3137e3e02c8603::t_6f30758f8c0037 54
+.env.supabase.local.example
+  s_3137e3e02c8603::t_d4f79db2419008 1-2,5-7
+  s_3137e3e02c8603::t_6ec94787457b95 3-4
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/sections/[sectionId]/route.ts
+  s_3137e3e02c8603::t_f1088195127ba2 6-7
+scripts/vercel-env-checklist.md
+  s_3137e3e02c8603::t_6f3d9978fe643d 3-4,7
+components/admin/DashboardOverview.tsx
+  h_53dad1e32c3c71 25,31,37,43,48,54,117
+lib/sanitize/data-json.ts
+  s_3137e3e02c8603::t_e476629047dfde 10-13,26,31,37-40,62,66,69,77,91,94
+app/(admin)/sites/[siteId]/contents/page.tsx
+  h_53dad1e32c3c71 55,102-103
+app/(admin)/login/page.tsx
+  h_53dad1e32c3c71 17
+components/admin/ImageFieldInput.tsx
+  h_53dad1e32c3c71 107,111,125,135-136,198,200-201,205,214
+scss/_components.scss
+  h_53dad1e32c3c71 20
+USER_SETUP.md
+  s_3137e3e02c8603::t_900e93f3e7ead0 19
+  s_3137e3e02c8603::t_425ddd553b906f 1-18,20-27
+app/api/sites/[siteId]/content/[contentType]/[id]/route.ts
+  s_3137e3e02c8603::t_a7dfdba45e8f8b 3,33
+  s_3137e3e02c8603::t_00e30e489cc3ab 4
+  s_3137e3e02c8603::t_abf0386520ba3a 2,10-13,15-21,23-26,28-32
+docs/vercel-deploy.md
+  s_3137e3e02c8603::t_3b2654f49e0011 14-15
+components/admin/AdminPageHeader.tsx
+  h_53dad1e32c3c71 11,19,23,25,27
+components/admin/LoginForm.tsx
+  h_53dad1e32c3c71 77,86,118,122,129,133-134
+lib/sanitize/html.ts
+  s_3137e3e02c8603::t_81d9adfe507619 1,36-48,53
+components/admin/ContentList.tsx
+  h_53dad1e32c3c71 97,149,159,164,169,175-176,201,288,298,310-311,317,322,329,342-343
+components/admin/AdminLayout.tsx
+  s_3137e3e02c8603::t_ac6ffa8135a165 1-41,44-46,48-75
+lib/sanitize/html.test.ts
+  s_3137e3e02c8603::t_eeffa5799cc93e 5-6,9,11,14,16,19,21,26,28-30
+lib/db/prisma.ts
+  s_3137e3e02c8603::t_4cb22253d8e85d 17-21,23
+  s_3137e3e02c8603::t_a8739738c0c2fe 22
+app/(admin)/sites/[siteId]/content-types/page.tsx
+  h_53dad1e32c3c71 43-44,54
+README.md
+  s_3137e3e02c8603::t_2bdfe3cba4a362 43-44
+scripts/vercel-env-paste.md
+  s_3137e3e02c8603::t_3c00e690e06961 1-24,26-27,29-41
+  s_3137e3e02c8603::t_f5d1a4b549de43 25,28
+app/api/sites/[siteId]/content/[contentType]/route.ts
+  s_3137e3e02c8603::t_daec14b2842490 2
+  s_3137e3e02c8603::t_da4543a7bb4bbb 4
+app/(admin)/layout.tsx
+  s_3137e3e02c8603::t_f603d63676408f 3-5
+scripts/setup-supabase-deploy.sh
+  s_3137e3e02c8603::t_f9713f762e1c69 32,34-36,38
+  s_3137e3e02c8603::t_e734dbd546b183 1-26,31,33,37,39-47,52-63,66-69,71-104
+  s_3137e3e02c8603::t_bc1341fbbf3cf9 29-30
+  s_3137e3e02c8603::t_110ecfb6de3dc4 70
+  s_3137e3e02c8603::t_d6ecfd04204d4e 28
+  s_3137e3e02c8603::t_f33adc2674b335 27
+  s_3137e3e02c8603::t_f2e846aa66ea44 48-51
+  s_3137e3e02c8603::t_133e827ba1c136 64-65
+prisma/schema.prisma
+  s_3137e3e02c8603::t_5e52ef9c708084 7
+  s_3137e3e02c8603::t_fc430d13e3d907 29-30
+  s_3137e3e02c8603::t_7537a84c69f421 79
+  s_3137e3e02c8603::t_d12057ea2bc465 195
+  s_3137e3e02c8603::t_725888b3014935 37-38
+  s_3137e3e02c8603::t_1e9aade02dc5c9 90
+  s_3137e3e02c8603::t_da2c9c0f13e797 59
+  s_3137e3e02c8603::t_ffe47218cab14e 215
+  s_3137e3e02c8603::t_fd2703ea4b92dc 117
+  s_3137e3e02c8603::t_0491dc15b20145 170
+  s_3137e3e02c8603::t_b68e4c0af1f1b4 22-23
+  s_3137e3e02c8603::t_6b1997a127aec9 15-16
+  s_3137e3e02c8603::t_9f21208510867b 133
+  s_3137e3e02c8603::t_20f730690964de 100
+  s_3137e3e02c8603::t_b685dcb5485438 232
+  s_3137e3e02c8603::t_2810ecb2606457 152
+components/admin/ContentForm.tsx
+  s_3137e3e02c8603::t_334610d3969b31 142-155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "213a7e829ecfac98f8830c365f2c979dd5afd93d",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_3137e3e02c8603": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "8a393429-09c0-4794-8744-5d5fd5a8cd69",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
