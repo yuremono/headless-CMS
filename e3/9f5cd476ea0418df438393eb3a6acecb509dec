@@ -1,0 +1,74 @@
+.gitignore
+  s_d637af2decd4d1::t_347c33c4351ad3 21
+  s_9aff36515515cc::t_7448d70b9c2305 48-53
+lib/auth/roles.test.ts
+  s_462ae7c2f6e61a::t_4a00ac2a609ef1 1-69
+lib/auth/site-role.test.ts
+  s_462ae7c2f6e61a::t_fefdb7f837d485 1-90
+lib/auth/site-role.ts
+  s_462ae7c2f6e61a::t_e856a5a0607b2c 40
+  s_462ae7c2f6e61a::t_4c1520ecaf94d9 1-24,26-39,41-65,67-79
+  s_462ae7c2f6e61a::t_cd781bb5334ed6 66
+  s_462ae7c2f6e61a::t_e7ac7b00e483ce 25
+lib/auth/index.ts
+  s_462ae7c2f6e61a::t_7dcc835198cfef 3-29
+lib/auth/admin-access.test.ts
+  s_462ae7c2f6e61a::t_59c39967b70baa 1-49
+lib/auth/admin-access.ts
+  s_462ae7c2f6e61a::t_955728a541ab86 1-55
+lib/auth/roles.ts
+  s_462ae7c2f6e61a::t_1a4f07a309661a 1-71
+lib/content/service.ts
+  s_462ae7c2f6e61a::t_c9c295ff950062 10
+  s_462ae7c2f6e61a::t_7b88d4df9482df 2-7
+  s_462ae7c2f6e61a::t_3346deb8e834af 143-154
+lib/content/service.test.ts
+  s_462ae7c2f6e61a::t_3d0d2e9e0457ca 44
+  s_462ae7c2f6e61a::t_7838225695974e 8
+  s_462ae7c2f6e61a::t_0f8144587d6286 50
+  s_d637af2decd4d1::t_b02f8f70da6d7d 188-206
+  s_462ae7c2f6e61a::t_31830599ffa2a4 9-12
+  s_462ae7c2f6e61a::t_a6d32f91a4a9cd 92-93
+docs/progress-checklist.md
+  s_a98ec7229e4fc2::t_1b2ee05a253c83 1-252
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "e39f5cd476ea0418df438393eb3a6acecb509dec",
+  "prompts": {},
+  "sessions": {
+    "s_462ae7c2f6e61a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b6860e4a-4819-4143-8558-96e6a83f2b5e",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_9aff36515515cc": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "7daab694-4c20-4c41-a1d7-fbd2cc59e812",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_a98ec7229e4fc2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "52baf791-c23e-4056-8664-1b4c8383f374",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d637af2decd4d1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e3cf5cd8-2959-4479-a272-73192554441b",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
