@@ -1,0 +1,377 @@
+app/api/admin/sites/[siteId]/assets/route.ts
+  s_9133b8946c0205::t_d2e9a4ed560972 1
+  s_9133b8946c0205::t_1ab46bdbaebf72 51
+docs/agents/handoff-2026-05-29-2200JST.md
+  s_abac1067690820::t_2b1505ec0fe040 1-279
+docs/agents/handoff-2026-05-29-2247JST.md
+  s_f041d6c4ac3ede::t_32cdf73ae71ac9 1-183
+prisma/migrations/20260529180000_add_authjs_models/migration.sql
+  s_f928abf2816d51::t_18eb531dbeae87 1-55
+lib/auth/session-bridge.ts
+  s_f928abf2816d51::t_87f47eb8efa63c 1,13,15-16,19-32
+docs/delivery-guide.md
+  s_f041d6c4ac3ede::t_f582da58b4c701 413
+  s_1b9a18c30b0117::t_911781be0a9ed4 425-426
+  s_f041d6c4ac3ede::t_b017f4db31153c 432
+  s_f041d6c4ac3ede::t_c53b2989ee91f9 252
+  s_93a8e7e2fa1dd7::t_dcdb0315c77464 33-34
+  s_f928abf2816d51::t_2c9ac9d444da3b 59-62
+  s_eb8cc828ffb462::t_a01df96fa44d14 270-279
+  s_f928abf2816d51::t_908ab40e68543c 399-400
+  s_93a8e7e2fa1dd7::t_7ae1caed1d0f4d 304-311
+  s_70ce55d4f42303::t_7a20436c4a171c 416
+  s_f928abf2816d51::t_c6b9fcfaad4924 108-113,115,117-124
+  s_f928abf2816d51::t_ee4103d541b74c 424
+lib/static-export/export.ts
+  s_ebe89f2a587c3b::t_c329ae1d009790 2
+  s_9cdf0c65c58039::t_4e2c1c79174e6c 12,27-39,47-48,51-62,64,102
+  s_ebe89f2a587c3b::t_c4a6d2d87ccb2c 1,3-11,13-26,40-46,49-50,63,65-101,103-113
+components/admin/admin-api.ts
+  s_9133b8946c0205::t_f5713fe81c4681 264-290
+examples/preview/css/preview.css
+  s_7730181e09fc85::t_0a31eb0fd762d6 279-311
+.gitignore
+  s_7730181e09fc85::t_c27f7056f07382 23-28
+supabase/.temp/gotrue-version
+  s_3137e3e02c8603::t_e4d208dcf4f68d 1
+components/admin/LoginForm.tsx
+  s_f928abf2816d51::t_efd16e40f8e7c4 40,42-43,45-56,58-72
+  s_f928abf2816d51::t_0faa3fd0074090 84
+  s_f928abf2816d51::t_916093fc264dd0 7
+  s_f928abf2816d51::t_7a71149f608503 112-117
+  s_f928abf2816d51::t_367925ef893d2b 28
+examples/preview/js/generated-hub.js
+  s_7730181e09fc85::t_700d5da31f4e3e 1-76
+lib/auth/content-user.test.ts
+  s_71bf9bf56b538f::t_c1d1bb8e106d92 1-23
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/duplicate/route.test.ts
+  s_9133b8946c0205::t_877f82ef8dcfa8 51
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/sections/[sectionId]/route.test.ts
+  s_9133b8946c0205::t_44a4d539bda943 72
+lib/auth/app-session.ts
+  s_f928abf2816d51::t_155df9aca1c4bf 1-53
+examples/preview/index.html
+  s_7730181e09fc85::t_7bef16f99770b5 21-22
+app/api/admin/auth/logout/route.ts
+  s_f928abf2816d51::t_0713e5a3da89a3 1-32
+docs/agents/architecture.md
+  s_1b9a18c30b0117::t_adb52533111b83 98
+  s_1b9a18c30b0117::t_900d61e851cbeb 151-154,156
+prisma/seed.ts
+  s_f928abf2816d51::t_a8a382d59015b6 2
+  s_f928abf2816d51::t_583fe1bda403cb 30-31,39,44
+  s_9cdf0c65c58039::t_b299f601094419 8
+  s_9cdf0c65c58039::t_905dd91ba0ccd2 266-268
+app/api/admin/auth/login/route.test.ts
+  s_f928abf2816d51::t_2582c381a27f0e 1-81
+lib/storage/upload-asset.ts
+  s_9133b8946c0205::t_b49c9f9f253818 1
+  s_9133b8946c0205::t_d54fb2ca4017e4 51
+  s_9133b8946c0205::t_d695e5e72f5b11 21
+lib/static-export/sections.ts
+  s_ebe89f2a587c3b::t_0f8f1f3429a88b 1-410
+examples/preview/js/mode.js
+  s_7730181e09fc85::t_a1543488baa76c 1-35
+examples/preview/README.md
+  s_c596432c1e645b::t_ca57c642ce77a7 3,6,8,11,13,15-17,20-22,24,26,28-31,33,35,37,39-41,43,49-51,53,55,64,84,87,94,97-98,109
+  s_7730181e09fc85::t_1bd745d9774e5a 45,47-48,57-62,66,68,70-76,78,81,86,99-102,108
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/publish/route.ts
+  s_9133b8946c0205::t_29091988cc2c21 1
+  s_9133b8946c0205::t_a5d21eec3fadcc 17-22
+lib/static-export/render-page.test.ts
+  s_ebe89f2a587c3b::t_447803effae57a 1-63
+package.json
+  s_70ce55d4f42303::t_1a471711656f40 8
+  s_ebe89f2a587c3b::t_8a3443645cc023 17-18
+  s_f928abf2816d51::t_98f3ea80b951a6 27,30,33,40
+  s_f928abf2816d51::t_b316ddf0c52ec6 9
+vercel.json
+  s_70ce55d4f42303::t_2860eef300f227 1-6
+lib/content/store.ts
+  s_ebe89f2a587c3b::t_9b21f4aa900138 6
+  s_ebe89f2a587c3b::t_1892877fc63930 268-270
+  s_ebe89f2a587c3b::t_27b5adaf63e226 373-375
+  s_ebe89f2a587c3b::t_2b47034b15fe29 332-334
+scripts/vercel-env-checklist.md
+  s_70ce55d4f42303::t_5cb9e2920ef0d1 1-36
+components/admin/LogoutButton.tsx
+  s_f928abf2816d51::t_7b54be0aced42d 4-5,9,14,18-26
+SPEC.md
+  s_93a8e7e2fa1dd7::t_b0d1866ef89e51 1259-1269
+proxy.js
+  s_c596432c1e645b::t_1eba258284ade5 10,12,24-32,69-76,86
+lib/auth/session-bridge.test.ts
+  s_f928abf2816d51::t_cf9e773fc6ec26 1-7,10,15,18,31,34,36-41,44-59,61
+lib/static-export/paths.ts
+  s_ebe89f2a587c3b::t_a62dcfa134ffce 1-6,13-16,19-21,23-26,28-31,33-34,36
+  s_9cdf0c65c58039::t_8522d390ec8f0c 7-12,17-18,22,27,32,35
+lib/content/section-patch.test.ts
+  s_9133b8946c0205::t_b849675bd09930 176
+  s_9133b8946c0205::t_a0ab0c3ef256c2 191
+supabase/.temp/cli-latest
+  s_3137e3e02c8603::t_48c73f72ed1ce0 1
+app/api/admin/auth/login/route.ts
+  s_f928abf2816d51::t_4af656a384af2b 1-36
+lib/preview/generated-output-path.test.ts
+  s_7730181e09fc85::t_0213a5ff947fb0 1-18
+lib/preview/index.ts
+  s_7730181e09fc85::t_ece51b74fe59ac 7-10
+README.md
+  s_eb8cc828ffb462::t_701a62ea96f2ee 65
+  s_f041d6c4ac3ede::t_c2497ca1a85e62 64
+  s_70ce55d4f42303::t_c5167d4bd70206 66
+  s_93a8e7e2fa1dd7::t_5799069e9c5cc4 53-54
+  s_eb8cc828ffb462::t_c0b6f8c5c452d7 45-52
+lib/static-export/index.ts
+  s_9cdf0c65c58039::t_f082a00d3a2e46 1,6,12,14
+  s_ebe89f2a587c3b::t_2dfd4f65f6c97a 2-5,7-11,13,15-17
+app/preview/generated/[[...path]]/route.ts
+  s_7730181e09fc85::t_0ea0988682608a 1-59
+lib/auth/app-session.test.ts
+  s_f928abf2816d51::t_c8aec9442c12e8 1-101
+lib/auth/index.ts
+  s_9133b8946c0205::t_fc04b1f7f25cfd 32
+supabase/.temp/pooler-url
+  s_3137e3e02c8603::t_e4d208dcf4f68d 1
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/unpublish/route.ts
+  s_9133b8946c0205::t_841977a4ba3923 16-21
+  s_9133b8946c0205::t_37e2c1f5e8b78c 1
+docs/progress-checklist.md
+  s_c41e785761439d::t_5903247712b4cb 15-16
+  s_f041d6c4ac3ede::t_df471e6abc4ae9 256-257
+  s_9cdf0c65c58039::t_933b88ff29c751 184,186,190-191,193-196
+  s_9cdf0c65c58039::t_e890f1fba07939 18
+  s_f041d6c4ac3ede::t_0a85324eae21d2 217
+  s_1b9a18c30b0117::t_785b78e14678c4 218
+  s_f928abf2816d51::t_64760809cd46c4 41
+  s_f041d6c4ac3ede::t_a280843f54341e 291
+  s_f928abf2816d51::t_9d33cf2ac4880a 20
+  s_f041d6c4ac3ede::t_7a1b2a0495ff1d 80
+  s_f041d6c4ac3ede::t_6c2f80cb4212ec 222
+  s_abac1067690820::t_7f0c35e3ff89e4 258
+  s_abac1067690820::t_a5dc5f8760744b 152
+  s_93a8e7e2fa1dd7::t_9bb8e30976e6e8 185,187-189,192,197-198
+  s_f041d6c4ac3ede::t_49c163d9bdb830 19
+  s_c41e785761439d::t_8995de3de090f2 147
+  s_c41e785761439d::t_06b323efe2bf3b 292-293
+  s_f041d6c4ac3ede::t_3e7c6925a2b0d4 3,5
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/route.ts
+  s_9133b8946c0205::t_dc2312fdd372ef 52-58
+  s_9133b8946c0205::t_50e41c7e42de44 1
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/sections/[sectionId]/route.ts
+  s_9133b8946c0205::t_7c22d4a04e5f62 22-29
+  s_9133b8946c0205::t_236210f6bf67d9 1
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/publish/route.test.ts
+  s_9133b8946c0205::t_32f11db2f98433 52
+lib/auth/content-user.ts
+  s_9133b8946c0205::t_2e2568a49671f9 1-15
+lib/auth/authjs.ts
+  s_f928abf2816d51::t_2f05e17c461377 1-81
+examples/preview/generated/index.html
+  s_7730181e09fc85::t_46ba3e3ff9b719 1-11
+examples/preview/generated/README.md
+  s_7730181e09fc85::t_9549d78221318d 1-4,6,11,13
+  s_9cdf0c65c58039::t_93a92f9b2cafb9 5,7-10,12,14-21
+app/api/admin/sites/[siteId]/content/[contentType]/route.test.ts
+  s_9133b8946c0205::t_078f86cf71a313 97
+.env.example
+  s_7730181e09fc85::t_18a78aaf92b839 26-29
+  s_70ce55d4f42303::t_d5c373d0632759 13-25
+  s_f928abf2816d51::t_a59c5d8972e0d6 51
+app/(admin)/page.tsx
+  s_f928abf2816d51::t_5fef70253b63c7 22-25
+  s_f928abf2816d51::t_8284705610494f 2
+  s_f928abf2816d51::t_c7c13e761efed2 13
+components/admin/AdminLayout.tsx
+  s_f928abf2816d51::t_1d58f80ed07253 2
+  s_f928abf2816d51::t_b7f882e814182e 18
+  s_f928abf2816d51::t_d6203b1edd53b5 24
+lib/preview/generated-output-path.ts
+  s_7730181e09fc85::t_b35569f1409d47 1-12
+docs/agents/phase3-auth-plan.md
+  s_f928abf2816d51::t_3e11316864050b 60
+  s_f928abf2816d51::t_9961414bddd147 129-130
+  s_f928abf2816d51::t_1e34880b7fe115 50-53
+app/api/auth/[...nextauth]/route.ts
+  s_f928abf2816d51::t_c015947d2879f5 1-3
+lib/static-export/render-page.ts
+  s_ebe89f2a587c3b::t_65b1cd9606b136 1-103
+examples/preview/js/main.js
+  s_7730181e09fc85::t_7ab76dcc51fc69 3-4
+  s_7730181e09fc85::t_fafdc4d741c50a 93-99
+  s_7730181e09fc85::t_496f53f1935380 126-138
+app/api/admin/sites/[siteId]/content/[contentType]/route.ts
+  s_9133b8946c0205::t_b4916844b40cad 1
+  s_9133b8946c0205::t_71ef60eab3d160 42-47
+lib/content/section-patch.ts
+  s_9133b8946c0205::t_69024812069bc5 160
+  s_9133b8946c0205::t_a483dc3c61ea71 106
+lib/static-export/export.test.ts
+  s_ebe89f2a587c3b::t_b8d7fa674c5a67 1-56,58-60,64,71-72,87-115,117,119-120
+  s_9cdf0c65c58039::t_bb2c0d565e120c 57,61-63,65-70,73-86,116,118
+scripts/export-preview.ts
+  s_ebe89f2a587c3b::t_3e23ca18b35e74 1-17
+docs/agents/static-html-export-design.md
+  s_9cdf0c65c58039::t_07b07a15e18a21 42-45
+  s_70c58f7286bda2::t_1864f0d3a040d8 1-3,5,18-41,46-325
+  s_9cdf0c65c58039::t_bf18eb3f71be12 4,6-17
+docs/vercel-deploy.md
+  s_70ce55d4f42303::t_cd626b35e33019 1-187
+prisma/schema.prisma
+  s_f928abf2816d51::t_7f2a68236afa7c 38,41-42,52-87
+lib/static-export/hook.ts
+  s_ebe89f2a587c3b::t_aae50036932bbb 1-21
+lib/content/service.ts
+  s_9133b8946c0205::t_7ee6ba0da8b46a 308
+  s_9133b8946c0205::t_f7d113a010b5c4 350,362,364,371,373,380,382
+  s_9133b8946c0205::t_e8ba5ecad1577f 324-325,334
+supabase/.temp/postgres-version
+  s_3137e3e02c8603::t_e4d208dcf4f68d 1
+supabase/.temp/project-ref
+  s_3137e3e02c8603::t_48c73f72ed1ce0 1
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/duplicate/route.ts
+  s_9133b8946c0205::t_e6c092a036dc60 16-21
+  s_71bf9bf56b538f::t_53bf2336c55374 1
+components/admin/AdminNav.tsx
+  s_f928abf2816d51::t_cc04dc4608317a 81
+  s_f928abf2816d51::t_68190eb4204fa0 14
+  s_f928abf2816d51::t_8de966b6e64329 2,9
+lib/static-export/sections.test.ts
+  s_ebe89f2a587c3b::t_59d70b542c8ee3 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "23f1b51b1c6566024c3a19a1b91a3b3444e02250",
+  "prompts": {},
+  "sessions": {
+    "s_1b9a18c30b0117": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9ea1d1c4-18d9-4e2c-bae5-ce9e3ab08fa7",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_3137e3e02c8603": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "8a393429-09c0-4794-8744-5d5fd5a8cd69",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_70c58f7286bda2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ead22c48-ff1a-43b2-94a0-bafbb4f54b8f",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_70ce55d4f42303": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "564ad0b2-5f53-4663-9fb6-f227935950a4",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_71bf9bf56b538f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1bc411ec-7847-480e-a5c6-05f4fe5a06f7",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_7730181e09fc85": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "d2cb5127-9172-4818-b137-8456484a318f",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_9133b8946c0205": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "faf9a736-abd3-4469-944a-fea08a3a4333",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_93a8e7e2fa1dd7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "3ae1ea00-c35c-48da-a257-ce4a1f67ad20",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_9cdf0c65c58039": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e4fa4c10-ce37-409f-97e8-632c54fb8e65",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_abac1067690820": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "8d3ceda6-7440-4072-83bc-d8962d61ffee",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_c41e785761439d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "cea737ec-b6bc-472a-940b-0fed29543e1e",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_c596432c1e645b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "6cab7111-6010-4ad2-81cd-75453cd050eb",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_eb8cc828ffb462": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "142ea2a5-aeef-4056-842b-b2ade0313dbf",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_ebe89f2a587c3b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "f8f7e774-2981-4e1d-900d-0bc76401cf0e",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_f041d6c4ac3ede": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "8d5d0f60-b190-4401-b8f8-74dc49d86e25",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_f928abf2816d51": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "87bb043d-0deb-49dd-b99d-5ecfa5f477e4",
+        "model": "default"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
