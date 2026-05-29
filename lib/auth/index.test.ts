@@ -5,10 +5,24 @@ vi.mock("./api-key", () => ({
   validateStoredAdminApiKeyGlobal: vi.fn(),
 }));
 
+vi.mock("./session-bridge", () => ({
+  resolveProductionSession: vi.fn(),
+}));
+
+vi.mock("./production-config", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./production-config")>();
+  return {
+    ...actual,
+    getAuthProvider: vi.fn(),
+  };
+});
+
 import {
   validateStoredAdminApiKeyGlobal,
   validateStoredApiKey,
 } from "./api-key";
+import { getAuthProvider } from "./production-config";
+import { resolveProductionSession } from "./session-bridge";
 import {
   authDevTokens,
   validateAdminAccess,
@@ -21,6 +35,8 @@ import {
 
 const mockedValidateStoredApiKey = vi.mocked(validateStoredApiKey);
 const mockedValidateStoredAdminApiKeyGlobal = vi.mocked(validateStoredAdminApiKeyGlobal);
+const mockedGetAuthProvider = vi.mocked(getAuthProvider);
+const mockedResolveProductionSession = vi.mocked(resolveProductionSession);
 
 const originalEnv = { ...process.env };
 
@@ -155,10 +171,31 @@ describe("validateSession", () => {
   beforeEach(() => {
     process.env = { ...originalEnv, NODE_ENV: "test" };
     delete process.env.CMS_SESSION_TOKEN;
+    mockedGetAuthProvider.mockReturnValue("none");
+    mockedResolveProductionSession.mockResolvedValue(null);
   });
 
   afterEach(() => {
     process.env = { ...originalEnv };
+  });
+
+  it("本番 bridge が userId を返すとき AuthContext に付与", async () => {
+    mockedGetAuthProvider.mockReturnValue("authjs");
+    mockedResolveProductionSession.mockResolvedValue({
+      userId: "user-abc",
+      sessionToken: "prod-token",
+    });
+
+    const result = await validateSession(
+      new Request("https://example.com", sessionHeaders("prod-token")),
+      "site-1",
+    );
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.context.userId).toBe("user-abc");
+      expect(result.context.actorId).toBe("user:user-abc");
+    }
   });
 
   it("x-session-token ヘッダーで認証", async () => {

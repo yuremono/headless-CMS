@@ -1,7 +1,16 @@
 import { LoginForm } from '../../../components/admin/LoginForm';
 import { adminDemoCredentials } from '../../../components/admin/AdminData';
+import { getAuthProvider } from '../../../lib/auth/production-config';
 
-export default function LoginPage() {
+interface LoginPageProps {
+  searchParams: Promise<{ redirect?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams;
+  const redirectTo = params.redirect?.startsWith('/') ? params.redirect : '/';
+  const authProvider = getAuthProvider();
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10 text-slate-100">
       <div className="grid w-full max-w-5xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
@@ -9,8 +18,8 @@ export default function LoginPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-slate-400">Headless CMS</p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white">管理画面へログイン</h1>
           <p className="mt-4 text-sm leading-7 text-slate-300">
-            Phase 1 の簡易ログイン画面です。環境変数で切り替えられるデモ用アカウントを使い、
-            ダッシュボードからサイト概要とコンテンツ管理に進みます。
+            Phase 3 骨格ではデモ用アカウントでセッションを発行します。
+            本番では Auth.js または Supabase Auth に切り替え、`CMS_ENFORCE_ADMIN_LOGIN` で UI ガードを有効化します。
           </p>
           <dl className="mt-8 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
@@ -24,7 +33,12 @@ export default function LoginPage() {
           </dl>
         </section>
 
-        <LoginForm email={adminDemoCredentials.email} password={adminDemoCredentials.password} redirectTo="/" />
+        <LoginForm
+          email={adminDemoCredentials.email}
+          password={adminDemoCredentials.password}
+          redirectTo={redirectTo}
+          authProvider={authProvider}
+        />
       </div>
     </main>
   );

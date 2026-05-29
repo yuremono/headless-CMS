@@ -2,6 +2,8 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import type { CmsAuthProvider } from '../../lib/auth/production-config';
+import { authProviderLabel } from '../../lib/auth/production-config';
 import { ADMIN_DEV_SESSION_TOKEN, hasPersistedAdminSession, persistAdminSession } from './admin-api';
 
 interface LoginFormProps {
@@ -9,9 +11,16 @@ interface LoginFormProps {
   password: string;
   redirectTo: string;
   sessionToken?: string;
+  authProvider?: CmsAuthProvider;
 }
 
-export function LoginForm({ email, password, redirectTo, sessionToken = ADMIN_DEV_SESSION_TOKEN }: LoginFormProps) {
+export function LoginForm({
+  email,
+  password,
+  redirectTo,
+  sessionToken = ADMIN_DEV_SESSION_TOKEN,
+  authProvider = 'none',
+}: LoginFormProps) {
   const router = useRouter();
   const [formEmail, setFormEmail] = useState(email);
   const [formPassword, setFormPassword] = useState(password);
@@ -46,6 +55,11 @@ export function LoginForm({ email, password, redirectTo, sessionToken = ADMIN_DE
         <p className="mt-2 text-sm text-slate-300">
           MVP 用の簡易ログインです。成功時に `x-session-token` 用セッションを保存し、管理 API リクエストへ付与します。
         </p>
+        {authProvider !== 'none' ? (
+          <p className="mt-3 rounded-2xl border border-sky-400/20 bg-sky-400/10 px-4 py-3 text-xs leading-5 text-sky-100">
+            本番認証プロバイダ: {authProviderLabel(authProvider)}（フェーズ B までデモログインを利用）
+          </p>
+        ) : null}
       </div>
 
       <label className="block">

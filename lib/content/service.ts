@@ -381,3 +381,6 @@ export async function duplicateAdminContent(
 ): Promise<ContentRecord | null> {
   return duplicateContent(siteId, contentType, id, actorId);
 }
+
+export { patchContentSection as patchAdminSection } from "@/lib/content/section-patch";
+export type { PatchSectionResult } from "@/lib/content/section-patch";

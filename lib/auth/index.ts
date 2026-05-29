@@ -1,5 +1,7 @@
 import { validateStoredAdminApiKeyGlobal, validateStoredApiKey } from "./api-key";
 import { verifySignedPreviewToken } from "../preview/signed-preview-token";
+import { getAuthProvider } from "./production-config";
+import { resolveProductionSession } from "./session-bridge";
 import type { SiteRole } from "./roles";
 
 export type AuthMode = "public" | "admin" | "session" | "preview";
@@ -171,6 +173,23 @@ export async function validateSession(request: Request, siteId: string): Promise
 
   if (!providedToken) {
     return makeFailure(401, "missing_session", "Session is required.");
+  }
+
+  if (getAuthProvider() !== "none") {
+    const productionSession = await resolveProductionSession(request, providedToken);
+    if (productionSession) {
+      return {
+        ok: true,
+        context: {
+          mode: "session",
+          siteId,
+          token: providedToken,
+          scope: "write",
+          actorId: `user:${productionSession.userId}`,
+          userId: productionSession.userId,
+        },
+      };
+    }
   }
 
   const configuredToken = getConfiguredKey("CMS_SESSION_TOKEN", siteId);
