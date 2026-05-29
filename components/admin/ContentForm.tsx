@@ -122,176 +122,207 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
     const body = buildContentWriteBody({ title, slug, data, status: action === 'publish' ? 'published' : 'draft' });
 
     try {
-      if (action === 'publish' && mode === 'edit' && record?.id) {
-        const publishResult = await adminFetch<ApiContentRecord>(
-          `/api/admin/sites/${siteId}/content/${contentType.slug}/${record.id}/publish`,
-          { method: 'POST' },
-        );
+		const endpoint =
+			mode === "create"
+				? `/api/admin/sites/${siteId}/content/${contentType.slug}`
+				: `/api/admin/sites/${siteId}/content/${contentType.slug}/${record?.id}`;
 
-        if (!publishResult.ok || !publishResult.data) {
-          throw new Error(publishResult.error ?? `HTTP ${publishResult.status}`);
-        }
+		const method = mode === "create" ? "POST" : "PATCH";
+		const response = await adminFetch<ApiContentRecord>(endpoint, {
+			method,
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(body),
+		});
 
-        setStatusKind('success');
-        setStatusMessage('公開しました。');
-        router.refresh();
-        return;
-      }
+		if (!response.ok || !response.data) {
+			throw new Error(response.error ?? `HTTP ${response.status}`);
+		}
 
-      const endpoint =
-        mode === 'create'
-          ? `/api/admin/sites/${siteId}/content/${contentType.slug}`
-          : `/api/admin/sites/${siteId}/content/${contentType.slug}/${record?.id}`;
+		const saved = mapApiContentRecord(response.data);
 
-      const method = mode === 'create' ? 'POST' : 'PATCH';
-      const response = await adminFetch<ApiContentRecord>(endpoint, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
+		if (action === "publish" && mode === "edit" && record?.id) {
+			const publishResult = await adminFetch<ApiContentRecord>(
+				`/api/admin/sites/${siteId}/content/${contentType.slug}/${record.id}/publish`,
+				{ method: "POST" },
+			);
 
-      if (!response.ok || !response.data) {
-        throw new Error(response.error ?? `HTTP ${response.status}`);
-      }
+			if (!publishResult.ok || !publishResult.data) {
+				throw new Error(
+					publishResult.error ?? `HTTP ${publishResult.status}`,
+				);
+			}
+		}
 
-      const saved = mapApiContentRecord(response.data);
-      setStatusKind('success');
-      setStatusMessage(action === 'publish' ? '公開しました。' : '下書きを保存しました。');
+		setStatusKind("success");
+		setStatusMessage(
+			action === "publish" ? "公開しました。" : "下書きを保存しました。",
+		);
 
-      if (mode === 'create') {
-        router.push(`/sites/${siteId}/contents/${contentType.slug}/${saved.id}`);
-        return;
-      }
+		if (mode === "create") {
+			router.push(
+				`/sites/${siteId}/contents/${contentType.slug}/${saved.id}`,
+			);
+			return;
+		}
 
-      router.refresh();
-    } catch (cause) {
-      const message = cause instanceof Error ? cause.message : '保存に失敗しました。';
-      setStatusKind('error');
-      setStatusMessage(`API エラー: ${message}`);
-    } finally {
-      setIsPending(false);
-    }
+		router.refresh();
+	} catch (cause) {
+		const message =
+			cause instanceof Error ? cause.message : "保存に失敗しました。";
+		setStatusKind("error");
+		setStatusMessage(`API エラー: ${message}`);
+	} finally {
+		setIsPending(false);
+	}
   }
 
   return (
-    <section className="ContentForm space-y-5 rounded-3xl border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{contentType.kind}</p>
-          <h3 className="mt-2 text-2xl font-semibold text-white">
-            {readOnly
-              ? `${contentType.label} の詳細`
-              : mode === 'create'
-                ? `${contentType.label} を新規作成`
-                : `${contentType.label} を編集`}
-          </h3>
-          <p className="mt-2 text-sm text-slate-300">
-            {readOnly ? '閲覧専用です。編集操作は表示されません。' : 'スキーマに従ってフィールドを自動生成しています。'}
-          </p>
-        </div>
-        <div className="flex items-center gap-3 text-sm text-slate-300">
-          <span className="rounded-full border border-white/10 px-3 py-1">{contentType.schemaJson.fields.length} fields</span>
-          <span className="rounded-full border border-white/10 px-3 py-1">{contentType.schemaJson.sectionTemplates?.length ?? 0} templates</span>
-        </div>
-      </div>
+		<section className="ContentForm space-y-5  border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">
+			<div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+				<div>
+					<p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+						{contentType.kind}
+					</p>
+					<h3 className="mt-2 text-2xl font-semibold text-white">
+						{readOnly
+							? `${contentType.label} の詳細`
+							: mode === "create"
+								? `${contentType.label} を新規作成`
+								: `${contentType.label} を編集`}
+					</h3>
+					<p className="mt-2 text-sm text-slate-300">
+						{readOnly
+							? "閲覧専用です。編集操作は表示されません。"
+							: "スキーマに従ってフィールドを自動生成しています。"}
+					</p>
+				</div>
+				<div className="flex items-center gap-3 text-sm text-slate-300">
+					<span className="rounded-full border border-white/10 px-3 py-1">
+						{contentType.schemaJson.fields.length} fields
+					</span>
+					<span className="rounded-full border border-white/10 px-3 py-1">
+						{contentType.schemaJson.sectionTemplates?.length ?? 0}{" "}
+						templates
+					</span>
+				</div>
+			</div>
 
-      {!readOnly ? (
-        <div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
-          下書き保存・公開は管理 API へ POST / PATCH / publish を送信します。`x-session-token` が必要です。
-        </div>
-      ) : null}
+			{!readOnly ? (
+				<div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
+					下書き保存・公開は管理 API へ POST / PATCH / publish
+					を送信します。`x-session-token` が必要です。
+				</div>
+			) : null}
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <label className="block">
-          <span className="text-sm font-medium text-white">タイトル</span>
-          <input
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-            value={String(draft.title ?? '')}
-            onChange={(event) => updateField('title', event.target.value)}
-            placeholder="タイトルを入力"
-            disabled={readOnly}
-            readOnly={readOnly}
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm font-medium text-white">スラッグ</span>
-          <input
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-            value={String(draft.slug ?? '')}
-            onChange={(event) => updateField('slug', event.target.value)}
-            placeholder="slug"
-            disabled={readOnly}
-            readOnly={readOnly}
-          />
-        </label>
-      </div>
+			<div className="grid gap-5 lg:grid-cols-2">
+				<label className="block">
+					<span className="text-sm font-medium text-white">
+						タイトル
+					</span>
+					<input
+						className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+						value={String(draft.title ?? "")}
+						onChange={(event) =>
+							updateField("title", event.target.value)
+						}
+						placeholder="タイトルを入力"
+						disabled={readOnly}
+						readOnly={readOnly}
+					/>
+				</label>
+				<label className="block">
+					<span className="text-sm font-medium text-white">
+						スラッグ
+					</span>
+					<input
+						className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+						value={String(draft.slug ?? "")}
+						onChange={(event) =>
+							updateField("slug", event.target.value)
+						}
+						placeholder="slug"
+						disabled={readOnly}
+						readOnly={readOnly}
+					/>
+				</label>
+			</div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        {contentType.schemaJson.fields
-          .filter((field) => {
-            const fieldKey = getFieldKey(field);
-            return fieldKey !== 'title' && fieldKey !== 'slug' && !isSeoFieldKey(fieldKey);
-          })
-          .map((field) => {
-            const fieldKey = getFieldKey(field);
-            return (
-            <FieldRenderer
-              key={fieldKey}
-              siteId={siteId}
-              field={field}
-              value={draft[fieldKey] ?? ''}
-              sectionTemplates={contentType.schemaJson.sectionTemplates}
-              onChange={updateField}
-              readOnly={readOnly}
-            />
-            );
-          })}
-      </div>
+			<div className="grid gap-5 lg:grid-cols-2">
+				{contentType.schemaJson.fields
+					.filter((field) => {
+						const fieldKey = getFieldKey(field);
+						return (
+							fieldKey !== "title" &&
+							fieldKey !== "slug" &&
+							!isSeoFieldKey(fieldKey)
+						);
+					})
+					.map((field) => {
+						const fieldKey = getFieldKey(field);
+						return (
+							<FieldRenderer
+								key={fieldKey}
+								siteId={siteId}
+								field={field}
+								value={draft[fieldKey] ?? ""}
+								sectionTemplates={
+									contentType.schemaJson.sectionTemplates
+								}
+								onChange={updateField}
+								readOnly={readOnly}
+							/>
+						);
+					})}
+			</div>
 
-      <div className="grid gap-5 lg:grid-cols-2">
-        <SeoFields draft={draft} onChange={updateField} readOnly={readOnly} />
-      </div>
+			<div className="grid gap-5 lg:grid-cols-2">
+				<SeoFields
+					draft={draft}
+					onChange={updateField}
+					readOnly={readOnly}
+				/>
+			</div>
 
-      <AdminActionNotice kind={statusKind} message={statusMessage} />
+			<AdminActionNotice kind={statusKind} message={statusMessage} />
 
-      <div className="flex flex-wrap gap-3">
-        {!readOnly ? (
-          <>
-            <button
-              type="button"
-              className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={() => void persist('save')}
-              disabled={isPending}
-            >
-              下書きを保存
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={() => void persist('publish')}
-              disabled={isPending || mode === 'create'}
-            >
-              公開
-            </button>
-          </>
-        ) : null}
-        {mode === 'edit' && previewUrl ? (
-          <a
-            href={previewUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="PreviewLink rounded-full border border-violet-400/40 bg-violet-400/10 px-5 py-3 text-sm font-medium text-violet-100 transition hover:bg-violet-400/20"
-          >
-            プレビューを開く
-          </a>
-        ) : null}
-        <Link
-          href={`/sites/${siteId}/contents/${contentType.slug}`}
-          className="rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white"
-        >
-          一覧に戻る
-        </Link>
-      </div>
-    </section>
+			<div className="flex flex-wrap gap-3">
+				{!readOnly ? (
+					<>
+						<button
+							type="button"
+							className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+							onClick={() => void persist("save")}
+							disabled={isPending}
+						>
+							下書きを保存
+						</button>
+						<button
+							type="button"
+							className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+							onClick={() => void persist("publish")}
+							disabled={isPending || mode === "create"}
+						>
+							公開
+						</button>
+					</>
+				) : null}
+				{mode === "edit" && previewUrl ? (
+					<a
+						href={previewUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="PreviewLink rounded-full border border-violet-400/40 bg-violet-400/10 px-5 py-3 text-sm font-medium text-violet-100 transition hover:bg-violet-400/20"
+					>
+						プレビューを開く
+					</a>
+				) : null}
+				<Link
+					href={`/sites/${siteId}/contents/${contentType.slug}`}
+					className="rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white"
+				>
+					一覧に戻る
+				</Link>
+			</div>
+		</section>
   );
 }

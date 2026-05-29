@@ -1,6 +1,10 @@
 # Vercel 環境変数チェックリスト（コピペ用）
 
+**コピペブロック:** [vercel-env-paste.md](./vercel-env-paste.md)  
+**一括セットアップ:** `.env.supabase.local` に DB パスワード → `./scripts/setup-supabase-deploy.sh`  
 詳細手順: [docs/vercel-deploy.md](../docs/vercel-deploy.md)
+
+Supabase 既存: `dvcaumqooopebexajsdw`（[ダッシュボード](https://supabase.com/dashboard/project/dvcaumqooopebexajsdw/settings/database)）
 
 ---
 

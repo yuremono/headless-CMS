@@ -9,6 +9,8 @@ import {
 } from "@/lib/content/service";
 import { recordAuditFromContext } from "@/lib/audit/log";
 
+export const runtime = "nodejs";
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ siteId: string; contentType: string; id: string }> },
@@ -48,24 +50,30 @@ export async function PATCH(
     return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);
   }
 
-  const body = await readJsonBody(request);
-  const content = await updateAdminContent(
-    siteId,
-    contentType,
-    id,
-    body,
-    resolveContentUserId(resolved.context),
-  );
-  if (!content) {
-    return errorResponse(404, "content_not_found", "Content not found.");
+  try {
+    const body = await readJsonBody(request);
+    const content = await updateAdminContent(
+      siteId,
+      contentType,
+      id,
+      body,
+      resolveContentUserId(resolved.context),
+    );
+    if (!content) {
+      return errorResponse(404, "content_not_found", "Content not found.");
+    }
+
+    await recordAuditFromContext(resolved.context, siteId, "content.update", "content", id, {
+      contentType,
+      title: content.title,
+    });
+
+    return jsonResponse(content);
+  } catch (error) {
+    console.error("[admin content PATCH]", error);
+    const message = error instanceof Error ? error.message : "Content update failed.";
+    return errorResponse(500, "content_update_failed", message);
   }
-
-  await recordAuditFromContext(resolved.context, siteId, "content.update", "content", id, {
-    contentType,
-    title: content.title,
-  });
-
-  return jsonResponse(content);
 }
 
 export async function DELETE(

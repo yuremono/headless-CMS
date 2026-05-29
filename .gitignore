@@ -5,7 +5,9 @@ node_modules/
 .env
 .env.local
 .env.*.local
+.env.supabase.local
 !.env.example
+!.env.supabase.local.example
 
 # Next.js
 .next/
@@ -58,3 +60,4 @@ NOTE.md
 
 # SCSS compiled CSS (track scss/*.scss only)
 scss/*.css
+.vercel

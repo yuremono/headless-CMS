@@ -11,7 +11,8 @@
 |----------------|------------|--------------|----------------------|
 | CMS | ヘッドレス CMS 本体 | Vercel（要インポート） | ローカル PG のみ |
 | DB | Supabase PostgreSQL | Supabase | ユーザーが作成 |
-| 公開サイト | 案件フロント | Vercel | デプロイ済み・**env 未設定の可能性** |
+| 公開サイト | 案件フロント | Vercel | `https://0529headless-front.vercel.app` |
+| CMS | ヘッドレス CMS 本体 | Vercel | `https://0529headless-cms.vercel.app`（**`DATABASE_URL` 要設定**） |
 
 ダッシュボード例: [Vercel チーム](https://vercel.com/5alvia0fficinali50-gmailcoms-projects)
 

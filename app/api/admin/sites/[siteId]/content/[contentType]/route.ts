@@ -8,6 +8,8 @@ import {
 } from "@/lib/content/service";
 import { recordAuditFromContext } from "@/lib/audit/log";
 
+export const runtime = "nodejs";
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ siteId: string; contentType: string }> },

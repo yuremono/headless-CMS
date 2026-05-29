@@ -71,52 +71,62 @@ export function MediaLibrary({ siteId, initialAssets }: MediaLibraryProps) {
   }
 
   return (
-    <div className="MediaLibrary space-y-6">
-      <AdminActionNotice kind={messageKind} message={message} />
+		<div className="MediaLibrary space-y-6">
+			<AdminActionNotice kind={messageKind} message={message} />
 
-      <div className="MediaLibrary_toolbar flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-white/10 bg-white/5 p-5">
-        <div>
-          <p className="text-sm font-medium text-white">アセット数</p>
-          <p className="mt-1 text-2xl font-semibold text-white">{total}</p>
-        </div>
+			<div className="MediaLibrary_toolbar flex flex-wrap items-center justify-between gap-4  border border-white/10 bg-white/5 p-5">
+				<div>
+					<p className="text-sm font-medium text-white">アセット数</p>
+					<p className="mt-1 text-2xl font-semibold text-white">
+						{total}
+					</p>
+				</div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          {!readOnly ? (
-            <>
-              <input
-                ref={fileInputRef}
-                className="sr-only"
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                onChange={(event) => {
-                  const file = event.target.files?.[0] ?? null;
-                  void handleFileSelected(file);
-                  event.target.value = '';
-                }}
-              />
-              <button
-                type="button"
-                className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-              >
-                {isUploading ? 'アップロード中…' : '画像をアップロード'}
-              </button>
-            </>
-          ) : null}
-          <button
-            type="button"
-            className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
-            onClick={() => {
-              void refreshAssets();
-            }}
-          >
-            一覧を更新
-          </button>
-        </div>
-      </div>
+				<div className="flex flex-wrap items-center gap-3">
+					{!readOnly ? (
+						<>
+							<input
+								ref={fileInputRef}
+								className="sr-only"
+								type="file"
+								accept="image/jpeg,image/png,image/webp,image/gif"
+								onChange={(event) => {
+									const file =
+										event.target.files?.[0] ?? null;
+									void handleFileSelected(file);
+									event.target.value = "";
+								}}
+							/>
+							<button
+								type="button"
+								className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+								onClick={() => fileInputRef.current?.click()}
+								disabled={isUploading}
+							>
+								{isUploading
+									? "アップロード中…"
+									: "画像をアップロード"}
+							</button>
+						</>
+					) : null}
+					<button
+						type="button"
+						className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+						onClick={() => {
+							void refreshAssets();
+						}}
+					>
+						一覧を更新
+					</button>
+				</div>
+			</div>
 
-      <AssetGrid siteId={siteId} assets={assets} onAssetUpdated={handleAssetUpdated} readOnly={readOnly} />
-    </div>
+			<AssetGrid
+				siteId={siteId}
+				assets={assets}
+				onAssetUpdated={handleAssetUpdated}
+				readOnly={readOnly}
+			/>
+		</div>
   );
 }

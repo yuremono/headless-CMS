@@ -1,6 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
-
-const RICH_TEXT_PURIFY_OPTIONS: Parameters<typeof DOMPurify.sanitize>[1] = {
+const RICH_TEXT_PURIFY_OPTIONS = {
   ALLOWED_TAGS: [
     "p",
     "br",
@@ -35,10 +33,23 @@ const RICH_TEXT_PURIFY_OPTIONS: Parameters<typeof DOMPurify.sanitize>[1] = {
   ALLOW_DATA_ATTR: false,
 };
 
-export function sanitizeRichTextHtml(value: string): string {
+type DomPurifyModule = typeof import("isomorphic-dompurify");
+
+let domPurifyPromise: Promise<DomPurifyModule["default"]> | null = null;
+
+async function loadDomPurify(): Promise<DomPurifyModule["default"]> {
+  if (!domPurifyPromise) {
+    domPurifyPromise = import("isomorphic-dompurify").then((module) => module.default);
+  }
+
+  return domPurifyPromise;
+}
+
+export async function sanitizeRichTextHtml(value: string): Promise<string> {
   if (value.trim().length === 0) {
     return "";
   }
 
+  const DOMPurify = await loadDomPurify();
   return DOMPurify.sanitize(value, RICH_TEXT_PURIFY_OPTIONS);
 }

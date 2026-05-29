@@ -51,27 +51,27 @@ const newsSchema = {
 };
 
 describe("sanitizeContentDataJson", () => {
-  it("richText フィールドの HTML をサニタイズする", () => {
+  it("richText フィールドの HTML をサニタイズする", async () => {
     const dataJson = {
       title: "Hello",
       body: '<p>OK</p><script>alert(1)</script>',
     };
 
-    const result = sanitizeContentDataJson(dataJson, newsSchema);
+    const result = await sanitizeContentDataJson(dataJson, newsSchema);
     expect(result.title).toBe("Hello");
     expect(result.body).toBe("<p>OK</p>");
   });
 
-  it("object 内の richText もサニタイズする", () => {
+  it("object 内の richText もサニタイズする", async () => {
     const dataJson = {
       seo: { description: '<em>desc</em><script>x</script>' },
     };
 
-    const result = sanitizeContentDataJson(dataJson, newsSchema);
+    const result = await sanitizeContentDataJson(dataJson, newsSchema);
     expect(result.seo).toEqual({ description: "<em>desc</em>" });
   });
 
-  it("sectionArray 内の richText をサニタイズする", () => {
+  it("sectionArray 内の richText をサニタイズする", async () => {
     const dataJson = {
       sections: [
         {
@@ -81,7 +81,7 @@ describe("sanitizeContentDataJson", () => {
       ],
     };
 
-    const result = sanitizeContentDataJson(dataJson, newsSchema);
+    const result = await sanitizeContentDataJson(dataJson, newsSchema);
     expect(result.sections).toEqual([
       {
         type: "textBlock",
@@ -90,7 +90,7 @@ describe("sanitizeContentDataJson", () => {
     ]);
   });
 
-  it("sectionArray 内のネスト array（FAQ）の richText もサニタイズする", () => {
+  it("sectionArray 内のネスト array（FAQ）の richText もサニタイズする", async () => {
     const dataJson = {
       sections: [
         {
@@ -110,7 +110,7 @@ describe("sanitizeContentDataJson", () => {
       ],
     };
 
-    const result = sanitizeContentDataJson(dataJson, newsSchema);
+    const result = await sanitizeContentDataJson(dataJson, newsSchema);
     expect(result.sections).toEqual([
       {
         type: "faq",
@@ -157,7 +157,7 @@ describe("sanitizeContentDataJson", () => {
       ],
     };
 
-    const result = sanitizeContentDataJson(dataJson, topPageSchema);
+    const result = await sanitizeContentDataJson(dataJson, topPageSchema);
     const sections = result.sections as Array<{ type: string; data: Record<string, unknown> }>;
 
     expect(sections[0].data.body).toBe("<p>safe</p>");
@@ -167,13 +167,13 @@ describe("sanitizeContentDataJson", () => {
     expect(result.hero).toEqual({ title: "Hero" });
   });
 
-  it("スキーマが不正な場合は dataJson をそのまま返す", () => {
+  it("スキーマが不正な場合は dataJson をそのまま返す", async () => {
     const dataJson = { body: "<script>x</script>" };
-    const result = sanitizeContentDataJson(dataJson, { invalid: true });
+    const result = await sanitizeContentDataJson(dataJson, { invalid: true });
     expect(result).toBe(dataJson);
   });
 
-  it("sectionArray の allowedSections に fields が無い場合は data を変更しない", () => {
+  it("sectionArray の allowedSections に fields が無い場合は data を変更しない", async () => {
     const schemaWithoutFields = {
       apiName: "page",
       label: "ページ",
@@ -198,16 +198,16 @@ describe("sanitizeContentDataJson", () => {
       ],
     };
 
-    const result = sanitizeContentDataJson(dataJson, schemaWithoutFields);
+    const result = await sanitizeContentDataJson(dataJson, schemaWithoutFields);
     expect(result.sections).toEqual(dataJson.sections);
   });
-  it("トップレベルでスキーマに無いフィールドは変更しない", () => {
+  it("トップレベルでスキーマに無いフィールドは変更しない", async () => {
     const dataJson = {
       title: "Hello",
       extra: '<script>keep</script>',
     };
 
-    const result = sanitizeContentDataJson(dataJson, newsSchema);
+    const result = await sanitizeContentDataJson(dataJson, newsSchema);
     expect(result.extra).toBe('<script>keep</script>');
   });
 });

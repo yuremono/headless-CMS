@@ -3,6 +3,8 @@ import { errorResponse, jsonResponse, readJsonBody } from "@/lib/http";
 import { patchAdminSection, resolveAdminRequest } from "@/lib/content/service";
 import { recordAuditFromContext } from "@/lib/audit/log";
 
+export const runtime = "nodejs";
+
 export async function PATCH(
   request: Request,
   {

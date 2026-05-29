@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  schemas  = ["headless_cms"]
 }
 
 enum SiteMemberRole {
@@ -11,22 +12,30 @@ enum SiteMemberRole {
   admin
   editor
   viewer
+
+  @@schema("headless_cms")
 }
 
 enum ApiKeyKind {
   public
   admin
+
+  @@schema("headless_cms")
 }
 
 enum ContentTypeKind {
   single
   collection
+
+  @@schema("headless_cms")
 }
 
 enum ContentStatus {
   draft
   published
   unpublished
+
+  @@schema("headless_cms")
 }
 
 model User {
@@ -47,6 +56,7 @@ model User {
   auditLogs       AuditLog[]
 
   @@map("users")
+  @@schema("headless_cms")
 }
 
 model Account {
@@ -66,6 +76,7 @@ model Account {
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
+  @@schema("headless_cms")
 }
 
 model Session {
@@ -76,6 +87,7 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+  @@schema("headless_cms")
 }
 
 model VerificationToken {
@@ -85,6 +97,7 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+  @@schema("headless_cms")
 }
 
 model Site {
@@ -101,6 +114,7 @@ model Site {
   auditLogs     AuditLog[]
 
   @@map("sites")
+  @@schema("headless_cms")
 }
 
 model SiteMember {
@@ -116,6 +130,7 @@ model SiteMember {
   @@unique([siteId, userId])
   @@index([userId])
   @@map("site_members")
+  @@schema("headless_cms")
 }
 
 model ApiKey {
@@ -134,6 +149,7 @@ model ApiKey {
 
   @@index([siteId, kind])
   @@map("api_keys")
+  @@schema("headless_cms")
 }
 
 model ContentModel {
@@ -151,6 +167,7 @@ model ContentModel {
   @@unique([siteId, apiName])
   @@index([siteId, type])
   @@map("content_models")
+  @@schema("headless_cms")
 }
 
 model Content {
@@ -175,6 +192,7 @@ model Content {
   @@index([siteId, status])
   @@index([modelId, slug])
   @@map("contents")
+  @@schema("headless_cms")
 }
 
 model Asset {
@@ -194,6 +212,7 @@ model Asset {
 
   @@index([siteId])
   @@map("assets")
+  @@schema("headless_cms")
 }
 
 model AuditLog {
@@ -210,4 +229,5 @@ model AuditLog {
 
   @@index([siteId, createdAt])
   @@map("audit_logs")
+  @@schema("headless_cms")
 }

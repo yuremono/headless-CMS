@@ -1,5 +1,7 @@
 import { deliveryErrorResponse, deliveryJsonResponse } from "@/lib/http";
-import { listDeliveryContents, resolveDeliveryRequest } from "@/lib/content/service";
+import { listDeliveryContents, resolveDeliveryRequest } from "@/lib/content/delivery";
+
+export const runtime = "nodejs";
 
 export async function GET(
   request: Request,

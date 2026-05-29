@@ -40,6 +40,8 @@ DB 関連: `npx prisma migrate dev` / `npx prisma studio` / `npx tsx prisma/seed
 2. `examples/preview/` を別ポートで配信（例: `python3 -m http.server 3001`）
 3. `.env.local` に `FRONTEND_BASE_URL=http://localhost:3001` を設定すると管理画面のプレビューリンクと連携
 
+本番（Vercel + Supabase）: [USER_SETUP.md](./USER_SETUP.md)（**DB パスワード 1 行 + スクリプト 1 本**）
+
 詳細・seed 後の ID は [examples/preview/README.md](examples/preview/README.md) を参照。
 
 ## 公開サイト（案件フロント）

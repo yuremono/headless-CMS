@@ -14,7 +14,13 @@ function createPrismaClient(): PrismaClient {
     throw new Error("DATABASE_URL is not set.");
   }
 
-  const pool = new pg.Pool({ connectionString });
+  const useSupabaseSsl =
+    connectionString.includes("supabase.co") || connectionString.includes("pooler.supabase.com");
+  const pool = new pg.Pool({
+    connectionString,
+    ssl: useSupabaseSsl ? { rejectUnauthorized: false } : undefined,
+    max: process.env.VERCEL ? 1 : 10,
+  });
   const adapter = new PrismaPg(pool);
 
   return new PrismaClient({

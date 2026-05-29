@@ -2,8 +2,6 @@ import {
   applySitePermission,
   validateAdminAccess,
   validateGlobalAdminAccess,
-  validatePreviewToken,
-  validatePublicApiKey,
   type AdminAccessOptions,
   type AuthResult,
 } from "@/lib/auth";
@@ -13,7 +11,7 @@ import {
   listAdminContentTypes,
   listAdminContents as listAdminContentsForUi,
 } from "@/lib/db/sites";
-import { isPlainObject, parseBooleanQuery, parsePagination } from "@/lib/http";
+import { isPlainObject, parsePagination } from "@/lib/http";
 import {
   createContent,
   deleteContent,
@@ -45,10 +43,12 @@ export type {
   SiteSummary,
 } from "@/lib/content/types";
 
-export interface ResolveRequestResult {
-  auth: AuthResult;
-  includeDraft: boolean;
-}
+export type { ResolveDeliveryRequestResult as ResolveRequestResult } from "./delivery";
+export {
+  getDeliveryContent,
+  listDeliveryContents,
+  resolveDeliveryRequest,
+} from "./delivery";
 
 const CONTROL_KEYS = new Set([
   "slug",
@@ -115,29 +115,6 @@ function normalizeTitle(body: Record<string, unknown>, dataJson: Record<string, 
   }
 
   return undefined;
-}
-
-export async function resolveDeliveryRequest(
-  request: Request,
-  siteId: string,
-  searchParams: URLSearchParams,
-): Promise<ResolveRequestResult> {
-  const includeDraft = parseBooleanQuery(searchParams.get("draft"));
-  const publicAuth = await validatePublicApiKey(request, siteId);
-  if (!publicAuth.ok) {
-    return { auth: publicAuth, includeDraft };
-  }
-
-  if (!includeDraft) {
-    return { auth: publicAuth, includeDraft };
-  }
-
-  const previewAuth = await validatePreviewToken(request, siteId);
-  if (!previewAuth.ok) {
-    return { auth: previewAuth, includeDraft };
-  }
-
-  return { auth: previewAuth, includeDraft: true };
 }
 
 export async function resolveAdminRequest(
@@ -250,32 +227,6 @@ export async function deleteAdminMember(siteId: string, memberId: string) {
 }
 
 export { MEMBER_MANAGE_PERMISSION };
-
-export async function listDeliveryContents(
-  siteId: string,
-  contentType: string,
-  searchParams: URLSearchParams,
-  includeDraft: boolean,
-): Promise<ContentCollectionResult> {
-  const { limit, offset } = parsePagination(searchParams);
-  return listContents({
-    siteId,
-    contentType,
-    includeDraft,
-    limit,
-    offset,
-    slug: searchParams.get("slug"),
-  });
-}
-
-export async function getDeliveryContent(
-  siteId: string,
-  contentType: string,
-  id: string,
-  includeDraft: boolean,
-): Promise<ContentRecord | null> {
-  return getContent(siteId, contentType, id, includeDraft);
-}
 
 export async function listAdminContents(
   siteId: string,

@@ -7,7 +7,10 @@ import type {
 import { parseContentTypeDefinition } from "@/lib/schemas/content-type";
 import { sanitizeRichTextHtml } from "./html";
 
-function sanitizeFieldValue(value: unknown, field: ContentFieldDefinition): unknown {
+async function sanitizeFieldValue(
+  value: unknown,
+  field: ContentFieldDefinition,
+): Promise<unknown> {
   switch (field.type) {
     case "richText":
       return typeof value === "string" ? sanitizeRichTextHtml(value) : value;
@@ -20,18 +23,21 @@ function sanitizeFieldValue(value: unknown, field: ContentFieldDefinition): unkn
       if (!Array.isArray(value)) {
         return value;
       }
-      return value.map((item) => sanitizeFieldValue(item, field.item));
+      return Promise.all(value.map((item) => sanitizeFieldValue(item, field.item)));
     case "sectionArray":
       if (!Array.isArray(value)) {
         return value;
       }
-      return value.map((section) => sanitizeSectionValue(section, field));
+      return Promise.all(value.map((section) => sanitizeSectionValue(section, field)));
     default:
       return value;
   }
 }
 
-function sanitizeSectionValue(section: unknown, field: SectionArrayField): unknown {
+async function sanitizeSectionValue(
+  section: unknown,
+  field: SectionArrayField,
+): Promise<unknown> {
   if (!isPlainObject(section)) {
     return section;
   }
@@ -53,14 +59,14 @@ function sanitizeSectionValue(section: unknown, field: SectionArrayField): unkno
 
   return {
     ...section,
-    data: sanitizeObjectFields(data, template.fields),
+    data: await sanitizeObjectFields(data, template.fields),
   };
 }
 
-function sanitizeObjectFields(
+async function sanitizeObjectFields(
   data: Record<string, unknown>,
   fields: ContentFieldDefinition[],
-): Record<string, unknown> {
+): Promise<Record<string, unknown>> {
   const result = clonePlainObject(data);
 
   for (const field of fields) {
@@ -68,7 +74,7 @@ function sanitizeObjectFields(
       continue;
     }
 
-    result[field.name] = sanitizeFieldValue(result[field.name], field);
+    result[field.name] = await sanitizeFieldValue(result[field.name], field);
   }
 
   return result;
@@ -82,10 +88,10 @@ function parseSchemaDefinition(schemaJson: Record<string, unknown>): ContentType
   }
 }
 
-export function sanitizeContentDataJson(
+export async function sanitizeContentDataJson(
   dataJson: Record<string, unknown>,
   schemaJson: Record<string, unknown>,
-): Record<string, unknown> {
+): Promise<Record<string, unknown>> {
   const definition = parseSchemaDefinition(schemaJson);
   if (!definition) {
     return dataJson;
