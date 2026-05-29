@@ -1,0 +1,24 @@
+AGENTS.md
+  s_8002476f24f4e9::t_4550734d346b2f 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "29199fca64e12edd01148cc2711806a446dc791c",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_8002476f24f4e9": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "5e36d896-9e3f-4613-8719-adaced8535a7",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
