@@ -1,5 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+vi.mock("next/cache", () => ({
+  unstable_cache: (fn: (...args: unknown[]) => unknown) => fn,
+  revalidateTag: vi.fn(),
+}));
+
 vi.mock("@/lib/auth", () => ({
   validatePublicApiKey: vi.fn(),
   validatePreviewToken: vi.fn(),

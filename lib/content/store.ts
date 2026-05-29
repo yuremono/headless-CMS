@@ -1,9 +1,8 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db/prisma";
 import { resolveSiteId } from "@/lib/db/site-resolver";
+import { revalidateDeliveryContent } from "@/lib/content/delivery-tags";
 import { clonePlainObject, isPlainObject } from "@/lib/http";
-import { sanitizeContentDataJson } from "@/lib/sanitize";
-import { scheduleContentExport } from "@/lib/static-export/hook";
 import { toContentModelRecord, toContentRecord } from "./mappers";
 import type {
   ContentCollectionResult,
@@ -14,6 +13,29 @@ import type {
   ListContentsInput,
   UpdateContentInput,
 } from "./types";
+
+async function sanitizeDataJson(
+  dataJson: Record<string, unknown>,
+  schemaJson: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  const { sanitizeContentDataJson } = await import("@/lib/sanitize");
+  return await sanitizeContentDataJson(dataJson, schemaJson);
+}
+
+function scheduleContentExportDeferred(record: ContentRecord): void {
+  void import("@/lib/static-export/hook").then(({ scheduleContentExport }) => {
+    scheduleContentExport(record);
+  });
+}
+
+// 公開保存・更新・削除のたびに配信キャッシュを即時失効させ、フロントへほぼ即時に反映する。
+async function revalidateDeliveryFor(
+  siteIdOrSlug: string,
+  contentType: string,
+  ref: { id: string; slug: string | null },
+): Promise<void> {
+  await revalidateDeliveryContent(siteIdOrSlug, contentType, { id: ref.id, slug: ref.slug });
+}
 
 function normalizeStatus(status: unknown): ContentStatus {
   if (status === "published" || status === "unpublished") {
@@ -185,7 +207,7 @@ export async function createContent(
   }
 
   const status = normalizeStatus(input.status);
-  const dataJson = sanitizeContentDataJson(
+  const dataJson = await sanitizeDataJson(
     input.dataJson ? clonePlainObject(input.dataJson) : {},
     asRecord(model.schemaJson),
   );
@@ -207,7 +229,9 @@ export async function createContent(
     },
   });
 
-  return toContentRecord(row, contentType);
+  const record = toContentRecord(row, contentType);
+  await revalidateDeliveryFor(siteIdOrSlug, contentType, record);
+  return record;
 }
 
 export async function updateContent(
@@ -238,7 +262,7 @@ export async function updateContent(
     return null;
   }
 
-  const dataJson = sanitizeContentDataJson(
+  const dataJson = await sanitizeDataJson(
     input.dataJson ? clonePlainObject(input.dataJson) : asRecord(current.dataJson),
     asRecord(model.schemaJson),
   );
@@ -266,7 +290,8 @@ export async function updateContent(
   });
 
   const record = toContentRecord(row, contentType);
-  scheduleContentExport(record);
+  scheduleContentExportDeferred(record);
+  await revalidateDeliveryFor(siteIdOrSlug, contentType, record);
   return record;
 }
 
@@ -281,6 +306,11 @@ export async function deleteContent(siteIdOrSlug: string, contentType: string, i
     return false;
   }
 
+  const target = await prisma.content.findFirst({
+    where: { id, siteId, modelId: model.id },
+    select: { id: true, slug: true },
+  });
+
   const result = await prisma.content.deleteMany({
     where: {
       id,
@@ -288,6 +318,13 @@ export async function deleteContent(siteIdOrSlug: string, contentType: string, i
       modelId: model.id,
     },
   });
+
+  if (result.count > 0) {
+    await revalidateDeliveryFor(siteIdOrSlug, contentType, {
+      id: target?.id ?? id,
+      slug: target?.slug ?? null,
+    });
+  }
 
   return result.count > 0;
 }
@@ -330,7 +367,8 @@ export async function publishContent(
   });
 
   const record = toContentRecord(row, contentType);
-  scheduleContentExport(record);
+  scheduleContentExportDeferred(record);
+  await revalidateDeliveryFor(siteIdOrSlug, contentType, record);
   return record;
 }
 
@@ -371,7 +409,8 @@ export async function unpublishContent(
   });
 
   const record = toContentRecord(row, contentType);
-  scheduleContentExport(record);
+  scheduleContentExportDeferred(record);
+  await revalidateDeliveryFor(siteIdOrSlug, contentType, record);
   return record;
 }
 

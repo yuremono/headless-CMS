@@ -81,12 +81,12 @@ describe("resolveDeliveryCacheControl", () => {
     expect(resolveDeliveryCacheControl(true, "item")).toBe("no-store");
   });
 
-  it("公開一覧は短めの CDN キャッシュを返す", () => {
-    expect(resolveDeliveryCacheControl(false, "collection")).toBe("public, max-age=30, s-maxage=120");
+  it("公開一覧も no-store を返す（キャッシュは Data Cache 層が担当）", () => {
+    expect(resolveDeliveryCacheControl(false, "collection")).toBe("no-store");
   });
 
-  it("公開単体は長めの CDN キャッシュを返す", () => {
-    expect(resolveDeliveryCacheControl(false, "item")).toBe("public, max-age=60, s-maxage=300");
+  it("公開単体も no-store を返す（キャッシュは Data Cache 層が担当）", () => {
+    expect(resolveDeliveryCacheControl(false, "item")).toBe("no-store");
   });
 });
 
@@ -94,7 +94,7 @@ describe("deliveryJsonResponse / deliveryErrorResponse", () => {
   it("deliveryJsonResponse は Cache-Control を付与する", async () => {
     const response = deliveryJsonResponse({ ok: true }, false, "item");
     expect(response.status).toBe(200);
-    expect(response.headers.get("Cache-Control")).toBe("public, max-age=60, s-maxage=300");
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
     await expect(response.json()).resolves.toEqual({ ok: true });
   });
 

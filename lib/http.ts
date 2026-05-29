@@ -1,15 +1,12 @@
 export type DeliveryCacheScope = "collection" | "item";
 
 const DELIVERY_CACHE_NO_STORE = "no-store";
-const DELIVERY_CACHE_COLLECTION = "public, max-age=30, s-maxage=120";
-const DELIVERY_CACHE_ITEM = "public, max-age=60, s-maxage=300";
 
-export function resolveDeliveryCacheControl(includeDraft: boolean, scope: DeliveryCacheScope): string {
-  if (includeDraft) {
-    return DELIVERY_CACHE_NO_STORE;
-  }
-
-  return scope === "collection" ? DELIVERY_CACHE_COLLECTION : DELIVERY_CACHE_ITEM;
+// 配信レスポンス自体は CDN/ブラウザに保存させず、毎リクエストで API キー認証を必ず通す。
+// 負荷対策は Next.js Data Cache（unstable_cache + revalidateTag）で行い、
+// 公開保存時にタグ失効させることで、CDN の TTL 待ちなしにほぼ即時で反映する。
+export function resolveDeliveryCacheControl(_includeDraft: boolean, _scope: DeliveryCacheScope): string {
+  return DELIVERY_CACHE_NO_STORE;
 }
 
 export function jsonResponse(body: unknown, init: ResponseInit = {}): Response {

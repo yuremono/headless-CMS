@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { GET } from "./route";
 
-vi.mock("@/lib/content/service", () => ({
+vi.mock("@/lib/content/delivery", () => ({
   resolveDeliveryRequest: vi.fn(),
   getDeliveryContent: vi.fn(),
 }));
 
-import { getDeliveryContent, resolveDeliveryRequest } from "@/lib/content/service";
+import { getDeliveryContent, resolveDeliveryRequest } from "@/lib/content/delivery";
 
 const mockedResolveDeliveryRequest = vi.mocked(resolveDeliveryRequest);
 const mockedGetDeliveryContent = vi.mocked(getDeliveryContent);
@@ -99,7 +99,7 @@ describe("GET /api/sites/[siteId]/content/[contentType]/[id]", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(response.headers.get("Cache-Control")).toBe("public, max-age=60, s-maxage=300");
+    expect(response.headers.get("Cache-Control")).toBe("no-store");
     await expect(response.json()).resolves.toMatchObject({
       id: "content-1",
       title: "Hello",
