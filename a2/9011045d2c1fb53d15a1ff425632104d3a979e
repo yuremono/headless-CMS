@@ -1,0 +1,418 @@
+app/(admin)/sites/[siteId]/contents/[contentType]/new/page.tsx
+  s_40f3faf305dc77::t_be615dc3f196c3 24-28
+  s_12b4fc60153d1a::t_f424002e47788a 2,8
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/duplicate/route.ts
+  s_d4cdf4f962f360::t_12c9c368190986 9
+components/admin/SiteExportPanel.tsx
+  s_aeaee7c3c075e7::t_80acf58afdd4f0 1-67
+app/api/admin/sites/[siteId]/audit-logs/route.ts
+  s_12b4fc60153d1a::t_1321f05eaf0731 1-25
+components/admin/ContentForm.tsx
+  s_40f3faf305dc77::t_a602140ebc4eac 100
+  s_d4cdf4f962f360::t_4863081dd2ed66 258-277
+  s_40f3faf305dc77::t_48c3fa3e35315b 223-224
+  s_40f3faf305dc77::t_60ff11e8e84265 245
+  s_12b4fc60153d1a::t_6f8be83c26ecf7 212-213
+  s_40f3faf305dc77::t_b7db954f0afaf5 252
+  s_40f3faf305dc77::t_776f2d320fdf6a 182-186,188-190
+  s_40f3faf305dc77::t_874b47f9081e66 6
+  s_40f3faf305dc77::t_c57aea61ccf0fc 198-202
+components/admin/SectionEditor.tsx
+  s_40f3faf305dc77::t_33fd6fd2785630 391,415
+  s_40f3faf305dc77::t_c308fce7c064ea 286-302
+  s_40f3faf305dc77::t_9c6a910a65d353 381
+  s_40f3faf305dc77::t_54a55efd16ea93 19
+  s_40f3faf305dc77::t_7b6488897bd6f9 167
+  s_40f3faf305dc77::t_292ff36fef2753 323,372
+lib/db/create-site.ts
+  s_170bccce25c5a2::t_0e4d48e4ca9360 2
+components/admin/ContentTypeList.tsx
+  s_3cf5bf34ae6caa::t_1fd8df2a4edd04 48-52
+  s_40f3faf305dc77::t_a352b2d93b4e6b 14
+  s_40f3faf305dc77::t_cfcd21965099c1 1-2
+  s_40f3faf305dc77::t_5ed9f55ecc9c2d 5
+lib/db/api-keys.ts
+  s_170bccce25c5a2::t_0e4d48e4ca9360 1-90
+app/api/sites/[siteId]/content/[contentType]/route.ts
+  s_4c46cb64112109::t_b0194d838d98a5 1-2
+  s_4c46cb64112109::t_5160c279d89dff 13-17,21
+lib/content/service.test.ts
+  s_d4cdf4f962f360::t_4ed67214bafe96 51
+  s_d4cdf4f962f360::t_93d41cc3e93af7 192
+  s_d4cdf4f962f360::t_2cccfcb3f123f8 212,215-217,220-222
+  s_d4cdf4f962f360::t_ad9f760732527c 13
+  s_d4cdf4f962f360::t_1421f0519aeeb8 94
+components/admin/AdminAccessContext.tsx
+  s_40f3faf305dc77::t_9764c478c859b9 1-11,14-29
+  s_4c46cb64112109::t_8295aff9016dff 12
+  s_e6265644d5da2b::t_64331f24aaf508 13
+app/api/admin/sites/[siteId]/assets/[assetId]/route.ts
+  s_d4cdf4f962f360::t_a5b432c2946600 9
+app/(admin)/sites/[siteId]/content-types/page.tsx
+  s_4c46cb64112109::t_2e94c1a7c33b02 7
+  s_40f3faf305dc77::t_08f8d002ce0ae5 23-24,35-39
+lib/http.test.ts
+  s_4c46cb64112109::t_ec66c458bb0d40 4-5,12
+  s_4c46cb64112109::t_8a7a4d1b49bfc4 78-111
+components/admin/AssetGrid.tsx
+  s_40f3faf305dc77::t_13f0c8fe991d65 146-157,159-188
+  s_40f3faf305dc77::t_0933725702f269 43
+  s_40f3faf305dc77::t_096d4dd9049e33 13
+lib/auth/site-role.ts
+  s_d4cdf4f962f360::t_270875af18ef37 80-118
+  s_d4cdf4f962f360::t_79d12aea68300c 3
+lib/auth/site-role.test.ts
+  s_d4cdf4f962f360::t_ae88a7640c3ac5 92-147
+  s_d4cdf4f962f360::t_e218a86a2f1341 5
+  s_d4cdf4f962f360::t_16dfa63e633519 17,20
+lib/db/members.ts
+  s_3cf5bf34ae6caa::t_6941399962116b 1-290
+lib/http.ts
+  s_4c46cb64112109::t_f05da401744324 1-14,19-37
+lib/db/audit-logs.ts
+  s_12b4fc60153d1a::t_9e9b52599abca2 1-40
+app/api/sites/[siteId]/content/[contentType]/[id]/route.test.ts
+  s_4c46cb64112109::t_a14d6ed5a89361 60,67
+  s_4c46cb64112109::t_56d1d85ab9d93b 34,38
+  s_4c46cb64112109::t_dd4414325d5467 102,110-146
+app/api/admin/sites/[siteId]/audit-logs/route.test.ts
+  s_12b4fc60153d1a::t_21452d3d28532f 1-87
+components/admin/SiteMembersPanel.tsx
+  s_3cf5bf34ae6caa::t_cf04a19ea20b39 1-3,5-14,16-228
+  s_40f3faf305dc77::t_a155908c7a93ee 15
+  s_40f3faf305dc77::t_efa4faed8be009 4
+components/admin/SiteAuditLogsPanel.tsx
+  s_e6265644d5da2b::t_9a2c0c1d00bdd8 1-112
+app/api/admin/sites/[siteId]/api-keys/rotate/route.ts
+  s_435dd645567293::t_34e87e1626cfc7 1-3,5-23,26-27
+  s_12b4fc60153d1a::t_5aaf6d50428012 24-25
+  s_4c46cb64112109::t_e166bbee5a6b5f 4
+components/admin/SiteApiKeyRotatePanel.tsx
+  s_435dd645567293::t_49cd7c28d54da6 1-3,5-20,22-52,57-106
+  s_40f3faf305dc77::t_ab58bfa600175a 53-56
+  s_3cf5bf34ae6caa::t_1fd8df2a4edd04 4
+  s_40f3faf305dc77::t_c93e96a390af16 21
+components/admin/ImageFieldInput.tsx
+  s_40f3faf305dc77::t_0f2de7cadbd892 14
+  s_40f3faf305dc77::t_5a4600129a4603 20
+  s_40f3faf305dc77::t_42e78a64c9aac5 166-167,179-180
+  s_40f3faf305dc77::t_37388a39326ace 111-140
+lib/auth/roles.ts
+  s_170bccce25c5a2::t_0e4d48e4ca9360 11
+  s_d4cdf4f962f360::t_404bf9c39ee07a 36
+  s_12b4fc60153d1a::t_af9efac97e5f96 19
+  s_12b4fc60153d1a::t_0e09a34d6f97ee 42
+docs/progress-checklist.md
+  s_170bccce25c5a2::t_59be9ad507aa26 200-201,209-231
+  s_170bccce25c5a2::t_3f6ce4369a7395 3,5
+  s_d4cdf4f962f360::t_26192d30cb1fbe 138
+  s_170bccce25c5a2::t_94588a0575f6f4 273,275
+  s_170bccce25c5a2::t_04d7011b567505 18
+  s_e6265644d5da2b::t_82c2f2e1fd33d2 141-142,145
+app/api/admin/sites/[siteId]/schemas/route.ts
+  s_d4cdf4f962f360::t_ffda1ffabc455d 9
+app/api/admin/sites/[siteId]/content/[contentType]/route.ts
+  s_d4cdf4f962f360::t_1aa3217ead4388 15,34
+  s_12b4fc60153d1a::t_f6ddd148cace9f 46-50
+  s_4c46cb64112109::t_4c81e373d80b2e 8
+components/admin/SeoFields.tsx
+  s_40f3faf305dc77::t_5fc113cd7d6992 187-191,204
+  s_40f3faf305dc77::t_464ee57f167029 141-142
+  s_40f3faf305dc77::t_1dc9354ce02ef3 128-129
+  s_40f3faf305dc77::t_fe044c551b5263 154-155
+  s_40f3faf305dc77::t_0ef6854fb425ef 180-181
+  s_40f3faf305dc77::t_a5dcbc08e21d8b 166-167
+  s_40f3faf305dc77::t_3618ea081625a5 81,84
+  s_12b4fc60153d1a::t_ee5f7e95483699 116-117
+components/admin/SectionArrayItemEditor.tsx
+  s_40f3faf305dc77::t_286ff3f719638d 98,127
+  s_40f3faf305dc77::t_fa4a0e54244d18 164,172
+  s_40f3faf305dc77::t_39a32e9f37a460 3
+  s_40f3faf305dc77::t_98977bb28fac6f 38-39
+  s_40f3faf305dc77::t_57a2c190540505 141-142,151-152
+app/(admin)/sites/[siteId]/media/page.tsx
+  s_40f3faf305dc77::t_5588d3165fe0e3 24,30-34,47
+  s_40f3faf305dc77::t_ae84f398348a79 8
+app/api/admin/sites/[siteId]/assets/route.ts
+  s_d4cdf4f962f360::t_d68c99eb52b95b 10,31
+app/api/admin/sites/[siteId]/members/route.test.ts
+  s_12b4fc60153d1a::t_a5e10e358015a5 11-14
+  s_3cf5bf34ae6caa::t_6bc493ebff3a93 1-10,15-121
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/route.ts
+  s_12b4fc60153d1a::t_01f2680d5df134 80-83
+  s_d4cdf4f962f360::t_62dd52797827c3 16,44,69
+  s_12b4fc60153d1a::t_16c85dce75e05f 56-60
+  s_4c46cb64112109::t_4c81e373d80b2e 9
+docs/delivery-guide.md
+  s_3cf5bf34ae6caa::t_12c73401a7eaba 1-123,125-227,229-307,309,311,325,329-333,335,340-388,391-395
+  s_b81e1091c8aee3::t_7348f568d6f17a 124
+  s_b81e1091c8aee3::t_773f03740c8024 228
+  s_07f266d0011452::t_90821838480719 389-390
+  s_07f266d0011452::t_b3bbeea097cd52 308,310,312-324,326-328,334,336-339
+lib/audit/log.ts
+  s_6286a3e7bc4085::t_bdb08afb021cea 61
+  s_12b4fc60153d1a::t_b7a126c732bf68 53
+  s_6286a3e7bc4085::t_2846a25bb90f73 1
+  s_12b4fc60153d1a::t_ef2d08be7bd027 2-52,54-60,62-97
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/route.test.ts
+  s_12b4fc60153d1a::t_cc60633a2591c4 12-15
+app/api/admin/sites/[siteId]/members/[memberId]/route.ts
+  s_4c46cb64112109::t_e166bbee5a6b5f 32-35
+  s_3cf5bf34ae6caa::t_afda0b5a0d8881 1-7,9-31,36-55,58-59
+  s_12b4fc60153d1a::t_a0df5b36525d4c 56-57
+  s_12b4fc60153d1a::t_a63113e33f2f51 8
+app/api/admin/route-permissions.test.ts
+  s_4c46cb64112109::t_4c81e373d80b2e 86-95,98-107
+  s_d4cdf4f962f360::t_236a801f1ccf2d 2-19,30-60,65-68,71-85,108,113-133,136-148
+  s_12b4fc60153d1a::t_aa36798e7d96ea 20,23-25
+  s_d4cdf4f962f360::t_597378538a8400 1
+  s_d4cdf4f962f360::t_8671592e1bb134 21-22,61-64,69-70,96-97,109-112,134-135
+  s_aeaee7c3c075e7::t_fceeece6c8098f 26-29
+lib/auth/roles.test.ts
+  s_12b4fc60153d1a::t_23496036e7b1f2 37,41-44
+  s_d4cdf4f962f360::t_607d9ad125cc96 34,45-48
+  s_d4cdf4f962f360::t_a3b5f2e1a96b02 33
+lib/db/members.test.ts
+  s_3cf5bf34ae6caa::t_90f1f7f7eb758b 1-245
+app/api/sites/[siteId]/content/[contentType]/[id]/route.ts
+  s_4c46cb64112109::t_59780b8fb4f9e1 1
+  s_4c46cb64112109::t_66014b73a5328e 13-17,22,25
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/unpublish/route.ts
+  s_d4cdf4f962f360::t_54b76f3f2bf16e 9
+app/api/admin/sites/[siteId]/api-keys/rotate/route.test.ts
+  s_12b4fc60153d1a::t_e54f78a962c20c 12-15
+  s_435dd645567293::t_7d51aea138f8fc 1-11,16-82
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/publish/route.ts
+  s_d4cdf4f962f360::t_844993684564f1 10
+  s_12b4fc60153d1a::t_5727c1b324e42d 21-25
+  s_12b4fc60153d1a::t_5968cdcea11a96 3
+lib/db/site-export.ts
+  s_3cf5bf34ae6caa::t_cf04a19ea20b39 1-88
+lib/db/site-export.test.ts
+  s_aeaee7c3c075e7::t_dee37f0e36fd43 1-140
+app/api/admin/sites/[siteId]/export/route.ts
+  s_aeaee7c3c075e7::t_1453e16bbf850c 1-24
+app/api/admin/sites/[siteId]/export/route.test.ts
+  s_3cf5bf34ae6caa::t_12c73401a7eaba 1-81
+prisma/migrations/20260529140000_add_audit_logs/migration.sql
+  s_d4cdf4f962f360::t_024d02a29dcb17 1-22
+app/api/admin/sites/route.test.ts
+  s_12b4fc60153d1a::t_bdd42b060c50ca 16-20
+app/(admin)/sites/[siteId]/contents/page.tsx
+  s_40f3faf305dc77::t_46d05a03349e01 6,25
+  s_40f3faf305dc77::t_581278cf47d87e 75
+components/admin/admin-api.ts
+  s_e6265644d5da2b::t_49700892ac10d8 109-126
+  s_4c46cb64112109::t_64944fed2c0dc0 92-108
+docs/agents/phase3-roles.md
+  s_d4cdf4f962f360::t_45a7234e383523 34
+  s_3cf5bf34ae6caa::t_134a6c154a111c 43
+components/admin/MediaLibrary.tsx
+  s_40f3faf305dc77::t_c3cd3e7671ddfc 119
+  s_40f3faf305dc77::t_662c82b4bcab06 16
+  s_40f3faf305dc77::t_dde6245cce9fc6 4
+  s_40f3faf305dc77::t_abf737167ad722 84-106
+.gitignore
+  s_07f266d0011452::t_6c68180ed8fbf4 25
+app/api/admin/sites/route.ts
+  s_d4cdf4f962f360::t_ff2e94436d02a1 8,18
+  s_4c46cb64112109::t_4c81e373d80b2e 34-42
+  s_12b4fc60153d1a::t_673d253f4ded85 5
+lib/db/audit-logs.test.ts
+  s_12b4fc60153d1a::t_310780ceb1251a 1-80
+prisma/schema.prisma
+  s_12b4fc60153d1a::t_bfed12588a5e70 60
+  s_12b4fc60153d1a::t_1cba725e71450f 157-172
+  s_12b4fc60153d1a::t_db3a83a1133059 44
+lib/auth/admin-ui-access.ts
+  s_40f3faf305dc77::t_e84f0dc725374d 14,24,35
+  s_40f3faf305dc77::t_0eb3d82d259f44 1-13,16-23,26-34,37-76
+  s_e6265644d5da2b::t_73eb1f7878c36c 25
+  s_e6265644d5da2b::t_81fb84ab2e9375 36
+  s_e6265644d5da2b::t_c99d5e68a10bc6 15
+components/admin/AdminLayout.tsx
+  s_40f3faf305dc77::t_e7cfac29139ff5 2-3,6,14-17,19-26
+components/admin/SectionFieldForm.tsx
+  s_40f3faf305dc77::t_72a82f83f5d955 114,118
+  s_40f3faf305dc77::t_3e63a54cc4c5f6 4
+  s_40f3faf305dc77::t_b495872f1b93c9 66-67,76-77
+  s_40f3faf305dc77::t_8be4c25f511f78 52
+  s_40f3faf305dc77::t_82bd442f7648b2 176-177
+  s_40f3faf305dc77::t_4d940f8820f88d 161
+  s_3cf5bf34ae6caa::t_40c32252da0bbe 87,91
+  s_40f3faf305dc77::t_ef4b5dbd458a19 239
+  s_40f3faf305dc77::t_e138d0c4d21dba 10
+app/api/admin/dashboard/route.ts
+  s_d4cdf4f962f360::t_5a9ffc647d8fdd 6
+lib/content/admin-role-enforcement.test.ts
+  s_d4cdf4f962f360::t_1d7b190d28e02c 20-47
+  s_d4cdf4f962f360::t_e753adc1cd6be3 1-2,7-9,12-19,48-177
+  s_d4cdf4f962f360::t_d88d3131420a04 3-6,10-11
+components/admin/ContentList.tsx
+  s_40f3faf305dc77::t_078bbd3f2b9022 24
+  s_40f3faf305dc77::t_c87004fb8b9c44 105-109
+  s_40f3faf305dc77::t_ccef1697e6d85f 174-178
+  s_40f3faf305dc77::t_9eae35050f7ded 227,229-265
+  s_40f3faf305dc77::t_c8ce1bb6fd8641 127,129-149
+  s_40f3faf305dc77::t_2d3396ec4c6664 5
+app/(admin)/sites/[siteId]/contents/[contentType]/[id]/page.tsx
+  s_40f3faf305dc77::t_92b33e61aa6714 38,43
+  s_40f3faf305dc77::t_faa2d8561d059a 10
+app/api/admin/sites/[siteId]/content/[contentType]/route.test.ts
+  s_12b4fc60153d1a::t_c300fc6c085484 11-14
+app/api/admin/sites/[siteId]/members/route.ts
+  s_12b4fc60153d1a::t_07688acb134686 8
+  s_12b4fc60153d1a::t_5fca77fc6832d2 52-56
+  s_3cf5bf34ae6caa::t_afda0b5a0d8881 1-7,9-51,57-58
+components/admin/FieldRenderer.tsx
+  s_40f3faf305dc77::t_86a5b0e7b70970 15
+  s_40f3faf305dc77::t_1663c2e552bc9f 47
+  s_40f3faf305dc77::t_992e26e7f3b192 63
+  s_40f3faf305dc77::t_8aa8e18f3e9384 22
+  s_40f3faf305dc77::t_aea52601f74948 120-121
+  s_40f3faf305dc77::t_198fb11e292ff2 78-79,82-86,97,103
+app/api/admin/sites/[siteId]/content-types/route.ts
+  s_d4cdf4f962f360::t_309a890eb68df7 9
+app/api/admin/sites/[siteId]/members/[memberId]/route.test.ts
+  s_12b4fc60153d1a::t_434b8f1ac111d0 11-14
+  s_3cf5bf34ae6caa::t_6bc493ebff3a93 1-10,15-113
+lib/content/service.ts
+  s_d4cdf4f962f360::t_a87570c1630cf6 10
+  s_d4cdf4f962f360::t_3675c4fab61b4b 157-167
+  s_3cf5bf34ae6caa::t_884ce3dfdd728e 230-253
+app/api/admin/sites/[siteId]/route.ts
+  s_d4cdf4f962f360::t_74bf360a8e49e2 9
+components/admin/SiteCreateForm.tsx
+  s_40f3faf305dc77::t_847dceb25bddf5 73-76
+  s_40f3faf305dc77::t_aa7712096b0319 25
+  s_40f3faf305dc77::t_95d7ddc21e3a48 6
+app/api/sites/[siteId]/content/[contentType]/route.test.ts
+  s_4c46cb64112109::t_276d5094395cf6 33,41
+  s_4c46cb64112109::t_ed543b6fc4d508 83,95-123
+lib/db/api-keys.test.ts
+  s_435dd645567293::t_98730df37b8396 1-79
+lib/db/index.ts
+  s_3cf5bf34ae6caa::t_177a5fdc1fd360 19-27
+  s_aeaee7c3c075e7::t_cc4985a16c7979 18
+lib/audit/log.test.ts
+  s_12b4fc60153d1a::t_ac92ef0f041b44 1-163
+app/(admin)/sites/[siteId]/page.tsx
+  s_435dd645567293::t_22f7e401ecb05d 55
+  s_aeaee7c3c075e7::t_9f49eff335daf3 9
+  s_12b4fc60153d1a::t_271dcdc17fe4bd 12
+  s_e6265644d5da2b::t_f76298565e95e6 61-63
+  s_e6265644d5da2b::t_a9c9ea246a792e 8
+  s_40f3faf305dc77::t_d4ab64fec2df3f 36,49
+  s_435dd645567293::t_47f6fd1f123af4 7
+  s_4c46cb64112109::t_64944fed2c0dc0 6,58-60
+  s_aeaee7c3c075e7::t_de9ee93ce3ef94 56
+app/api/admin/sites/[siteId]/content/[contentType]/[id]/publish/route.test.ts
+  s_12b4fc60153d1a::t_a4fb75c45dcdc4 9-12
+app/(admin)/sites/[siteId]/contents/[contentType]/page.tsx
+  s_3cf5bf34ae6caa::t_99f0696112123a 25,31,37-41
+  s_40f3faf305dc77::t_9762e066c72a55 2,8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "a29011045d2c1fb53d15a1ff425632104d3a979e",
+  "prompts": {},
+  "sessions": {
+    "s_07f266d0011452": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "07047c68-72da-41d0-bbf0-f39bae85f8c4",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_12b4fc60153d1a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "d97ad6a3-ff6f-4c1e-9045-4e970f5bd44b",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_170bccce25c5a2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "08d03829-b303-4f5a-909d-ea722e009843",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_3cf5bf34ae6caa": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a4de5b57-ad8e-49fd-ac29-f02040e9d7b6",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_40f3faf305dc77": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "83a79fb6-1aa9-4e20-a774-890e2f12f3b6",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_435dd645567293": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "4bc837ab-4584-4d53-b0af-3b2664797d2f",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_4c46cb64112109": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "047bea19-79cc-46a2-8d07-541b88f21503",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_6286a3e7bc4085": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "37549bcb-461b-427e-9d4b-2481677b2028",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_aeaee7c3c075e7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a82b3392-7776-450d-90a9-0ae3d46c0bf5",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_b81e1091c8aee3": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9e8670cd-aec5-4cb4-aebf-1c3e9cf61bf3",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d4cdf4f962f360": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "c63d2781-09bc-4a1d-ba73-46446dd2edbb",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_e6265644d5da2b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "eab162ac-8cb0-4d79-8e12-5296b4615671",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
