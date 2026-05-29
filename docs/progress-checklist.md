@@ -1,8 +1,8 @@
 # 進捗チェックリスト
 
-**最終更新:** 2026-05-29 21:40 JST  
+**最終更新:** 2026-05-29 22:00 JST  
 **参照:** [SPEC.md](../SPEC.md) v0.2（§12 Phase 定義・§16 プロトタイプ）  
-**検証:** `npm test` / `npm run test:coverage` を本日再実行して反映（build は前回成功のまま）
+**検証:** `npm test`（327 passed / 52 files）・`npm run test:coverage`（89.99% Lines）・`npm run build` を本日再実行して反映
 
 ---
 
@@ -11,12 +11,12 @@
 | スコープ | 進捗 | 状態メモ |
 |---------|------|----------|
 | **Phase 1**（CMSコア） | **完了** | DB・認証・CRUD・配信/管理 API・API キー・JSON スキーマ取り込み |
-| **Phase 2**（編集体験） | **ほぼ完了** | セクション UI・SEO・画像・プレビュー・並び替え。一部フィールド型・キャッシュは未 |
-| **Phase 3**（納品運用） | **骨格のみ** | 4 ロール定義・権限チェック関数はあるが API/UI 未適用 |
+| **Phase 2**（編集体験） | **ほぼ完了** | セクション UI・SEO・画像・プレビュー・並び替え。汎用 object / reference フィールド UI は部分 |
+| **Phase 3**（納品運用） | **完了** | API 権限強制・メンバー CRUD・API キーローテ・監査ログ UI・サイトエクスポート・viewer 読取 UI・Cache-Control・delivery-guide。本番認証のみ未 |
 | **Phase 4**（AI 編集） | **未着手** | — |
 | **§16 プロトタイプ** | **成立** | 3 種類・編集→プレビュー→公開 API のデモライン到達 |
-| **テスト** | **263 件 / 40 ファイル** | スコープ内カバレッジ **89.4%**（Lines、`lib/**` + `app/api/**`、目標 80% 達成） |
-| **ビルド** | **成功** | `npm run build`（Next.js 16.2.6） |
+| **テスト** | **327 件 / 52 ファイル** | スコープ内カバレッジ **90.0%**（Lines 89.99%、`lib/**` + `app/api/**`、目標 80% 達成） |
+| **ビルド** | **成功** | `npm run build`（Next.js 16.2.6、本日再検証） |
 
 ---
 
@@ -64,7 +64,7 @@
 - [x] 公開 API: JSON 返却・公開済みのみ（下書き除外）
 - [x] 配信 GET 一覧 / 単体 / slug 指定
 - [x] ページネーション（`limit` / `offset`）
-- [ ] 公開 API キャッシュヘッダ（`Cache-Control` 等）— 未実装
+- [x] 公開 API キャッシュヘッダ（`Cache-Control` — `lib/http.ts` / `deliveryJsonResponse`、draft は `no-store`）
 
 ### 2.6 管理 API
 
@@ -129,19 +129,19 @@
 
 ---
 
-## 4. Phase 3 / Phase 4（未着手・骨格のみ）
+## 4. Phase 3 / Phase 4
 
-> SPEC §12 Phase 3–4。完了 `[x]`、未着手 `[ ]`、骨格のみは注記。
+> SPEC §12 Phase 3–4。完了 `[x]`、未着手 `[ ]`、部分完了は注記。
 
 ### 4.1 Phase 3：納品運用
 
 - [x] 4 ロールの API 強制（`PHASE3_ENFORCE_ROLES=true` + ルート別 permission）— 全管理 API route に適用済み
-- [ ] メンバー CRUD UI / API
-- [ ] viewer 向け読取専用管理画面
+- [x] メンバー CRUD UI / API — `SiteMembersPanel` + `GET|POST /api/admin/sites/{siteId}/members` + `PATCH|DELETE .../members/{memberId}`
+- [x] viewer 向け読取専用管理画面 — `AdminAccessContext` / `getAdminUiAccess`（`readOnly` で編集 UI 非表示）
 - [x] API キーローテーション UI — サイト概要 `SiteApiKeyRotatePanel`（owner / admin）
 - [x] 操作ログ — API `GET /api/admin/sites/{siteId}/audit-logs` + サイト概要 `SiteAuditLogsPanel`（owner / admin）
-- [ ] バックアップ / DB エクスポート手順・自動化
-- [ ] コンテンツ / サイトエクスポート
+- [x] バックアップ / DB エクスポート手順 — `scripts/backup-db.sh` + `docs/delivery-guide.md` §10（手動 / cron。自動 UI は未）
+- [x] コンテンツ / サイトエクスポート — `SiteExportPanel` + `GET /api/admin/sites/{siteId}/export`（JSON ダウンロード）
 - [x] 納品用簡易ドキュメント（案件向け）— `docs/delivery-guide.md`
 - [ ] 本番認証（Supabase Auth / Auth.js）と `AuthContext.userId` 連携
 
@@ -198,15 +198,14 @@
 | 項目 | 状態 | 備考 |
 |------|------|------|
 | **Supabase DB 接続** | 未接続 | `.env` は **ローカル PostgreSQL**（`localhost:5432/headless_cms`）。Supabase 接続は**ユーザー作業**（下記手順） |
-| **git リポジトリ** | **初期化済み・push 済み** | [github.com/yuremono/headless-CMS](https://github.com/yuremono/headless-CMS) — `main` / `e39f5cd`（Initial commit） |
-| **本番認証** | 未導入 | デモセッション + 開発用 API キー |
+| **git リポジトリ** | **push 済み・ローカル未反映あり** | [github.com/yuremono/headless-CMS](https://github.com/yuremono/headless-CMS) — `main` @ `c718295`（Phase 3 コミット済み）。**未 commit / 未 push のローカル変更あり**（本番認証・middleware・セクション PATCH 等 WIP） |
+| **本番認証** | 未導入 | デモセッション + 開発用 API キー（Phase 3 残タスク） |
 | **R2 ストレージ** | stub | `STORAGE_PROVIDER=local` が MVP 既定 |
-| **Phase 3 権限強制** | オフ既定 | `PHASE3_ENFORCE_ROLES` 未設定時は全操作許可 |
+| **Phase 3 権限強制** | 実装済み・オフ既定 | `PHASE3_ENFORCE_ROLES=true` で全管理 API に 403 適用。未設定時は従来どおり全操作許可 |
 | **管理画面 UI テスト** | 対象外 | カバレッジは `lib/**` + `app/api/**` のみ。E2E なし |
 | **Next.js middleware** | 暫定 | `middleware.mjs`（将来 proxy 移行検討） |
 | **seed ID 変動** | 運用注意 | 再 seed 後は `examples/preview/js/config.js` の contentId 更新が必要 |
-| **dev/build 同時起動** | 運用注意 | 複数 `next dev` / `next build` でロックエラー |
-| **未カバー API ルート** | 低優先 | `api-keys/rotate`・`lib/db/api-keys.ts` が 0%（Phase 3 骨格） |
+| **dev/build 同時起動** | 運用注意 | 複数 `next dev` / `next build` で `.next/lock` 競合。解除後再実行 |
 
 ### Supabase 接続手順（ユーザー作業）
 
@@ -242,6 +241,7 @@ npx prisma migrate deploy && npx tsx prisma/seed.ts
 | プロジェクト構成・コマンド | [docs/agents/project.md](agents/project.md) |
 | API・DB・セキュリティ | [docs/agents/architecture.md](agents/architecture.md) |
 | Phase 3 権限メモ | [docs/agents/phase3-roles.md](agents/phase3-roles.md) |
+| 案件納品ガイド | [docs/delivery-guide.md](delivery-guide.md) |
 | 要件定義 | [SPEC.md](../SPEC.md) |
 | エージェントルール | [AGENTS.md](../AGENTS.md) |
 
@@ -270,6 +270,6 @@ npm test && npm run test:coverage && npm run build
 
 1. **Phase 列は SPEC §12 の 4 段階に厳密対応** — MVP 必須との対応表（§12 冒頭）も Phase 1–2 にマッピング。
 2. **§16 は独立セクション** — プロトタイプデモの Go/No-Go ラインとして、Phase 2 完了とは別に成功条件テーブルで追跡。
-3. **完了判定は実装確認ベース** — 2026-05-29 再検証: `npm test`（263 passed / 40 files）、`npm run test:coverage`（89.4% Lines）、git 初期化・push 済み（`yuremono/headless-CMS`）。
-4. **部分完了は `[ ]` + 注記** — 署名付き previewToken、汎用 object フィールド UI、権限骨格など。
-5. **更新タイミング** — 再 seed・Phase 3 着手・Supabase 接続後にサマリー表と §6 を更新する。
+3. **完了判定は実装確認ベース** — 2026-05-29 再検証: `npm test`（327 passed / 52 files）、`npm run test:coverage`（89.99% Lines）、`npm run build` 成功。git `main` @ `c718295` push 済み（未 commit ローカル変更あり）。
+4. **部分完了は `[ ]` + 注記** — 署名付き previewToken、汎用 object フィールド UI、本番認証など。
+5. **更新タイミング** — 再 seed・Phase 4 着手・Supabase 接続・本番認証導入後にサマリー表と §6 を更新する。

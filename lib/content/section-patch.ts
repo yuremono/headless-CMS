@@ -66,15 +66,15 @@ export function extractSectionPatch(body: Record<string, unknown>): SectionPatch
     }
   }
 
-  const hasVisible = typeof body.visible === "boolean";
+  const visible = typeof body.visible === "boolean" ? body.visible : undefined;
   const hasData = Object.keys(dataPatch).length > 0;
 
-  if (!hasVisible && !hasData) {
+  if (visible === undefined && !hasData) {
     return null;
   }
 
   return {
-    visible: hasVisible ? body.visible : undefined,
+    visible,
     dataPatch,
   };
 }
