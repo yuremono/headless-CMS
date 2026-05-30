@@ -1,0 +1,55 @@
+scripts/build-front-css.mjs
+  s_9e2cf11dda94f0::t_e8677cdf320abc 41,46
+  s_9e2cf11dda94f0::t_d3f4c6166472d2 1-40,42-45,47-68
+package.json
+  s_762c3ecd8e07fa::t_55cbf87ba7d486 41
+  s_d168678408384c::t_5f61be72b4beb7 31,34
+  ai_agent 50
+  s_9e2cf11dda94f0::t_05f9d26a2736ba 20-21
+  s_d446cff8772ee1::t_786401bb3cea70 8-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "f3ece22cbeb4e8a46c8a4ec009148ff8423b0be9",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_762c3ecd8e07fa": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1b076ade-620c-47b8-967c-7c96342ba72e",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_9e2cf11dda94f0": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "40682d3c-c44a-4531-8165-201ff0c0d4a9",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d168678408384c": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ffe25ea1-0f39-4f23-97e2-900509b3bbc3",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d446cff8772ee1": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "2887f2c5-58d3-45b5-9866-9e5c5d1d13be",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
