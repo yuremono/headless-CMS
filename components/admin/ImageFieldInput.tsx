@@ -139,205 +139,197 @@ export function ImageFieldInput( {
 
         const previewIsVideo=value.url && /\.(mp4|webm|mov|avi)(\?|$)/i.test(value.url);
 
-        return (<div data-l="ImageField"className="ImageFieldInput block"> <div data-l="FieldLabel"className="flex items-center gap-2 text-sm font-medium text-WH"> <span> {
-                        label
-                }
-
-                </span> {
-                        required ? (<span className= {
-                                        adminBadgeRequired
-                                }
-
-                                >必須</span>) : null
-                }
-
-                </div> <div data-l="FieldControls"className="ImageFieldInput_controls mt-3 flex flex-wrap items-center gap-3"> {
-                         !readOnly ? (<> <button type="button"
-
-                                className= {
-                                        adminBtnGhostSm
-                                }
-
-                                onClick= {
-                                        ()=> setIsLibraryOpen(true)
-                                }
-
-                                > ライブラリから選択 </button> </>) : null
-                }
-
-                        {
-                        value.url ? (<span className= {
-                                        adminBadgeSuccess
-                                }
-
-                                >登録済み</span>) : null
-                }
-
-                </div> {
-                         !readOnly ? (<div data-l="UploadWrap"className="mt-4"> <MediaUploadZone siteId= {
-                                        siteId
-                                }
-
-                                multiple disabled= {
-                                        isUploading
-                                }
-
-                                buttonLabel= {
-                                        isUploading ? 'アップロード中…' : '画像をアップロード'
-                                }
-
-                                dropHint="画像をドラッグ&ドロップ、またはクリックして選択（複数可・先頭1件を使用）"
-
-                                alt= {
-                                        value.alt
-                                }
-
-                                onUploadStart= {
-                                        ()=> {
-                                                setIsUploading(true);
-                                                setUploadError('');
-                                        }
-                                }
-
-                                onBatchComplete= {
-                                        handleBatchComplete
-                                }
-
-                                /> </div>) : null
-                }
-
-                        {
-                        value.url ? (<div data-l="FieldPreview"className="ImageFieldInput_preview mt-4 overflow-hidden rounded-2xl border border-WH/20 bg-BK/50 p-3"> {
-                                        previewIsVideo ? (<video src= {
-                                                        value.url
-                                                }
-
-                                                controls className="max-h-48 w-full rounded-xl object-contain"/>) : (<img src= {
-                                                        value.url
-                                                }
-
-                                                alt= {
-                                                        value.alt || label
-                                                }
-
-                                                className="max-h-48 w-full rounded-xl object-contain"/>)
-                                }
-
-                                </div>) : null
-                }
-
-                <label className="mt-4 block"> <span className="text-xs font-medium text-GR">画像 URL</span> <input className= {
-                        adminFieldControl
-                }
-
-                type="url"
-                placeholder="/uploads/site-id/example.jpg"
-
-                value= {
-                        value.url
-                }
-
-                onChange= {
-                        (event)=> onChange( {
-                                        ...value, url: event.target.value
-                                }
-
-                        )
-                }
-
-                disabled= {
-                        readOnly
-                }
-
-                readOnly= {
-                        readOnly
-                }
-
-                /> </label> <label className="mt-4 block"> <span className="text-xs font-medium text-GR">代替テキスト</span> <input className= {
-                        adminFieldControl
-                }
-
-                type="text"
-                placeholder="画像の説明"
-
-                value= {
-                        value.alt
-                }
-
-                onChange= {
-                        (event)=> onChange( {
-                                        ...value, alt: event.target.value
-                                }
-
-                        )
-                }
-
-                disabled= {
-                        readOnly
-                }
-
-                readOnly= {
-                        readOnly
-                }
-
-                /> </label> {
-                        uploadError ? <p className="mt-2 text-xs text-AC"> {
-                                uploadError
-                        }
-
-                        </p> : null
-                }
-
-                        {
-                        helpText ? <p className="mt-2 text-xs leading-5 text-GR"> {
-                                helpText
-                        }
-
-                        </p> : null
-                }
-
-                        {
-                        isLibraryOpen ? (<div data-l="LibraryModal"
-                                className="ImageFieldInput_modal fixed inset-0 z-50 flex items-center justify-center bg-BK/80 p-4 backdrop-blur-sm"
-                                role="dialog"
-                                aria-modal="true"
-                                aria-label="メディアライブラリ"
-                                > <div data-l="ModalPanel"className="ImageFieldInput_modalPanel flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-WH/20 shadow-2xl"> <div data-l="ModalHeader"className="flex items-center justify-between border-b border-WH/20 px-5 py-4"> <div> <p className="text-lg font-semibold text-WH">メディアライブラリ</p> <p className="text-sm text-GR">登録済みの画像から選択します。</p> </div> <button type="button"
-
-                                className= {
-                                        adminBtnGhostSm
-                                }
-
-                                onClick= {
-                                        ()=> setIsLibraryOpen(false)
-                                }
-
-                                > 閉じる </button> </div> <div data-l="ModalBody"className="overflow-y-auto px-5 py-5"> {
-                                        libraryLoading ? (<p className="text-sm text-GR">読み込み中…</p>) : libraryError ? (<p className="text-sm text-AC"> {
-                                                        libraryError
-                                                }
-
-                                                </p>) : (<AssetGrid siteId= {
-                                                        siteId
-                                                }
-
-                                                assets= {
-                                                        libraryAssets
-                                                }
-
-                                                selectable selectedUrl= {
-                                                        value.url
-                                                }
-
-                                                onSelect= {
-                                                        handleLibrarySelect
-                                                }
-
-                                                />)
-                                }
-
-                                </div> </div> </div>) : null
-                }
-
-                </div>);
+        return (
+			<div data-l="ImageField" className="ImageFieldInput block">
+				{" "}
+				<div
+					data-l="FieldLabel"
+					className="flex items-center gap-2 text-sm font-medium text-WH"
+				>
+					{" "}
+					<span> {label}</span>{" "}
+					{required ? (
+						<span className={adminBadgeRequired}>必須</span>
+					) : null}
+				</div>{" "}
+				<div
+					data-l="FieldControls"
+					className="ImageFieldInput_controls mt-3 flex flex-wrap items-center gap-3"
+				>
+					{" "}
+					{!readOnly ? (
+						<>
+							{" "}
+							<button
+								type="button"
+								className={adminBtnGhostSm}
+								onClick={() => setIsLibraryOpen(true)}
+							>
+								{" "}
+								ライブラリから選択{" "}
+							</button>{" "}
+						</>
+					) : null}
+					{value.url ? (
+						<span className={adminBadgeSuccess}>登録済み</span>
+					) : null}
+				</div>{" "}
+				{!readOnly ? (
+					<div data-l="UploadWrap" className="mt-4">
+						{" "}
+						<MediaUploadZone
+							siteId={siteId}
+							multiple
+							disabled={isUploading}
+							buttonLabel={
+								isUploading
+									? "アップロード中…"
+									: "画像をアップロード"
+							}
+							dropHint="画像をドラッグ&ドロップ、またはクリックして選択（複数可・先頭1件を使用）"
+							alt={value.alt}
+							onUploadStart={() => {
+								setIsUploading(true);
+								setUploadError("");
+							}}
+							onBatchComplete={handleBatchComplete}
+						/>{" "}
+					</div>
+				) : null}
+				{value.url ? (
+					<div
+						data-l="FieldPreview"
+						className="ImageFieldInput_preview mt-4 overflow-hidden rounded-md border border-WH/20 bg-BK/50 p-3"
+					>
+						{" "}
+						{previewIsVideo ? (
+							<video
+								src={value.url}
+								controls
+								className="max-h-48 w-full rounded-md object-contain"
+							/>
+						) : (
+							<img
+								src={value.url}
+								alt={value.alt || label}
+								className="max-h-48 w-full rounded-md object-contain"
+							/>
+						)}
+					</div>
+				) : null}
+				<label className="mt-4 block">
+					{" "}
+					<span className="text-xs font-medium text-GR">
+						画像 URL
+					</span>{" "}
+					<input
+						className={adminFieldControl}
+						type="url"
+						placeholder="/uploads/site-id/example.jpg"
+						value={value.url}
+						onChange={(event) =>
+							onChange({
+								...value,
+								url: event.target.value,
+							})
+						}
+						disabled={readOnly}
+						readOnly={readOnly}
+					/>{" "}
+				</label>{" "}
+				<label className="mt-4 block">
+					{" "}
+					<span className="text-xs font-medium text-GR">
+						代替テキスト
+					</span>{" "}
+					<input
+						className={adminFieldControl}
+						type="text"
+						placeholder="画像の説明"
+						value={value.alt}
+						onChange={(event) =>
+							onChange({
+								...value,
+								alt: event.target.value,
+							})
+						}
+						disabled={readOnly}
+						readOnly={readOnly}
+					/>{" "}
+				</label>{" "}
+				{uploadError ? (
+					<p className="mt-2 text-xs text-AC"> {uploadError}</p>
+				) : null}
+				{helpText ? (
+					<p className="mt-2 text-xs leading-5 text-GR">
+						{" "}
+						{helpText}
+					</p>
+				) : null}
+				{isLibraryOpen ? (
+					<div
+						data-l="LibraryModal"
+						className="ImageFieldInput_modal fixed inset-0 z-50 flex items-center justify-center bg-BK/80 p-4 backdrop-blur-sm"
+						role="dialog"
+						aria-modal="true"
+						aria-label="メディアライブラリ"
+					>
+						{" "}
+						<div
+							data-l="ModalPanel"
+							className="ImageFieldInput_modalPanel flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-WH/20 shadow-2xl"
+						>
+							{" "}
+							<div
+								data-l="ModalHeader"
+								className="flex items-center justify-between border-b border-WH/20 px-5 py-4"
+							>
+								{" "}
+								<div>
+									{" "}
+									<p className="text-lg font-semibold text-WH">
+										メディアライブラリ
+									</p>{" "}
+									<p className="text-sm text-GR">
+										登録済みの画像から選択します。
+									</p>{" "}
+								</div>{" "}
+								<button
+									type="button"
+									className={adminBtnGhostSm}
+									onClick={() => setIsLibraryOpen(false)}
+								>
+									{" "}
+									閉じる{" "}
+								</button>{" "}
+							</div>{" "}
+							<div
+								data-l="ModalBody"
+								className="overflow-y-auto px-5 py-5"
+							>
+								{" "}
+								{libraryLoading ? (
+									<p className="text-sm text-GR">
+										読み込み中…
+									</p>
+								) : libraryError ? (
+									<p className="text-sm text-AC">
+										{" "}
+										{libraryError}
+									</p>
+								) : (
+									<AssetGrid
+										siteId={siteId}
+										assets={libraryAssets}
+										selectable
+										selectedUrl={value.url}
+										onSelect={handleLibrarySelect}
+									/>
+								)}
+							</div>{" "}
+						</div>{" "}
+					</div>
+				) : null}
+			</div>
+		);
 }

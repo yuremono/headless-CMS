@@ -117,7 +117,7 @@ export function SiteMembersPanel({ siteId }: SiteMembersPanelProps) {
   }
 
   return (
-		<section className="SiteMembersPanel rounded-2xl border border-white/10 bg-slate-950/40 p-4">
+		<section className="SiteMembersPanel rounded-md border border-white/10 bg-slate-950/40 p-4">
 			<div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
 				<div>
 					<h2 className="text-lg font-semibold text-white">
@@ -147,7 +147,7 @@ export function SiteMembersPanel({ siteId }: SiteMembersPanelProps) {
 						required
 						value={inviteEmail}
 						onChange={(event) => setInviteEmail(event.target.value)}
-						className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-white"
+						className="rounded-md border border-white/10 bg-slate-900 px-3 py-2 text-white"
 						placeholder="editor@example.com"
 						autoComplete="email"
 					/>
@@ -162,7 +162,7 @@ export function SiteMembersPanel({ siteId }: SiteMembersPanelProps) {
 									.value as (typeof ROLE_OPTIONS)[number],
 							)
 						}
-						className="rounded-xl border border-white/10 bg-slate-900 px-3 py-2 text-white"
+						className="rounded-md border border-white/10 bg-slate-900 px-3 py-2 text-white"
 					>
 						{ROLE_OPTIONS.map((role) => (
 							<option key={role} value={role}>
@@ -231,7 +231,7 @@ export function SiteMembersPanel({ siteId }: SiteMembersPanelProps) {
 														.value as (typeof ROLE_OPTIONS)[number],
 												)
 											}
-											className="rounded-lg border border-white/10 bg-slate-900 px-2 py-1 text-white"
+											className="rounded-md border border-white/10 bg-slate-900 px-2 py-1 text-white"
 											aria-label={`${member.email ?? member.id} のロール`}
 										>
 											{ROLE_OPTIONS.map((role) => (

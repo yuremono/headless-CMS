@@ -452,7 +452,7 @@ export function FieldGroup({
 				onClick={handleSummaryClick}
 			>
 				<span
-					className="pointer-events-none shrink-0 rounded-lg border border-WH/20 p-1.5 text-GR"
+					className="pointer-events-none shrink-0 rounded-md border border-WH/20 p-1.5 text-GR"
 					aria-hidden="true"
 				>
 					<svg

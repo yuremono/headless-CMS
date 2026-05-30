@@ -84,7 +84,7 @@ export function LoginForm({
 					用セッションを保存し、管理 API リクエストへ付与します。
 				</p>
 				{authProvider !== "none" ? (
-					<p className="mt-3 rounded-2xl border border-sky-400/20 bg-sky-400/10 px-4 py-3 text-xs leading-5 text-sky-100">
+					<p className="mt-3 rounded-md border border-sky-400/20 bg-sky-400/10 px-4 py-3 text-xs leading-5 text-sky-100">
 						本番認証プロバイダ: {authProviderLabel(authProvider)}
 					</p>
 				) : null}
@@ -95,7 +95,7 @@ export function LoginForm({
 					メールアドレス
 				</span>
 				<input
-					className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+					className="mt-2 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
 					value={formEmail}
 					onChange={(event) => setFormEmail(event.target.value)}
 					placeholder="admin@example.com"
@@ -107,7 +107,7 @@ export function LoginForm({
 					パスワード
 				</span>
 				<input
-					className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+					className="mt-2 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
 					type="password"
 					value={formPassword}
 					onChange={(event) => setFormPassword(event.target.value)}
@@ -116,7 +116,7 @@ export function LoginForm({
 			</label>
 
 			{message ? (
-				<p className="rounded-2xl border border-AC/20 bg-AC/10 px-4 py-3 text-sm text-rose-100">
+				<p className="rounded-md border border-AC/20 bg-AC/10 px-4 py-3 text-sm text-rose-100">
 					{message}
 				</p>
 			) : null}

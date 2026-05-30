@@ -68,127 +68,151 @@ export function SectionArrayItemEditor({
   }
 
   const inputClassName =
-    'mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20';
+		"mt-1 w-full rounded-md border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20";
 
   return (
-    <div className="SectionArrayItemEditor space-y-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs font-medium text-slate-300">{label}</p>
-        <span className="rounded-full border border-white/10 px-2 py-0.5 text-xs text-slate-400">
-          {items.length} 件
-        </span>
-      </div>
+		<div className="SectionArrayItemEditor space-y-3">
+			<div className="flex flex-wrap items-center justify-between gap-2">
+				<p className="text-xs font-medium text-slate-300">{label}</p>
+				<span className="rounded-full border border-white/10 px-2 py-0.5 text-xs text-slate-400">
+					{items.length} 件
+				</span>
+			</div>
 
-      {items.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-white/15 px-3 py-4 text-xs text-slate-400">
-          項目がありません。追加ボタンから作成してください。
-        </p>
-      ) : (
-        <div className="space-y-2">
-          {items.map((item, index) => {
-            const heading = itemLabel?.(item, index) ?? `項目 ${index + 1}`;
+			{items.length === 0 ? (
+				<p className="rounded-md border border-dashed border-white/15 px-3 py-4 text-xs text-slate-400">
+					項目がありません。追加ボタンから作成してください。
+				</p>
+			) : (
+				<div className="space-y-2">
+					{items.map((item, index) => {
+						const heading =
+							itemLabel?.(item, index) ?? `項目 ${index + 1}`;
 
-            return (
-				<article
-					key={
-						typeof item.id === "string" ? item.id : `item-${index}`
-					}
-					className="SectionArrayItemEditor_item rounded-xl border border-white/10 bg-slate-950/40 p-3"
+						return (
+							<article
+								key={
+									typeof item.id === "string"
+										? item.id
+										: `item-${index}`
+								}
+								className="SectionArrayItemEditor_item rounded-md border border-white/10 bg-slate-950/40 p-3"
+							>
+								<header className="mb-3 flex flex-wrap items-center justify-between gap-2">
+									<p className="truncate text-sm font-medium text-white">
+										{heading}
+									</p>
+									{!readOnly ? (
+										<div className="flex items-center gap-1">
+											<button
+												type="button"
+												className="rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+												aria-label="上へ移動"
+												disabled={index === 0}
+												onClick={() =>
+													moveItem(index, "up")
+												}
+											>
+												↑
+											</button>
+											<button
+												type="button"
+												className="rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+												aria-label="下へ移動"
+												disabled={
+													index === items.length - 1
+												}
+												onClick={() =>
+													moveItem(index, "down")
+												}
+											>
+												↓
+											</button>
+											<button
+												type="button"
+												className="rounded-md border border-AC/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-AC/10"
+												aria-label="削除"
+												onClick={() =>
+													removeItem(index)
+												}
+											>
+												削除
+											</button>
+										</div>
+									) : null}
+								</header>
+
+								<div className="grid gap-3">
+									{fields.map((field) => (
+										<label
+											key={field.key}
+											className="block"
+										>
+											<span className="text-xs font-medium text-slate-300">
+												{field.label}
+											</span>
+											{field.multiline ? (
+												<textarea
+													className={inputClassName}
+													rows={3}
+													value={readString(
+														item,
+														field.key,
+													)}
+													placeholder={
+														field.placeholder
+													}
+													onChange={(event) =>
+														updateItem(
+															index,
+															field.key,
+															event.target.value,
+														)
+													}
+													disabled={readOnly}
+													readOnly={readOnly}
+												/>
+											) : (
+												<input
+													className={inputClassName}
+													type="text"
+													value={readString(
+														item,
+														field.key,
+													)}
+													placeholder={
+														field.placeholder
+													}
+													onChange={(event) =>
+														updateItem(
+															index,
+															field.key,
+															event.target.value,
+														)
+													}
+													disabled={readOnly}
+													readOnly={readOnly}
+												/>
+											)}
+										</label>
+									))}
+								</div>
+							</article>
+						);
+					})}
+				</div>
+			)}
+
+			{!readOnly ? (
+				<button
+					type="button"
+					className="rounded-full border border-sky-400/40 bg-sky-400/10 px-3 py-1.5 text-xs font-medium text-sky-100 transition hover:bg-sky-400/20"
+					onClick={addItem}
 				>
-					<header className="mb-3 flex flex-wrap items-center justify-between gap-2">
-						<p className="truncate text-sm font-medium text-white">
-							{heading}
-						</p>
-						{!readOnly ? (
-							<div className="flex items-center gap-1">
-								<button
-									type="button"
-									className="rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-									aria-label="上へ移動"
-									disabled={index === 0}
-									onClick={() => moveItem(index, "up")}
-								>
-									↑
-								</button>
-								<button
-									type="button"
-									className="rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-									aria-label="下へ移動"
-									disabled={index === items.length - 1}
-									onClick={() => moveItem(index, "down")}
-								>
-									↓
-								</button>
-								<button
-									type="button"
-									className="rounded-lg border border-AC/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-AC/10"
-									aria-label="削除"
-									onClick={() => removeItem(index)}
-								>
-									削除
-								</button>
-							</div>
-						) : null}
-					</header>
-
-					<div className="grid gap-3">
-						{fields.map((field) => (
-							<label key={field.key} className="block">
-								<span className="text-xs font-medium text-slate-300">
-									{field.label}
-								</span>
-								{field.multiline ? (
-									<textarea
-										className={inputClassName}
-										rows={3}
-										value={readString(item, field.key)}
-										placeholder={field.placeholder}
-										onChange={(event) =>
-											updateItem(
-												index,
-												field.key,
-												event.target.value,
-											)
-										}
-										disabled={readOnly}
-										readOnly={readOnly}
-									/>
-								) : (
-									<input
-										className={inputClassName}
-										type="text"
-										value={readString(item, field.key)}
-										placeholder={field.placeholder}
-										onChange={(event) =>
-											updateItem(
-												index,
-												field.key,
-												event.target.value,
-											)
-										}
-										disabled={readOnly}
-										readOnly={readOnly}
-									/>
-								)}
-							</label>
-						))}
-					</div>
-				</article>
-			);
-          })}
-        </div>
-      )}
-
-      {!readOnly ? (
-      <button
-        type="button"
-        className="rounded-full border border-sky-400/40 bg-sky-400/10 px-3 py-1.5 text-xs font-medium text-sky-100 transition hover:bg-sky-400/20"
-        onClick={addItem}
-      >
-        項目を追加
-      </button>
-      ) : null}
-    </div>
+					項目を追加
+				</button>
+			) : null}
+		</div>
   );
 }
 

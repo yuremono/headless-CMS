@@ -5,18 +5,17 @@ export const adminTextMuted = 'text-GR';
 export const adminTextMeta = 'text-xs text-GR';
 
 export const adminFieldControl =
-  'w-full rounded-2xl border border-WH/25 bg-BC/50 px-4 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30';
+  'w-full rounded-md border border-WH/25 bg-BC/50 px-4 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30';
 
 export const adminFieldControlTextarea = `${adminFieldControl} min-h-[8rem] mt-2`;
 
 export const adminFieldControlCompact =
-  'mt-2 w-full rounded-2xl border border-WH/25 bg-BC/50 px-3 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30';
+  'mt-2 w-full rounded-md border border-WH/25 bg-BC/50 px-3 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30';
 
 export const adminPanel =
   ' border border-WH/20  ';
 
-export const adminPanelInset =
-  'rounded-xl border border-WH/20 bg-BK/60';
+export const adminPanelInset = "rounded-md border border-WH/20 bg-BK/60";
 
 export const adminBtn =
   'rounded-full text-sm font-medium transition disabled:cursor-not-allowed';
@@ -44,7 +43,7 @@ export const adminBtnViolet = `${adminBtn} bg-WH px-5 py-3 text-BK hover:bg-WH90
 export const adminBtnVioletXs = `${adminBtn} border border-SC/60 bg-SC/30 px-3 py-1 text-xs  hover:bg-SC/50`;
 
 export const adminFormatBtn =
-  'rounded-md border border-WH/25 px-2 py-0.5 text-xs text-GR transition hover:border-WH/40 hover:bg-TC80 hover:';
+	"rounded-md border border-WH/25 px-2 py-0.5 text-xs text-GR transition  hover:bg-TC10 ";
 
 export const adminFormatBtnActive =
   'rounded-md border border-SC/70 bg-SC/35 px-2 py-0.5 text-xs ';
@@ -54,5 +53,5 @@ export const adminBadgeRequired = 'rounded-full bg-SC/35 px-2 py-0.5 text-xs ';
 export const adminBadgeSuccess =
   'rounded-full border border-SC/60 bg-SC/30 px-3 py-1 text-xs ';
 
-export const adminTintInfo = 'rounded-xl border border-SC/40 bg-SC/10';
-export const adminTintAccent = 'rounded-xl border border-SC/40 bg-SC/15';
+export const adminTintInfo = "rounded-md border border-SC/40 bg-SC/10";
+export const adminTintAccent = "rounded-md border border-SC/40 bg-SC/15";

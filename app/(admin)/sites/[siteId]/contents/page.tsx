@@ -53,7 +53,7 @@ export default async function ContentsHubPage({ params }: ContentsHubPageProps) 
 			/>
 
 			<section className=" border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">
-				<div className="overflow-x-auto rounded-2xl border border-white/10">
+				<div className="overflow-x-auto rounded-md border border-white/10">
 					<table className="min-w-full divide-y divide-white/10 text-left text-sm">
 						<thead className="bg-slate-950/60 text-slate-400">
 							<tr>

@@ -51,7 +51,7 @@ function writeNested(
 function SectionInput({ label, value, onChange, multiline, placeholder }: FieldProps) {
   const { readOnly } = useAdminAccess();
   const className =
-    'mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20';
+		"mt-1 w-full rounded-md border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20";
 
   return (
     <label className="SectionFieldForm_field block">
@@ -218,33 +218,37 @@ export function SectionFieldForm({ type, data, onChange, readOnly = false }: Sec
 
   if (type === 'imageText') {
     return (
-      <div className="SectionFieldForm grid gap-3">
-        <SectionInput
-          label="タイトル"
-          value={readString(data, 'title')}
-          onChange={(value) => onChange({ ...data, title: value })}
-        />
-        <SectionInput
-          label="本文"
-          value={readString(data, 'body')}
-          multiline
-          onChange={(value) => onChange({ ...data, body: value })}
-        />
-        <label className="SectionFieldForm_field block">
-          <span className="text-xs font-medium text-slate-300">画像位置</span>
-          <select
-            className="mt-1 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-            value={readString(data, 'imagePosition') || 'right'}
-            onChange={(event) => onChange({ ...data, imagePosition: event.target.value })}
-            disabled={readOnly}
-          >
-            <option value="left">左</option>
-            <option value="right">右</option>
-          </select>
-        </label>
-        <ImageFields data={data} onChange={onChange} />
-      </div>
-    );
+		<div className="SectionFieldForm grid gap-3">
+			<SectionInput
+				label="タイトル"
+				value={readString(data, "title")}
+				onChange={(value) => onChange({ ...data, title: value })}
+			/>
+			<SectionInput
+				label="本文"
+				value={readString(data, "body")}
+				multiline
+				onChange={(value) => onChange({ ...data, body: value })}
+			/>
+			<label className="SectionFieldForm_field block">
+				<span className="text-xs font-medium text-slate-300">
+					画像位置
+				</span>
+				<select
+					className="mt-1 w-full rounded-md border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+					value={readString(data, "imagePosition") || "right"}
+					onChange={(event) =>
+						onChange({ ...data, imagePosition: event.target.value })
+					}
+					disabled={readOnly}
+				>
+					<option value="left">左</option>
+					<option value="right">右</option>
+				</select>
+			</label>
+			<ImageFields data={data} onChange={onChange} />
+		</div>
+	);
   }
 
   if (type === 'cardList') {

@@ -120,7 +120,7 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
 			</div>
 
 			{current ? (
-				<article className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+				<article className="rounded-md border border-white/10 bg-slate-950/60 p-5">
 					<div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
 						<div>
 							<h4 className="text-xl font-semibold text-white">
@@ -187,7 +187,7 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
 					</div>
 				</article>
 			) : (
-				<div className="rounded-2xl border border-dashed border-white/15 p-6 text-sm text-slate-300">
+				<div className="rounded-md border border-dashed border-white/15 p-6 text-sm text-slate-300">
 					まだコンテンツがありません。新規作成から入力してください。
 				</div>
 			)}
@@ -225,13 +225,13 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
 
 			<div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_180px]">
 				<input
-					className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+					className="rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
 					value={keyword}
 					onChange={(event) => setKeyword(event.target.value)}
 					placeholder="タイトル・スラッグ・要約で検索"
 				/>
 				<select
-					className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+					className="rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
 					value={status}
 					onChange={(event) =>
 						setStatus(event.target.value as typeof status)
@@ -244,7 +244,7 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
 				</select>
 			</div>
 
-			<div className="overflow-x-auto rounded-2xl border border-white/10">
+			<div className="overflow-x-auto rounded-md border border-white/10">
 				<table className="min-w-full divide-y divide-white/10 text-left text-sm">
 					<thead className="bg-slate-950/60 text-slate-400">
 						<tr>

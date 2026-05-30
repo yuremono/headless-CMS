@@ -44,24 +44,27 @@ export function SiteExportPanel({ siteId, siteSlug }: SiteExportPanelProps) {
   }
 
   return (
-    <section className="SiteExportPanel rounded-2xl border border-white/10 bg-slate-950/50 p-4">
-      <h3 className="text-base font-semibold text-white">サイトエクスポート</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-400">
-        コンテンツ種類・コンテンツ・アセットメタデータ（URL のみ）を JSON でダウンロードします。画像バイナリは含みません。
-      </p>
-      <button
-        type="button"
-        disabled={isSubmitting}
-        className="mt-4 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-60"
-        onClick={() => void handleExport()}
-      >
-        {isSubmitting ? 'エクスポート中…' : 'エクスポート'}
-      </button>
-      {errorMessage ? (
-        <div className="mt-3">
-          <AdminActionNotice kind="error" message={errorMessage} />
-        </div>
-      ) : null}
-    </section>
+		<section className="SiteExportPanel rounded-md border border-white/10 bg-slate-950/50 p-4">
+			<h3 className="text-base font-semibold text-white">
+				サイトエクスポート
+			</h3>
+			<p className="mt-2 text-sm leading-6 text-slate-400">
+				コンテンツ種類・コンテンツ・アセットメタデータ（URL のみ）を
+				JSON でダウンロードします。画像バイナリは含みません。
+			</p>
+			<button
+				type="button"
+				disabled={isSubmitting}
+				className="mt-4 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-60"
+				onClick={() => void handleExport()}
+			>
+				{isSubmitting ? "エクスポート中…" : "エクスポート"}
+			</button>
+			{errorMessage ? (
+				<div className="mt-3">
+					<AdminActionNotice kind="error" message={errorMessage} />
+				</div>
+			) : null}
+		</section>
   );
 }

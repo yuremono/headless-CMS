@@ -132,7 +132,7 @@ export function MediaUploadZone({
 		<div data-l="UploadZone" className="MediaUploadZone space-y-3">
 			<div
 				data-l="DropZone"
-				className={`MediaUploadZone_drop_zone rounded-2xl border border-dashed p-6 text-center transition ${
+				className={`MediaUploadZone_drop_zone rounded-md border border-dashed p-6 text-center transition ${
 					isDragOver
 						? "border-SC bg-SC/25"
 						: "border-WH/35 bg-BC/40 hover:border-WH/50"

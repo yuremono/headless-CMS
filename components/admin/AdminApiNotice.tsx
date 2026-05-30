@@ -14,7 +14,7 @@ export function AdminApiNotice({ source, error, endpoint }: AdminApiNoticeProps)
   return (
 		<div
 			data-l="ApiNotice"
-			className={`AdminApiNotice rounded-2xl border px-4 py-3 text-sm ${
+			className={`AdminApiNotice rounded-md border px-4 py-3 text-sm ${
 				isDemo
 					? "border-amber-400/30 bg-amber-400/10 text-amber-100"
 					: "border-AC/30 bg-AC/10 text-rose-100"

@@ -69,7 +69,7 @@ export function DashboardOverview({ sites, recentContents }: DashboardOverviewPr
 						{sites.map((site) => (
 							<article
 								key={site.id}
-								className="rounded-2xl border border-white/10 bg-slate-950/50 p-4"
+								className="rounded-md border border-white/10 bg-slate-950/50 p-4"
 							>
 								<div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
 									<div>
@@ -122,7 +122,7 @@ export function DashboardOverview({ sites, recentContents }: DashboardOverviewPr
 						{recentContents.map((content) => (
 							<article
 								key={content.id}
-								className="rounded-2xl border border-white/10 bg-slate-950/50 p-4"
+								className="rounded-md border border-white/10 bg-slate-950/50 p-4"
 							>
 								<p className="text-sm text-slate-400">
 									{content.contentType}

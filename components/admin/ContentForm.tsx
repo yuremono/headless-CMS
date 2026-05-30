@@ -208,7 +208,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 			</div>
 
 			{!readOnly ? (
-				<div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
+				<div className="rounded-md border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
 					下書き保存・公開は管理 API へ POST / PATCH / publish
 					を送信します。`x-session-token` が必要です。
 				</div>
@@ -220,7 +220,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 						タイトル
 					</span>
 					<input
-						className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+						className="mt-2 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
 						value={String(draft.title ?? "")}
 						onChange={(event) =>
 							updateField("title", event.target.value)
@@ -235,7 +235,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 						スラッグ
 					</span>
 					<input
-						className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+						className="mt-2 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
 						value={String(draft.slug ?? "")}
 						onChange={(event) =>
 							updateField("slug", event.target.value)
@@ -290,7 +290,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 					<>
 						<button
 							type="button"
-						className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+							className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
 							onClick={() => void persist("save")}
 							disabled={isPending}
 						>
@@ -298,7 +298,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 						</button>
 						<button
 							type="button"
-						className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+							className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
 							onClick={() => void persist("publish")}
 							disabled={isPending || mode === "create"}
 						>

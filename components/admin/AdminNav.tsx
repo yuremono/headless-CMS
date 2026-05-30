@@ -27,61 +27,72 @@ export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
     : [];
 
   return (
-    <nav className="AdminNav flex min-h-full flex-col gap-5">
-      <div data-l="NavBrand" className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Headless CMS</p>
-        <h1 className="text-xl font-semibold text-white">管理画面</h1>
-        {/* <p className="text-sm leading-6 text-slate-300">
+		<nav className="AdminNav flex min-h-full flex-col gap-5">
+			<div data-l="NavBrand" className="space-y-2">
+				<p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+					Headless CMS
+				</p>
+				<h1 className="text-xl font-semibold text-white">管理画面</h1>
+				{/* <p className="text-sm leading-6 text-slate-300">
           スキーマ駆動の編集 UI をまとめています。
         </p> */}
-      </div>
+			</div>
 
-      {/* {site ? (
-        <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+			{/* {site ? (
+        <div className="rounded-md border border-white/10 bg-slate-950/60 p-4">
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Current site</p>
           <p className="mt-2 text-lg font-semibold text-white">{site.name}</p>
           <p className="text-sm text-slate-300">{site.domain}</p>
         </div>
       ) : null} */}
 
-      <div data-l="NavMain" className="space-y-2">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Navigation</p>
-        <ul className="space-y-1">
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className="block rounded-xl px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+			<div data-l="NavMain" className="space-y-2">
+				<p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+					Navigation
+				</p>
+				<ul className="space-y-1">
+					{navItems.map((item) => (
+						<li key={item.href}>
+							<Link
+								href={item.href}
+								className="block rounded-md px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
+							>
+								{item.label}
+							</Link>
+						</li>
+					))}
+				</ul>
+			</div>
 
-      {siteItems.length > 0 ? (
-        <div data-l="NavSite" className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Site tools</p>
-          <ul className="space-y-1">
-            {siteItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="block rounded-xl px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+			{siteItems.length > 0 ? (
+				<div data-l="NavSite" className="space-y-2">
+					<p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+						Site tools
+					</p>
+					<ul className="space-y-1">
+						{siteItems.map((item) => (
+							<li key={item.href}>
+								<Link
+									href={item.href}
+									className="block rounded-md px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-white"
+								>
+									{item.label}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</div>
+			) : null}
 
-      <div data-l="NavAccount" className="mt-auto space-y-2 border-t border-white/10 pt-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Account</p>
-        <LogoutButton authProvider={authProvider} />
-      </div>
-    </nav>
+			<div
+				data-l="NavAccount"
+				className="mt-auto space-y-2 border-t border-white/10 pt-5"
+			>
+				<p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+					Account
+				</p>
+				<LogoutButton authProvider={authProvider} />
+			</div>
+		</nav>
   );
 }
