@@ -1,0 +1,24 @@
+tsconfig.json
+  s_67a699ee3865b7::t_8886ccc3c85bac 42-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "f25632c7d9e1e550b3eeb7159697e50b892de1eb",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_67a699ee3865b7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "89f6a203-ccee-48bd-8f52-6baf0b0ebbee",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
