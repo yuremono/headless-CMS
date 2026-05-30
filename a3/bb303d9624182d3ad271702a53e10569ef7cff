@@ -1,0 +1,80 @@
+components/admin/FieldGroup.tsx
+  s_28dd9f58c9bbc8::t_eb5e11ad419c46 1-159
+components/admin/ComposableContentForm.tsx
+  s_28dd9f58c9bbc8::t_76c5eb1cbffbf0 1-212
+lib/admin/field-type-catalog.ts
+  s_28dd9f58c9bbc8::t_4d0bcd60a0d486 182
+  s_28dd9f58c9bbc8::t_b25420d2a6a828 2-3
+  s_28dd9f58c9bbc8::t_8f6608adb31dff 1,4-14,16-181,183-201
+  s_28dd9f58c9bbc8::t_32613710b45560 15
+scss/_components.scss
+  s_d168678408384c::t_52d8c79e729c81 89-90,94-95
+  s_28dd9f58c9bbc8::t_105514e7df3227 101-106
+app/(admin)/sites/[siteId]/developer/page.tsx
+  s_964df2618910a2::t_331307c526021a 1,4-10,13,15-17,26
+  s_adc75a79329528::t_6903dc9fa33d78 2-3,11-12,14
+  s_28dd9f58c9bbc8::t_90dd8592c8a918 18-25
+components/admin/ContentEditView.tsx
+  s_28dd9f58c9bbc8::t_60d87d5de4954b 73-88
+  s_28dd9f58c9bbc8::t_58cdb3e2c23b7d 16,19-24
+  s_28dd9f58c9bbc8::t_2ee5d211c6e99b 47-53,57
+  s_adc75a79329528::t_5f85a24046575a 1-4,6-15,17-18,25-46,54-56,58-72,89-91
+  s_1a362728d44af0::t_52ceb264a101be 5
+lib/admin/field-type-catalog.test.ts
+  s_28dd9f58c9bbc8::t_d868096278bc28 1-106
+components/admin/FieldAddPanel.tsx
+  s_28dd9f58c9bbc8::t_02201601012da8 1-121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "a3bb303d9624182d3ad271702a53e10569ef7cff",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_1a362728d44af0": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "00b83426-9768-47ad-ab51-2d73140666b2",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_28dd9f58c9bbc8": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "cb3c12c3-fa0e-4362-bd19-09f51b36e55d",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_964df2618910a2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "83cd2f68-a0fd-4184-9bb6-2c9d3db212c8",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_adc75a79329528": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "62787f8c-191f-4ff7-8b55-9b3accda6d76",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d168678408384c": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ffe25ea1-0f39-4f23-97e2-900509b3bbc3",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
