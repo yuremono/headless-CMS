@@ -336,7 +336,7 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
 												) : null}
 												<button
 													type="button"
-													className="rounded-full border border-rose-400/40 bg-rose-400/10 px-3 py-1.5 text-xs font-medium text-rose-100"
+													className="rounded-full border border-AC/40 bg-AC/10 px-3 py-1.5 text-xs font-medium text-rose-100"
 													onClick={() =>
 														void mutateRecord(
 															item,

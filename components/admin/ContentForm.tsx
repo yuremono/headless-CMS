@@ -290,7 +290,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 					<>
 						<button
 							type="button"
-							className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+						className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
 							onClick={() => void persist("save")}
 							disabled={isPending}
 						>
@@ -298,7 +298,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 						</button>
 						<button
 							type="button"
-							className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+						className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
 							onClick={() => void persist("publish")}
 							disabled={isPending || mode === "create"}
 						>

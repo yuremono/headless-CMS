@@ -89,74 +89,92 @@ export function SectionArrayItemEditor({
             const heading = itemLabel?.(item, index) ?? `項目 ${index + 1}`;
 
             return (
-              <article
-                key={typeof item.id === 'string' ? item.id : `item-${index}`}
-                className="SectionArrayItemEditor_item rounded-xl border border-white/10 bg-slate-950/40 p-3"
-              >
-                <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                  <p className="truncate text-sm font-medium text-white">{heading}</p>
-                  {!readOnly ? (
-                  <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      className="rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-                      aria-label="上へ移動"
-                      disabled={index === 0}
-                      onClick={() => moveItem(index, 'up')}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-                      aria-label="下へ移動"
-                      disabled={index === items.length - 1}
-                      onClick={() => moveItem(index, 'down')}
-                    >
-                      ↓
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-lg border border-rose-400/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-rose-400/10"
-                      aria-label="削除"
-                      onClick={() => removeItem(index)}
-                    >
-                      削除
-                    </button>
-                  </div>
-                  ) : null}
-                </header>
+				<article
+					key={
+						typeof item.id === "string" ? item.id : `item-${index}`
+					}
+					className="SectionArrayItemEditor_item rounded-xl border border-white/10 bg-slate-950/40 p-3"
+				>
+					<header className="mb-3 flex flex-wrap items-center justify-between gap-2">
+						<p className="truncate text-sm font-medium text-white">
+							{heading}
+						</p>
+						{!readOnly ? (
+							<div className="flex items-center gap-1">
+								<button
+									type="button"
+									className="rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+									aria-label="上へ移動"
+									disabled={index === 0}
+									onClick={() => moveItem(index, "up")}
+								>
+									↑
+								</button>
+								<button
+									type="button"
+									className="rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+									aria-label="下へ移動"
+									disabled={index === items.length - 1}
+									onClick={() => moveItem(index, "down")}
+								>
+									↓
+								</button>
+								<button
+									type="button"
+									className="rounded-lg border border-AC/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-AC/10"
+									aria-label="削除"
+									onClick={() => removeItem(index)}
+								>
+									削除
+								</button>
+							</div>
+						) : null}
+					</header>
 
-                <div className="grid gap-3">
-                  {fields.map((field) => (
-                    <label key={field.key} className="block">
-                      <span className="text-xs font-medium text-slate-300">{field.label}</span>
-                      {field.multiline ? (
-                        <textarea
-                          className={inputClassName}
-                          rows={3}
-                          value={readString(item, field.key)}
-                          placeholder={field.placeholder}
-                          onChange={(event) => updateItem(index, field.key, event.target.value)}
-                          disabled={readOnly}
-                          readOnly={readOnly}
-                        />
-                      ) : (
-                        <input
-                          className={inputClassName}
-                          type="text"
-                          value={readString(item, field.key)}
-                          placeholder={field.placeholder}
-                          onChange={(event) => updateItem(index, field.key, event.target.value)}
-                          disabled={readOnly}
-                          readOnly={readOnly}
-                        />
-                      )}
-                    </label>
-                  ))}
-                </div>
-              </article>
-            );
+					<div className="grid gap-3">
+						{fields.map((field) => (
+							<label key={field.key} className="block">
+								<span className="text-xs font-medium text-slate-300">
+									{field.label}
+								</span>
+								{field.multiline ? (
+									<textarea
+										className={inputClassName}
+										rows={3}
+										value={readString(item, field.key)}
+										placeholder={field.placeholder}
+										onChange={(event) =>
+											updateItem(
+												index,
+												field.key,
+												event.target.value,
+											)
+										}
+										disabled={readOnly}
+										readOnly={readOnly}
+									/>
+								) : (
+									<input
+										className={inputClassName}
+										type="text"
+										value={readString(item, field.key)}
+										placeholder={field.placeholder}
+										onChange={(event) =>
+											updateItem(
+												index,
+												field.key,
+												event.target.value,
+											)
+										}
+										disabled={readOnly}
+										readOnly={readOnly}
+									/>
+								)}
+							</label>
+						))}
+					</div>
+				</article>
+			);
           })}
         </div>
       )}

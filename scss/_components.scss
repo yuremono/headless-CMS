@@ -8,12 +8,20 @@
   @apply h-screen overflow-hidden;
 }
 
+.AdminLayout--no_sidebar {
+  @apply grid-cols-1;
+}
+
 .SidebarAside {
   @apply min-h-0 overflow-y-auto;
 }
 
 .AdminMain {
   @apply min-h-0 min-w-0 overflow-y-auto;
+}
+
+.AdminMain--full {
+  @apply col-span-full w-full max-w-none;
 }
 
 .AdminPageHeader {
@@ -109,34 +117,518 @@
   @apply overflow-visible text-slate-100;
 }
 
-.field_group_header {
-  @apply cursor-pointer list-none;
+// --- 管理画面共通フィールド UI ---
+
+.AdminFieldLabel {
+  @apply text-sm font-medium text-white;
 }
 
-.field_group_toggle {
-  @apply pointer-events-none mt-1 shrink-0 rounded-lg border border-white/10 p-1.5 text-slate-400;
+.AdminFieldLegend {
+  @apply text-sm font-medium text-white;
 }
 
-.field_group_toggle_icon {
-  @apply block h-4 w-4 transition-transform duration-300;
+.AdminFieldHint {
+  @apply block text-xs text-slate-400;
 }
 
-.FieldGroup[open] .field_group_toggle_icon {
-  @apply rotate-180;
+.AdminFieldMeta {
+  @apply text-xs text-slate-400;
 }
 
-.composable_content_form_layout {
+.AdminFieldError {
+  @apply mt-2 text-sm text-rose-300;
+}
+
+.AdminCheckboxLabel {
+  @apply flex items-center gap-2 text-sm text-slate-200;
+}
+
+.AdminCheckboxLabel_start {
+  @apply flex items-start gap-2 text-sm text-slate-200;
+}
+
+.AdminFieldControl {
+  @apply mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20;
+}
+
+.AdminFieldControl_textarea {
+  @apply min-h-[8rem];
+}
+
+.AdminFieldControl_compact {
+  @apply mt-2 rounded-2xl px-3 py-2;
+}
+
+.AdminButton {
+  @apply rounded-full text-sm font-medium transition disabled:cursor-not-allowed;
+}
+
+.AdminButton_primary {
+  @apply bg-white px-5 py-3 text-slate-950 hover:bg-slate-100 disabled:opacity-60;
+}
+
+.AdminButton_publish {
+  @apply border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-emerald-100 hover:bg-emerald-400/20 disabled:opacity-60;
+}
+
+.AdminButton_action {
+  @apply bg-sky-400/90 px-5 py-3 text-slate-950 hover:bg-sky-300 disabled:opacity-50;
+}
+
+.AdminButton_ghost {
+  @apply border border-white/15 px-5 py-3 text-white hover:bg-white/10;
+}
+
+.AdminButton_ghost_sm {
+  @apply border border-white/15 px-4 py-2;
+}
+
+.AdminButton_danger {
+  @apply border border-AC/40 bg-AC/10 text-rose-100 hover:bg-AC/20;
+}
+
+.AdminButton_danger_sm {
+  @apply px-3 py-1 text-xs;
+}
+
+.AdminButton_sky {
+  @apply border border-sky-400/40 bg-sky-400/10 text-sky-100 hover:bg-sky-400/20;
+}
+
+.AdminButton_sky_sm {
+  @apply px-4 py-2;
+}
+
+.AdminButton_violet {
+  @apply border border-violet-400/40 bg-violet-400/10 text-violet-100 hover:bg-violet-400/20;
+}
+
+.AdminButton_emerald_sm {
+  @apply border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-emerald-100 hover:bg-emerald-400/20;
+}
+
+.AdminBadge_required {
+  @apply rounded-full bg-sky-400/15 px-2 py-0.5 text-xs text-sky-200;
+}
+
+.AdminBadge_success {
+  @apply rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-100;
+}
+
+// --- ComposableContentForm ---
+
+.ComposableContentForm {
+  @apply space-y-5;
+}
+
+.ComposableContentForm_intro {
+  @apply block;
+}
+
+.ComposableContentForm_title {
+  @apply text-2xl font-semibold text-SC;
+}
+
+.ComposableContentForm_lead {
+  @apply mt-2 text-sm text-slate-300;
+}
+
+.ComposableContentForm_layout {
   @apply flex flex-col items-stretch gap-4 overflow-visible lg:flex-row lg:items-start lg:gap-6;
 }
 
-.composable_content_form_main {
+.ComposableContentForm_main {
   @apply min-w-0 flex-1;
 }
 
-.composable_content_form_groups {
-  @apply min-w-0;
+.ComposableContentForm_empty {
+  @apply text-sm text-slate-400;
 }
 
+.ComposableContentForm_groups {
+  @apply min-w-0 space-y-4;
+}
+
+// --- FieldAddPanel ---
+
 .FieldAddPanel {
-  @apply lg:sticky lg:top-0 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start;
+  @apply rounded-2xl border border-white/10 bg-slate-950/40 p-4 lg:sticky lg:top-0 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start;
+}
+
+.FieldAddPanel_title {
+  @apply text-sm font-semibold text-white;
+}
+
+.FieldAddPanel_prefix {
+  @apply mt-4 block;
+}
+
+.FieldAddPanel_types,
+.FieldAddPanel_format {
+  @apply mt-4 space-y-2;
+}
+
+.FieldAddPanel_preview {
+  @apply mt-4 rounded-xl border border-white/10 bg-slate-950/50 p-3;
+}
+
+.FieldAddPanel_previewTitle {
+  @apply text-xs uppercase tracking-[0.2em] text-slate-400;
+}
+
+.FieldAddPanel_previewList {
+  @apply mt-2 space-y-1 font-mono text-xs text-sky-100;
+}
+
+.FieldAddPanel_submit {
+  @apply mt-4;
+}
+
+.FieldAddPanel_actions {
+  @apply mt-6 flex flex-wrap gap-3 border-t border-white/10 pt-6;
+}
+
+.FieldAddPanel_logout {
+  @apply mt-4 border-t border-white/10 pt-4;
+}
+
+// --- FieldGroup ---
+
+.FieldGroup {
+  @apply rounded-2xl border border-white/10 bg-slate-950/30 p-4;
+}
+
+.FieldGroup_header {
+  @apply flex flex-wrap items-center gap-3 cursor-pointer list-none;
+}
+
+.FieldGroup_toggle {
+  @apply pointer-events-none mt-1 shrink-0 rounded-lg border border-white/10 p-1.5 text-slate-400;
+}
+
+.FieldGroup_toggleIcon {
+  @apply block h-4 w-4 transition-transform duration-300;
+}
+
+.FieldGroup[open] .FieldGroup_toggleIcon {
+  @apply rotate-180;
+}
+
+.FieldGroup_prefixRow {
+  @apply flex min-w-[12rem] flex-1 flex-row items-center gap-3;
+}
+
+.FieldGroup_prefixLabel {
+  @apply shrink-0 text-sm font-medium text-white;
+}
+
+.FieldGroup_prefix {
+  @apply min-w-0 flex-1;
+}
+
+.FieldGroup_duplicate,
+.FieldGroup_remove {
+  @apply px-4 py-2 text-sm;
+}
+
+.FieldGroup_fields {
+  @apply mt-4 space-y-4;
+}
+
+.FieldGroup_repeatHint {
+  @apply text-xs text-sky-200/90;
+}
+
+.FieldGroup_template {
+  @apply space-y-4 rounded-xl border border-sky-400/20 bg-sky-400/5 p-4;
+}
+
+.FieldGroup_templateTitle {
+  @apply text-sm font-medium text-sky-100;
+}
+
+.FieldGroup_arrayItems {
+  @apply space-y-4;
+}
+
+.FieldGroup_arrayHeader {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.FieldGroup_arrayTitle {
+  @apply text-sm font-medium text-white;
+}
+
+.FieldGroup_arrayEmpty {
+  @apply text-sm text-slate-400;
+}
+
+.FieldGroup_arrayItem {
+  @apply space-y-4 rounded-xl border border-white/10 bg-slate-950/50 p-4;
+}
+
+.FieldGroup_arrayItemHeader {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.FieldGroup_arrayItemTitle {
+  @apply text-sm font-medium text-slate-200;
+}
+
+.FieldGroup_arrayItemPath {
+  @apply ml-2 font-mono text-xs text-slate-400;
+}
+
+.FieldGroup_fieldHeader {
+  @apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.FieldGroup_fieldFormat {
+  @apply flex items-center gap-1 text-xs;
+}
+
+.FieldGroup_formatBtn {
+  @apply rounded-md border border-white/15 px-2 py-0.5 text-slate-300 transition hover:bg-slate-800;
+}
+
+.FieldGroup_formatBtn_is_active {
+  @apply border-sky-400/60 bg-sky-400/15 text-sky-100;
+}
+
+.FieldGroup_imageBundle {
+  @apply rounded-xl border border-violet-400/20 bg-violet-400/5 p-4;
+}
+
+.FieldGroup_imageBundleTitle {
+  @apply text-sm font-medium text-violet-100;
+}
+
+.FieldGroup_bundleFields {
+  @apply mt-3 space-y-4;
+}
+
+.FieldGroup_bundleRemove {
+  @apply px-3 py-1 text-xs;
+}
+
+.FieldGroup_bundleRemoveWrap {
+  @apply space-y-3;
+}
+
+// --- AdminActionNotice ---
+
+.AdminActionNotice {
+  @apply rounded-2xl border px-4 py-3 text-sm;
+}
+
+.AdminActionNotice_is_success {
+  @apply border-emerald-400/30 bg-emerald-400/10 text-emerald-100;
+}
+
+.AdminActionNotice_is_error {
+  @apply border-AC/30 bg-AC/10 text-rose-100;
+}
+
+// --- RichInlineEditor ---
+
+.RichInlineEditor_toolbar {
+  @apply mb-2 flex flex-wrap gap-2;
+}
+
+.RichInlineEditor_btn {
+  @apply rounded-lg border border-white/15 bg-slate-950/60 px-3 py-1 text-xs font-semibold text-white transition hover:bg-slate-800;
+}
+
+.RichInlineEditor_btn_italic {
+  @apply italic;
+}
+
+.RichInlineEditor_btn_accent {
+  @apply border-sky-400/40 bg-sky-400/10 font-semibold not-italic text-sky-100 hover:bg-sky-400/20;
+}
+
+.RichInlineEditor_area {
+  @apply min-h-[3rem];
+}
+
+// --- ImageFieldInput ---
+
+.ImageFieldInput_label {
+  @apply flex items-center gap-2 text-sm font-medium text-white;
+}
+
+.ImageFieldInput_controls {
+  @apply mt-3 flex flex-wrap items-center gap-3;
+}
+
+.ImageFieldInput_preview {
+  @apply mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50 p-3;
+}
+
+.ImageFieldInput_previewMedia {
+  @apply max-h-48 w-full rounded-xl object-contain;
+}
+
+.ImageFieldInput_fieldLabel {
+  @apply text-xs font-medium text-slate-300;
+}
+
+.ImageFieldInput_field {
+  @apply mt-4 block;
+}
+
+.ImageFieldInput_error {
+  @apply mt-2 text-xs text-rose-300;
+}
+
+.ImageFieldInput_help {
+  @apply mt-2 text-xs leading-5 text-slate-400;
+}
+
+.ImageFieldInput_modal {
+  @apply fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm;
+}
+
+.ImageFieldInput_modalPanel {
+  @apply flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-white/10 bg-slate-900 shadow-2xl;
+}
+
+.ImageFieldInput_modalHeader {
+  @apply flex items-center justify-between border-b border-white/10 px-5 py-4;
+}
+
+.ImageFieldInput_modalTitle {
+  @apply text-lg font-semibold text-white;
+}
+
+.ImageFieldInput_modalLead {
+  @apply text-sm text-slate-400;
+}
+
+.ImageFieldInput_modalBody {
+  @apply overflow-y-auto px-5 py-5;
+}
+
+.ImageFieldInput_modalLoading {
+  @apply text-sm text-slate-400;
+}
+
+// --- MediaUploadZone ---
+
+.MediaUploadZone {
+  @apply space-y-3;
+}
+
+.MediaUploadZone_drop_zone {
+  @apply cursor-pointer rounded-2xl border border-dashed border-white/20 bg-slate-950/30 p-6 text-center transition outline-none hover:border-white/30 focus-visible:ring-2 focus-visible:ring-sky-400/30;
+}
+
+.MediaUploadZone_drop_zone_is_dragover {
+  @apply border-sky-400/70 bg-sky-400/10;
+}
+
+.MediaUploadZone_drop_zone_is_disabled {
+  @apply cursor-not-allowed opacity-60;
+}
+
+.MediaUploadZone_dropTitle {
+  @apply text-sm font-medium text-white;
+}
+
+.MediaUploadZone_dropHint {
+  @apply mt-2 text-xs leading-5 text-slate-400;
+}
+
+.MediaUploadZone_dropNote {
+  @apply mt-1 text-xs text-slate-500;
+}
+
+.MediaUploadZone_progress {
+  @apply mt-3 text-xs text-sky-200;
+}
+
+.MediaUploadZone_error {
+  @apply text-xs text-rose-300;
+}
+
+// --- AssetGrid ---
+
+.AssetGrid_empty {
+  @apply border border-dashed border-white/15 bg-slate-950/30 p-10 text-center text-sm text-slate-400;
+}
+
+.AssetGrid_list {
+  @apply grid gap-4 sm:grid-cols-2 xl:grid-cols-3;
+}
+
+.AssetGrid_item {
+  @apply overflow-hidden border border-white/10 bg-slate-950/50;
+}
+
+.AssetGrid_item_is_selected {
+  @apply border-sky-400/60 ring-2 ring-sky-400/20;
+}
+
+.AssetGrid_preview {
+  @apply relative aspect-[4/3] overflow-hidden bg-slate-950/80;
+}
+
+.AssetGrid_previewMedia {
+  @apply h-full w-full object-cover;
+}
+
+.AssetGrid_selectOverlay {
+  @apply absolute inset-0 bg-slate-950/0 transition hover:bg-slate-950/20;
+}
+
+.AssetGrid_mimeFallback {
+  @apply flex h-full items-center justify-center text-sm text-slate-400;
+}
+
+.AssetGrid_meta {
+  @apply space-y-3 p-4;
+}
+
+.AssetGrid_filename {
+  @apply truncate text-sm font-medium text-white;
+}
+
+.AssetGrid_url {
+  @apply mt-1 truncate text-xs text-slate-400;
+}
+
+.AssetGrid_metaList {
+  @apply grid grid-cols-2 gap-2 text-xs text-slate-300;
+}
+
+.AssetGrid_metaTerm {
+  @apply text-slate-500;
+}
+
+.AssetGrid_metaValue {
+  @apply mt-0.5 truncate;
+}
+
+.AssetGrid_metaValue_wide {
+  @apply col-span-2 mt-0.5;
+}
+
+.AssetGrid_altText {
+  @apply text-xs text-slate-400;
+}
+
+.AssetGrid_selectBtn {
+  @apply w-full;
+}
+
+.AssetGrid_saveBtn {
+  @apply disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.AssetGrid_error {
+  @apply text-xs text-rose-300;
+}
+
+.PreviewLink {
+  @apply border border-violet-400/40 bg-violet-400/10 text-violet-100 hover:bg-violet-400/20;
 }

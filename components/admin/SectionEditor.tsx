@@ -260,130 +260,143 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
             const isDropTarget = dropIndex === index && dragIndex !== null && dragIndex !== index;
 
             return (
-              <article
-                key={section.id}
-                className={`SectionEditor_item rounded-2xl border bg-slate-950/50 ${
-                  isHidden ? 'border-amber-400/30 opacity-70' : 'border-white/10'
-                } ${isDragging ? 'SectionEditor_item_is_dragging' : ''} ${
-                  isDropTarget ? 'SectionEditor_item_drop_target' : ''
-                }`}
-                onDragOver={(event) => {
-                  event.preventDefault();
-                  event.dataTransfer.dropEffect = 'move';
-                  if (dragIndex !== null && dragIndex !== index) {
-                    setDropIndex(index);
-                  }
-                }}
-                onDrop={(event) => {
-                  event.preventDefault();
-                  if (dragIndex !== null) {
-                    handleReorder(dragIndex, index);
-                  }
-                  clearDragState();
-                }}
-              >
-                <header className="SectionEditor_itemHeader flex flex-wrap items-center gap-2 px-4 py-3">
-                  {!readOnly ? (
-                    <button
-                      type="button"
-                      draggable
-                      className="SectionEditor_dragHandle shrink-0"
-                      aria-label="並び替え（ドラッグ）"
-                      onDragStart={(event) => {
-                        event.dataTransfer.effectAllowed = 'move';
-                        event.dataTransfer.setData('text/plain', String(index));
-                        setDragIndex(index);
-                        setDropIndex(index);
-                      }}
-                      onDragEnd={clearDragState}
-                    >
-                      <span aria-hidden="true">⋮⋮</span>
-                    </button>
-                  ) : null}
-                  <button
-                    type="button"
-                    className="SectionEditor_toggle flex min-w-0 flex-1 items-center gap-3 text-left"
-                    aria-expanded={isOpen}
-                    onClick={() => toggleOpen(section.id)}
-                  >
-                    <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-xs text-sky-200">
-                      {getSectionLabel(section.type)}
-                    </span>
-                    {isHidden ? (
-                      <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-xs text-amber-100">
-                        非表示
-                      </span>
-                    ) : null}
-                    <span className={`truncate text-sm font-medium ${isHidden ? 'text-slate-400' : 'text-white'}`}>
-                      {previewTitle}
-                    </span>
-                    <span className="truncate text-xs text-slate-500">{section.id}</span>
-                  </button>
+				<article
+					key={section.id}
+					className={`SectionEditor_item rounded-2xl border bg-slate-950/50 ${
+						isHidden
+							? "border-amber-400/30 opacity-70"
+							: "border-white/10"
+					} ${isDragging ? "SectionEditor_item_is_dragging" : ""} ${
+						isDropTarget ? "SectionEditor_item_drop_target" : ""
+					}`}
+					onDragOver={(event) => {
+						event.preventDefault();
+						event.dataTransfer.dropEffect = "move";
+						if (dragIndex !== null && dragIndex !== index) {
+							setDropIndex(index);
+						}
+					}}
+					onDrop={(event) => {
+						event.preventDefault();
+						if (dragIndex !== null) {
+							handleReorder(dragIndex, index);
+						}
+						clearDragState();
+					}}
+				>
+					<header className="SectionEditor_itemHeader flex flex-wrap items-center gap-2 px-4 py-3">
+						{!readOnly ? (
+							<button
+								type="button"
+								draggable
+								className="SectionEditor_dragHandle shrink-0"
+								aria-label="並び替え（ドラッグ）"
+								onDragStart={(event) => {
+									event.dataTransfer.effectAllowed = "move";
+									event.dataTransfer.setData(
+										"text/plain",
+										String(index),
+									);
+									setDragIndex(index);
+									setDropIndex(index);
+								}}
+								onDragEnd={clearDragState}
+							>
+								<span aria-hidden="true">⋮⋮</span>
+							</button>
+						) : null}
+						<button
+							type="button"
+							className="SectionEditor_toggle flex min-w-0 flex-1 items-center gap-3 text-left"
+							aria-expanded={isOpen}
+							onClick={() => toggleOpen(section.id)}
+						>
+							<span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-xs text-sky-200">
+								{getSectionLabel(section.type)}
+							</span>
+							{isHidden ? (
+								<span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-0.5 text-xs text-amber-100">
+									非表示
+								</span>
+							) : null}
+							<span
+								className={`truncate text-sm font-medium ${isHidden ? "text-slate-400" : "text-white"}`}
+							>
+								{previewTitle}
+							</span>
+							<span className="truncate text-xs text-slate-500">
+								{section.id}
+							</span>
+						</button>
 
-                  {!readOnly ? (
-                  <div className="SectionEditor_actions flex items-center gap-1">
-                    <button
-                      type="button"
-                      className="SectionEditor_duplicate rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5"
-                      aria-label="複製"
-                      onClick={() => handleDuplicate(index)}
-                    >
-                      複製
-                    </button>
-                    <button
-                      type="button"
-                      className={`SectionEditor_visibility rounded-lg border px-2 py-1 text-xs transition ${
-                        isHidden
-                          ? 'border-emerald-400/30 text-emerald-200 hover:bg-emerald-400/10'
-                          : 'border-amber-400/30 text-amber-200 hover:bg-amber-400/10'
-                      }`}
-                      aria-label={isHidden ? '表示に戻す' : '非表示にする'}
-                      onClick={() => handleToggleVisible(index)}
-                    >
-                      {isHidden ? '表示' : '非表示'}
-                    </button>
-                    <button
-                      type="button"
-                      className="SectionEditor_move rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-                      aria-label="上へ移動"
-                      disabled={index === 0}
-                      onClick={() => handleMove(index, 'up')}
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      className="SectionEditor_move rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
-                      aria-label="下へ移動"
-                      disabled={index === sections.length - 1}
-                      onClick={() => handleMove(index, 'down')}
-                    >
-                      ↓
-                    </button>
-                    <button
-                      type="button"
-                      className="SectionEditor_remove rounded-lg border border-rose-400/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-rose-400/10"
-                      aria-label="削除"
-                      onClick={() => handleRemove(index)}
-                    >
-                      削除
-                    </button>
-                  </div>
-                  ) : null}
-                </header>
+						{!readOnly ? (
+							<div className="SectionEditor_actions flex items-center gap-1">
+								<button
+									type="button"
+									className="SectionEditor_duplicate rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5"
+									aria-label="複製"
+									onClick={() => handleDuplicate(index)}
+								>
+									複製
+								</button>
+								<button
+									type="button"
+									className={`SectionEditor_visibility rounded-lg border px-2 py-1 text-xs transition ${
+										isHidden
+											? "border-emerald-400/30 text-emerald-200 hover:bg-emerald-400/10"
+											: "border-amber-400/30 text-amber-200 hover:bg-amber-400/10"
+									}`}
+									aria-label={
+										isHidden ? "表示に戻す" : "非表示にする"
+									}
+									onClick={() => handleToggleVisible(index)}
+								>
+									{isHidden ? "表示" : "非表示"}
+								</button>
+								<button
+									type="button"
+									className="SectionEditor_move rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+									aria-label="上へ移動"
+									disabled={index === 0}
+									onClick={() => handleMove(index, "up")}
+								>
+									↑
+								</button>
+								<button
+									type="button"
+									className="SectionEditor_move rounded-lg border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+									aria-label="下へ移動"
+									disabled={index === sections.length - 1}
+									onClick={() => handleMove(index, "down")}
+								>
+									↓
+								</button>
+								<button
+									type="button"
+									className="SectionEditor_remove rounded-lg border border-AC/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-AC/10"
+									aria-label="削除"
+									onClick={() => handleRemove(index)}
+								>
+									削除
+								</button>
+							</div>
+						) : null}
+					</header>
 
-                {isOpen ? (
-                  <div className="SectionEditor_body border-t border-white/10 px-4 py-4">
-                    <SectionFieldForm
-                      type={section.type}
-                      data={section.data}
-                      onChange={(data) => handleDataChange(index, data)}
-                      readOnly={readOnly}
-                    />
-                  </div>
-                ) : null}
-              </article>
-            );
+					{isOpen ? (
+						<div className="SectionEditor_body border-t border-white/10 px-4 py-4">
+							<SectionFieldForm
+								type={section.type}
+								data={section.data}
+								onChange={(data) =>
+									handleDataChange(index, data)
+								}
+								readOnly={readOnly}
+							/>
+						</div>
+					) : null}
+				</article>
+			);
           })
         )}
       </div>

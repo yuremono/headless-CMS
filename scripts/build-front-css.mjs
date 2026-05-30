@@ -19,7 +19,7 @@ const TMP_DIR = path.join(OUT_DIR, ".scss-build");
 
 const ENTRIES = [
   { scss: "scss/globals.scss", css: "globals.css" },
-  { scss: "index.scss", css: "index.css" },
+  { scss: "scss/index.scss", css: "index.css" },
 ];
 
 async function ensureDir(dir) {

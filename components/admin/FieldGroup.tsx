@@ -12,6 +12,20 @@ import {
   type ComposableFieldGroup,
   type ComposableFieldRow,
 } from '@/lib/admin/field-type-catalog';
+import {
+	adminBtnDangerSm,
+	adminBtnDangerXs,
+	adminBtnEmeraldSm,
+	adminBtnSkySm,
+	adminBtnVioletXs,
+	adminFieldControl,
+	adminFieldControlTextarea,
+	adminFormatBtn,
+	adminFormatBtnActive,
+	adminPanel,
+	adminPanelInset,
+	adminTintInfo,
+} from "./admin-ui-classes";
 import { ImageFieldInput } from './ImageFieldInput';
 import { RichInlineEditor } from './RichInlineEditor';
 import type { ImageFieldValue } from './admin-api';
@@ -219,6 +233,7 @@ export function FieldGroup({
   const scalarFields = group.fields.filter((field) => field.bundle !== 'image');
   const imageBundleFields = group.fields.filter((field) => field.bundle === 'image');
   const hasImageBundle = imageBundleFields.length > 0;
+
   function renderFieldInput(
     field: ComposableFieldRow,
     value: string,
@@ -239,26 +254,30 @@ export function FieldGroup({
 
     if (field.type === 'text') {
       return (
-        <textarea
-          className="mt-2 min-h-[8rem] w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-          value={value}
-          onChange={(event) => onValueChange(event.target.value)}
-          disabled={readOnly}
-          readOnly={readOnly}
-        />
-      );
+			<textarea
+				className={adminFieldControlTextarea}
+				value={value}
+				onChange={(event) => onValueChange(event.target.value)}
+				disabled={readOnly}
+				readOnly={readOnly}
+			/>
+		);
     }
 
     return (
-      <input
-        className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-        type={field.type === 'imageUrl' || field.type === 'href' ? 'url' : 'text'}
-        value={value}
-        onChange={(event) => onValueChange(event.target.value)}
-        disabled={readOnly}
-        readOnly={readOnly}
-      />
-    );
+		<input
+			className={adminFieldControl}
+			type={
+				field.type === "imageUrl" || field.type === "href"
+					? "url"
+					: "text"
+			}
+			value={value}
+			onChange={(event) => onValueChange(event.target.value)}
+			disabled={readOnly}
+			readOnly={readOnly}
+		/>
+	);
   }
 
   function renderScalarField(
@@ -270,51 +289,52 @@ export function FieldGroup({
     const isRich = supportsFormat(field.type) && field.format === 'richText';
 
     return (
-      <div key={field.jsonPath} data-l={`FieldItem${fieldIndex + 1}`} className="field_group_field">
-        <div
-          data-l="FieldHeader"
-          className="field_group_field_header flex flex-wrap items-center justify-between gap-2"
-        >
-          <p className="text-xs text-slate-400">
-            {getFieldTypeLabel(field.type)} · <span className="font-mono">{field.jsonPath}</span>
-          </p>
-          {showFormatToggle && supportsFormat(field.type) && !readOnly ? (
-            <div
-              data-l="FormatToggle"
-              className="field_group_field_format flex items-center gap-1 text-xs"
-              role="group"
-              aria-label="形式"
-            >
-              <button
-                type="button"
-                className={`rounded-md border px-2 py-0.5 transition ${
-                  !isRich
-                    ? 'border-sky-400/60 bg-sky-400/15 text-sky-100'
-                    : 'border-white/15 text-slate-300 hover:bg-slate-800'
-                }`}
-                onClick={() => handleFormatChange(field.jsonPath, 'plain')}
-              >
-                プレーン
-              </button>
-              <button
-                type="button"
-                className={`rounded-md border px-2 py-0.5 transition ${
-                  isRich
-                    ? 'border-sky-400/60 bg-sky-400/15 text-sky-100'
-                    : 'border-white/15 text-slate-300 hover:bg-slate-800'
-                }`}
-                onClick={() => handleFormatChange(field.jsonPath, 'richText')}
-              >
-                リッチ
-              </button>
-            </div>
-          ) : null}
-        </div>
-        {renderFieldInput(field, String(field.value ?? ''), (next) =>
-          onValueChange(field.jsonPath, next),
-        )}
-      </div>
-    );
+		<div key={field.jsonPath} data-l={`FieldItem${fieldIndex + 1}`}>
+			<div
+				data-l="FieldHeader"
+				className="flex flex-wrap items-center justify-between gap-2"
+			>
+				<p className="text-xs text-GR">
+					{getFieldTypeLabel(field.type)} ·{" "}
+					<span className="font-mono">{field.jsonPath}</span>
+				</p>
+				{showFormatToggle && supportsFormat(field.type) && !readOnly ? (
+					<div
+						data-l="FormatToggle"
+						className="flex items-center gap-1 text-xs"
+						role="group"
+						aria-label="形式"
+					>
+						<button
+							type="button"
+							className={
+								!isRich ? adminFormatBtnActive : adminFormatBtn
+							}
+							onClick={() =>
+								handleFormatChange(field.jsonPath, "plain")
+							}
+						>
+							プレーン
+						</button>
+						<button
+							type="button"
+							className={
+								isRich ? adminFormatBtnActive : adminFormatBtn
+							}
+							onClick={() =>
+								handleFormatChange(field.jsonPath, "richText")
+							}
+						>
+							リッチ
+						</button>
+					</div>
+				) : null}
+			</div>
+			{renderFieldInput(field, String(field.value ?? ""), (next) =>
+				onValueChange(field.jsonPath, next),
+			)}
+		</div>
+	);
   }
 
   function renderImageBundleForFields(
@@ -336,49 +356,68 @@ export function FieldGroup({
     };
 
     return (
-      <div
-        data-l="ImageBundle"
-        className="field_group_image_bundle rounded-xl border border-violet-400/20 bg-violet-400/5 p-4"
-      >
-        <p className="text-sm font-medium text-violet-100">{labelPrefix}画像セット</p>
-        <div data-l="BundleFields" className="mt-3 space-y-4">
-          {urlField ? (
-            <div data-l="BundleImage" className="field_group_bundle_image">
-              <p className="text-xs text-slate-400">
-                {getFieldTypeLabel('imageUrl')} · <span className="font-mono">{urlField.jsonPath}</span>
-                {altField ? (
-                  <>
-                    {' '}
-                    / <span className="font-mono">{altField.jsonPath}</span>
-                  </>
-                ) : null}
-              </p>
-              <ImageFieldInput
-                siteId={siteId}
-                label="画像"
-                value={bundleValue}
-                onChange={(nextValue) => onFieldsChange(applyImageFieldValue(fields, nextValue))}
-                readOnly={readOnly}
-              />
-            </div>
-          ) : null}
-          {hrefFields.map((field, hrefIndex) => (
-            <div
-              key={field.jsonPath}
-              data-l={`BundleField${hrefIndex + 1}`}
-              className="field_group_bundle_field"
-            >
-              <p className="text-xs text-slate-400">
-                {getFieldTypeLabel(field.type)} · <span className="font-mono">{field.jsonPath}</span>
-              </p>
-              {renderFieldInput(field, String(field.value ?? ''), (next) => {
-                onFieldsChange(updateFieldRow(fields, field.jsonPath, next));
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+		<div data-l="ImageBundle" className={`${adminTintInfo} p-4`}>
+			<p className="text-sm font-medium text-WH">
+				{labelPrefix}画像セット
+			</p>
+			<div data-l="BundleFields" className="mt-3 space-y-4">
+				{urlField ? (
+					<div data-l="BundleImage">
+						<p className="text-xs text-GR">
+							{getFieldTypeLabel("imageUrl")} ·{" "}
+							<span className="font-mono">
+								{urlField.jsonPath}
+							</span>
+							{altField ? (
+								<>
+									{" "}
+									/{" "}
+									<span className="font-mono">
+										{altField.jsonPath}
+									</span>
+								</>
+							) : null}
+						</p>
+						<ImageFieldInput
+							siteId={siteId}
+							label="画像"
+							value={bundleValue}
+							onChange={(nextValue) =>
+								onFieldsChange(
+									applyImageFieldValue(fields, nextValue),
+								)
+							}
+							readOnly={readOnly}
+						/>
+					</div>
+				) : null}
+				{hrefFields.map((field, hrefIndex) => (
+					<div
+						key={field.jsonPath}
+						data-l={`BundleField${hrefIndex + 1}`}
+					>
+						<p className="text-xs text-GR">
+							{getFieldTypeLabel(field.type)} ·{" "}
+							<span className="font-mono">{field.jsonPath}</span>
+						</p>
+						{renderFieldInput(
+							field,
+							String(field.value ?? ""),
+							(next) => {
+								onFieldsChange(
+									updateFieldRow(
+										fields,
+										field.jsonPath,
+										next,
+									),
+								);
+							},
+						)}
+					</div>
+				))}
+			</div>
+		</div>
+	);
   }
 
   function renderArrayItemFields(item: ComposableArrayItem) {
@@ -402,172 +441,212 @@ export function FieldGroup({
   }
 
   return (
-    <details
-      data-l="FieldGroup"
-      className="FieldGroup rounded-2xl border border-white/10 bg-slate-950/30 p-4"
-      aria-label={`フィールド: ${group.prefix || '（Field name 未入力）'}`}
-    >
-      <summary
-        data-l="GroupHeader"
-        className="field_group_header flex flex-wrap items-center gap-3"
-        onClick={handleSummaryClick}
-      >
-        <span className="field_group_toggle" aria-hidden="true">
-          <svg
-            className="field_group_toggle_icon"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.06z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </span>
-        <div
-          data-l="PrefixRow"
-          className="field_group_prefix_row flex min-w-[12rem] flex-1 flex-row items-center gap-3"
-        >
-          <span className="field_group_prefix_label shrink-0  text-sm font-medium text-white">
-            Field name
-          </span>
-          <label className="field_group_prefix min-w-0 flex-1">
-            <input
-              className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-              value={group.prefix}
-              onChange={(event) => handlePrefixChange(event.target.value)}
-              placeholder="例: hero"
-              disabled={readOnly}
-              readOnly={readOnly}
-            />
-            {!prefixValidation.valid ? (
-              <p className="mt-2 text-sm text-rose-300">{prefixValidation.message}</p>
-            ) : null}
-          </label>
-        </div>
-        {!readOnly ? (
-          <>
-            <button
-              type="button"
-              data-l="Duplicate"
-              className="field_group_duplicate rounded-full border border-sky-400/40 bg-sky-400/10 px-4 py-2 text-sm text-sky-100 transition hover:bg-sky-400/20"
-              onClick={(event) => {
-                event.preventDefault();
-                onDuplicate?.();
-              }}
-            >
-              複製
-            </button>
-            <button
-              type="button"
-              className="field_group_remove rounded-full border border-rose-400/40 bg-rose-400/10 px-4 py-2 text-sm text-rose-100 transition hover:bg-rose-400/20"
-              onClick={(event) => {
-                event.preventDefault();
-                onRemove();
-              }}
-            >
-              JSONを削除
-            </button>
-          </>
-        ) : null}
-      </summary>
+		<details
+			data-l="FieldGroup"
+			className={`FieldGroup group ${adminPanel} p-4`}
+			aria-label={`フィールド: ${group.prefix || "（Field name 未入力）"}`}
+		>
+			<summary
+				data-l="GroupHeader"
+				className="flex flex-wrap cursor-pointer list-none items-center gap-3"
+				onClick={handleSummaryClick}
+			>
+				<span
+					className="pointer-events-none shrink-0 rounded-lg border border-WH/20 p-1.5 text-GR"
+					aria-hidden="true"
+				>
+					<svg
+						className="block h-4 w-4 transition-transform duration-300 group-open:rotate-180"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+					>
+						<path
+							fillRule="evenodd"
+							d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.06z"
+							clipRule="evenodd"
+						/>
+					</svg>
+				</span>
+				<div
+					data-l="PrefixRow"
+					className="flex min-w-[12rem] flex-1 flex-row items-center gap-3"
+				>
+					<span className="shrink-0 text-sm font-medium text-WH">
+						Field name
+					</span>
+					<label className="min-w-0 flex-1">
+						<input
+							className={adminFieldControl}
+							value={group.prefix}
+							onChange={(event) =>
+								handlePrefixChange(event.target.value)
+							}
+							placeholder="例: hero"
+							disabled={readOnly}
+							readOnly={readOnly}
+						/>
+						{!prefixValidation.valid ? (
+							<p className="AdminFieldError">
+								{prefixValidation.message}
+							</p>
+						) : null}
+					</label>
+				</div>
+				{!readOnly ? (
+					<>
+						<button
+							type="button"
+							data-l="Duplicate"
+							className={adminBtnSkySm}
+							onClick={(event) => {
+								event.preventDefault();
+								onDuplicate?.();
+							}}
+						>
+							複製
+						</button>
+						<button
+							type="button"
+							className={adminBtnDangerSm}
+							onClick={(event) => {
+								event.preventDefault();
+								onRemove();
+							}}
+						>
+							削除
+						</button>
+					</>
+				) : null}
+			</summary>
 
-      <div data-l="GroupFields" className="field_group_fields mt-4 space-y-4">
-        {group.repeatable ? (
-          <p className="text-xs text-sky-200/90">
-            繰り返しフィールド — 保存時は <span className="font-mono">{group.prefix || '…'}[]</span>{' '}
-            として配列化されます。
-          </p>
-        ) : null}
+			<div data-l="GroupFields" className="mt-4 space-y-4">
+				{group.repeatable ? (
+					<p className="text-xs text-SC">
+						繰り返しフィールド — 保存時は{" "}
+						<span className="font-mono">
+							{group.prefix || "…"}[]
+						</span>{" "}
+						として配列化されます。
+					</p>
+				) : null}
 
-        {group.repeatable ? (
-          <div data-l="ArrayTemplate" className="field_group_template rounded-xl border border-sky-400/20 bg-sky-400/5 p-4 space-y-4">
-            <p className="text-sm font-medium text-sky-100">フィールド定義（テンプレート）</p>
-            {scalarFields.map((field, fieldIndex) =>
-              renderScalarField(field, fieldIndex, true, handleFieldChange),
-            )}
-            {hasImageBundle
-              ? renderImageBundleForFields(group.fields, (nextFields) =>
-                  onChange({ ...group, fields: nextFields }),
-                'テンプレート ')
-              : null}
-          </div>
-        ) : null}
+				{group.repeatable ? (
+					<div
+						data-l="ArrayTemplate"
+						className={`space-y-4 ${adminTintInfo} p-4`}
+					>
+						<p className="text-sm font-medium text-WH">
+							フィールド定義（テンプレート）
+						</p>
+						{scalarFields.map((field, fieldIndex) =>
+							renderScalarField(
+								field,
+								fieldIndex,
+								true,
+								handleFieldChange,
+							),
+						)}
+						{hasImageBundle
+							? renderImageBundleForFields(
+									group.fields,
+									(nextFields) =>
+										onChange({
+											...group,
+											fields: nextFields,
+										}),
+									"テンプレート ",
+								)
+							: null}
+					</div>
+				) : null}
 
-        {group.repeatable ? (
-          <div data-l="ArrayItems" className="field_group_array_items space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-sm font-medium text-white">
-                要素（{(group.items ?? []).length} 件）
-              </p>
-              {!readOnly ? (
-                <button
-                  type="button"
-                  className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-100 transition hover:bg-emerald-400/20"
-                  onClick={handleAddArrayItem}
-                >
-                  要素を追加
-                </button>
-              ) : null}
-            </div>
+				{group.repeatable ? (
+					<div data-l="ArrayItems" className="space-y-4">
+						<div className="flex flex-wrap items-center justify-between gap-2">
+							<p className="text-sm font-medium text-WH">
+								要素（{(group.items ?? []).length} 件）
+							</p>
+							{!readOnly ? (
+								<button
+									type="button"
+									className={adminBtnDangerSm}
+									onClick={handleAddArrayItem}
+								>
+									要素を追加
+								</button>
+							) : null}
+						</div>
 
-            {(group.items ?? []).length === 0 ? (
-              <p className="text-sm text-slate-400">要素がありません。「要素を追加」で配列に入れます。</p>
-            ) : (
-              (group.items ?? []).map((item, itemIndex) => (
-                <div
-                  key={item.id}
-                  data-l={`ArrayItem${itemIndex + 1}`}
-                  className="field_group_array_item rounded-xl border border-white/10 bg-slate-950/50 p-4 space-y-4"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="text-sm font-medium text-slate-200">
-                      要素 {itemIndex + 1}
-                      <span className="ml-2 font-mono text-xs text-slate-400">
-                        {group.prefix}.{itemIndex}
-                      </span>
-                    </p>
-                    {!readOnly ? (
-                      <button
-                        type="button"
-                        className="rounded-full border border-rose-400/40 bg-rose-400/10 px-3 py-1 text-xs text-rose-100 transition hover:bg-rose-400/20"
-                        onClick={() => handleRemoveArrayItem(item.id)}
-                      >
-                        要素を削除
-                      </button>
-                    ) : null}
-                  </div>
-                  {renderArrayItemFields(item)}
-                </div>
-              ))
-            )}
-          </div>
-        ) : null}
+						{(group.items ?? []).length === 0 ? (
+							<p className="text-sm text-GR">
+								要素がありません。「要素を追加」で配列に入れます。
+							</p>
+						) : (
+							(group.items ?? []).map((item, itemIndex) => (
+								<div
+									key={item.id}
+									data-l={`ArrayItem${itemIndex + 1}`}
+									className={`space-y-4 ${adminPanelInset} p-4`}
+								>
+									<div className="flex flex-wrap items-center justify-between gap-2">
+										<p className="text-sm font-medium text-WH">
+											要素 {itemIndex + 1}
+											<span className="ml-2 font-mono text-xs text-GR">
+												{group.prefix}.{itemIndex}
+											</span>
+										</p>
+										{!readOnly ? (
+											<button
+												type="button"
+												className={adminBtnDangerXs}
+												onClick={() =>
+													handleRemoveArrayItem(
+														item.id,
+													)
+												}
+											>
+												要素を削除
+											</button>
+										) : null}
+									</div>
+									{renderArrayItemFields(item)}
+								</div>
+							))
+						)}
+					</div>
+				) : null}
 
-        {!group.repeatable
-          ? scalarFields.map((field, fieldIndex) =>
-              renderScalarField(field, fieldIndex, true, handleFieldChange),
-            )
-          : null}
+				{!group.repeatable
+					? scalarFields.map((field, fieldIndex) =>
+							renderScalarField(
+								field,
+								fieldIndex,
+								true,
+								handleFieldChange,
+							),
+						)
+					: null}
 
-        {!group.repeatable && hasImageBundle ? (
-          <div className="space-y-3">
-            {renderImageBundleForFields(group.fields, (nextFields) =>
-              onChange({ ...group, fields: nextFields }),
-            '',)}
-            {!readOnly ? (
-              <button
-                type="button"
-                className="field_group_bundle_remove rounded-full border border-violet-400/40 px-3 py-1 text-xs text-violet-100 transition hover:bg-violet-400/10"
-                onClick={handleRemoveBundle}
-              >
-                画像セットを削除
-              </button>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-    </details>
+				{!group.repeatable && hasImageBundle ? (
+					<div className="space-y-3">
+						{renderImageBundleForFields(
+							group.fields,
+							(nextFields) =>
+								onChange({ ...group, fields: nextFields }),
+							"",
+						)}
+						{!readOnly ? (
+							<button
+								type="button"
+								className={adminBtnVioletXs}
+								onClick={handleRemoveBundle}
+							>
+								画像セットを削除
+							</button>
+						) : null}
+					</div>
+				) : null}
+			</div>
+		</details>
   );
 }

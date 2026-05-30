@@ -15,12 +15,12 @@
 |----------------|------------|--------------|----------------------|
 | CMS | ヘッドレス CMS 本体 | Vercel（要インポート） | ローカル PG のみ |
 | DB | Supabase PostgreSQL | Supabase | ユーザーが作成 |
-| 公開サイト | 案件フロント | Vercel | `https://headless-front.vercel.app` |
-| CMS | ヘッドレス CMS 本体 | Vercel | `https://headless-cms.vercel.app`（**`DATABASE_URL` 要設定**） |
+| 公開サイト | 案件フロント | Vercel | `https://headless-front0529.vercel.app` |
+| CMS | ヘッドレス CMS 本体 | Vercel | `https://headless-cms0529.vercel.app`（**`DATABASE_URL` 要設定**） |
 
 ダッシュボード例: [Vercel チーム](https://vercel.com/5alvia0fficinali50-gmailcoms-projects)
 
-フロント URL 例: `https://headless-front.vercel.app`
+フロント URL 例: `https://headless-front0529.vercel.app`
 
 ---
 
@@ -120,7 +120,7 @@ npx tsx prisma/seed.ts
 | `CMS_PUBLIC_API_KEY` | 本番推奨 | 未設定時のみ `public-dev-key` フォールバック |
 | `CMS_ADMIN_API_KEY` | 推奨 | 管理 API 用 |
 | `STORAGE_PROVIDER` | はい | `local`（MVP。Vercel 上のアップロードは永続化されない点に注意） |
-| `FRONTEND_BASE_URL` | フロント接続時 | 初回デプロイ後に `https://headless-front.vercel.app` を追加して **Redeploy** |
+| `FRONTEND_BASE_URL` | フロント接続時 | 初回デプロイ後に `https://headless-front0529.vercel.app` を追加して **Redeploy** |
 
 5. **Deploy**  
 6. デプロイ URL を `APP_URL` に合わせて更新し、再度 **Redeploy**（初回 URL 確定後）  
@@ -160,7 +160,7 @@ npx vercel --prod
 
 1. CMS 管理画面にログイン（`/login`）  
 2. トップページを編集して **公開**  
-3. `https://headless-front.vercel.app` を再読み込み  
+3. `https://headless-front0529.vercel.app` を再読み込み  
 4. 変更が反映されれば OK（CSR のためフロントの再デプロイは不要）  
 
 失敗時:

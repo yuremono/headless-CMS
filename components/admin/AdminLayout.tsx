@@ -44,10 +44,11 @@ interface AdminLayoutProps {
         children: ReactNode;
         site?: SiteSummary | null;
         title?: string;
+        hideSidebar?: boolean;
 }
 
 export async function AdminLayout( {
-                children, site
+                children, site, hideSidebar = false
         }
 
         : AdminLayoutProps) {
@@ -59,15 +60,29 @@ export async function AdminLayout( {
                 <AdminAccessProvider access={access}>
                         <div
                                 data-l="LayoutShell"
-                                className="AdminLayout grid  bg-slate-950 px-4 py-4 text-slate-100 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6 lg:py-6"
+                                className={
+                                        hideSidebar
+                                                ? 'AdminLayout AdminLayout--no_sidebar grid bg-BC px-4 py-4 text-WH lg:px-6 lg:py-6'
+                                                : 'AdminLayout grid bg-BC px-4 py-4 text-WH lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6 lg:py-6'
+                                }
                         >
-                                <aside
-                                        data-l="SidebarAside"
-                                        className="SidebarAside flex flex-col p-5 "
+                                {hideSidebar ? null : (
+                                        <aside
+                                                data-l="SidebarAside"
+                                                className="SidebarAside flex flex-col p-5 "
+                                        >
+                                                <AdminNav site={site ?? null} authProvider={authProvider} />
+                                        </aside>
+                                )}
+                                <main
+                                        className={
+                                                hideSidebar
+                                                        ? 'AdminMain AdminMain--full space-y-6 border border-WH/10 bg-WH/5 p-5 shadow-xl shadow-BC/20'
+                                                        : 'AdminMain space-y-6 border border-WH/10 bg-WH/5 p-5 shadow-xl shadow-BC/20'
+                                        }
                                 >
-                                        <AdminNav site={site ?? null} authProvider={authProvider} />
-                                </aside>
-                                <main className="AdminMain space-y-6 border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">{children}</main>
+                                        {children}
+                                </main>
                         </div>
                 </AdminAccessProvider>
         );

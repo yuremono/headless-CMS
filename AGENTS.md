@@ -2,16 +2,16 @@
 
 制作会社向け CMS 基盤。コンテンツの作成・編集・API配信に専念し、表示フロントエンドとは分離する。
 
-**本リポジトリのメイン作業ドキュメントはこのファイル（AGENTS.md）です。**
-
 ---
 
-## メイン作業ページ（developer / composable 編集）
+## メイン作業ページ
+
+[重要] 現在はトップページのみ編集する。ユーザーの指示がなければ他のページで使っているコンポーネントは編集しない。
 
 | 環境 | URL |
 |------|-----|
-| **ローカル** | http://localhost:3000/sites/main-site/developer |
-| **本番（動作確認済み）** | https://0529headless-cms.vercel.app/sites/main-site/developer |
+| **ローカル** | http://localhost:3000/ |
+| **本番（動作確認済み）** | https://headless-cms0529.vercel.app/ |
 
 `npm run dev` 起動後にローカル URL を開く。本番は `npm run deploy` で反映。
 
@@ -25,18 +25,10 @@
 
 | 役割 | プロジェクト名 | Production URL（現状） |
 |------|----------------|------------------------|
-| CMS | `headless-cms` | https://0529headless-cms.vercel.app |
-| 案件フロント | `headless-front` | https://0529headless-front.vercel.app |
+| CMS | `headless-cms` | https://headless-cms0529.vercel.app |
+| 案件フロント | `headless-front` | https://headless-front0529.vercel.app |
 
-ログイン（本番）: https://0529headless-cms.vercel.app/login
-
-**ドメイン注意:** `headless-cms.vercel.app` および `2020.headless-cms.talks.smakosh.com` は**別の Vercel プロジェクト**（旧 Gatsby 等）に紐づいており、そこへリダイレクトされると 404 になります。本番作業は上記 `0529headless-cms.vercel.app` を使うか、ダッシュボードで旧プロジェクトからドメインを外したあと、当プロジェクト `headless-cms` に再割り当てしてください。
-
-```bash
-# ドメイン解放後（CLI）
-npx vercel alias set <最新 production deployment URL> headless-cms.vercel.app
-npx vercel domains add 2020.headless-cms.talks.smakosh.com   # 当チームで DNS 管理している場合
-```
+ログイン（本番）: https://headless-cms0529.vercel.app/login
 
 ---
 
@@ -124,13 +116,13 @@ npm run deploy
 
 | いつ | 読むファイル |
 |------|-------------|
-| 要件・機能追加・Phase判断・成功条件 | `SPEC.md` |
-| composable フィールド UI・複製・繰り返し配列 | `FIELD.md` |
+| 開発当初の要件 | `SPEC.md`(更新不要) |
+| composable フィールド UI・複製・繰り返し配列 | `docs/FIELD.md` |
 | 技術スタック・ディレクトリ・コマンド・実装状態 | `docs/agents/project.md` |
 | API設計・DB・セキュリティ・MVP範囲 | `docs/agents/architecture.md` |
 | CMS CLI / MCP（エージェント操作） | `docs/agents/cms-mcp.md`（MCP 使い方）→ `docs/agents/cms-agent.md` → `docs/agents/cms-cli.md` |
 | 案件フロントから MCP | フロント repo の `cms-mcp/README.md`（CMS clone 不要） |
-| コーディング規約・管理画面CSS | `docs/agents/coding.md` |
+| DOM・Tailwind・style変更 | `docs/agents/coding.md` |
 
 ## サブエージェント・マルチタスク
 
@@ -163,29 +155,16 @@ npm run deploy
 | 変更 | 外科的に最小差分。初編集ファイルは事前確認 |
 | 秘密 | APIキー等をリポジトリに書かない |
 
-## task Levels
-
-言われなければ `level 0`。言われたら以降継続（上書き式）。
-
-| Level | 動作 |
-|-------|------|
-| 0 | 最短でシンプルに解決 |
-| 1 | `task-level-1` スキル。テスト・タスクログ禁止 |
-| 2 | `task-level-2`, `task-log` |
-| 3 | `task-level-2`, `task-large` |
-
 ## Execution rules
 
 - 誤った行動と指摘されたら `tasks/learning.yaml` に追記
 - `.gitignore` 対象を強制 push しない
 - ユーザー指示なしに本ファイル を編集しない
 - ブラウザ確認・ビルド・テストは指示なしでは実行しない
-- 実装前に `SPEC.md` と `docs/agents/` の矛盾を確認
 
 ## ブラウザ確認
 
 管理画面の見た目確認時は `agent-browser` スキル。保存先: `tmp/browser-checks/`  
-**優先確認 URL:** http://localhost:3000/sites/main-site/developer
 
 ## 禁止事項
 

@@ -320,14 +320,14 @@ describe('createCmsAgentClient', () => {
 
     it('CMS_BASE_URL 環境変数でベース URL を上書きできる', async () => {
       const saved = process.env['CMS_BASE_URL'];
-      process.env['CMS_BASE_URL'] = 'https://0529headless-cms.vercel.app';
+      process.env['CMS_BASE_URL'] = 'https://headless-cms0529.vercel.app';
 
       mockFetchJson(MOCK_CONTENT_RECORD);
       const client = createCmsAgentClient({ apiKey: MOCK_API_KEY });
       await client.getContent('s', 't', 'i');
 
       const call = vi.mocked(fetch).mock.calls[0];
-      expect((call?.[0] as string).startsWith('https://0529headless-cms.vercel.app')).toBe(true);
+      expect((call?.[0] as string).startsWith('https://headless-cms0529.vercel.app')).toBe(true);
 
       process.env['CMS_BASE_URL'] = saved;
     });

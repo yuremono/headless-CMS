@@ -11,12 +11,10 @@ interface AdminNavProps {
 
 export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
   const siteKey = site ? siteRouteKey(site) : '';
-  const navItems = site
-    ? [
-        { href: `/sites/${siteKey}/developer`, label: '開発者用' },
-        { href: '/', label: 'ダッシュボード' },
-      ]
-    : [{ href: '/', label: 'ダッシュボード' }];
+  const navItems = [
+    { href: '/', label: 'トップページ' },
+    { href: '/dashboard', label: 'ダッシュボード' },
+  ];
   const siteItems = site
     ? [
         { href: `/sites/${siteKey}`, label: 'サイト概要' },

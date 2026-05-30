@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { adminFieldControl, adminFormatBtn, adminFormatBtnActive } from './admin-ui-classes';
 
 interface RichInlineEditorProps {
   value: string;
@@ -83,24 +84,29 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
   return (
     <div data-l="RichEditor" className="RichInlineEditor mt-2">
       {!readOnly ? (
-        <div data-l="EditorToolbar" className="rich_inline_editor_toolbar mb-2 flex flex-wrap gap-2" role="toolbar" aria-label="書式">
+        <div
+          data-l="EditorToolbar"
+          className="mb-2 flex flex-wrap gap-2"
+          role="toolbar"
+          aria-label="書式"
+        >
           <button
             type="button"
-            className="rich_inline_editor_btn rounded-lg border border-white/15 bg-slate-950/60 px-3 py-1 text-xs font-semibold text-white transition hover:bg-slate-800"
+            className={adminFormatBtn}
             onClick={() => applyTag('strong')}
           >
             太字
           </button>
           <button
             type="button"
-            className="rich_inline_editor_btn rounded-lg border border-white/15 bg-slate-950/60 px-3 py-1 text-xs italic text-white transition hover:bg-slate-800"
+            className={`${adminFormatBtn} italic`}
             onClick={() => applyTag('em')}
           >
             斜体
           </button>
           <button
             type="button"
-            className="rich_inline_editor_btn rounded-lg border border-sky-400/40 bg-sky-400/10 px-3 py-1 text-xs text-sky-100 transition hover:bg-sky-400/20"
+            className={adminFormatBtnActive}
             onClick={() => applyTag('span', 'accent')}
           >
             アクセント
@@ -110,7 +116,7 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
       <div
         data-l="EditorArea"
         ref={editorRef}
-        className="rich_inline_editor_area min-h-[3rem] w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+        className={`${adminFieldControl} min-h-[3rem]`}
         contentEditable={!readOnly}
         suppressContentEditableWarning
         role="textbox"

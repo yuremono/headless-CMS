@@ -60,7 +60,7 @@ npm run cms:mcp   # packages/headless-cms-mcp を起動
 | 変数 | 必須 | デフォルト | 説明 |
 |------|------|-----------|------|
 | `CMS_ADMIN_API_KEY` | **本番で必須** | 開発: `admin-dev-key` | 管理 API キー（`x-api-key` ヘッダー） |
-| `CMS_BASE_URL` | いいえ | `http://localhost:3000` | CMS の origin（例: `https://0529headless-cms.vercel.app`） |
+| `CMS_BASE_URL` | いいえ | `http://localhost:3000` | CMS の origin（例: `https://headless-cms0529.vercel.app`） |
 | `CMS_SITE_ID` | いいえ | `main-site` | デフォルトサイト slug |
 
 本番 Vercel では `admin-dev-key` は使えない。CMS 管理者が Vercel の CMS プロジェクト env に設定したキーを共有すること。
@@ -82,7 +82,7 @@ npm run cms:mcp   # packages/headless-cms-mcp を起動
       "cwd": "/ABSOLUTE/PATH/TO/headless-front",
       "env": {
         "CMS_ADMIN_API_KEY": "your-admin-api-key",
-        "CMS_BASE_URL": "https://0529headless-cms.vercel.app",
+        "CMS_BASE_URL": "https://headless-cms0529.vercel.app",
         "CMS_SITE_ID": "main-site"
       }
     }

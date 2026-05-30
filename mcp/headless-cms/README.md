@@ -68,7 +68,7 @@ For production:
       "cwd": "/ABSOLUTE/PATH/TO/0529headless",
       "env": {
         "CMS_ADMIN_API_KEY": "your-admin-api-key",
-        "CMS_BASE_URL": "https://0529headless-cms.vercel.app",
+        "CMS_BASE_URL": "https://headless-cms0529.vercel.app",
         "CMS_SITE_ID": "main-site"
       }
     }

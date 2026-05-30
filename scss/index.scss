@@ -1,12 +1,192 @@
-@use "./scss/globals" as *;
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@100;200;300;400;500;600;700&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP&family=Shippori+Mincho:wght@400;800&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@100..700&family=Jost:wght@100..900&family=Noto+Serif+JP:wght@200..900&family=Shippori+Mincho:wght@400;500;600;700&family=Viaoda+Libre&display=swap');
+
+:root {//font
+        --Ser: "Noto Serif JP", serif;
+
+           // "Noto Sans JP",
+           // "メイリオ", Meiryo,
+        --San:
+                "IBM Plex Sans JP",
+                /* Google Fonts */
+                -apple-system,
+                /* iOS/macOS */
+                BlinkMacSystemFont,
+                /* macOS Safari/Chrome */
+                "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+                /* macOS日本語 */
+                "Yu Gothic Medium", "Yu Gothic", "Meiryo",
+                /* Windows */
+                "Roboto", "Noto Sans CJK JP",
+                /* Android */
+                sans-serif;
+        --Ship: "Shippori Mincho","Noto Serif JP", serif;
+        --Zen: "Zen Kaku Gothic New",var(--San), sans-serif;
+        --Jost: "Jost",var(--San), sans-serif;
+        --Via: "Viaoda Libre",var(--San), sans-serif;
+        --FF: var(--San) ,sans-serif;
+        --Eng: var(--San);
+}
+
+:root {//color
+        --UN: unset;
+        --IN: inherit;
+        --CC: currentColor;
+
+        --TR: transparent; 
+        --MC: oklch(0.1 0.05 265); 
+        --SC: oklch(0.50 0.125 265); 
+        --AC: oklch(0.3 0.7 30); 
+        --BC: oklch(0.1 0.05 265); 
+
+        --TC: oklch(100% 0.00 60); 
+        --GR: oklch(75% 0.00 270); 
+        --BK: oklch(0% 0.00 60);
+        --WH: oklch(100% 0.00 60);
+}
+
+:root {//standard color name, do not use tertiary, quaternary,quinary 
+        --second: var(--SC);
+        --third: oklch(0.50 0.1 210);
+        --fourth: oklch(0.97 0.2 109.29);
+        // --fifth: var(--SC);
+
+        --primary: var(--MC);
+        --secondary: var(--SC);
+        --accent: var(--AC);
+        --background: var(--BC);
+        --foreground: var(--TC);
+        --surface: var(--TC);
+        --muted: var(--GR);
+        --neutral: var(--GR);
+        --border: var(--TC);
+        --danger: oklch(0.7 0.5 10);
+        // --warning: var(--AC);
+
+        // --destructive: var(--AC);
+        // --ring: var(--TC);
+        // --card: var(--wc);
+        // --popover: var(--BC);
+        // --surface: var(--BC);//（カード・シートの背景）
+        // --error: var(--AC);
+        // --success: var(--MC);
+        // --error: var(--AC);
+        // --info: var(--SC);//（ステータス系）
+        // --neutral: var(--GR);//（グレー系）
+}
+.dark {
+	--background: var(--TC);
+	--foreground: var(--WH);
+	// --border: #fff;
+        // --BK: #fff;
+        // --TC: #fff;
+        // --WH: #fff;
+}
+
+:root {// color opacity
+        --MC05: color-mix(in srgb, transparent, var(--MC) 05%);
+
+        @for $i from 1 through 9 {
+                --MC#{$i}0: color-mix(in srgb, transparent, var(--MC) #{$i}0%);
+                --SC#{$i}0: color-mix(in srgb, transparent, var(--SC) #{$i}0%);
+                --AC#{$i}0: color-mix(in srgb, transparent, var(--AC) #{$i}0%);
+                --BC#{$i}0: color-mix(in srgb, transparent, var(--BC) #{$i}0%);
+                --TC#{$i}0: color-mix(in srgb, transparent, var(--TC) #{$i}0%);
+                --GR#{$i}0: color-mix(in srgb, transparent, var(--GR) #{$i}0%);
+                --WH#{$i}0: color-mix(in srgb, transparent, var(--WH) #{$i}0%);
+                --BK#{$i}0: color-mix(in srgb, transparent, var(--BK) #{$i}0%);
+        }
+}
+
+:root {
+        --LS: 0.05em;
+        --LH: 2;
+        --FW: 300;
+        --FZ: 87.5%;
+        @media (min-width: 768px){
+                --FZ: 100%;
+        }
+
+        --HFF: var(--Eng);
+        --HFW: 500;
+        --HLH: 1.25;
+        --HLS: 0.00em;
+
+        --h1FZ: clamp(32px, 5vw, 64px);
+        --h2FZ: clamp(24px, 3.2vw, 40px);
+        --h3FZ: clamp(18px, 2vw, 24px);
+        --largeFZ: clamp(48px, 6.4vw, 96px);
+}
+
+
+:root{
+        --rad:4px;
+        @media (min-width: 768px){
+                --rad:4px;
+        }
+        --rad2:calc(var(--rad)*2 );
+        --radH:calc(var(--rad)/2 );
+        --sheetR:var(--rad);
+        --sheetBG:var(--BC);
+        --sheetP:var(--gap);
+        --boardR:var(--rad);
+        --lineClamp:2;
+}
+:root{
+        interpolate-size: allow-keywords;
+}
+
+:root{//ボーダー シャドウ デコレーション等
+
+        --lineClamp:2;
+        --bds: solid;
+        --bdw: 1px;
+        --bdc: var(--TC30);  
+        --line:var(--bdw) var(--bds) var(--bdc); 
+        --tsw: 4px;
+        --tsc: var(--MC);
+        --TS: 0 0 0.25em var(--BK90);
+        --DS: drop-shadow(0 0 0.25em var(--BK70));
+        --BS: 0.25rem 0.25rem 0rem var(--BK10);
+        --WTS: var(--tsw) var(--tsc);
+        --BGgrad: linear-gradient(90deg, var(--BK), transparent 80%) no-repeat center/100% 100%;
+}
+:root {//space 余白設定
+        --MY: 4rem;
+        --PX2: calc(var(--PX) * 2);
+        --gap: 1rem;
+        --PX: 1.5rem;
+        --PY: 1.5rem;
+        --gapN: calc(var(--gap)*-1);
+        --gapH: calc(var(--gap)/2);
+        @media (min-width: 1024px){
+                --gap: 1.5rem;
+        }
+        @media (min-width: 768px){
+                --MY: 6rem;
+        }
+}
+:root {//サイズ
+        --imgW: calc(50% - var(--gap)/2);
+        --wid: 1260px;
+        --MY: 120px;
+        --MY25: calc(var(--MY)/4);
+        --MY5: calc(var(--MY)/2);
+        --MY75: calc(var(--MY)/4*3);
+        --15MY: calc(var(--MY)*1.5);
+        --2MY: calc(var(--MY)*2.0);
+        --25MY: calc(var(--MY)*2.5);
+        --3MY: calc(var(--MY)*3.0);
+        --4MY: calc(var(--MY)*4.0);
+}
+
 //tailwind recovery
 @layer base{
-
         .inline-size {container-type: inline-size;}
         .rtl {direction: rtl;}
         .ltr {direction: ltr;}
@@ -62,110 +242,7 @@ html{
 
 :where(*)::-webkit-scrollbar-thumb {
 	border-radius: var(--rad);
-	background-color: color-mix(in srgb, transparent, var(--foreground) 30%);
-}
-
-html.PageTransitionScrollSmooth {
-	scroll-behavior: smooth;
-}
-
-html.PageTransitionScrollInstant {
-	scroll-behavior: auto !important;
-}
-
-.PageTransition {
-	/* InitialLoading と同じトークンで canvas ラベルを揃える */
-	--initial-loading-font-style: normal;
-	--initial-loading-font-weight: 300;
-	--initial-loading-line-height: 1;
-	--initial-loading-font-size: calc(var(--mmFZ) * 3);
-	--initial-loading-text: var(--WH);
-	--page-rect-bg: var(--MC);
-	--page-rect-size: 0.01;
-	position: relative;
-	isolation: isolate;
-	min-height: 100lvh;
-	background-color: var(--background);
-}
-
-.PageTransitionRunning {
-	min-height: 100lvh;
-}
-
-.PageTransitionOverlay {
-	position: fixed;
-	inset: 0;
-	z-index: 2147483647;
-	pointer-events: none;
-}
-
-body.SiteTransitionPending #root > :not(.InitialLoading) {
-	visibility: hidden;
-}
-
-body.SiteTransitionPending #root > .InitialLoading {
-	display: block !important;
-	visibility: visible;
-}
-
-.PageTransitionCanvas {
-	display: block;
-	width: 100vw;
-	height: 100lvh;
-	pointer-events: none;
-}
-
-.InitialLoading {
-        --initial-loading-font-style: normal;
-	--initial-loading-font-weight: 300;
-	--initial-loading-line-height: 1;
-        //overwrite
-	--initial-loading-font-size: calc(var(--mmFZ)*3);
-	--initial-loading-text: var(--background);
-
-	--page-rect-bg: var(--MC);
-	--page-rect-size: 0.01;
-	visibility: visible;
-	pointer-events: auto;
-}
-
-.InitialLoadingDone {
-	visibility: hidden;
-	pointer-events: none;
-}
-
-.InitialLoadingLayer {
-	background-color: transparent;
-	z-index: 2147483647;
-}
-
-.InitialLoadingCanvas {
-	position: absolute;
-	inset: 0;
-	z-index: 0;
-	display: block;
-	width: 100vw;
-	height: 100lvh;
-	pointer-events: none;
-}
-
-.InitialLoadingTextProbe {
-	position: fixed;
-	left: -100vw;
-	top: -100vh;
-	z-index: -1;
-	visibility: hidden;
-	width: calc(var(--wid) / 2);
-	padding: 1rem 1.5rem;
-	background-color: var(--background);
-	color: var(--initial-loading-text);
-	font-family: var(--Eng);
-	font-size: var(--initial-loading-font-size);
-	font-style: var(--initial-loading-font-style);
-	font-weight: var(--initial-loading-font-weight);
-	line-height: var(--initial-loading-line-height);
-	text-align: center;
-	pointer-events: none;
+	background-color: color-mix(in srgb, transparent, var(--foreground) 10%);
 }
 
 svg {display: inline-block;}
@@ -219,38 +296,6 @@ h1,h2,h3,h4,h5,h6,.largeFZ {
 .BGgrad3 {background: var(--BGgrad3);}
 
 
-.UL {
-        @apply text-center [width:--wid];
-        li{
-                @apply inline-block p-[--PX] align-top;
-                box-shadow: inset -1px -1px  #000, -1px -1px #000;
-                // box-shadow: inset 0 0 1px #000, -1px -1px #000;
-        }
-        h3{
-                @apply [font-size:--h2FZ] leading-none;
-        }
-        details{
-                @apply w-auto inline-block ;
-                transition: var(--trans);
-                *{
-                        @apply text-left;
-                }
-                &[open] {
-                        @apply w-[calc(var(--wid)-12rem)];
-                }
-                &[open]:last-of-type ,
-                &[open]:first-of-type {
-                        @apply w-[calc(var(--wid)-6rem)];
-                }
-                &[open]+details:not([open]) {
-                        @apply w-[6rem];
-                }
-                &:has(+details[open]):not([open])  {
-                        @apply w-[6rem];
-                }
-        }
-}
-
 
 dialog{
         top: 0;
@@ -268,216 +313,663 @@ dialog{
         }
 }
 
-//Generator Page Controller
-div.tp-rotv {
-        font-size: inherit;
-        /* --tp-base-background-color: var(--GR); */
-        --tp-base-border-radius: 6px;
-        --tp-base-font-family: system-ui, sans-serif;
-        --tp-base-shadow-color: rgba(0, 0, 0, 0.2);
-        --cnt-fg: var(--TC);
-        --lbl-fg: var(--TC);
-        --btn-fg: var(--WH);
-        --cnt-usz: 2em;
-        /* Random Rects 等で実際に効く色 (--MC に一旦統一) */
-        --tp-base-background-color: var(--WH80);
-        /* --tp-base-shadow-color: var(--AC); */
-        /* --tp-button-background-color: var(--SC); */
-        /* --tp-button-background-color-hover: var(--AC); */
-        /* --tp-button-background-color-focus: var(--AC); */
-        /* --tp-button-background-color-active: var(--AC); */
-        /* --tp-button-foreground-color: var(--AC); */
-        /* --tp-container-background-color: var(--AC); */
-        /* --tp-container-foreground-color: var(--AC); */
-        /* --tp-container-background-color-hover: var(--AC); */
-        /* --tp-container-background-color-focus: var(--AC); */
-        /* --tp-container-background-color-active: var(--AC); */
-        /* --tp-input-background-color: var(--AC); */
-        --tp-input-foreground-color: var(--TC);
-        /* --tp-input-background-color-hover: var(--AC); */
-        /* --tp-input-background-color-focus: var(--AC); */
-        /* --tp-input-background-color-active: var(--AC); */
-        /* --tp-label-foreground-color: var(--AC); */
-        /* モニター・区切りブレード未使用時（値は --AC 想定で保持） */
-        /* --tp-monitor-background-color: var(--AC); */
-        /* --tp-monitor-foreground-color: var(--AC); */
-        /* --tp-groove-foreground-color: var(--AC); */
+// 管理画面コンポーネント（@apply 集約）
 
+// コンポーネント同名の PascalCase カスタムクラスを @apply で集約する。
+// 例:
+// .SectionEditor {
+//   @apply flex flex-col gap-4 p-6 bg-background rounded-lg;
+// }
+
+.AdminLayout {
+	@apply h-screen overflow-hidden;
 }
 
-.tp-fldv-expanded .tp-lblv_l {
-        text-align: right;
+.AdminLayout--no_sidebar {
+	@apply grid-cols-1;
 }
 
-div.tp-lblv_v {
-        flex: unset;
-        width: unset;
+.SidebarAside {
+	@apply min-h-0 overflow-y-auto;
 }
 
-/* plugin-essentials の radiogrid は幅が無いとGridが描画されない（上の unset を打ち消す） */
-div.tp-lblv_v:has(.tp-radgridv) {
-        width: var(--bld-vw);
-        min-width: var(--bld-vw);
-        flex: 0 0 auto;
-        align-self: flex-start;
+.AdminMain {
+	@apply min-h-0 min-w-0 overflow-y-auto;
 }
 
-.tp-rotv_b {
-        min-width: 25.5em;
+.AdminMain--full {
+	@apply col-span-full w-full max-w-none;
 }
 
-.HeaderItems>div {
-        scrollbar-gutter: stable;
+.AdminPageHeader {
+	@apply backdrop-blur;
 }
 
-.HeaderItems>div::-webkit-scrollbar {
-        background-color: transparent;
-        width: o;
-        height: 0;
+.AdminCard {
+	@apply  border border-WH/20 bg-WH/5;
 }
 
-.HeaderItems>div:has(.tp-cntv.tp-rotv-expanded) {
-        opacity: 0.5;
+.AdminStatGrid {
+	@apply gap-4;
 }
 
-.HeaderItems>div:has(.tp-cntv.tp-rotv-expanded):hover {
-        opacity: 1;
+.ContentForm,
+.ContentList,
+.ContentTypeList,
+.DashboardOverview,
+.LoginForm,
+.SiteCreateForm {
+	@apply text-WH;
 }
 
-
-@layer base {
-        :root {
-	--mmFZ: 2rem;
-	--mmWobbleAmp: 32;
-	--mmWobbleAmpX: 32;
-	--mmWobbleAmpY: 32;
-	// --mmWobbleFreqX: 0.00024;
-	// --mmWobbleFreqY: 0.00014;
-	--mmWobbleFreqX: 0.0005;
-	--mmWobbleFreqY: 0.0003;
-
-                @media (max-width: 1560px) {
-                        --mmFZ: 1.25rem;
-                }
-                @media (max-width: 640px) {
-                        --mmFZ: 0.875rem;
-                }
-        }
-        .mindMap {
-                @apply content-center text-[length:--mmFZ] min-h-lvh font-[family-name:--Eng];
-        }
-
-        .mindMap>* {
-                display: inline-block;
-                cursor: default;
-                transition: 0.4s;
-                line-height: 1;
-        }
-
-        // @media (max-width: 834px) {
-        //         .mindMap>*:not(h1, h2, .about_tx, .about_p, .experience_tx) {
-        //                 pointer-events: none;
-        //         }
-        // }
-
-        .mindWobble {
-                @apply relative text-[length:--mmFZ]  font-[family-name:--Eng] z-10 leading-[0.8em];
-                font-size: calc(var(--mmFZ) * 5.5);
-                --mmWobbleAmp: 15;
-                --mmWobbleAmpX: 32;
-                --mmWobbleAmpY: 32;
-                --mmWobbleFreqX: 0.0005;
-                --mmWobbleFreqY: 0.0003;
-                
-        }
-
-
-
-
-
-
-        // @media (max-width: 1080px) {
-        //         .about_tx {
-        //                 padding: 1em;
-        //                 position: relative;
-        //                 inset: unset;
-        //                 translate: unset;
-        //         }
-        // }
-
-
-        
-
-
-        .creative_tx {
-                line-height: 2;
-                left: 50%;
-                top: 50%;
-                translate: 0 -50%;
-                z-index: 1;
-        }
-
-        @media (max-width: 960px) {
-                .creative_tx {
-                        padding: 1em;
-                        position: relative;
-                        inset: unset;
-                        translate: unset;
-                }
-        }
-
-        .creative .mindWobble {
-                pointer-events: none;
-        }
-
-        .creative_bottom {
-                width: 100%;
-                background-color: var(--GR);
-                color: var(--WH);
-        }
-
-
-
-
-
-
+.SectionEditor {
+	@apply  border border-WH/20 bg-BK/40 p-4;
 }
 
-@property --dot-spacing {
-        syntax: "<length>";
-        inherits: false;
-        initial-value: 20px;
+.SectionEditor_item {
+	@apply overflow-hidden;
 }
 
-@property --dot-fade-offset {
-        syntax: "<percentage>";
-        inherits: false;
-        initial-value: 0%;
+.SectionEditor_item_is_dragging {
+	@apply opacity-50;
 }
 
-@property --dot-color {
-        syntax: "<color>";
-        inherits: false;
-        initial-value: #fc466b;
+.SectionEditor_item_drop_target {
+	@apply border-SC/60 ring-2 ring-SC/30;
 }
 
-.houdini-polka-card {
-        cursor: pointer;
-        animation: houdini-polka-pulse 2s ease-out infinite alternate paused;
-
-        &:hover,
-        &:focus-visible {
-                animation-play-state: running;
-        }
+.SectionEditor_dragHandle {
+	@apply cursor-grab rounded-lg border border-WH/20 px-2 py-1 text-xs leading-none text-GR transition hover:bg-WH/5 active:cursor-grabbing;
 }
 
-@keyframes houdini-polka-pulse {
-        from {
-                --dot-fade-offset: 0%;
-                --dot-color: #fc466b;
-        }
-        to {
-                --dot-fade-offset: 100%;
-                --dot-color: #3f5efb;
-        }
+.SectionEditor_itemHeader {
+	@apply bg-BK/30;
+}
+
+.SectionEditor_body {
+	@apply bg-BK/20;
+}
+
+.SectionFieldForm {
+	@apply text-WH;
+}
+
+.SectionArrayItemEditor_item {
+	@apply bg-BK/30;
+}
+
+.SeoFields {
+	@apply overflow-hidden  border border-WH/20 bg-BK/40;
+}
+
+.SeoFields_header {
+	@apply bg-BK/30 px-4 py-3;
+}
+
+.SeoFields_body {
+	@apply border-t border-WH/20 px-4 py-4;
+}
+
+.ImageFieldInput {
+	@apply text-WH;
+}
+
+.MediaLibrary,
+.AssetGrid,
+.MediaUploadZone {
+	@apply text-WH;
+}
+
+.MediaUploadZone_drop_zone {
+	@apply outline-none focus-visible:ring-2 focus-visible:ring-SC/30;
+}
+
+.FieldRenderer {
+	@apply text-WH;
+}
+
+.FieldAddPanel,
+.FieldGroup,
+.ComposableContentForm {
+	@apply overflow-visible text-WH;
+}
+
+// --- 管理画面共通フィールド UI ---
+
+.AdminFieldLabel {
+	@apply text-sm font-medium text-WH;
+}
+
+.AdminFieldLegend {
+	@apply text-sm font-medium text-WH;
+}
+
+.AdminFieldHint {
+	@apply block text-xs text-GR;
+}
+
+.AdminFieldMeta {
+	@apply text-xs text-GR;
+}
+
+.AdminFieldError {
+	@apply mt-2 text-sm text-AC;
+}
+
+.AdminCheckboxLabel {
+	@apply flex items-center gap-2 text-sm text-WH;
+}
+
+.AdminCheckboxLabel_start {
+	@apply flex items-start gap-2 text-sm text-WH;
+}
+
+.AdminFieldControl {
+	@apply mt-2 w-full  border border-WH/25 px-4 py-3 text-sm text-WH outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30;
+}
+
+.AdminFieldControl_textarea {
+	@apply min-h-[8rem];
+}
+
+.AdminFieldControl_compact {
+	@apply mt-2  px-3 py-2;
+}
+
+.AdminButton {
+	@apply rounded-full text-sm font-medium transition disabled:cursor-not-allowed;
+}
+
+.AdminButton_primary {
+	@apply bg-WH px-5 py-3 text-BK hover:bg-WH90 disabled:opacity-60;
+}
+
+.AdminButton_publish {
+	@apply border border-third/60 bg-third/50 px-5 py-3 text-BK hover:bg-third/50 disabled:opacity-60;
+}
+
+.AdminButton_action {
+	@apply bg-SC px-5 py-3 text-WH hover:bg-SC80 disabled:opacity-50;
+}
+
+.AdminButton_ghost {
+	@apply border border-WH/15 px-5 py-3 text-WH hover:bg-WH/10;
+}
+
+.AdminButton_ghost_sm {
+	@apply border border-WH/15 px-4 py-2;
+}
+
+.AdminButton_danger {
+	@apply border border-AC/40 bg-AC/10 text-AC80 hover:bg-AC/20;
+}
+
+.AdminButton_danger_sm {
+	@apply px-3 py-1 text-xs;
+}
+
+.AdminButton_sky {
+	@apply border border-SC/60 bg-SC/30 text-WH hover:bg-SC/50;
+}
+
+.AdminButton_sky_sm {
+	@apply px-4 py-2;
+}
+
+.AdminButton_violet {
+	@apply border border-SC/60 bg-SC/30 text-WH hover:bg-SC/50;
+}
+
+.AdminButton_emerald_sm {
+	@apply border border-third/60 bg-third/50 px-4 py-2 text-BK hover:bg-third/50;
+}
+
+.AdminBadge_required {
+	@apply rounded-full bg-SC/10 px-2 py-0.5 text-xs text-SC;
+}
+
+.AdminBadge_success {
+	@apply rounded-full border border-third/30 bg-third/10 px-3 py-1 text-xs text-third;
+}
+
+// --- ComposableContentForm ---
+
+.ComposableContentForm {
+	@apply space-y-5;
+}
+
+.ComposableContentForm_intro {
+	@apply block;
+}
+
+.ComposableContentForm_title {
+	@apply text-2xl font-semibold text-SC;
+}
+
+.ComposableContentForm_lead {
+	@apply mt-2 text-sm text-GR;
+}
+
+.ComposableContentForm_layout {
+	@apply flex flex-col items-stretch gap-4 overflow-visible lg:flex-row lg:items-start lg:gap-6;
+}
+
+.ComposableContentForm_main {
+	@apply min-w-0 flex-1;
+}
+
+.ComposableContentForm_empty {
+	@apply text-sm text-GR;
+}
+
+.ComposableContentForm_groups {
+	@apply min-w-0 space-y-4;
+}
+
+// --- FieldAddPanel ---
+
+.FieldAddPanel {
+	@apply  border border-WH/20   p-4 lg:sticky lg:top-0 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start;
+}
+
+.FieldAddPanel_title {
+	@apply text-sm font-semibold text-WH;
+}
+
+.FieldAddPanel_prefix {
+	@apply mt-4 block;
+}
+
+.FieldAddPanel_types,
+.FieldAddPanel_format {
+	@apply mt-4 space-y-2;
+}
+
+.FieldAddPanel_preview {
+	@apply mt-4 rounded-xl border border-WH/20 bg-BK/50 p-3;
+}
+
+.FieldAddPanel_previewTitle {
+	@apply text-xs uppercase tracking-[0.2em] text-GR;
+}
+
+.FieldAddPanel_previewList {
+	@apply mt-2 space-y-1 font-mono text-xs text-SC;
+}
+
+.FieldAddPanel_submit {
+	@apply mt-4;
+}
+
+.FieldAddPanel_actions {
+	@apply mt-6 flex flex-wrap gap-3 border-t border-WH/20 pt-6;
+}
+
+.FieldAddPanel_logout {
+	@apply mt-4 border-t border-WH/20 pt-4;
+}
+
+// --- FieldGroup ---
+
+.FieldGroup {
+	@apply  border border-WH/20   p-4;
+}
+
+.FieldGroup_header {
+	@apply flex flex-wrap items-center gap-3 cursor-pointer list-none;
+}
+
+.FieldGroup_toggle {
+	@apply pointer-events-none mt-1 shrink-0 rounded-lg border border-WH/20 p-1.5 text-GR;
+}
+
+.FieldGroup_toggleIcon {
+	@apply block h-4 w-4 transition-transform duration-300;
+}
+
+.FieldGroup[open] .FieldGroup_toggleIcon {
+	@apply rotate-180;
+}
+
+.FieldGroup_prefixRow {
+	@apply flex min-w-[12rem] flex-1 flex-row items-center gap-3;
+}
+
+.FieldGroup_prefixLabel {
+	@apply shrink-0 text-sm font-medium text-WH;
+}
+
+.FieldGroup_prefix {
+	@apply min-w-0 flex-1;
+}
+
+.FieldGroup_duplicate,
+.FieldGroup_remove {
+	@apply px-4 py-2 text-sm;
+}
+
+.FieldGroup_fields {
+	@apply mt-4 space-y-4;
+}
+
+.FieldGroup_repeatHint {
+	@apply text-xs text-SC;
+}
+
+.FieldGroup_template {
+	@apply space-y-4 rounded-xl border border-SC/40 bg-SC/10 p-4;
+}
+
+.FieldGroup_templateTitle {
+	@apply text-sm font-medium text-WH;
+}
+
+.FieldGroup_arrayItems {
+	@apply space-y-4;
+}
+
+.FieldGroup_arrayHeader {
+	@apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.FieldGroup_arrayTitle {
+	@apply text-sm font-medium text-WH;
+}
+
+.FieldGroup_arrayEmpty {
+	@apply text-sm text-GR;
+}
+
+.FieldGroup_arrayItem {
+	@apply space-y-4 rounded-xl border border-WH/20 bg-BK/50 p-4;
+}
+
+.FieldGroup_arrayItemHeader {
+	@apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.FieldGroup_arrayItemTitle {
+	@apply text-sm font-medium text-WH;
+}
+
+.FieldGroup_arrayItemPath {
+	@apply ml-2 font-mono text-xs text-GR;
+}
+
+.FieldGroup_fieldHeader {
+	@apply flex flex-wrap items-center justify-between gap-2;
+}
+
+.FieldGroup_fieldFormat {
+	@apply flex items-center gap-1 text-xs;
+}
+
+.FieldGroup_formatBtn {
+	@apply rounded-md border border-WH/25 px-2 py-0.5 text-GR transition hover:border-WH/40 hover:bg-TC80 hover:text-WH;
+}
+
+.FieldGroup_formatBtn_is_active {
+	@apply border-SC/70 bg-SC/35 text-WH;
+}
+
+.FieldGroup_imageBundle {
+	@apply rounded-xl border border-SC/40 bg-SC/10 p-4;
+}
+
+.FieldGroup_imageBundleTitle {
+	@apply text-sm font-medium text-WH;
+}
+
+.FieldGroup_bundleFields {
+	@apply mt-3 space-y-4;
+}
+
+.FieldGroup_bundleRemove {
+	@apply px-3 py-1 text-xs;
+}
+
+.FieldGroup_bundleRemoveWrap {
+	@apply space-y-3;
+}
+
+// --- AdminActionNotice ---
+
+.AdminActionNotice {
+	@apply  border px-4 py-3 text-sm;
+}
+
+.AdminActionNotice_is_success {
+	@apply border-third/60 bg-third/50 text-BK;
+}
+
+.AdminActionNotice_is_error {
+	@apply border-AC/70 bg-AC/35 text-BK;
+}
+
+// --- RichInlineEditor ---
+
+.RichInlineEditor_toolbar {
+	@apply mb-2 flex flex-wrap gap-2;
+}
+
+.RichInlineEditor_btn {
+	@apply rounded-lg border border-WH/15 bg-BK/60 px-3 py-1 text-xs font-semibold text-WH transition hover:bg-TC80;
+}
+
+.RichInlineEditor_btn_italic {
+	@apply italic;
+}
+
+.RichInlineEditor_btn_accent {
+	@apply border-SC/40 bg-SC/10 font-semibold not-italic text-SC hover:bg-SC/20;
+}
+
+.RichInlineEditor_area {
+	@apply min-h-[3rem];
+}
+
+// --- ImageFieldInput ---
+
+.ImageFieldInput_label {
+	@apply flex items-center gap-2 text-sm font-medium text-WH;
+}
+
+.ImageFieldInput_controls {
+	@apply mt-3 flex flex-wrap items-center gap-3;
+}
+
+.ImageFieldInput_preview {
+	@apply mt-4 overflow-hidden  border border-WH/20 bg-BK/50 p-3;
+}
+
+.ImageFieldInput_previewMedia {
+	@apply max-h-48 w-full rounded-xl object-contain;
+}
+
+.ImageFieldInput_fieldLabel {
+	@apply text-xs font-medium text-GR;
+}
+
+.ImageFieldInput_field {
+	@apply mt-4 block;
+}
+
+.ImageFieldInput_error {
+	@apply mt-2 text-xs text-AC;
+}
+
+.ImageFieldInput_help {
+	@apply mt-2 text-xs leading-5 text-GR;
+}
+
+.ImageFieldInput_modal {
+	@apply fixed inset-0 z-50 flex items-center justify-center bg-BK/80 p-4 backdrop-blur-sm;
+}
+
+.ImageFieldInput_modalPanel {
+	@apply flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-WH/20 shadow-2xl;
+}
+
+.ImageFieldInput_modalHeader {
+	@apply flex items-center justify-between border-b border-WH/20 px-5 py-4;
+}
+
+.ImageFieldInput_modalTitle {
+	@apply text-lg font-semibold text-WH;
+}
+
+.ImageFieldInput_modalLead {
+	@apply text-sm text-GR;
+}
+
+.ImageFieldInput_modalBody {
+	@apply overflow-y-auto px-5 py-5;
+}
+
+.ImageFieldInput_modalLoading {
+	@apply text-sm text-GR;
+}
+
+// --- MediaUploadZone ---
+
+.MediaUploadZone {
+	@apply space-y-3;
+}
+
+.MediaUploadZone_drop_zone {
+	@apply cursor-pointer  border border-dashed border-WH/35 bg-BC/40 p-6 text-center transition outline-none hover:border-WH/30 focus-visible:ring-2 focus-visible:ring-SC/30;
+}
+
+.MediaUploadZone_drop_zone_is_dragover {
+	@apply border-SC/70 bg-SC/10;
+}
+
+.MediaUploadZone_drop_zone_is_disabled {
+	@apply cursor-not-allowed opacity-60;
+}
+
+.MediaUploadZone_dropTitle {
+	@apply text-sm font-medium text-WH;
+}
+
+.MediaUploadZone_dropHint {
+	@apply mt-2 text-xs leading-5 text-GR;
+}
+
+.MediaUploadZone_dropNote {
+	@apply mt-1 text-xs text-GR;
+}
+
+.MediaUploadZone_progress {
+	@apply mt-3 text-xs text-SC;
+}
+
+.MediaUploadZone_error {
+	@apply text-xs text-AC;
+}
+
+// --- AssetGrid ---
+
+.AssetGrid_empty {
+	@apply border border-dashed border-WH/15 bg-BK/30 p-10 text-center text-sm text-GR;
+}
+
+.AssetGrid_list {
+	@apply grid gap-4 sm:grid-cols-2 xl:grid-cols-3;
+}
+
+.AssetGrid_item {
+	@apply overflow-hidden border border-WH/20 bg-BK/50;
+}
+
+.AssetGrid_item_is_selected {
+	@apply border-SC/60 ring-2 ring-SC/20;
+}
+
+.AssetGrid_preview {
+	@apply relative aspect-[4/3] overflow-hidden bg-BK/80;
+}
+
+.AssetGrid_previewMedia {
+	@apply h-full w-full object-cover;
+}
+
+.AssetGrid_selectOverlay {
+	@apply absolute inset-0 bg-BK/0 transition hover:bg-BK/20;
+}
+
+.AssetGrid_mimeFallback {
+	@apply flex h-full items-center justify-center text-sm text-GR;
+}
+
+.AssetGrid_meta {
+	@apply space-y-3 p-4;
+}
+
+.AssetGrid_filename {
+	@apply truncate text-sm font-medium text-WH;
+}
+
+.AssetGrid_url {
+	@apply mt-1 truncate text-xs text-GR;
+}
+
+.AssetGrid_metaList {
+	@apply grid grid-cols-2 gap-2 text-xs text-GR;
+}
+
+.AssetGrid_metaTerm {
+	@apply text-GR;
+}
+
+.AssetGrid_metaValue {
+	@apply mt-0.5 truncate;
+}
+
+.AssetGrid_metaValue_wide {
+	@apply col-span-2 mt-0.5;
+}
+
+.AssetGrid_altText {
+	@apply text-xs text-GR;
+}
+
+.AssetGrid_selectBtn {
+	@apply w-full;
+}
+
+.AssetGrid_saveBtn {
+	@apply disabled:cursor-not-allowed disabled:opacity-60;
+}
+
+.AssetGrid_error {
+	@apply text-xs text-AC;
+}
+
+.PreviewLink {
+	@apply border border-SC/60 bg-SC/30 text-WH hover:bg-SC/50;
+}
+.FieldGroup_field {
+	@apply block;
+}
+
+.FieldGroup_fieldMeta {
+	@apply text-xs text-GR;
+}
+
+.FieldGroup_bundleImage,
+.FieldGroup_bundleField {
+	@apply block;
+}
+
+.RichInlineEditor {
+	@apply block;
+}
+
+.RichInlineEditor_area {
+	@apply min-h-[3rem];
+}
+
+.ImageFieldInput_uploadWrap {
+	@apply mt-4;
 }

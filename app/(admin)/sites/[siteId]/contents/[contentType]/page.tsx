@@ -24,6 +24,13 @@ export default async function ContentListPage({ params }: ContentListPageProps) 
   const records = await loadContents(siteId, contentType);
   const access = await getAdminUiAccess(siteId);
 
+  if (definition.kind === 'single') {
+    const record = records.data[0];
+    if (record) {
+      redirect(`/sites/${siteId}/contents/${contentType}/${record.id}`);
+    }
+  }
+
   return (
     <AdminLayout site={site}>
       <AdminPageHeader

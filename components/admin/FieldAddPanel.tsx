@@ -1,7 +1,17 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
+import type { CmsAuthProvider } from '@/lib/auth/production-config';
+import { LogoutButton } from './LogoutButton';
+import {
+  adminBtnAction,
+  adminBtnPrimary,
+  adminBtnPublish,
+  adminBtnViolet,
+  adminFieldControl,
+  adminPanel,
+  adminPanelInset,
+} from './admin-ui-classes';
 import {
   createFieldsFromSelection,
   normalizePrefix,
@@ -19,12 +29,12 @@ interface FieldAddPanelProps {
     repeatable?: boolean,
   ) => void;
   readOnly?: boolean;
-  siteId: string;
-  contentTypeSlug: string;
   previewUrl?: string | null;
   isPending?: boolean;
   onSave?: () => void;
   onPublish?: () => void;
+  authProvider?: CmsAuthProvider;
+  showLogout?: boolean;
 }
 
 const emptySelection: ComposableFieldSelection = {
@@ -37,12 +47,12 @@ export function FieldAddPanel({
   sourceData,
   onAdd,
   readOnly = false,
-  siteId,
-  contentTypeSlug,
   previewUrl,
   isPending = false,
   onSave,
   onPublish,
+  authProvider = 'none',
+  showLogout = false,
 }: FieldAddPanelProps) {
   const [prefix, setPrefix] = useState('');
   const [selection, setSelection] = useState<ComposableFieldSelection>(emptySelection);
@@ -76,27 +86,30 @@ export function FieldAddPanel({
   const showFormatChoice = selection.title || selection.text;
 
   return (
-    <div data-l="FieldPanel" className="FieldAddPanel rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-      <h4 className="text-sm font-semibold text-white">フィールドを追加</h4>
+    <div
+      data-l="FieldPanel"
+      className={`FieldAddPanel ${adminPanel} p-4 lg:sticky lg:top-0 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start`}
+    >
+      <h4 className="text-sm font-semibold text-WH">フィールドを追加</h4>
 
-      <label className="field_add_panel_prefix mt-4 block">
-        <span className="text-sm font-medium text-white">Field name</span>
+      <label className="mt-4 block">
+        <span className="text-sm font-medium text-WH">Field name</span>
         <input
-          className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+          className={adminFieldControl}
           value={prefix}
           onChange={(event) => setPrefix(event.target.value)}
-          placeholder="例: hero（空でも可）"
+          placeholder="例: hero"
           disabled={readOnly}
           readOnly={readOnly}
         />
         {!prefixValidation.valid ? (
-          <p className="mt-2 text-sm text-rose-300">{prefixValidation.message}</p>
+          <p className="mt-2 text-sm text-AC">{prefixValidation.message}</p>
         ) : null}
       </label>
 
-      <fieldset className="field_add_panel_types mt-4 space-y-2" disabled={readOnly}>
-        <legend className="text-sm font-medium text-white">Field Path</legend>
-        <label className="flex items-center gap-2 text-sm text-slate-200">
+      <fieldset className="mt-4 space-y-2" disabled={readOnly}>
+        <legend className="text-sm font-medium text-WH">Field Path</legend>
+        <label className="flex items-center gap-2 text-sm text-WH">
           <input
             type="checkbox"
             checked={selection.title}
@@ -104,7 +117,7 @@ export function FieldAddPanel({
           />
           タイトル
         </label>
-        <label className="flex items-center gap-2 text-sm text-slate-200">
+        <label className="flex items-center gap-2 text-sm text-WH">
           <input
             type="checkbox"
             checked={selection.text}
@@ -112,7 +125,7 @@ export function FieldAddPanel({
           />
           テキスト
         </label>
-        <label className="flex items-center gap-2 text-sm text-slate-200">
+        <label className="flex items-center gap-2 text-sm text-WH">
           <input
             type="checkbox"
             checked={selection.image}
@@ -120,7 +133,7 @@ export function FieldAddPanel({
           />
           画像（URL・代替テキスト・リンク先をセット追加）
         </label>
-        <label className="flex items-start gap-2 text-sm text-slate-200">
+        <label className="flex items-start gap-2 text-sm text-WH">
           <input
             type="checkbox"
             className="mt-1"
@@ -129,7 +142,7 @@ export function FieldAddPanel({
           />
           <span>
             繰り返し（配列）
-            <span className="block text-xs text-slate-400">
+            <span className="block text-xs text-GR">
               同一構成の要素を JSON 配列として保存します（例: cards[]）。
             </span>
           </span>
@@ -137,9 +150,9 @@ export function FieldAddPanel({
       </fieldset>
 
       {showFormatChoice ? (
-        <fieldset className="field_add_panel_format mt-4 space-y-2" disabled={readOnly}>
-          <legend className="text-sm font-medium text-white">タイトル・テキストの形式</legend>
-          <label className="flex items-start gap-2 text-sm text-slate-200">
+        <fieldset className="mt-4 space-y-2" disabled={readOnly}>
+          <legend className="text-sm font-medium text-WH">タイトル・テキストの形式</legend>
+          <label className="flex items-start gap-2 text-sm text-WH">
             <input
               type="radio"
               name="field_add_format"
@@ -149,10 +162,10 @@ export function FieldAddPanel({
             />
             <span>
               プレーンテキスト
-              <span className="block text-xs text-slate-400">そのまま文字列として表示（安全）。</span>
+              <span className="block text-xs text-GR">そのまま文字列として表示（安全）。</span>
             </span>
           </label>
-          <label className="flex items-start gap-2 text-sm text-slate-200">
+          <label className="flex items-start gap-2 text-sm text-WH">
             <input
               type="radio"
               name="field_add_format"
@@ -162,7 +175,7 @@ export function FieldAddPanel({
             />
             <span>
               リッチテキスト
-              <span className="block text-xs text-slate-400">
+              <span className="block text-xs text-GR">
                 太字・斜体・アクセント（span）などインライン装飾を許可。
               </span>
             </span>
@@ -171,9 +184,12 @@ export function FieldAddPanel({
       ) : null}
 
       {previewPaths.length > 0 ? (
-        <div data-l="PathPreview" className="field_add_panel_preview mt-4 rounded-xl border border-white/10 bg-slate-950/50 p-3">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">追加されるフィールドパス</p>
-          <ul className="mt-2 space-y-1 font-mono text-xs text-sky-100">
+        <div
+          data-l="PathPreview"
+          className={`mt-4 ${adminPanelInset} p-3`}
+        >
+          <p className="text-xs uppercase tracking-[0.2em] text-GR">追加されるフィールドパス</p>
+          <ul className="mt-2 space-y-1 font-mono text-xs text-WH">
             {previewPaths.map((path) => (
               <li key={path}>{path}</li>
             ))}
@@ -184,7 +200,7 @@ export function FieldAddPanel({
       {!readOnly ? (
         <button
           type="button"
-          className="field_add_panel_submit mt-4 rounded-full bg-sky-400/90 px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-sky-300 disabled:cursor-not-allowed disabled:opacity-50"
+          className={`mt-4 ${adminBtnAction}`}
           onClick={handleAdd}
           disabled={!canAdd}
         >
@@ -192,12 +208,15 @@ export function FieldAddPanel({
         </button>
       ) : null}
 
-      <div data-l="FormActions" className="field_add_panel_actions mt-6 flex flex-wrap gap-3 border-t border-white/10 pt-6">
+      <div
+        data-l="FormActions"
+        className="mt-6 flex flex-wrap gap-3 border-t border-WH/20 pt-6"
+      >
         {!readOnly ? (
           <>
             <button
               type="button"
-              className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+              className={adminBtnPrimary}
               onClick={() => onSave?.()}
               disabled={isPending}
             >
@@ -205,7 +224,7 @@ export function FieldAddPanel({
             </button>
             <button
               type="button"
-              className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+              className={adminBtnPublish}
               onClick={() => onPublish?.()}
               disabled={isPending}
             >
@@ -218,18 +237,18 @@ export function FieldAddPanel({
             href={previewUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="PreviewLink rounded-full border border-violet-400/40 bg-violet-400/10 px-5 py-3 text-sm font-medium text-violet-100 transition hover:bg-violet-400/20"
-          >
-            プレビューを開く
-          </a>
+            className={adminBtnPrimary}
+            >
+              プレビューを開く
+            </a>
         ) : null}
-        <Link
-          href={`/sites/${siteId}/contents/${contentTypeSlug}`}
-          className="rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white"
-        >
-          一覧に戻る
-        </Link>
+        {/* 一覧に戻る ボタンはトップページでは非表示 */}
       </div>
+      {showLogout ? (
+        <div className="mt-4 border-t border-WH/20 pt-4">
+          <LogoutButton authProvider={authProvider} />
+        </div>
+      ) : null}
     </div>
   );
 }

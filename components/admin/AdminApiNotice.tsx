@@ -12,24 +12,27 @@ export function AdminApiNotice({ source, error, endpoint }: AdminApiNoticeProps)
   const isDemo = source === 'demo';
 
   return (
-    <div
-      data-l="ApiNotice"
-      className={`AdminApiNotice rounded-2xl border px-4 py-3 text-sm ${
-        isDemo
-          ? 'border-amber-400/30 bg-amber-400/10 text-amber-100'
-          : 'border-rose-400/30 bg-rose-400/10 text-rose-100'
-      }`}
-      role="status"
-    >
-      {isDemo ? (
-        <p>
-          API からデータを取得できなかったため、開発用デモデータを表示しています。
-          {error ? ` (${error})` : null}
-        </p>
-      ) : (
-        <p>{error ?? 'API リクエストに失敗しました。'}</p>
-      )}
-      {endpoint ? <p className="mt-1 text-xs opacity-80">endpoint: {endpoint}</p> : null}
-    </div>
+		<div
+			data-l="ApiNotice"
+			className={`AdminApiNotice rounded-2xl border px-4 py-3 text-sm ${
+				isDemo
+					? "border-amber-400/30 bg-amber-400/10 text-amber-100"
+					: "border-AC/30 bg-AC/10 text-rose-100"
+			}`}
+			role="status"
+		>
+			{isDemo ? (
+				<p>
+					API
+					からデータを取得できなかったため、開発用デモデータを表示しています。
+					{error ? ` (${error})` : null}
+				</p>
+			) : (
+				<p>{error ?? "API リクエストに失敗しました。"}</p>
+			)}
+			{endpoint ? (
+				<p className="mt-1 text-xs opacity-80">endpoint: {endpoint}</p>
+			) : null}
+		</div>
   );
 }

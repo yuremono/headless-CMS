@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { CmsAuthProvider } from '@/lib/auth/production-config';
 import { useAdminAccess } from './AdminAccessContext';
 import { AdminActionNotice } from './AdminActionNotice';
 import {
@@ -31,6 +32,8 @@ interface ComposableContentFormProps {
   record: ContentRecord;
   previewUrl?: string | null;
   fieldFormats?: Record<string, ComposableFieldFormat>;
+  authProvider?: CmsAuthProvider;
+  showLogout?: boolean;
 }
 
 function createGroupId(): string {
@@ -66,6 +69,8 @@ export function ComposableContentForm({
   record,
   previewUrl,
   fieldFormats = {},
+  authProvider = 'none',
+  showLogout = false,
 }: ComposableContentFormProps) {
   const router = useRouter();
   const { readOnly } = useAdminAccess();
@@ -174,36 +179,38 @@ export function ComposableContentForm({
   }
 
   return (
-    <section data-l="ContentForm" className="ComposableContentForm space-y-5 ">
+    <section data-l="ContentForm" className="ComposableContentForm space-y-5 overflow-visible text-WH">
       <div>
-        <h3 className="text-2xl font-semibold text-white">ページ名</h3>
-        <p className="mt-2 text-sm text-slate-300">
+        <h1 className="text-2xl font-normal text-WH/50 tracking-widest">
+          A composable ( headless ) CMS <span className='mx-1 opacity-50 [font-size:0.5em]'>inspired by microCMS.</span>
+        </h1>
+        <p className="mt-2 text-sm text-GR">
           {readOnly
             ? '閲覧専用です。フィールドの追加・編集はできません。'
             : 'フィールドを追加・保存し、サイトやアプリで取得します。'}
         </p>
       </div>
 
-      <div className="composable_content_form_layout">
+      <div className="flex flex-col items-stretch gap-4 overflow-visible lg:flex-row lg:items-start lg:gap-6">
         <FieldAddPanel
           sourceData={sourceData}
           onAdd={handleAddGroup}
           readOnly={readOnly}
-          siteId={siteId}
-          contentTypeSlug={contentType.slug}
           previewUrl={previewUrl}
           isPending={isPending}
           onSave={() => void persist('save')}
           onPublish={() => void persist('publish')}
+          authProvider={authProvider}
+          showLogout={showLogout}
         />
 
-        <div className="composable_content_form_main">
+        <div className="min-w-0 flex-1">
           {groups.length === 0 ? (
-            <p className="composable_content_form_empty text-sm text-slate-400">
+            <p className="text-sm text-GR">
               フィールドはまだありません。左のパネルから追加してください。
             </p>
           ) : (
-            <div className="composable_content_form_groups space-y-4">
+            <div className="min-w-0 space-y-4">
               {groups.map((group) => (
                 <FieldGroup
                   key={group.id}

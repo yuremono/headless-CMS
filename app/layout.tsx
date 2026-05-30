@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import "../index.scss";
+import "../scss/index.scss";
 
 export const metadata: Metadata = {
   title: "Headless CMS",

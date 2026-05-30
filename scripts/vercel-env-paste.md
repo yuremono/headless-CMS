@@ -10,7 +10,7 @@ Supabase: [portfolio-cms](https://supabase.com/dashboard/project/dvcaumqooopebex
 
 ```
 DATABASE_URL=postgresql://postgres.dvcaumqooopebexajsdw:＜DBパスワード＞@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true
-APP_URL=https://0529headless-cms.vercel.app
+APP_URL=https://headless-cms0529.vercel.app
 CMS_AUTH_PROVIDER=authjs
 CMS_ENFORCE_ADMIN_LOGIN=true
 AUTH_SECRET=62cac86cb7be53e8cfa53a6e63409ea9693620506e8a98757a40de0caa81cfb8
@@ -19,7 +19,7 @@ ADMIN_DEMO_EMAIL=admin@example.com
 ADMIN_DEMO_PASSWORD=HeadlessCMS-Demo-2026
 CMS_PUBLIC_API_KEY=public-dev-key
 STORAGE_PROVIDER=local
-FRONTEND_BASE_URL=https://0529headless-front.vercel.app
+FRONTEND_BASE_URL=https://headless-front0529.vercel.app
 ```
 
 Direct（migrate/seed ローカルのみ・ユーザー名は `postgres`）:
@@ -33,7 +33,7 @@ postgresql://postgres:＜DBパスワード＞@db.dvcaumqooopebexajsdw.supabase.c
 ## フロント（プロジェクト: `headless-front`）
 
 ```
-CMS_API_BASE_URL=https://0529headless-cms.vercel.app
+CMS_API_BASE_URL=https://headless-cms0529.vercel.app
 SITE_ID=main-site
 PUBLIC_API_KEY=public-dev-key
 CONTENT_TYPE=topPage

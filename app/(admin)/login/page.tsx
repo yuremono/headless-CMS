@@ -29,7 +29,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 						ガードを有効化します。
 					</p>
 					<dl className="mt-8 grid gap-4 sm:grid-cols-2">
-						<div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+						<div className="  border border-white/10 bg-slate-950/60 p-4">
 							<dt className="text-xs uppercase tracking-[0.2em] text-slate-500">
 								Email
 							</dt>
@@ -37,7 +37,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 								{adminDemoCredentials.email}
 							</dd>
 						</div>
-						<div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+						<div className="  border border-white/10 bg-slate-950/60 p-4">
 							<dt className="text-xs uppercase tracking-[0.2em] text-slate-500">
 								Password
 							</dt>

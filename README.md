@@ -7,7 +7,7 @@
 | 環境 | developer ページ（composable 編集） |
 |------|-------------------------------------|
 | ローカル | http://localhost:3000/sites/main-site/developer |
-| 本番 | https://0529headless-cms.vercel.app/sites/main-site/developer |
+| 本番 | https://headless-cms0529.vercel.app/sites/main-site/developer |
 
 > **【重要】ローカルと本番は同一 DB を共有しています。** `.env.local` の `DATABASE_URL` が本番 Supabase（`portfolio-cms` / schema `headless_cms`）を指すため、`localhost:3000` の編集は即座に本番へ反映されます。`prisma migrate reset` / seed の再実行は本番データを壊すので禁止。詳細は [AGENTS.md](./AGENTS.md) の「DB 共有運用」を参照。
 

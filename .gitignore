@@ -8,6 +8,8 @@ node_modules/
 .env.supabase.local
 !.env.example
 !.env.supabase.local.example
+private
+private/*
 
 # Next.js
 .next/

@@ -19,10 +19,10 @@ cp .env.supabase.local.example .env.supabase.local
 
 ## 3. 確認
 
-1. https://0529headless-cms.vercel.app/login — `admin@example.com` / `HeadlessCMS-Demo-2026`
-2. **メイン作業ページ（本番）:** https://0529headless-cms.vercel.app/sites/main-site/developer
+1. https://headless-cms0529.vercel.app/login — `admin@example.com` / `HeadlessCMS-Demo-2026`
+2. **メイン作業ページ（本番）:** https://headless-cms0529.vercel.app/sites/main-site/developer
 3. コンテンツを **公開**
-4. https://0529headless-front.vercel.app を **再読み込み**
+4. https://headless-front0529.vercel.app を **再読み込み**
 
 `headless-cms.vercel.app` / `2020.headless-cms.talks.smakosh.com` は別プロジェクトに紐づいていると 404 になります（[AGENTS.md](./AGENTS.md) 参照）。
 

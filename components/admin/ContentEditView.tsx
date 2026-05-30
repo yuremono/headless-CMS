@@ -8,6 +8,7 @@ import { PreviewLink } from './PreviewLink';
 import { loadContent, resolveContentTypeDefinition, resolveSiteSummary } from './AdminData';
 import { buildPreviewUrl } from '@/lib/preview';
 import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
+import { getAuthProvider } from '@/lib/auth/production-config';
 import { getSchemaByType } from '@/lib/content/service';
 import { isComposableFieldFormat, type ComposableFieldFormat } from '@/lib/admin/field-type-catalog';
 
@@ -35,6 +36,7 @@ interface ContentEditViewProps {
   contentType: string;
   id: string;
   formLayout?: 'schema' | 'composable';
+  hideSidebar?: boolean;
 }
 
 export async function ContentEditView({
@@ -42,6 +44,7 @@ export async function ContentEditView({
   contentType,
   id,
   formLayout = 'schema',
+  hideSidebar = false,
 }: ContentEditViewProps) {
   const site = await resolveSiteSummary(siteId);
   const definitionResult = await resolveContentTypeDefinition(siteId, contentType);
@@ -64,6 +67,7 @@ export async function ContentEditView({
     slug: definition.kind === 'collection' ? record.data.slug : undefined,
   });
   const access = await getAdminUiAccess(siteId);
+  const authProvider = getAuthProvider();
 
   const isComposable = formLayout === 'composable';
   const fieldFormats = isComposable
@@ -76,7 +80,7 @@ export async function ContentEditView({
       : `${definition.label} 編集`;
 
   return (
-    <AdminLayout site={site}>
+    <AdminLayout site={site} hideSidebar={hideSidebar}>
       {/* <AdminPageHeader
         title={pageTitle}
         subtitle={`対象コンテンツ: ${record.data.title}`}
@@ -101,6 +105,8 @@ export async function ContentEditView({
           record={record.data}
           previewUrl={previewUrl}
           fieldFormats={fieldFormats}
+          authProvider={authProvider}
+          showLogout={hideSidebar}
         />
       ) : (
         <ContentForm

@@ -5,8 +5,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 FRONT_ROOT="$(cd "$ROOT/../0529headless-front" && pwd)"
 SUPABASE_REF="dvcaumqooopebexajsdw"
-CMS_VERCEL_URL="https://0529headless-cms.vercel.app"
-FRONT_VERCEL_URL="https://0529headless-front.vercel.app"
+CMS_VERCEL_URL="https://headless-cms0529.vercel.app"
+FRONT_VERCEL_URL="https://headless-front0529.vercel.app"
 
 AUTH_SECRET="${AUTH_SECRET:-62cac86cb7be53e8cfa53a6e63409ea9693620506e8a98757a40de0caa81cfb8}"
 PREVIEW_TOKEN_SECRET="${PREVIEW_TOKEN_SECRET:-ea9b1c8a195b1d14ef3f9b62de80277315e7cb12828f7e9bf6704b9ed64cc2b6}"
