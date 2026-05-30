@@ -42,11 +42,15 @@ npm run cms -- content publish
 
 ### MCP（Cursor）
 
+**詳細ガイド:** [cms-mcp.md](./cms-mcp.md)（セットアップ・Cursor 設定・ツール一覧・トラブルシュート）
+
 1. リポジトリルートで `npm install`（`tsx` が devDependency に含まれる）
 2. Cursor Settings → MCP、または `~/.cursor/mcp.json` にサーバー定義を追加
 3. `npm run cms:mcp` で起動するか、`cwd` をリポジトリルートにして npm script 経由で起動
 
-設定例・利用可能ツール・典型ワークフロー: [mcp/headless-cms/README.md](../../mcp/headless-cms/README.md)（レガシー） / packages 版は `packages/headless-cms-mcp/`（`npm run cms:mcp`）
+**案件フロント開発者**は CMS repo を clone せず、フロント repo 同梱の `cms-mcp/` から `npm run cms:mcp` を使える（[cms-mcp.md §リポジトリ別](./cms-mcp.md)）。
+
+レガシー README: [mcp/headless-cms/README.md](../../mcp/headless-cms/README.md)
 
 ## 制約
 

@@ -59,9 +59,13 @@ Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS �
 | `lib/content/` | コンテンツ store / service / delivery / mappers / types。配信キャッシュ失効は `delivery-tags.ts`（`revalidateTag`）+ `delivery.ts`（`unstable_cache`） |
 | `lib/schemas/` | コンテンツモデル・フィールド型・バリデーション |
 | `lib/sanitize/` | richText HTML サニタイズ（`data_json` 向け） |
-| `lib/cms-agent/` | CLI / MCP 共通の Admin API クライアント・コンテンツ操作（`docs/agents/cms-agent.md`） |
+| `packages/headless-cms-agent/` | CLI / MCP 共通ライブラリ（`@headless/cms-agent`、`@/` 非依存） |
+| `packages/headless-cms-mcp/` | MCP サーバー（推奨、`npm run cms:mcp`） |
+| `lib/cms-agent/` | 上記 package への re-export（後方互換） |
 | `lib/preview/` | プレビュー URL・トークン解決 |
-| `mcp/headless-cms/` | MCP サーバー（`npm run cms:mcp`）。README: `mcp/headless-cms/README.md` |
+| `mcp/headless-cms/` | MCP サーバー（レガシー配置） |
+| `docs/agents/cms-mcp.md` | MCP 使い方（Cursor 設定・ツール・トラブルシュート） |
+| `docs/agents/cms-agent.md` | CLI / MCP 構成概要 |
 | `lib/sections/` | **未作成（将来）** — セクション型は `content-types/*.json` + SectionEditor |
 | `lib/storage/` | 画像・ファイルアップロード（`local` / `r2` stub） |
 | `middleware.mjs` | `/api/*` 向け CORS（`FRONTEND_BASE_URL`） |

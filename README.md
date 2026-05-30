@@ -29,4 +29,8 @@ npm run dev
 | [SPEC.md](SPEC.md) | 要件定義 |
 | [docs/agents/project.md](docs/agents/project.md) | 技術スタック・ディレクトリ |
 | [docs/agents/architecture.md](docs/agents/architecture.md) | API・DB・セキュリティ |
+| [docs/agents/cms-mcp.md](docs/agents/cms-mcp.md) | **MCP 使い方** — Cursor 連携・AI エージェント操作 |
+| [docs/agents/cms-agent.md](docs/agents/cms-agent.md) | CLI / MCP 構成・環境変数 |
 | [USER_SETUP.md](USER_SETUP.md) | 本番初回セットアップ |
+
+案件フロント開発者が CMS を AI 編集する場合は **フロント repo 同梱の MCP** を使う（CMS clone 不要）。詳細は [docs/agents/cms-mcp.md](docs/agents/cms-mcp.md)。

@@ -156,6 +156,15 @@ migrate 後は `npx tsx prisma/seed.ts` で `admin@example.com` に bcrypt ハ�
    - `NODE_ENV !== "production"` かつ上記未設定時のみ、固定の開発用トークンが有効  
    - **本番（`NODE_ENV=production`）では必ず env または DB キーを設定すること**
 
+### 案件フロント開発者への管理キー共有（MCP / AI 編集）
+
+案件フロントは **別リポジトリ** で開発し、配信 API には `CMS_PUBLIC_API_KEY`（読取）のみ使う。  
+AI エージェント（Cursor MCP）で CMS コンテンツを編集させる場合は、**`CMS_ADMIN_API_KEY` を CMS 管理者が安全に共有**する。
+
+- フロント開発者は CMS ソース・Vercel CMS プロジェクトへのアクセスは**不要**
+- フロント repo 同梱 MCP: `npm run cms:mcp`（詳細 [docs/agents/cms-mcp.md](../agents/cms-mcp.md)）
+- キーは `.env` または Cursor MCP 設定の env に置き、**Git にコミットしない**
+
 ### プレビュートークン
 
 | 方式 | 設定 |

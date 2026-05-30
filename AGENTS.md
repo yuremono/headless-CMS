@@ -128,7 +128,8 @@ npm run deploy
 | composable フィールド UI・複製・繰り返し配列 | `FIELD.md` |
 | 技術スタック・ディレクトリ・コマンド・実装状態 | `docs/agents/project.md` |
 | API設計・DB・セキュリティ・MVP範囲 | `docs/agents/architecture.md` |
-| CMS CLI / MCP（エージェント操作） | `docs/agents/cms-agent.md` → `docs/agents/cms-cli.md` / `mcp/headless-cms/README.md` |
+| CMS CLI / MCP（エージェント操作） | `docs/agents/cms-mcp.md`（MCP 使い方）→ `docs/agents/cms-agent.md` → `docs/agents/cms-cli.md` |
+| 案件フロントから MCP | フロント repo の `cms-mcp/README.md`（CMS clone 不要） |
 | コーディング規約・管理画面CSS | `docs/agents/coding.md` |
 
 ## サブエージェント・マルチタスク
