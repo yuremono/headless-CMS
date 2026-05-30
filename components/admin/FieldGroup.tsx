@@ -7,8 +7,11 @@ import {
   type ComposableFieldGroup,
   type ComposableFieldRow,
 } from '@/lib/admin/field-type-catalog';
+import { ImageFieldInput } from './ImageFieldInput';
+import type { ImageFieldValue } from './admin-api';
 
 interface FieldGroupProps {
+  siteId: string;
   group: ComposableFieldGroup;
   sourceData: Record<string, unknown>;
   onChange: (group: ComposableFieldGroup) => void;
@@ -28,7 +31,29 @@ function removeImageBundle(fields: ComposableFieldRow[]): ComposableFieldRow[] {
   return fields.filter((field) => field.bundle !== 'image');
 }
 
-export function FieldGroup({ group, sourceData, onChange, onRemove, readOnly = false }: FieldGroupProps) {
+function applyImageFieldValue(
+  fields: ComposableFieldRow[],
+  nextValue: ImageFieldValue,
+): ComposableFieldRow[] {
+  return fields.map((field) => {
+    if (field.type === 'imageUrl') {
+      return { ...field, value: nextValue.url };
+    }
+    if (field.type === 'imageAlt') {
+      return { ...field, value: nextValue.alt };
+    }
+    return field;
+  });
+}
+
+export function FieldGroup({
+  siteId,
+  group,
+  sourceData,
+  onChange,
+  onRemove,
+  readOnly = false,
+}: FieldGroupProps) {
   const prefixValidation = validatePrefix(group.prefix);
 
   function handlePrefixChange(nextPrefix: string) {
@@ -63,6 +88,13 @@ export function FieldGroup({ group, sourceData, onChange, onRemove, readOnly = f
   const scalarFields = group.fields.filter((field) => field.bundle !== 'image');
   const imageBundleFields = group.fields.filter((field) => field.bundle === 'image');
   const hasImageBundle = imageBundleFields.length > 0;
+  const imageUrlField = imageBundleFields.find((field) => field.type === 'imageUrl');
+  const imageAltField = imageBundleFields.find((field) => field.type === 'imageAlt');
+  const imageHrefFields = imageBundleFields.filter((field) => field.type === 'href');
+  const imageFieldValue: ImageFieldValue = {
+    url: String(imageUrlField?.value ?? ''),
+    alt: String(imageAltField?.value ?? ''),
+  };
 
   return (
     <div className="FieldGroup rounded-2xl border border-white/10 bg-slate-950/30 p-4">
@@ -134,7 +166,33 @@ export function FieldGroup({ group, sourceData, onChange, onRemove, readOnly = f
               ) : null}
             </div>
             <div className="mt-3 space-y-4">
-              {imageBundleFields.map((field) => (
+              {imageUrlField ? (
+                <div className="field_group_bundle_image">
+                  <p className="text-xs text-slate-400">
+                    {getFieldTypeLabel('imageUrl')} ·{' '}
+                    <span className="font-mono">{imageUrlField.jsonPath}</span>
+                    {imageAltField ? (
+                      <>
+                        {' '}
+                        / <span className="font-mono">{imageAltField.jsonPath}</span>
+                      </>
+                    ) : null}
+                  </p>
+                  <ImageFieldInput
+                    siteId={siteId}
+                    label="画像"
+                    value={imageFieldValue}
+                    onChange={(nextValue) => {
+                      onChange({
+                        ...group,
+                        fields: applyImageFieldValue(group.fields, nextValue),
+                      });
+                    }}
+                    readOnly={readOnly}
+                  />
+                </div>
+              ) : null}
+              {imageHrefFields.map((field) => (
                 <div key={field.jsonPath} className="field_group_bundle_field">
                   <p className="text-xs text-slate-400">
                     {getFieldTypeLabel(field.type)} ·{' '}
@@ -142,7 +200,7 @@ export function FieldGroup({ group, sourceData, onChange, onRemove, readOnly = f
                   </p>
                   <input
                     className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-                    type={field.type === 'imageUrl' || field.type === 'href' ? 'url' : 'text'}
+                    type="url"
                     value={String(field.value ?? '')}
                     onChange={(event) => handleFieldChange(field.jsonPath, event.target.value)}
                     disabled={readOnly}

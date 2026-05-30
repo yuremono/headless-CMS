@@ -157,6 +157,7 @@ export function ComposableContentForm({
           {groups.map((group) => (
             <FieldGroup
               key={group.id}
+              siteId={siteId}
               group={group}
               sourceData={sourceData}
               onChange={(next) => updateGroup(group.id, next)}
