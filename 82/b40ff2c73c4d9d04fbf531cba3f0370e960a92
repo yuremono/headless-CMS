@@ -1,0 +1,217 @@
+components/admin/LogoutButton.tsx
+  s_ea8d1754c2559b::t_e52f8d0601a11b 6
+  s_ea8d1754c2559b::t_2c10a102ed0ad1 14,20,22-24,29,35
+components/admin/AdminLayout.tsx
+  h_53dad1e32c3c71 65-66,80-81
+  s_cf553ce2be909c::t_2ede7a11d63471 47,51,63-64,67,69-79,82,84-85
+components/admin/RichInlineEditor.tsx
+  s_a2086fba48f4db::t_a7897dcd9bc583 87-92
+  s_a2086fba48f4db::t_495bc71eed026c 95,102,109
+  s_a2086fba48f4db::t_7b58fb0b8d28ed 4
+  s_a2086fba48f4db::t_86213b6ebe0b77 119
+mcp/headless-cms/README.md
+  s_cf553ce2be909c::t_3d2f777701e252 71
+scss/index.scss
+  s_ea8d1754c2559b::t_bcd256ac98ab1c 15-33
+  s_a2086fba48f4db::t_e4b85919dcec97 316,318-322,325,329,333,337,341,345,353,370,374,433,437-439,441-443,445-447,449-451,453-455,457-459,461-463,465-467,469-483,485-487,489-491,493-495,497-499,501-503,505-511,513-519,521-523,525-527,529-531,533-536,538,541-542,545-546,549,553-554,557-558,561,565-566,569-570,573-575,577-588,590-592,594-596,598-604,606-608,610-614,616-622,624-638,640-655,657-659,661-663,665-675,677-679,681-683,685-691,693-695,697-707,709-711,713-715,717-719,721-741,743-745,747-755,757-763,765-773,775-781,783-789,791-797,799-801,803-805,807-809,811-813,815-817,819-821,823-829,831-839,841-843,845-851,853-855,857-859,861-863,865-867,869-873,875-881,883-885,887-889,891-897,899-901,903-909,911-913,915-917,919-921,923-933,935-945,947-949,951-956,958-974
+  s_a2086fba48f4db::t_b87392f5a0f2d9 349,366,382,402,410,448,452,550,562,589,593,597,605,609,623,656,680,684,696,764,782,790,802,810,814,822,830,856,860,864,874,882,902,914,918,922,934,957
+  h_53dad1e32c3c71 5-7,42,44-47,55,68-69,127-128,245,324,326,328,330,332,334,336,338,340,342,344,346,348,350-352,354,356-361,363,365,367,369,371,373,375,377,379,381,383,385,387,389,391,393,395,397,399,401,403,405,407,409,413,417-419,423,427,429,431-432,460,464,468,488,492,512,520,524,528,537,539-540,543-544,547-548,551-552,555-556,559-560,563-564,567-568,571,660,664,692,708,712,716,720,742,746,840,950
+  s_a2086fba48f4db::t_b8850d21598433 572,615
+  s_a2086fba48f4db::t_94efe9231f5123 362,378,386,390,394,398,406,414,420,424,428,434,440,444,456,484,496,500,504,532,576,639,676,756,774,798,806,818,844,852,868,886,890,898,910,946
+.env.example
+  s_cf553ce2be909c::t_02c6100af08998 16
+app/layout.tsx
+  s_a2086fba48f4db::t_2161e37d8786ae 3
+USER_SETUP.md
+  s_cf553ce2be909c::t_8b33a409757629 25
+  s_cf553ce2be909c::t_6d52f83e480150 22-23
+docs/vercel-deploy.md
+  s_cf553ce2be909c::t_8e14b0f315b101 18-19
+  s_cf553ce2be909c::t_e5141b19a6091c 23,123,163
+components/admin/AdminApiNotice.tsx
+  h_53dad1e32c3c71 17-21,31,33,35
+scripts/vercel-env-paste.md
+  s_cf553ce2be909c::t_0ea670209054c5 22
+  s_cf553ce2be909c::t_3d9e2b0578b724 36
+  s_cf553ce2be909c::t_276761ff1efec5 13
+README.md
+  s_cf553ce2be909c::t_0d378a0f778967 10
+components/admin/SectionArrayItemEditor.tsx
+  h_53dad1e32c3c71 94,109,118,124,150,166
+components/admin/MediaUploadZone.tsx
+  s_a2086fba48f4db::t_b87392f5a0f2d9 177-181,184
+  h_53dad1e32c3c71 135-139,153,175,183,185
+  s_a2086fba48f4db::t_94efe9231f5123 174,176,188
+components/admin/AdminNav.tsx
+  s_a2086fba48f4db::t_1665289bbb0910 15
+  s_cf553ce2be909c::t_92408e89bea83a 14,16-17
+components/admin/ContentList.tsx
+  h_53dad1e32c3c71 339
+scss/_components.scss
+  s_a2086fba48f4db::t_c277387c9bac37 120-186,188-223,228-237,240-305,309,313,317-322,325,329-331,334-428,430-631
+  s_a2086fba48f4db::t_d80fdf97760499 224-227
+  s_a2086fba48f4db::t_fb995f96000b1b 632-633
+  h_53dad1e32c3c71 187,429
+  s_a2086fba48f4db::t_71fb98ab28804c 11-14,23-24
+docs/agents/coding.md
+  s_cf553ce2be909c::t_66bfc85d9e67ab 66-67
+  h_53dad1e32c3c71 30,40,56,60-61
+components/admin/admin-ui-classes.ts
+  s_a2086fba48f4db::t_0429ca547448e0 1,20
+  s_a2086fba48f4db::t_ba90ddedccca92 3-6,14,17,51,53,56,58
+  s_a2086fba48f4db::t_eca03aa580b75e 2,7,9,11,23,25,27,29,31,33,35,37,39,41,43,45,48
+  h_53dad1e32c3c71 8,10,12-13,15-16,18-19,21-22,24,26,28,30,32,34,36,38,40,42,44,46-47,49-50,52,54-55,57
+AGENTS.md
+  s_cf553ce2be909c::t_8592d03bab2040 29
+  h_53dad1e32c3c71 9,119-120,125
+  s_cf553ce2be909c::t_56bdc29bae908c 14,28,31
+tailwind.config.cjs
+  s_a2086fba48f4db::t_f8f9bc4b1bd31a 48
+  s_cf553ce2be909c::t_bdb0410f932907 2-4,6-13,17,54-57
+  s_cf553ce2be909c::t_b6c27a1a64faa6 1,5,14-16,18-22,24,29-30,33-37,40-41
+components/admin/ComposableContentForm.tsx
+  s_cf553ce2be909c::t_77fcdb906f4e26 203-204
+  s_a2086fba48f4db::t_ff1fb17b25ad5a 207,213
+  s_cf553ce2be909c::t_6f45f4f49506e2 5
+  s_a2086fba48f4db::t_b87392f5a0f2d9 209
+  s_a2086fba48f4db::t_b37935df83a4bd 194
+  s_cf553ce2be909c::t_59f2ccafe409f4 72-73
+  s_a2086fba48f4db::t_94efe9231f5123 182
+  s_cf553ce2be909c::t_9ebd32f2ab9bd7 35-36
+  h_53dad1e32c3c71 184-185,187
+  s_a2086fba48f4db::t_d1a22774317279 186
+components/admin/ImageFieldInput.tsx
+  h_53dad1e32c3c71 6,8-36,39-48,50-81,84-96,98-105,108-112,115-303,305-343
+docs/agents/cms-mcp.md
+  s_cf553ce2be909c::t_e2c43400e3a6af 63,85
+components/admin/SectionEditor.tsx
+  h_53dad1e32c3c71 265-271,274,295,297-298,323,344-348,350,354,361,370,376
+.gitignore
+  h_53dad1e32c3c71 11-12
+components/admin/AssetGrid.tsx
+  s_a2086fba48f4db::t_1b3a401444ee2e 216
+  h_53dad1e32c3c71 5,87
+  s_a2086fba48f4db::t_9eb9b72f5aea23 85-86,88
+  s_a2086fba48f4db::t_94efe9231f5123 105,107,111-114,141,148-151,154,249
+  s_a2086fba48f4db::t_b87392f5a0f2d9 108,130-133,160,167,169,175,181,190,204,212
+  s_a2086fba48f4db::t_bc02bf36f1913b 197
+  s_a2086fba48f4db::t_bd850db75a0d0a 233
+app/(admin)/sites/[siteId]/contents/[contentType]/page.tsx
+  s_a2086fba48f4db::t_7748fd7f96ba5b 27-33
+components/admin/LoginForm.tsx
+  h_53dad1e32c3c71 119
+scripts/setup-supabase-deploy.sh
+  s_cf553ce2be909c::t_168a6b33f0f698 8-9
+app/(admin)/page.tsx
+  s_cf553ce2be909c::t_b63d8ca67a229a 5,11-12
+  s_cf553ce2be909c::t_93d22aaa29e4ce 27
+  s_cf553ce2be909c::t_d050201020bfaf 1-3,9-10,13-19,22-26,28
+app/(admin)/sites/[siteId]/contents/[contentType]/[id]/page.tsx
+  s_a2086fba48f4db::t_d8ad0389e45124 9-16
+scripts/build-front-css.mjs
+  s_a2086fba48f4db::t_d9ec55a9bfbfbf 22
+scripts/vercel-env-checklist.md
+  s_cf553ce2be909c::t_987e4a4092c1cb 22
+components/admin/FieldGroup.tsx
+  s_a2086fba48f4db::t_095ed7e9a070cc 500
+  s_a2086fba48f4db::t_efd9f5870e4e1b 591
+  s_a2086fba48f4db::t_b87392f5a0f2d9 297,366,399,524,581,594
+  s_a2086fba48f4db::t_922963abc7a89b 359-362
+  s_a2086fba48f4db::t_e2ecc541fa207f 269,479
+  s_a2086fba48f4db::t_883b9c830cef36 451-454,456-458,460-462
+  s_a2086fba48f4db::t_f1ea68832f5938 522
+  s_a2086fba48f4db::t_5eb26a31b81e9e 631
+  s_a2086fba48f4db::t_6ce41d6d237f86 641
+  s_a2086fba48f4db::t_20b41fc63a344f 459
+  s_a2086fba48f4db::t_39bf08a40e290f 292-296,304-312,321-323
+  s_a2086fba48f4db::t_0799a8f9b6138a 534-535,537
+  s_a2086fba48f4db::t_e5ad41630879fe 446
+  h_53dad1e32c3c71 28,271-273,298,314,325,333,367,373-374,387,400,405,411-412,414,447,455,516,521,525,527-528,532,546,555-557,562,572,579,604,618,625,629,636
+  s_a2086fba48f4db::t_e1828edf6f9d9f 510
+  s_a2086fba48f4db::t_977ace7d4020d2 601
+  s_a2086fba48f4db::t_abb9f58b8d5ade 536,538-540
+  s_a2086fba48f4db::t_1c50d2a1bfa0a3 236,489-491,582-583
+  s_a2086fba48f4db::t_bb9f3a746eedd0 363-365
+  s_a2086fba48f4db::t_4d0e19754c9333 15-24
+  s_a2086fba48f4db::t_6c48ea1df3b38b 470-473,477
+  s_a2086fba48f4db::t_7718f9c6482cb7 258
+  s_a2086fba48f4db::t_94efe9231f5123 474-476,566
+  s_a2086fba48f4db::t_901aab1925be15 564-565
+  s_a2086fba48f4db::t_cf123f361e9db3 589,592
+  s_a2086fba48f4db::t_2fc44ec8c3ad07 25-27
+components/admin/ContentEditView.tsx
+  s_cf553ce2be909c::t_c4c79f845e6926 11
+  s_cf553ce2be909c::t_dae3715df1ec1e 83
+  s_cf553ce2be909c::t_30341623aeb492 70
+  s_cf553ce2be909c::t_26d8102219417e 39,47
+  s_cf553ce2be909c::t_426b3e401a5e3c 108-109
+components/admin/FieldAddPanel.tsx
+  s_a2086fba48f4db::t_94efe9231f5123 93,96,106,111,154
+  h_53dad1e32c3c71 101,240
+  s_a2086fba48f4db::t_367e827a287670 12-13
+  s_a2086fba48f4db::t_b432362f904a00 189,192
+  s_cf553ce2be909c::t_f457b3493aa461 54-55
+  s_cf553ce2be909c::t_c409a9a1681866 4-5
+  s_cf553ce2be909c::t_f715103aac9b68 36-37
+  s_a2086fba48f4db::t_d03f4c0bfc630c 91
+  s_a2086fba48f4db::t_588b003d59e301 7-11,14,89-90,92,95,98,110,153,187-188,190,203,211-212,214,219,227
+  s_a2086fba48f4db::t_b87392f5a0f2d9 145,165,178,191,213,248
+  s_a2086fba48f4db::t_9a8c30e4f0381d 136,155,168
+  s_ea8d1754c2559b::t_84a29164718527 245
+  s_cf553ce2be909c::t_fa1d5df1d1d512 247,249-251
+  s_a2086fba48f4db::t_83499533a3cf5d 112,120,128
+  s_ea8d1754c2559b::t_6047786da9552d 241-243
+components/admin/ContentForm.tsx
+  s_ea8d1754c2559b::t_f497ec5d5c354a 293,301
+lib/cms-agent/api-client.test.ts
+  s_cf553ce2be909c::t_1036d28f139068 323,330
+components/admin/SiteMembersPanel.tsx
+  h_53dad1e32c3c71 133,137,162,179,219,222,231,250
+next.config.js
+  s_a2086fba48f4db::t_b49a8aec718bcc 4-12
+app/(admin)/dashboard/page.tsx
+  s_cf553ce2be909c::t_ac16f7b94fe79f 27
+  s_cf553ce2be909c::t_7cca7b078560d6 1-23,25-26,28-38
+  h_53dad1e32c3c71 24
+app/(admin)/login/page.tsx
+  h_53dad1e32c3c71 32,40
+components/admin/AdminActionNotice.tsx
+  h_53dad1e32c3c71 15-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "82b40ff2c73c4d9d04fbf531cba3f0370e960a92",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_a2086fba48f4db": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a7c9c1cd-a4ba-45de-8013-a247949a807e",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_cf553ce2be909c": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b40562d1-2114-47bd-a5ae-e8f9bc7ed8fe",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_ea8d1754c2559b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e7989-09ce-79e2-a268-719a7e55117e",
+        "model": "gpt-5.4-mini"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
