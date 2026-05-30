@@ -5,11 +5,15 @@
 // }
 
 .AdminLayout {
-  @apply min-h-screen;
+  @apply h-screen overflow-hidden;
+}
+
+.SidebarAside {
+  @apply min-h-0 overflow-y-auto;
 }
 
 .AdminMain {
-  @apply min-w-0;
+  @apply min-h-0 min-w-0 overflow-y-auto;
 }
 
 .AdminPageHeader {
@@ -103,6 +107,22 @@
 .FieldGroup,
 .ComposableContentForm {
   @apply overflow-visible text-slate-100;
+}
+
+.field_group_header {
+  @apply cursor-pointer list-none;
+}
+
+.field_group_toggle {
+  @apply pointer-events-none mt-1 shrink-0 rounded-lg border border-white/10 p-1.5 text-slate-400;
+}
+
+.field_group_toggle_icon {
+  @apply block h-4 w-4 transition-transform duration-300;
+}
+
+.FieldGroup[open] .field_group_toggle_icon {
+  @apply rotate-180;
 }
 
 .composable_content_form_layout {

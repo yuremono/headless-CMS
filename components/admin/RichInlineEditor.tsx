@@ -81,9 +81,9 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
   }
 
   return (
-    <div className="RichInlineEditor mt-2">
+    <div data-l="RichEditor" className="RichInlineEditor mt-2">
       {!readOnly ? (
-        <div className="rich_inline_editor_toolbar mb-2 flex flex-wrap gap-2" role="toolbar" aria-label="書式">
+        <div data-l="EditorToolbar" className="rich_inline_editor_toolbar mb-2 flex flex-wrap gap-2" role="toolbar" aria-label="書式">
           <button
             type="button"
             className="rich_inline_editor_btn rounded-lg border border-white/15 bg-slate-950/60 px-3 py-1 text-xs font-semibold text-white transition hover:bg-slate-800"
@@ -108,6 +108,7 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
         </div>
       ) : null}
       <div
+        data-l="EditorArea"
         ref={editorRef}
         className="rich_inline_editor_area min-h-[3rem] w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
         contentEditable={!readOnly}

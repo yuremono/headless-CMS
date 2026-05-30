@@ -55,21 +55,20 @@ export async function AdminLayout( {
         const access=await getAdminUiAccess(siteKey);
         const authProvider=getAuthProvider();
 
-        return (<AdminAccessProvider access= {
-                        access
-                }
-
-                > <div className="AdminLayout grid min-h-screen gap-6 bg-slate-950 px-4 py-4 text-slate-100 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6 lg:py-6"> <aside className="flex flex-col  border border-white/10 bg-slate-900/80 p-5 shadow-2xl shadow-slate-950/40 backdrop-blur lg:min-h-[calc(100vh-3rem)]"> <AdminNav site= {
-                        site ?? null
-                }
-
-                authProvider= {
-                        authProvider
-                }
-
-                /> </aside> <main className="AdminMain min-w-0 space-y-6"> {
-                        children
-                }
-
-                </main> </div> </AdminAccessProvider>);
+        return (
+                <AdminAccessProvider access={access}>
+                        <div
+                                data-l="LayoutShell"
+                                className="AdminLayout grid  bg-slate-950 px-4 py-4 text-slate-100 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6 lg:py-6"
+                        >
+                                <aside
+                                        data-l="SidebarAside"
+                                        className="SidebarAside flex flex-col p-5 "
+                                >
+                                        <AdminNav site={site ?? null} authProvider={authProvider} />
+                                </aside>
+                                <main className="AdminMain space-y-6">{children}</main>
+                        </div>
+                </AdminAccessProvider>
+        );
 }

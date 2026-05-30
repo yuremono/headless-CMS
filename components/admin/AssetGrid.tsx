@@ -81,7 +81,7 @@ export function AssetGrid({
 
   if (assets.length === 0) {
     return (
-		<div className="AssetGrid  border border-dashed border-white/15 bg-slate-950/30 p-10 text-center text-sm text-slate-400">
+		<div data-l="AssetEmpty" className="AssetGrid  border border-dashed border-white/15 bg-slate-950/30 p-10 text-center text-sm text-slate-400">
 			アップロード済みのアセットはまだありません。
 		</div>
 	);
@@ -89,9 +89,11 @@ export function AssetGrid({
 
   return (
     <ul className="AssetGrid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {assets.map((asset) => {
+      {assets.map((asset, assetIndex) => {
         const isSelected = selectable && selectedUrl === asset.url;
         const isSaving = savingId === asset.id;
+        const itemLabel = `ItemPreview${assetIndex + 1}`;
+        const metaLabel = `ItemMeta${assetIndex + 1}`;
 
         return (
 			<li
@@ -102,7 +104,7 @@ export function AssetGrid({
 						: "border-white/10"
 				}`}
 			>
-				<div className="AssetGrid_preview relative aspect-[4/3] overflow-hidden bg-slate-950/80">
+				<div data-l={itemLabel} className="AssetGrid_preview relative aspect-[4/3] overflow-hidden bg-slate-950/80">
 					{asset.mimeType.startsWith("image/") ? (
 						<img
 							src={asset.url}
@@ -118,7 +120,7 @@ export function AssetGrid({
 							aria-label={asset.alt ?? asset.filename}
 						/>
 					) : (
-						<div className="flex h-full items-center justify-center text-sm text-slate-400">
+						<div data-l="MimeFallback" className="flex h-full items-center justify-center text-sm text-slate-400">
 							{asset.mimeType}
 						</div>
 					)}
@@ -133,7 +135,7 @@ export function AssetGrid({
 					) : null}
 				</div>
 
-				<div className="AssetGrid_meta space-y-3 p-4">
+				<div data-l={metaLabel} className="AssetGrid_meta space-y-3 p-4">
 					<div>
 						<p
 							className="truncate text-sm font-medium text-white"

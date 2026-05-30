@@ -139,22 +139,22 @@ export function ComposableContentForm({
   }
 
   return (
-    <section className="ComposableContentForm space-y-5 border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">
+    <section data-l="ContentForm" className="ComposableContentForm space-y-5 border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">
       <div>
-        <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{contentType.kind}</p>
+        
         <h3 className="mt-2 text-2xl font-semibold text-white">ページ名</h3>
         <p className="mt-2 text-sm text-slate-300">
           {readOnly
             ? '閲覧専用です。フィールドの追加・編集はできません。'
-            : 'prefix とフィールド型を選んでグループを追加し、JSON パスへ値を保存します。'}
+            : 'JSON Path を追加・保存し、サイトやアプリで取得します。'}
         </p>
       </div>
 
-      {!readOnly ? (
+      {/* {!readOnly ? (
         <div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
           下書き保存・公開は管理 API へ PATCH / publish を送信します。`x-session-token` が必要です。
         </div>
-      ) : null}
+      ) : null} */}
 
       <div className="composable_content_form_layout">
         <FieldAddPanel

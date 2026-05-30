@@ -77,7 +77,7 @@ export async function ContentEditView({
 
   return (
     <AdminLayout site={site}>
-      <AdminPageHeader
+      {/* <AdminPageHeader
         title={pageTitle}
         subtitle={`対象コンテンツ: ${record.data.title}`}
         actions={
@@ -92,7 +92,7 @@ export async function ContentEditView({
             />
           </>
         }
-      />
+      /> */}
       <AdminApiNotice source={record.meta.source} error={record.meta.error} endpoint={record.meta.endpoint} />
       {isComposable ? (
         <ComposableContentForm

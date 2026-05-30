@@ -70,11 +70,11 @@ export function FieldAddPanel({
   const showFormatChoice = selection.title || selection.text;
 
   return (
-    <div className="FieldAddPanel rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-      <h4 className="text-sm font-semibold text-white">フィールドを追加</h4>
+    <div data-l="FieldPanel" className="FieldAddPanel rounded-2xl border border-white/10 bg-slate-950/40 p-4">
+      <h4 className="text-sm font-semibold text-white">JSON Path を追加</h4>
 
       <label className="field_add_panel_prefix mt-4 block">
-        <span className="text-sm font-medium text-white">JSON パス prefix</span>
+        <span className="text-sm font-medium text-white">Path Name</span>
         <input
           className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
           value={prefix}
@@ -89,7 +89,7 @@ export function FieldAddPanel({
       </label>
 
       <fieldset className="field_add_panel_types mt-4 space-y-2" disabled={readOnly}>
-        <legend className="text-sm font-medium text-white">フィールド型</legend>
+        <legend className="text-sm font-medium text-white">Path の種類</legend>
         <label className="flex items-center gap-2 text-sm text-slate-200">
           <input
             type="checkbox"
@@ -151,8 +151,8 @@ export function FieldAddPanel({
       ) : null}
 
       {previewPaths.length > 0 ? (
-        <div className="field_add_panel_preview mt-4 rounded-xl border border-white/10 bg-slate-950/50 p-3">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">追加されるパス</p>
+        <div data-l="PathPreview" className="field_add_panel_preview mt-4 rounded-xl border border-white/10 bg-slate-950/50 p-3">
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">追加される JSON Path</p>
           <ul className="mt-2 space-y-1 font-mono text-xs text-sky-100">
             {previewPaths.map((path) => (
               <li key={path}>{path}</li>
@@ -168,11 +168,11 @@ export function FieldAddPanel({
           onClick={handleAdd}
           disabled={!canAdd}
         >
-          フィールドを追加
+          追加する
         </button>
       ) : null}
 
-      <div className="field_add_panel_actions mt-6 flex flex-wrap gap-3 border-t border-white/10 pt-6">
+      <div data-l="FormActions" className="field_add_panel_actions mt-6 flex flex-wrap gap-3 border-t border-white/10 pt-6">
         {!readOnly ? (
           <>
             <button

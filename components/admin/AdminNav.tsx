@@ -30,7 +30,7 @@ export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
 
   return (
     <nav className="AdminNav flex min-h-full flex-col gap-5">
-      <div className="space-y-2">
+      <div data-l="NavBrand" className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Headless CMS</p>
         <h1 className="text-xl font-semibold text-white">管理画面</h1>
         {/* <p className="text-sm leading-6 text-slate-300">
@@ -46,7 +46,7 @@ export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
         </div>
       ) : null} */}
 
-      <div className="space-y-2">
+      <div data-l="NavMain" className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Navigation</p>
         <ul className="space-y-1">
           {navItems.map((item) => (
@@ -63,7 +63,7 @@ export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
       </div>
 
       {siteItems.length > 0 ? (
-        <div className="space-y-2">
+        <div data-l="NavSite" className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Site tools</p>
           <ul className="space-y-1">
             {siteItems.map((item) => (
@@ -80,7 +80,7 @@ export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
         </div>
       ) : null}
 
-      <div className="mt-auto space-y-2 border-t border-white/10 pt-5">
+      <div data-l="NavAccount" className="mt-auto space-y-2 border-t border-white/10 pt-5">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Account</p>
         <LogoutButton authProvider={authProvider} />
       </div>

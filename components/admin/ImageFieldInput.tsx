@@ -87,15 +87,15 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
   const previewIsVideo = value.url && /\.(mp4|webm|mov|avi)(\?|$)/i.test(value.url);
 
   return (
-    <div className="ImageFieldInput block">
-      <div className="flex items-center gap-2 text-sm font-medium text-white">
+    <div data-l="ImageField" className="ImageFieldInput block">
+      <div data-l="FieldLabel" className="flex items-center gap-2 text-sm font-medium text-white">
         <span>{label}</span>
         {required ? (
           <span className="rounded-full bg-sky-400/15 px-2 py-0.5 text-xs text-sky-200">必須</span>
         ) : null}
       </div>
 
-      <div className="ImageFieldInput_controls mt-3 flex flex-wrap items-center gap-3">
+      <div data-l="FieldControls" className="ImageFieldInput_controls mt-3 flex flex-wrap items-center gap-3">
         {!readOnly ? (
           <>
             <button
@@ -115,7 +115,7 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
       </div>
 
       {!readOnly ? (
-        <div className="mt-4">
+        <div data-l="UploadWrap" className="mt-4">
           <MediaUploadZone
             siteId={siteId}
             multiple
@@ -133,7 +133,7 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
       ) : null}
 
       {value.url ? (
-        <div className="ImageFieldInput_preview mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50 p-3">
+        <div data-l="FieldPreview" className="ImageFieldInput_preview mt-4 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/50 p-3">
           {previewIsVideo ? (
             <video src={value.url} controls className="max-h-48 w-full rounded-xl object-contain" />
           ) : (
@@ -173,13 +173,14 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
 
       {isLibraryOpen ? (
         <div
+          data-l="LibraryModal"
           className="ImageFieldInput_modal fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label="メディアライブラリ"
         >
-          <div className="ImageFieldInput_modalPanel flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-white/10 bg-slate-900 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+          <div data-l="ModalPanel" className="ImageFieldInput_modalPanel flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-white/10 bg-slate-900 shadow-2xl">
+            <div data-l="ModalHeader" className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div>
                 <p className="text-lg font-semibold text-white">メディアライブラリ</p>
                 <p className="text-sm text-slate-400">登録済みの画像から選択します。</p>
@@ -193,7 +194,7 @@ export function ImageFieldInput({ siteId, label, required, helpText, value, onCh
               </button>
             </div>
 
-            <div className="overflow-y-auto px-5 py-5">
+            <div data-l="ModalBody" className="overflow-y-auto px-5 py-5">
               {libraryLoading ? (
                 <p className="text-sm text-slate-400">読み込み中…</p>
               ) : libraryError ? (

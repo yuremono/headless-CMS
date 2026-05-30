@@ -1,5 +1,6 @@
 'use client';
 
+import type { MouseEvent } from 'react';
 import {
   getFieldTypeLabel,
   migratePathsOnPrefixChange,
@@ -57,6 +58,15 @@ function applyImageFieldValue(
   });
 }
 
+function isInteractiveSummaryTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+  return Boolean(
+    target.closest('input, button, textarea, select, a, [contenteditable="true"]'),
+  );
+}
+
 export function FieldGroup({
   siteId,
   group,
@@ -66,6 +76,12 @@ export function FieldGroup({
   readOnly = false,
 }: FieldGroupProps) {
   const prefixValidation = validatePrefix(group.prefix);
+
+  function handleSummaryClick(event: MouseEvent<HTMLElement>) {
+    if (isInteractiveSummaryTarget(event.target)) {
+      event.preventDefault();
+    }
+  }
 
   function handlePrefixChange(nextPrefix: string) {
     const migratedFields = migratePathsOnPrefixChange(
@@ -115,45 +131,78 @@ export function FieldGroup({
   };
 
   return (
-    <div className="FieldGroup rounded-2xl border border-white/10 bg-slate-950/30 p-4">
-      <div className="field_group_header flex flex-wrap items-start justify-between gap-3">
-        <label className="field_group_prefix block min-w-[12rem] flex-1">
-          <span className="text-sm font-medium text-white">JSON パス prefix</span>
-          <input
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-            value={group.prefix}
-            onChange={(event) => handlePrefixChange(event.target.value)}
-            placeholder="例: hero"
-            disabled={readOnly}
-            readOnly={readOnly}
-          />
-          {!prefixValidation.valid ? (
-            <p className="mt-2 text-sm text-rose-300">{prefixValidation.message}</p>
-          ) : null}
-        </label>
+    <details
+      data-l="FieldGroup"
+      className="FieldGroup rounded-2xl border border-white/10 bg-slate-950/30 p-4"
+      open
+      aria-label={`フィールドグループ: ${group.prefix || '（prefix 未入力）'}`}
+    >
+      <summary
+        data-l="GroupHeader"
+        className="field_group_header flex flex-wrap items-center gap-3"
+        onClick={handleSummaryClick}
+      >
+        <span className="field_group_toggle" aria-hidden="true">
+          <svg
+            className="field_group_toggle_icon"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.06z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </span>
+        <div
+          data-l="PrefixRow"
+          className="field_group_prefix_row flex min-w-[12rem] flex-1 flex-row items-center gap-3"
+        >
+          <span className="field_group_prefix_label shrink-0  text-sm font-medium text-white">
+            Path Name
+          </span>
+          <label className="field_group_prefix min-w-0 flex-1">
+            <input
+              className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+              value={group.prefix}
+              onChange={(event) => handlePrefixChange(event.target.value)}
+              placeholder="例: hero"
+              disabled={readOnly}
+              readOnly={readOnly}
+            />
+            {!prefixValidation.valid ? (
+              <p className="mt-2 text-sm text-rose-300">{prefixValidation.message}</p>
+            ) : null}
+          </label>
+        </div>
         {!readOnly ? (
           <button
             type="button"
             className="field_group_remove rounded-full border border-rose-400/40 bg-rose-400/10 px-4 py-2 text-sm text-rose-100 transition hover:bg-rose-400/20"
-            onClick={onRemove}
+            onClick={(event) => {
+              event.preventDefault();
+              onRemove();
+            }}
           >
-            グループを削除
+            JSONを削除
           </button>
         ) : null}
-      </div>
+      </summary>
 
-      <div className="field_group_fields mt-4 space-y-4">
-        {scalarFields.map((field) => {
+      <div data-l="GroupFields" className="field_group_fields mt-4 space-y-4">
+        {scalarFields.map((field, fieldIndex) => {
           const isRich = supportsFormat(field.type) && field.format === 'richText';
 
           return (
-            <div key={field.jsonPath} className="field_group_field">
-              <div className="field_group_field_header flex flex-wrap items-center justify-between gap-2">
+            <div key={field.jsonPath} data-l={`FieldItem${fieldIndex + 1}`} className="field_group_field">
+              <div data-l="FieldHeader" className="field_group_field_header flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs text-slate-400">
                   {getFieldTypeLabel(field.type)} · <span className="font-mono">{field.jsonPath}</span>
                 </p>
                 {supportsFormat(field.type) && !readOnly ? (
                   <div
+                    data-l="FormatToggle"
                     className="field_group_field_format flex items-center gap-1 text-xs"
                     role="group"
                     aria-label="形式"
@@ -213,8 +262,8 @@ export function FieldGroup({
         })}
 
         {hasImageBundle ? (
-          <div className="field_group_image_bundle rounded-xl border border-violet-400/20 bg-violet-400/5 p-4">
-            <div className="field_group_image_bundle_header flex items-center justify-between gap-3">
+          <div data-l="ImageBundle" className="field_group_image_bundle rounded-xl border border-violet-400/20 bg-violet-400/5 p-4">
+            <div data-l="BundleHeader" className="field_group_image_bundle_header flex items-center justify-between gap-3">
               <p className="text-sm font-medium text-violet-100">画像セット</p>
               {!readOnly ? (
                 <button
@@ -226,9 +275,9 @@ export function FieldGroup({
                 </button>
               ) : null}
             </div>
-            <div className="mt-3 space-y-4">
+            <div data-l="BundleFields" className="mt-3 space-y-4">
               {imageUrlField ? (
-                <div className="field_group_bundle_image">
+                <div data-l="BundleImage" className="field_group_bundle_image">
                   <p className="text-xs text-slate-400">
                     {getFieldTypeLabel('imageUrl')} ·{' '}
                     <span className="font-mono">{imageUrlField.jsonPath}</span>
@@ -253,8 +302,8 @@ export function FieldGroup({
                   />
                 </div>
               ) : null}
-              {imageHrefFields.map((field) => (
-                <div key={field.jsonPath} className="field_group_bundle_field">
+              {imageHrefFields.map((field, hrefIndex) => (
+                <div key={field.jsonPath} data-l={`BundleField${hrefIndex + 1}`} className="field_group_bundle_field">
                   <p className="text-xs text-slate-400">
                     {getFieldTypeLabel(field.type)} ·{' '}
                     <span className="font-mono">{field.jsonPath}</span>
@@ -273,6 +322,6 @@ export function FieldGroup({
           </div>
         ) : null}
       </div>
-    </div>
+    </details>
   );
 }
