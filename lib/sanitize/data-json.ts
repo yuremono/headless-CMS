@@ -88,14 +88,81 @@ function parseSchemaDefinition(schemaJson: Record<string, unknown>): ContentType
   }
 }
 
+function isComposableRichTextFormat(value: unknown): value is "richText" {
+  return value === "richText";
+}
+
+/** ドット記法パスへ値を設定する（経路上のオブジェクトが無ければ生成しない＝既存値のみ更新）。 */
+function setExistingPathValue(
+  data: Record<string, unknown>,
+  path: string,
+  value: unknown,
+): void {
+  const parts = path.split(".");
+  let current: Record<string, unknown> = data;
+
+  for (let index = 0; index < parts.length - 1; index += 1) {
+    const next = current[parts[index] ?? ""];
+    if (!isPlainObject(next)) {
+      return;
+    }
+    current = next;
+  }
+
+  const leaf = parts[parts.length - 1] ?? "";
+  if (leaf in current) {
+    current[leaf] = value;
+  }
+}
+
+function readPathValue(data: Record<string, unknown>, path: string): unknown {
+  const parts = path.split(".");
+  let current: unknown = data;
+  for (const part of parts) {
+    if (!isPlainObject(current)) {
+      return undefined;
+    }
+    current = current[part];
+  }
+  return current;
+}
+
+/**
+ * composable フィールドビルダーで richText 指定されたパスをサニタイズする。
+ * これらは content-type スキーマの fields に含まれないため、スキーマ駆動サニタイズの対象外。
+ * schema_json.composableFieldFormats（jsonPath -> format）を見て個別にサニタイズする。
+ */
+async function sanitizeComposableRichText(
+  dataJson: Record<string, unknown>,
+  schemaJson: Record<string, unknown>,
+): Promise<void> {
+  const formats = schemaJson.composableFieldFormats;
+  if (!isPlainObject(formats)) {
+    return;
+  }
+
+  for (const [path, format] of Object.entries(formats)) {
+    if (!isComposableRichTextFormat(format)) {
+      continue;
+    }
+    const value = readPathValue(dataJson, path);
+    if (typeof value === "string") {
+      setExistingPathValue(dataJson, path, await sanitizeRichTextHtml(value));
+    }
+  }
+}
+
 export async function sanitizeContentDataJson(
   dataJson: Record<string, unknown>,
   schemaJson: Record<string, unknown>,
 ): Promise<Record<string, unknown>> {
   const definition = parseSchemaDefinition(schemaJson);
-  if (!definition) {
-    return dataJson;
-  }
 
-  return sanitizeObjectFields(dataJson, definition.fields);
+  const result = definition
+    ? await sanitizeObjectFields(dataJson, definition.fields)
+    : clonePlainObject(dataJson);
+
+  await sanitizeComposableRichText(result, schemaJson);
+
+  return result;
 }

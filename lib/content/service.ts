@@ -60,7 +60,25 @@ const CONTROL_KEYS = new Set([
   "createdBy",
   "updatedBy",
   "publishedAt",
+  "fieldFormats",
 ]);
+
+function extractFieldFormats(
+  body: Record<string, unknown>,
+): Record<string, "plain" | "richText"> | undefined {
+  const raw = body.fieldFormats;
+  if (!isPlainObject(raw)) {
+    return undefined;
+  }
+
+  const formats: Record<string, "plain" | "richText"> = {};
+  for (const [path, value] of Object.entries(raw)) {
+    if (value === "plain" || value === "richText") {
+      formats[path] = value;
+    }
+  }
+  return formats;
+}
 
 function normalizeContentStatus(value: unknown): ContentStatus | undefined {
   if (value === "draft" || value === "published" || value === "unpublished") {
@@ -146,6 +164,31 @@ export async function resolveGlobalAdminRequest(
 
 export async function getSchemas(siteId: string) {
   return listSchemas(siteId);
+}
+
+/**
+ * フロント検証ツール向けのフィールドマニフェスト（定義済みパス + format）を返す。
+ * id 指定時はそのコンテンツの実データ、未指定時は最新 1 件のデータからパスを収集する。
+ */
+export async function getFieldManifest(
+  siteId: string,
+  contentType: string,
+  id?: string | null,
+) {
+  const { buildFieldManifest } = await import("./field-manifest");
+  const schema = await getSchema(siteId, contentType);
+  const schemaJson = (schema?.schemaJson ?? {}) as Record<string, unknown>;
+
+  let dataJson: Record<string, unknown> = {};
+  if (id) {
+    const content = await getContent(siteId, contentType, id, true);
+    dataJson = content?.dataJson ?? {};
+  } else {
+    const list = await listContents({ siteId, contentType, includeDraft: true, limit: 1, offset: 0 });
+    dataJson = list.items[0]?.dataJson ?? {};
+  }
+
+  return buildFieldManifest(contentType, schemaJson, dataJson);
 }
 
 export async function getSchemaByType(siteId: string, contentType: string) {
@@ -274,6 +317,7 @@ export async function createAdminContent(
     dataJson,
     createdBy: userId,
     updatedBy: userId,
+    composableFieldFormats: extractFieldFormats(body),
   } satisfies CreateContentInput);
 }
 
@@ -299,6 +343,7 @@ export async function updateAdminContent(
     status,
     dataJson,
     updatedBy: userId,
+    composableFieldFormats: extractFieldFormats(body),
   } satisfies UpdateContentInput);
 }
 

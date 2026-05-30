@@ -109,6 +109,14 @@ export function AssetGrid({
 							alt={asset.alt ?? asset.filename}
 							className="h-full w-full object-cover"
 						/>
+					) : asset.mimeType.startsWith("video/") ? (
+						<video
+							src={asset.url}
+							className="h-full w-full object-cover"
+							controls
+							preload="metadata"
+							aria-label={asset.alt ?? asset.filename}
+						/>
 					) : (
 						<div className="flex h-full items-center justify-center text-sm text-slate-400">
 							{asset.mimeType}

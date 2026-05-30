@@ -345,12 +345,14 @@ export function buildContentWriteBody(input: {
   slug: string;
   data: Record<string, unknown>;
   status?: 'draft' | 'published' | 'unpublished';
+  fieldFormats?: Record<string, 'plain' | 'richText'>;
 }) {
   return {
     title: input.title,
     slug: input.slug,
     status: input.status ?? 'draft',
     data: input.data,
+    ...(input.fieldFormats ? { fieldFormats: input.fieldFormats } : {}),
   };
 }
 

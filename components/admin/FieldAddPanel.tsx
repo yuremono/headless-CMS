@@ -1,11 +1,13 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import {
   createFieldsFromSelection,
   normalizePrefix,
   previewPathsForSelection,
   validatePrefix,
+  type ComposableFieldFormat,
   type ComposableFieldSelection,
 } from '@/lib/admin/field-type-catalog';
 
@@ -13,6 +15,12 @@ interface FieldAddPanelProps {
   sourceData: Record<string, unknown>;
   onAdd: (prefix: string, fields: ReturnType<typeof createFieldsFromSelection>) => void;
   readOnly?: boolean;
+  siteId: string;
+  contentTypeSlug: string;
+  previewUrl?: string | null;
+  isPending?: boolean;
+  onSave?: () => void;
+  onPublish?: () => void;
 }
 
 const emptySelection: ComposableFieldSelection = {
@@ -21,9 +29,20 @@ const emptySelection: ComposableFieldSelection = {
   image: false,
 };
 
-export function FieldAddPanel({ sourceData, onAdd, readOnly = false }: FieldAddPanelProps) {
+export function FieldAddPanel({
+  sourceData,
+  onAdd,
+  readOnly = false,
+  siteId,
+  contentTypeSlug,
+  previewUrl,
+  isPending = false,
+  onSave,
+  onPublish,
+}: FieldAddPanelProps) {
   const [prefix, setPrefix] = useState('');
   const [selection, setSelection] = useState<ComposableFieldSelection>(emptySelection);
+  const [format, setFormat] = useState<ComposableFieldFormat>('plain');
 
   const prefixValidation = useMemo(() => validatePrefix(prefix), [prefix]);
   const previewPaths = useMemo(
@@ -43,10 +62,12 @@ export function FieldAddPanel({ sourceData, onAdd, readOnly = false }: FieldAddP
     }
 
     const normalized = normalizePrefix(prefix);
-    const fields = createFieldsFromSelection(normalized, selection, sourceData);
+    const fields = createFieldsFromSelection(normalized, selection, sourceData, format);
     onAdd(normalized, fields);
     setSelection(emptySelection);
   }
+
+  const showFormatChoice = selection.title || selection.text;
 
   return (
     <div className="FieldAddPanel rounded-2xl border border-white/10 bg-slate-950/40 p-4">
@@ -95,6 +116,40 @@ export function FieldAddPanel({ sourceData, onAdd, readOnly = false }: FieldAddP
         </label>
       </fieldset>
 
+      {showFormatChoice ? (
+        <fieldset className="field_add_panel_format mt-4 space-y-2" disabled={readOnly}>
+          <legend className="text-sm font-medium text-white">タイトル・テキストの形式</legend>
+          <label className="flex items-start gap-2 text-sm text-slate-200">
+            <input
+              type="radio"
+              name="field_add_format"
+              className="mt-1"
+              checked={format === 'plain'}
+              onChange={() => setFormat('plain')}
+            />
+            <span>
+              プレーンテキスト
+              <span className="block text-xs text-slate-400">そのまま文字列として表示（安全）。</span>
+            </span>
+          </label>
+          <label className="flex items-start gap-2 text-sm text-slate-200">
+            <input
+              type="radio"
+              name="field_add_format"
+              className="mt-1"
+              checked={format === 'richText'}
+              onChange={() => setFormat('richText')}
+            />
+            <span>
+              リッチテキスト
+              <span className="block text-xs text-slate-400">
+                太字・斜体・アクセント（span）などインライン装飾を許可。
+              </span>
+            </span>
+          </label>
+        </fieldset>
+      ) : null}
+
       {previewPaths.length > 0 ? (
         <div className="field_add_panel_preview mt-4 rounded-xl border border-white/10 bg-slate-950/50 p-3">
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">追加されるパス</p>
@@ -116,6 +171,45 @@ export function FieldAddPanel({ sourceData, onAdd, readOnly = false }: FieldAddP
           フィールドを追加
         </button>
       ) : null}
+
+      <div className="field_add_panel_actions mt-6 flex flex-wrap gap-3 border-t border-white/10 pt-6">
+        {!readOnly ? (
+          <>
+            <button
+              type="button"
+              className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => onSave?.()}
+              disabled={isPending}
+            >
+              下書きを保存
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={() => onPublish?.()}
+              disabled={isPending}
+            >
+              公開
+            </button>
+          </>
+        ) : null}
+        {previewUrl ? (
+          <a
+            href={previewUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="PreviewLink rounded-full border border-violet-400/40 bg-violet-400/10 px-5 py-3 text-sm font-medium text-violet-100 transition hover:bg-violet-400/20"
+          >
+            プレビューを開く
+          </a>
+        ) : null}
+        <Link
+          href={`/sites/${siteId}/contents/${contentTypeSlug}`}
+          className="rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white"
+        >
+          一覧に戻る
+        </Link>
+      </div>
     </div>
   );
 }

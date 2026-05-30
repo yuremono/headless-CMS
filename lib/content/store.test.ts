@@ -7,6 +7,7 @@ vi.mock("@/lib/db/prisma", () => ({
       findUnique: vi.fn(),
       findMany: vi.fn(),
       upsert: vi.fn(),
+      update: vi.fn(),
     },
     content: {
       findMany: vi.fn(),
@@ -43,6 +44,7 @@ const mockedResolveSiteId = vi.mocked(resolveSiteId);
 const mockedFindUnique = vi.mocked(prisma.contentModel.findUnique);
 const mockedFindManyModels = vi.mocked(prisma.contentModel.findMany);
 const mockedUpsert = vi.mocked(prisma.contentModel.upsert);
+const mockedUpdateModel = vi.mocked(prisma.contentModel.update);
 const mockedFindManyContents = vi.mocked(prisma.content.findMany);
 const mockedCount = vi.mocked(prisma.content.count);
 const mockedFindFirst = vi.mocked(prisma.content.findFirst);
@@ -288,6 +290,41 @@ describe("createContent", () => {
         data: expect.objectContaining({ status: "draft", publishedAt: null }),
       }),
     );
+  });
+
+  it("composableFieldFormats の richText を schema_json へマージし update する", async () => {
+    mockedCreate.mockResolvedValue(makeContent());
+    mockedUpdateModel.mockResolvedValue(makeModel());
+
+    await createContent("site-1", "news", {
+      title: "T",
+      composableFieldFormats: { "hero.title": "richText", "hero.lead": "plain" },
+    });
+
+    expect(mockedUpdateModel).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "model-news" },
+        data: expect.objectContaining({
+          schemaJson: expect.objectContaining({
+            composableFieldFormats: { "hero.title": "richText" },
+          }),
+        }),
+      }),
+    );
+  });
+
+  it("format に変更が無ければ contentModel.update を呼ばない", async () => {
+    mockedFindUnique.mockResolvedValue(
+      makeModel({ schemaJson: { fields: [], composableFieldFormats: { "hero.title": "richText" } } }),
+    );
+    mockedCreate.mockResolvedValue(makeContent());
+
+    await createContent("site-1", "news", {
+      title: "T",
+      composableFieldFormats: { "hero.title": "richText" },
+    });
+
+    expect(mockedUpdateModel).not.toHaveBeenCalled();
   });
 });
 

@@ -127,9 +127,15 @@ describe("mapUploadError", () => {
     ).toMatchObject({ status: 404 });
   });
 
-  it("R2 未実装は 501", () => {
+  it("R2 未設定は 501", () => {
     expect(
-      mapUploadError(new Error("R2 storage is not implemented yet.")),
+      mapUploadError(new Error("R2 storage is not configured.")),
+    ).toMatchObject({ status: 501, code: "storage_not_configured" });
+  });
+
+  it("Vercel local は 501", () => {
+    expect(
+      mapUploadError(new Error("Local storage cannot persist uploads on Vercel.")),
     ).toMatchObject({ status: 501, code: "storage_not_configured" });
   });
 

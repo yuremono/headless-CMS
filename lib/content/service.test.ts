@@ -75,6 +75,7 @@ import {
   getAdminContentRecord,
   getAdminContentTypes,
   getDeliveryContent,
+  getFieldManifest,
   getSchemaByType,
   getSchemas,
   listAdminContents as listAdminContentsService,
@@ -307,6 +308,43 @@ describe("admin content helpers", () => {
     expect(await createAdminContent("site-1", "news", null, "actor")).toBeNull();
   });
 
+  it("createAdminContent は fieldFormats を正規化して composableFieldFormats へ渡す", async () => {
+    await createAdminContent(
+      "site-1",
+      "news",
+      {
+        summary: "要約",
+        fieldFormats: { "hero.title": "richText", "hero.lead": "plain", "hero.bad": "x" },
+      },
+      "actor-1",
+    );
+
+    expect(mockedCreateContent).toHaveBeenCalledWith(
+      "site-1",
+      "news",
+      expect.objectContaining({
+        composableFieldFormats: { "hero.title": "richText", "hero.lead": "plain" },
+      }),
+    );
+  });
+
+  it("updateAdminContent は fieldFormats 不在時 composableFieldFormats=undefined", async () => {
+    await updateAdminContent(
+      "site-1",
+      "news",
+      "content-1",
+      { dataJson: { summary: "更新" } },
+      "actor-1",
+    );
+
+    expect(mockedUpdateContent).toHaveBeenCalledWith(
+      "site-1",
+      "news",
+      "content-1",
+      expect.objectContaining({ composableFieldFormats: undefined }),
+    );
+  });
+
   it("updateAdminContent は dataJson ネストを優先する", async () => {
     await updateAdminContent(
       "site-1",
@@ -350,6 +388,52 @@ describe("admin content helpers", () => {
     expect(mockedListContents).toHaveBeenCalledWith(
       expect.objectContaining({ includeDraft: true }),
     );
+  });
+});
+
+describe("getFieldManifest", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("id 指定時は対象コンテンツの dataJson からパスを収集する", async () => {
+    mockedGetSchema.mockResolvedValue({
+      siteId: "site-1",
+      contentType: "news",
+      schemaJson: { composableFieldFormats: { "hero.title": "richText" } },
+    } as never);
+    mockedGetContent.mockResolvedValue({
+      ...sampleRecord,
+      dataJson: { hero: { title: "<span>T</span>", lead: "リード" } },
+    });
+
+    const manifest = await getFieldManifest("site-1", "news", "content-1");
+
+    expect(mockedGetContent).toHaveBeenCalledWith("site-1", "news", "content-1", true);
+    expect(manifest.contentType).toBe("news");
+    const titleEntry = manifest.paths.find((f) => f.path === "hero.title");
+    expect(titleEntry?.format).toBe("richText");
+  });
+
+  it("id 未指定時は最新 1 件のデータを使う", async () => {
+    mockedGetSchema.mockResolvedValue({
+      siteId: "site-1",
+      contentType: "news",
+      schemaJson: {},
+    } as never);
+    mockedListContents.mockResolvedValue({
+      items: [{ ...sampleRecord, dataJson: { title: "最新" } }],
+      total: 1,
+      limit: 1,
+      offset: 0,
+    });
+
+    const manifest = await getFieldManifest("site-1", "news");
+
+    expect(mockedListContents).toHaveBeenCalledWith(
+      expect.objectContaining({ includeDraft: true, limit: 1 }),
+    );
+    expect(manifest.paths.some((f) => f.path === "title")).toBe(true);
   });
 });
 

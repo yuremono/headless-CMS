@@ -8,6 +8,27 @@ import { PreviewLink } from './PreviewLink';
 import { loadContent, resolveContentTypeDefinition, resolveSiteSummary } from './AdminData';
 import { buildPreviewUrl } from '@/lib/preview';
 import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
+import { getSchemaByType } from '@/lib/content/service';
+import { isComposableFieldFormat, type ComposableFieldFormat } from '@/lib/admin/field-type-catalog';
+
+async function loadComposableFieldFormats(
+  siteId: string,
+  contentType: string,
+): Promise<Record<string, ComposableFieldFormat>> {
+  const schema = await getSchemaByType(siteId, contentType);
+  const raw = schema?.schemaJson?.composableFieldFormats;
+  if (!raw || typeof raw !== 'object') {
+    return {};
+  }
+
+  const formats: Record<string, ComposableFieldFormat> = {};
+  for (const [path, value] of Object.entries(raw as Record<string, unknown>)) {
+    if (isComposableFieldFormat(value)) {
+      formats[path] = value;
+    }
+  }
+  return formats;
+}
 
 interface ContentEditViewProps {
   siteId: string;
@@ -45,6 +66,9 @@ export async function ContentEditView({
   const access = await getAdminUiAccess(siteId);
 
   const isComposable = formLayout === 'composable';
+  const fieldFormats = isComposable
+    ? await loadComposableFieldFormats(siteId, contentType)
+    : {};
   const pageTitle = isComposable
     ? 'ページ名'
     : access.readOnly
@@ -76,6 +100,7 @@ export async function ContentEditView({
           contentType={definition}
           record={record.data}
           previewUrl={previewUrl}
+          fieldFormats={fieldFormats}
         />
       ) : (
         <ContentForm

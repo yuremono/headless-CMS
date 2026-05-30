@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { StorageValidationError } from "./types";
-import { validateImageUpload } from "./validate";
+import { validateMediaUpload } from "./validate";
 
 const originalEnv = { ...process.env };
 
@@ -21,7 +21,17 @@ function minimalJpegBuffer(): Buffer {
   return Buffer.from([0xff, 0xd8, 0xff, 0x00]);
 }
 
-describe("validateImageUpload", () => {
+function minimalSvgBuffer(): Buffer {
+  return Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"></svg>', "utf8");
+}
+
+function minimalMp4Buffer(): Buffer {
+  const buffer = Buffer.alloc(12);
+  buffer.write("    ftypisom", 0, "ascii");
+  return buffer;
+}
+
+describe("validateMediaUpload", () => {
   beforeEach(() => {
     process.env = { ...originalEnv };
     delete process.env.UPLOAD_MAX_BYTES;
@@ -33,7 +43,7 @@ describe("validateImageUpload", () => {
 
   it("空ファイルは empty_file", () => {
     try {
-      validateImageUpload({
+      validateMediaUpload({
         buffer: Buffer.alloc(0),
         declaredMimeType: "image/png",
         size: 0,
@@ -49,7 +59,7 @@ describe("validateImageUpload", () => {
     process.env.UPLOAD_MAX_BYTES = "3";
 
     try {
-      validateImageUpload({
+      validateMediaUpload({
         buffer: minimalPngBuffer(),
         declaredMimeType: "image/png",
         size: 10,
@@ -60,22 +70,9 @@ describe("validateImageUpload", () => {
     }
   });
 
-  it("許可外 MIME は invalid_mime_type", () => {
-    try {
-      validateImageUpload({
-        buffer: minimalPngBuffer(),
-        declaredMimeType: "text/plain",
-        size: 12,
-      });
-      expect.fail("should throw");
-    } catch (error) {
-      expect((error as StorageValidationError).code).toBe("invalid_mime_type");
-    }
-  });
-
   it("署名不一致は invalid_file_content", () => {
     try {
-      validateImageUpload({
+      validateMediaUpload({
         buffer: Buffer.from("not-an-image"),
         declaredMimeType: "image/png",
         size: 12,
@@ -86,22 +83,32 @@ describe("validateImageUpload", () => {
     }
   });
 
-  it("宣言 MIME と検出 MIME が違う場合は mime_type_mismatch", () => {
-    try {
-      validateImageUpload({
-        buffer: minimalPngBuffer(),
-        declaredMimeType: "image/jpeg",
-        size: 12,
-      });
-      expect.fail("should throw");
-    } catch (error) {
-      expect((error as StorageValidationError).code).toBe("mime_type_mismatch");
-    }
+  it("宣言 MIME と検出 MIME が違っても検出結果を優先する", () => {
+    const buffer = minimalPngBuffer();
+    const result = validateMediaUpload({
+      buffer,
+      declaredMimeType: "image/jpeg",
+      size: buffer.length,
+    });
+
+    expect(result.mimeType).toBe("image/png");
+  });
+
+  it("type 未設定でも拡張子と内容から判定する", () => {
+    const buffer = minimalPngBuffer();
+    const result = validateMediaUpload({
+      buffer,
+      declaredMimeType: "application/octet-stream",
+      size: buffer.length,
+      filename: "photo.png",
+    });
+
+    expect(result.mimeType).toBe("image/png");
   });
 
   it("有効な PNG を受理する", () => {
     const buffer = minimalPngBuffer();
-    const result = validateImageUpload({
+    const result = validateMediaUpload({
       buffer,
       declaredMimeType: "image/png",
       size: buffer.length,
@@ -113,12 +120,34 @@ describe("validateImageUpload", () => {
 
   it("有効な JPEG を受理する", () => {
     const buffer = minimalJpegBuffer();
-    const result = validateImageUpload({
+    const result = validateMediaUpload({
       buffer,
       declaredMimeType: "image/jpeg",
       size: buffer.length,
     });
 
     expect(result.mimeType).toBe("image/jpeg");
+  });
+
+  it("有効な SVG を受理する", () => {
+    const buffer = minimalSvgBuffer();
+    const result = validateMediaUpload({
+      buffer,
+      declaredMimeType: "image/svg+xml",
+      size: buffer.length,
+    });
+
+    expect(result.mimeType).toBe("image/svg+xml");
+  });
+
+  it("有効な MP4 を受理する", () => {
+    const buffer = minimalMp4Buffer();
+    const result = validateMediaUpload({
+      buffer,
+      declaredMimeType: "video/mp4",
+      size: buffer.length,
+    });
+
+    expect(result.mimeType).toBe("video/mp4");
   });
 });

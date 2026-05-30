@@ -1,5 +1,7 @@
-const RICH_TEXT_PURIFY_OPTIONS = {
-  ALLOWED_TAGS: [
+import sanitizeHtml from "sanitize-html";
+
+const RICH_TEXT_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: [
     "p",
     "br",
     "strong",
@@ -29,27 +31,24 @@ const RICH_TEXT_PURIFY_OPTIONS = {
     "hr",
     "img",
   ],
-  ALLOWED_ATTR: ["href", "target", "rel", "src", "alt", "title", "width", "height"],
-  ALLOW_DATA_ATTR: false,
+  allowedAttributes: {
+    a: ["href", "target", "rel"],
+    img: ["src", "alt", "title", "width", "height"],
+    span: ["class"],
+  },
+  // インライン装飾用の安全なクラスのみ許可（エディタの「アクセント」ボタン相当）。
+  // フロント側で .accent / .highlight / .muted に対応する見た目を定義する想定。
+  allowedClasses: {
+    span: ["accent", "highlight", "muted"],
+  },
+  allowedSchemes: ["http", "https", "mailto", "tel"],
+  allowProtocolRelative: false,
 };
-
-type DomPurifyModule = typeof import("isomorphic-dompurify");
-
-let domPurifyPromise: Promise<DomPurifyModule["default"]> | null = null;
-
-async function loadDomPurify(): Promise<DomPurifyModule["default"]> {
-  if (!domPurifyPromise) {
-    domPurifyPromise = import("isomorphic-dompurify").then((module) => module.default);
-  }
-
-  return domPurifyPromise;
-}
 
 export async function sanitizeRichTextHtml(value: string): Promise<string> {
   if (value.trim().length === 0) {
     return "";
   }
 
-  const DOMPurify = await loadDomPurify();
-  return DOMPurify.sanitize(value, RICH_TEXT_PURIFY_OPTIONS);
+  return sanitizeHtml(value, RICH_TEXT_SANITIZE_OPTIONS);
 }

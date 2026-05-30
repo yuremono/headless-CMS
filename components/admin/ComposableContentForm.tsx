@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAdminAccess } from './AdminAccessContext';
 import { AdminActionNotice } from './AdminActionNotice';
@@ -16,7 +15,9 @@ import { FieldAddPanel } from './FieldAddPanel';
 import { FieldGroup } from './FieldGroup';
 import type { ContentRecord, ContentTypeDefinition } from './admin-data-types';
 import {
+  collectComposableFieldFormats,
   restoreGroupsFromData,
+  type ComposableFieldFormat,
   type ComposableFieldGroup,
   type ComposableFieldRow,
 } from '@/lib/admin/field-type-catalog';
@@ -26,6 +27,7 @@ interface ComposableContentFormProps {
   contentType: ContentTypeDefinition;
   record: ContentRecord;
   previewUrl?: string | null;
+  fieldFormats?: Record<string, ComposableFieldFormat>;
 }
 
 function createGroupId(): string {
@@ -52,11 +54,12 @@ export function ComposableContentForm({
   contentType,
   record,
   previewUrl,
+  fieldFormats = {},
 }: ComposableContentFormProps) {
   const router = useRouter();
   const { readOnly } = useAdminAccess();
   const [groups, setGroups] = useState<ComposableFieldGroup[]>(() =>
-    restoreGroupsFromData(record.data ?? {}, createGroupId),
+    restoreGroupsFromData(record.data ?? {}, createGroupId, fieldFormats),
   );
   const [statusMessage, setStatusMessage] = useState('');
   const [statusKind, setStatusKind] = useState<'success' | 'error'>('success');
@@ -97,6 +100,7 @@ export function ComposableContentForm({
       slug: record.slug,
       data,
       status: action === 'publish' ? 'published' : 'draft',
+      fieldFormats: collectComposableFieldFormats(groups),
     });
 
     try {
@@ -153,7 +157,17 @@ export function ComposableContentForm({
       ) : null}
 
       <div className="composable_content_form_layout">
-        <FieldAddPanel sourceData={sourceData} onAdd={handleAddGroup} readOnly={readOnly} />
+        <FieldAddPanel
+          sourceData={sourceData}
+          onAdd={handleAddGroup}
+          readOnly={readOnly}
+          siteId={siteId}
+          contentTypeSlug={contentType.slug}
+          previewUrl={previewUrl}
+          isPending={isPending}
+          onSave={() => void persist('save')}
+          onPublish={() => void persist('publish')}
+        />
 
         <div className="composable_content_form_main">
           {groups.length === 0 ? (
@@ -179,45 +193,6 @@ export function ComposableContentForm({
       </div>
 
       <AdminActionNotice kind={statusKind} message={statusMessage} />
-
-      <div className="flex flex-wrap gap-3">
-        {!readOnly ? (
-          <>
-            <button
-              type="button"
-              className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={() => void persist('save')}
-              disabled={isPending}
-            >
-              下書きを保存
-            </button>
-            <button
-              type="button"
-              className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
-              onClick={() => void persist('publish')}
-              disabled={isPending}
-            >
-              公開
-            </button>
-          </>
-        ) : null}
-        {previewUrl ? (
-          <a
-            href={previewUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="PreviewLink rounded-full border border-violet-400/40 bg-violet-400/10 px-5 py-3 text-sm font-medium text-violet-100 transition hover:bg-violet-400/20"
-          >
-            プレビューを開く
-          </a>
-        ) : null}
-        <Link
-          href={`/sites/${siteId}/contents/${contentType.slug}`}
-          className="rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white"
-        >
-          一覧に戻る
-        </Link>
-      </div>
     </section>
   );
 }

@@ -3,11 +3,14 @@
 import {
   getFieldTypeLabel,
   migratePathsOnPrefixChange,
+  supportsFormat,
   validatePrefix,
+  type ComposableFieldFormat,
   type ComposableFieldGroup,
   type ComposableFieldRow,
 } from '@/lib/admin/field-type-catalog';
 import { ImageFieldInput } from './ImageFieldInput';
+import { RichInlineEditor } from './RichInlineEditor';
 import type { ImageFieldValue } from './admin-api';
 
 interface FieldGroupProps {
@@ -25,6 +28,14 @@ function updateFieldRow(
   value: string,
 ): ComposableFieldRow[] {
   return fields.map((field) => (field.jsonPath === jsonPath ? { ...field, value } : field));
+}
+
+function updateFieldFormat(
+  fields: ComposableFieldRow[],
+  jsonPath: string,
+  format: ComposableFieldFormat,
+): ComposableFieldRow[] {
+  return fields.map((field) => (field.jsonPath === jsonPath ? { ...field, format } : field));
 }
 
 function removeImageBundle(fields: ComposableFieldRow[]): ComposableFieldRow[] {
@@ -78,6 +89,13 @@ export function FieldGroup({
     });
   }
 
+  function handleFormatChange(jsonPath: string, format: ComposableFieldFormat) {
+    onChange({
+      ...group,
+      fields: updateFieldFormat(group.fields, jsonPath, format),
+    });
+  }
+
   function handleRemoveBundle() {
     onChange({
       ...group,
@@ -125,31 +143,74 @@ export function FieldGroup({
       </div>
 
       <div className="field_group_fields mt-4 space-y-4">
-        {scalarFields.map((field) => (
-          <div key={field.jsonPath} className="field_group_field">
-            <p className="text-xs text-slate-400">
-              {getFieldTypeLabel(field.type)} · <span className="font-mono">{field.jsonPath}</span>
-            </p>
-            {field.type === 'text' ? (
-              <textarea
-                className="mt-2 min-h-[8rem] w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-                value={String(field.value ?? '')}
-                onChange={(event) => handleFieldChange(field.jsonPath, event.target.value)}
-                disabled={readOnly}
-                readOnly={readOnly}
-              />
-            ) : (
-              <input
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
-                type={field.type === 'imageUrl' || field.type === 'href' ? 'url' : 'text'}
-                value={String(field.value ?? '')}
-                onChange={(event) => handleFieldChange(field.jsonPath, event.target.value)}
-                disabled={readOnly}
-                readOnly={readOnly}
-              />
-            )}
-          </div>
-        ))}
+        {scalarFields.map((field) => {
+          const isRich = supportsFormat(field.type) && field.format === 'richText';
+
+          return (
+            <div key={field.jsonPath} className="field_group_field">
+              <div className="field_group_field_header flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs text-slate-400">
+                  {getFieldTypeLabel(field.type)} · <span className="font-mono">{field.jsonPath}</span>
+                </p>
+                {supportsFormat(field.type) && !readOnly ? (
+                  <div
+                    className="field_group_field_format flex items-center gap-1 text-xs"
+                    role="group"
+                    aria-label="形式"
+                  >
+                    <button
+                      type="button"
+                      className={`rounded-md border px-2 py-0.5 transition ${
+                        !isRich
+                          ? 'border-sky-400/60 bg-sky-400/15 text-sky-100'
+                          : 'border-white/15 text-slate-300 hover:bg-slate-800'
+                      }`}
+                      onClick={() => handleFormatChange(field.jsonPath, 'plain')}
+                    >
+                      プレーン
+                    </button>
+                    <button
+                      type="button"
+                      className={`rounded-md border px-2 py-0.5 transition ${
+                        isRich
+                          ? 'border-sky-400/60 bg-sky-400/15 text-sky-100'
+                          : 'border-white/15 text-slate-300 hover:bg-slate-800'
+                      }`}
+                      onClick={() => handleFormatChange(field.jsonPath, 'richText')}
+                    >
+                      リッチ
+                    </button>
+                  </div>
+                ) : null}
+              </div>
+              {isRich ? (
+                <RichInlineEditor
+                  value={String(field.value ?? '')}
+                  onChange={(html) => handleFieldChange(field.jsonPath, html)}
+                  readOnly={readOnly}
+                  ariaLabel={field.jsonPath}
+                />
+              ) : field.type === 'text' ? (
+                <textarea
+                  className="mt-2 min-h-[8rem] w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+                  value={String(field.value ?? '')}
+                  onChange={(event) => handleFieldChange(field.jsonPath, event.target.value)}
+                  disabled={readOnly}
+                  readOnly={readOnly}
+                />
+              ) : (
+                <input
+                  className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
+                  type={field.type === 'imageUrl' || field.type === 'href' ? 'url' : 'text'}
+                  value={String(field.value ?? '')}
+                  onChange={(event) => handleFieldChange(field.jsonPath, event.target.value)}
+                  disabled={readOnly}
+                  readOnly={readOnly}
+                />
+              )}
+            </div>
+          );
+        })}
 
         {hasImageBundle ? (
           <div className="field_group_image_bundle rounded-xl border border-violet-400/20 bg-violet-400/5 p-4">

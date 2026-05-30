@@ -9,10 +9,14 @@ interface AdminNavProps {
   authProvider?: CmsAuthProvider;
 }
 
-const navItems = [{ href: '/', label: 'ダッシュボード' }];
-
 export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
   const siteKey = site ? siteRouteKey(site) : '';
+  const navItems = site
+    ? [
+        { href: `/sites/${siteKey}/developer`, label: '開発者用' },
+        { href: '/', label: 'ダッシュボード' },
+      ]
+    : [{ href: '/', label: 'ダッシュボード' }];
   const siteItems = site
     ? [
         { href: `/sites/${siteKey}`, label: 'サイト概要' },
@@ -29,18 +33,18 @@ export function AdminNav({ site, authProvider = 'none' }: AdminNavProps) {
       <div className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Headless CMS</p>
         <h1 className="text-xl font-semibold text-white">管理画面</h1>
-        <p className="text-sm leading-6 text-slate-300">
+        {/* <p className="text-sm leading-6 text-slate-300">
           スキーマ駆動の編集 UI をまとめています。
-        </p>
+        </p> */}
       </div>
 
-      {site ? (
+      {/* {site ? (
         <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
           <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Current site</p>
           <p className="mt-2 text-lg font-semibold text-white">{site.name}</p>
           <p className="text-sm text-slate-300">{site.domain}</p>
         </div>
-      ) : null}
+      ) : null} */}
 
       <div className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Navigation</p>

@@ -2,6 +2,24 @@ export type ComposableFieldType = 'title' | 'text' | 'imageUrl' | 'imageAlt' | '
 
 export type ComposableFieldValue = string;
 
+/**
+ * title / text フィールドの保存形式。
+ * - plain: 文字列をそのまま保存。フロントは data-cms（textContent）で安全に表示。
+ * - richText: サニタイズ済み HTML を保存。フロントは data-cms-html で表示し、span 等のインライン装飾を許可。
+ */
+export type ComposableFieldFormat = 'plain' | 'richText';
+
+export const composableFieldFormats: readonly ComposableFieldFormat[] = ['plain', 'richText'];
+
+/** format を持てるのは title / text のみ（画像系は対象外）。 */
+export function supportsFormat(type: ComposableFieldType): boolean {
+  return type === 'title' || type === 'text';
+}
+
+export function isComposableFieldFormat(value: unknown): value is ComposableFieldFormat {
+  return value === 'plain' || value === 'richText';
+}
+
 export interface ComposableFieldSelection {
   title: boolean;
   text: boolean;
@@ -14,6 +32,8 @@ export interface ComposableFieldRow {
   jsonPath: string;
   value: ComposableFieldValue;
   bundle?: 'image';
+  /** title / text のみ。未指定は 'plain' 扱い。 */
+  format?: ComposableFieldFormat;
 }
 
 export interface ComposableFieldGroup {
@@ -90,6 +110,7 @@ export function createFieldsFromSelection(
   prefix: string,
   selection: ComposableFieldSelection,
   sourceData: Record<string, unknown>,
+  format: ComposableFieldFormat = 'plain',
 ): ComposableFieldRow[] {
   const rows: ComposableFieldRow[] = [];
 
@@ -100,6 +121,7 @@ export function createFieldsFromSelection(
       suffix,
       jsonPath: buildJsonPath(prefix, suffix),
       value: readDraftFromData(sourceData, prefix, suffix),
+      format,
     });
   }
 
@@ -110,6 +132,7 @@ export function createFieldsFromSelection(
       suffix,
       jsonPath: buildJsonPath(prefix, suffix),
       value: readDraftFromData(sourceData, prefix, suffix),
+      format,
     });
   }
 
@@ -171,6 +194,23 @@ export function previewPathsForSelection(prefix: string, selection: ComposableFi
   return paths;
 }
 
+/** グループ群から title / text の format マップ（jsonPath -> format）を収集する。 */
+export function collectComposableFieldFormats(
+  groups: ComposableFieldGroup[],
+): Record<string, ComposableFieldFormat> {
+  const formats: Record<string, ComposableFieldFormat> = {};
+
+  for (const group of groups) {
+    for (const field of group.fields) {
+      if (supportsFormat(field.type)) {
+        formats[field.jsonPath] = field.format ?? 'plain';
+      }
+    }
+  }
+
+  return formats;
+}
+
 export function getFieldTypeLabel(type: ComposableFieldType): string {
   switch (type) {
     case 'title':
@@ -188,7 +228,7 @@ export function getFieldTypeLabel(type: ComposableFieldType): string {
   }
 }
 
-function collectLeafPaths(data: Record<string, unknown>, pathPrefix = ''): string[] {
+export function collectLeafPaths(data: Record<string, unknown>, pathPrefix = ''): string[] {
   const paths: string[] = [];
 
   for (const [key, value] of Object.entries(data)) {
@@ -205,10 +245,12 @@ function collectLeafPaths(data: Record<string, unknown>, pathPrefix = ''): strin
   return paths;
 }
 
-function matchKnownSuffix(path: string): { prefix: string; suffix: string } | null {
-  for (const { suffix } of KNOWN_FIELD_SUFFIXES) {
+export function matchKnownSuffix(
+  path: string,
+): { prefix: string; suffix: string; type: ComposableFieldType } | null {
+  for (const { suffix, type } of KNOWN_FIELD_SUFFIXES) {
     if (path === suffix) {
-      return { prefix: '', suffix };
+      return { prefix: '', suffix, type };
     }
 
     const dottedSuffix = `.${suffix}`;
@@ -216,6 +258,7 @@ function matchKnownSuffix(path: string): { prefix: string; suffix: string } | nu
       return {
         prefix: path.slice(0, -dottedSuffix.length),
         suffix,
+        type,
       };
     }
   }
@@ -226,6 +269,7 @@ function matchKnownSuffix(path: string): { prefix: string; suffix: string } | nu
 export function restoreGroupsFromData(
   data: Record<string, unknown>,
   createId: () => string = () => `group-${Date.now()}`,
+  formats: Record<string, ComposableFieldFormat> = {},
 ): ComposableFieldGroup[] {
   const prefixSuffixes = new Map<string, Set<string>>();
 
@@ -240,26 +284,41 @@ export function restoreGroupsFromData(
     prefixSuffixes.set(matched.prefix, suffixSet);
   }
 
+  // data に値が無くても format だけ定義済みのパスを拾う（リッチ指定が空保存後も保持される）。
+  for (const path of Object.keys(formats)) {
+    const matched = matchKnownSuffix(path);
+    if (!matched) {
+      continue;
+    }
+    const suffixSet = prefixSuffixes.get(matched.prefix) ?? new Set<string>();
+    suffixSet.add(matched.suffix);
+    prefixSuffixes.set(matched.prefix, suffixSet);
+  }
+
   const groups: ComposableFieldGroup[] = [];
 
   for (const [prefix, suffixes] of prefixSuffixes) {
     const fields: ComposableFieldRow[] = [];
 
     if (suffixes.has(TITLE_SUFFIX)) {
+      const jsonPath = buildJsonPath(prefix, TITLE_SUFFIX);
       fields.push({
         type: 'title',
         suffix: TITLE_SUFFIX,
-        jsonPath: buildJsonPath(prefix, TITLE_SUFFIX),
+        jsonPath,
         value: readDraftFromData(data, prefix, TITLE_SUFFIX),
+        format: formats[jsonPath] ?? 'plain',
       });
     }
 
     if (suffixes.has(TEXT_SUFFIX)) {
+      const jsonPath = buildJsonPath(prefix, TEXT_SUFFIX);
       fields.push({
         type: 'text',
         suffix: TEXT_SUFFIX,
-        jsonPath: buildJsonPath(prefix, TEXT_SUFFIX),
+        jsonPath,
         value: readDraftFromData(data, prefix, TEXT_SUFFIX),
+        format: formats[jsonPath] ?? 'plain',
       });
     }
 

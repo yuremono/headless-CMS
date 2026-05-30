@@ -5,6 +5,8 @@ import {
   getMaxUploadBytes,
   getStorageProviderName,
   isAllowedImageMimeType,
+  isAllowedMediaMimeType,
+  isAllowedVideoMimeType,
   sanitizeFilename,
 } from "./config";
 
@@ -15,7 +17,7 @@ describe("getMaxUploadBytes", () => {
     process.env = { ...originalEnv };
   });
 
-  it("未設定時は既定 5MB", () => {
+  it("未設定時は既定 4.5MB", () => {
     delete process.env.UPLOAD_MAX_BYTES;
     expect(getMaxUploadBytes()).toBe(DEFAULT_MAX_UPLOAD_BYTES);
   });
@@ -33,6 +35,8 @@ describe("getStorageProviderName", () => {
 
   it("未設定時は local", () => {
     delete process.env.STORAGE_PROVIDER;
+    delete process.env.VERCEL;
+    delete process.env.BLOB_READ_WRITE_TOKEN;
     expect(getStorageProviderName()).toBe("local");
   });
 
@@ -40,19 +44,33 @@ describe("getStorageProviderName", () => {
     process.env.STORAGE_PROVIDER = "R2";
     expect(getStorageProviderName()).toBe("r2");
   });
+
+  it("blob を指定できる", () => {
+    process.env.STORAGE_PROVIDER = "blob";
+    expect(getStorageProviderName()).toBe("blob");
+  });
+
+  it("Vercel で Blob トークンがある場合は blob を自動選択", () => {
+    delete process.env.STORAGE_PROVIDER;
+    process.env.VERCEL = "1";
+    process.env.BLOB_READ_WRITE_TOKEN = "test-token";
+    expect(getStorageProviderName()).toBe("blob");
+  });
 });
 
-describe("isAllowedImageMimeType", () => {
-  it("許可 MIME のみ true", () => {
+describe("isAllowedMediaMimeType", () => {
+  it("画像・動画 MIME を許可する", () => {
     expect(isAllowedImageMimeType("image/png")).toBe(true);
-    expect(isAllowedImageMimeType("text/plain")).toBe(false);
+    expect(isAllowedVideoMimeType("video/mp4")).toBe(true);
+    expect(isAllowedMediaMimeType("text/plain")).toBe(false);
   });
 });
 
 describe("extensionForMimeType", () => {
   it("MIME ごとの拡張子を返す", () => {
     expect(extensionForMimeType("image/jpeg")).toBe(".jpg");
-    expect(extensionForMimeType("image/webp")).toBe(".webp");
+    expect(extensionForMimeType("video/mp4")).toBe(".mp4");
+    expect(extensionForMimeType("image/svg+xml")).toBe(".svg");
   });
 });
 

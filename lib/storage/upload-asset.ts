@@ -1,7 +1,7 @@
 import { resolveContentUserId } from "@/lib/auth/content-user";
 import { createAsset } from "@/lib/db/assets";
 import { resolveSiteId } from "@/lib/db/site-resolver";
-import { getStorageProvider, validateImageUpload } from "@/lib/storage";
+import { getStorageProvider, validateMediaUpload } from "@/lib/storage";
 import { StorageValidationError, type AssetUploadResult } from "@/lib/storage/types";
 
 function normalizeAlt(value: FormDataEntryValue | null): string | null {
@@ -26,10 +26,11 @@ export async function uploadSiteAsset(input: {
   }
 
   const buffer = Buffer.from(await input.file.arrayBuffer());
-  const validated = validateImageUpload({
+  const validated = validateMediaUpload({
     buffer,
     declaredMimeType: input.file.type || "application/octet-stream",
     size: input.file.size,
+    filename: input.file.name,
   });
 
   const stored = await getStorageProvider().upload({
@@ -58,8 +59,18 @@ export function mapUploadError(error: unknown): { status: number; code: string; 
     return { status, code: error.code, error: error.message };
   }
 
-  if (error instanceof Error && error.message.includes("R2 storage is not implemented")) {
-    return { status: 501, code: "storage_not_configured", error: error.message };
+  if (error instanceof Error) {
+    if (error.message.includes("R2 storage is not configured")) {
+      return { status: 501, code: "storage_not_configured", error: error.message };
+    }
+
+    if (error.message.includes("Vercel Blob storage is not configured")) {
+      return { status: 501, code: "storage_not_configured", error: error.message };
+    }
+
+    if (error.message.includes("Local storage cannot persist uploads on Vercel")) {
+      return { status: 501, code: "storage_not_configured", error: error.message };
+    }
   }
 
   return { status: 500, code: "upload_failed", error: "Failed to upload asset." };

@@ -36,6 +36,8 @@ export interface ListContentsInput {
   slug?: string | null;
 }
 
+export type ComposableFieldFormatMap = Record<string, "plain" | "richText">;
+
 export interface CreateContentInput {
   slug?: string | null;
   title?: string | null;
@@ -43,6 +45,8 @@ export interface CreateContentInput {
   dataJson?: Record<string, unknown>;
   createdBy?: string | null;
   updatedBy?: string | null;
+  /** composable フィールドビルダーの title/text 保存形式（jsonPath -> format）。schema_json へ反映する。 */
+  composableFieldFormats?: ComposableFieldFormatMap;
 }
 
 export interface UpdateContentInput {
@@ -51,6 +55,8 @@ export interface UpdateContentInput {
   status?: ContentStatus;
   dataJson?: Record<string, unknown>;
   updatedBy?: string | null;
+  /** composable フィールドビルダーの title/text 保存形式（jsonPath -> format）。schema_json へ反映する。 */
+  composableFieldFormats?: ComposableFieldFormatMap;
 }
 
 export interface ContentCollectionResult {

@@ -167,10 +167,64 @@ describe("sanitizeContentDataJson", () => {
     expect(result.hero).toEqual({ title: "Hero" });
   });
 
+  it("textBlock の title のみ（body 空）でもサニタイズを通過する", async () => {
+    const topPageSchema = JSON.parse(
+      await readFile(path.join(contentTypesDir, "topPage.json"), "utf8"),
+    ) as Record<string, unknown>;
+
+    const dataJson = {
+      sections: [
+        {
+          type: "textBlock",
+          id: "sec_text_title_only",
+          data: {
+            title: "タイトルのみ",
+            body: "",
+          },
+        },
+      ],
+    };
+
+    const result = await sanitizeContentDataJson(dataJson, topPageSchema);
+    const sections = result.sections as Array<{ type: string; data: Record<string, unknown> }>;
+    expect(sections[0].data.title).toBe("タイトルのみ");
+    expect(sections[0].data.body).toBe("");
+  });
+
+  it("cardList の cards 内 richText をサニタイズする", async () => {
+    const topPageSchema = JSON.parse(
+      await readFile(path.join(contentTypesDir, "topPage.json"), "utf8"),
+    ) as Record<string, unknown>;
+
+    const dataJson = {
+      sections: [
+        {
+          type: "cardList",
+          id: "sec_cards_001",
+          data: {
+            title: "Cards",
+            cards: [
+              {
+                id: "card_1",
+                title: "Card 1",
+                body: '<p>card</p><script>bad</script>',
+              },
+            ],
+          },
+        },
+      ],
+    };
+
+    const result = await sanitizeContentDataJson(dataJson, topPageSchema);
+    const sections = result.sections as Array<{ type: string; data: Record<string, unknown> }>;
+    const cards = sections[0].data.cards as Array<{ body: string }>;
+    expect(cards[0].body).toBe("<p>card</p>");
+  });
+
   it("スキーマが不正な場合は dataJson をそのまま返す", async () => {
     const dataJson = { body: "<script>x</script>" };
     const result = await sanitizeContentDataJson(dataJson, { invalid: true });
-    expect(result).toBe(dataJson);
+    expect(result).toStrictEqual(dataJson);
   });
 
   it("sectionArray の allowedSections に fields が無い場合は data を変更しない", async () => {

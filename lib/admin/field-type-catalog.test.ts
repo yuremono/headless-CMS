@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildJsonPath,
+  collectComposableFieldFormats,
   createFieldsFromSelection,
   expandImageBundle,
+  isComposableFieldFormat,
   migratePathsOnPrefixChange,
   previewPathsForSelection,
   restoreGroupsFromData,
+  supportsFormat,
   validatePrefix,
 } from './field-type-catalog';
 
@@ -170,5 +173,65 @@ describe('restoreGroupsFromData', () => {
     expect(groups).toHaveLength(1);
     expect(groups[0]?.prefix).toBe('');
     expect(groups[0]?.fields.map((field) => field.type)).toEqual(['title', 'text']);
+  });
+});
+
+describe('format', () => {
+  it('supportsFormat は title / text のみ true', () => {
+    expect(supportsFormat('title')).toBe(true);
+    expect(supportsFormat('text')).toBe(true);
+    expect(supportsFormat('imageUrl')).toBe(false);
+    expect(supportsFormat('href')).toBe(false);
+  });
+
+  it('isComposableFieldFormat は plain / richText のみ true', () => {
+    expect(isComposableFieldFormat('plain')).toBe(true);
+    expect(isComposableFieldFormat('richText')).toBe(true);
+    expect(isComposableFieldFormat('html')).toBe(false);
+    expect(isComposableFieldFormat(undefined)).toBe(false);
+  });
+
+  it('createFieldsFromSelection は title/text に format を付与する（既定 plain）', () => {
+    const plain = createFieldsFromSelection('hero', { title: true, text: true, image: false }, {});
+    expect(plain.map((row) => row.format)).toEqual(['plain', 'plain']);
+
+    const rich = createFieldsFromSelection('hero', { title: true, text: false, image: false }, {}, 'richText');
+    expect(rich[0]?.format).toBe('richText');
+  });
+
+  it('画像系の行には format を付けない', () => {
+    const rows = createFieldsFromSelection('hero', { title: false, text: false, image: true }, {}, 'richText');
+    expect(rows.every((row) => row.format === undefined)).toBe(true);
+  });
+
+  it('restoreGroupsFromData は formats マップから format を復元する', () => {
+    const groups = restoreGroupsFromData(
+      { hero: { title: '見出し', text: '本文' } },
+      () => 'g1',
+      { 'hero.title': 'richText' },
+    );
+
+    const fields = groups[0]?.fields ?? [];
+    expect(fields.find((f) => f.jsonPath === 'hero.title')?.format).toBe('richText');
+    expect(fields.find((f) => f.jsonPath === 'hero.text')?.format).toBe('plain');
+  });
+
+  it('data に値が無くても formats 定義済みパスはグループ復元される', () => {
+    const groups = restoreGroupsFromData({}, () => 'g1', { 'hero.title': 'richText' });
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.fields[0]?.jsonPath).toBe('hero.title');
+    expect(groups[0]?.fields[0]?.format).toBe('richText');
+  });
+
+  it('collectComposableFieldFormats は title/text のみ収集する', () => {
+    const groups = restoreGroupsFromData(
+      { hero: { title: 'A', text: 'B', image: { url: 'u' } } },
+      () => 'g1',
+      { 'hero.title': 'richText' },
+    );
+
+    const formats = collectComposableFieldFormats(groups);
+    expect(formats).toEqual({ 'hero.title': 'richText', 'hero.text': 'plain' });
   });
 });

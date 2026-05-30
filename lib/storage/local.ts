@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { extensionForMimeType, sanitizeFilename, type AllowedImageMimeType } from "./config";
+import { extensionForMimeType, sanitizeFilename, type AllowedMediaMimeType } from "./config";
 import type { StorageProvider, StoredFile, UploadInput } from "./types";
 
 function buildPublicUrl(siteId: string, filename: string): string {
@@ -10,7 +10,13 @@ function buildPublicUrl(siteId: string, filename: string): string {
 
 export class LocalStorageProvider implements StorageProvider {
   async upload(input: UploadInput): Promise<StoredFile> {
-    const extension = extensionForMimeType(input.mimeType as AllowedImageMimeType);
+    if (process.env.VERCEL === "1") {
+      throw new Error(
+        "Local storage cannot persist uploads on Vercel. Set STORAGE_PROVIDER=blob (recommended) or configure R2.",
+      );
+    }
+
+    const extension = extensionForMimeType(input.mimeType as AllowedMediaMimeType);
     const safeOriginal = sanitizeFilename(input.originalFilename).replace(/\.[^.]+$/, "");
     const filename = `${Date.now()}-${randomUUID().slice(0, 8)}-${safeOriginal}${extension}`;
     const directory = path.join(process.cwd(), "public", "uploads", input.siteId);

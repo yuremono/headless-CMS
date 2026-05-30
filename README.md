@@ -46,13 +46,13 @@ DB 関連: `npx prisma migrate dev` / `npx prisma studio` / `npx tsx prisma/seed
 
 ## 公開サイト（案件フロント）
 
-- 公開サイトは **プレーンな HTML + JavaScript** から CMS の JSON 配信 API を `fetch` する構成でよい
+- 公開サイトは **プレーンな HTML + JavaScript** から CMS の JSON 配信 API を `fetch` する構成
 - CMS 側で `FRONTEND_BASE_URL`（CORS 許可）を設定し、リクエストに `x-api-key`（公開 API キー）を付与する
 - 管理画面で **公開** すると API は即時更新される。ページ再読み込みで最新（CSR。ビルド不要）
 - Astro 等でビルド時に API を取得する SSG は、将来・代替の選択肢
 - 接続例: [examples/preview/](examples/preview/README.md)（同梱の参考クライアント。案件納品物ではない）
 
-**静的 HTML プレビュー（計画・最優先）:** 管理画面でコンテンツを保存・公開したとき、同梱デモ用の静的 HTML を `examples/preview/` に自動生成する機能を追加予定です。編集直後に生成ファイルを開くだけで表示確認でき、本番の配信は従来どおり JSON API のみです（案件フロントへの HTML 納品はありません）。
+**静的 HTML プレビュー（最優先）:** 管理画面でコンテンツを保存・公開したとき、同梱デモ用の静的 HTML を `examples/preview/` に自動生成する機能を追加予定です。編集直後に生成ファイルを開くだけで表示確認でき、本番の配信は従来どおり JSON API のみです（案件フロントへの HTML 納品はありません）。
 
 ## ドキュメント
 

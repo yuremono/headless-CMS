@@ -29,4 +29,11 @@ describe("sanitizeRichTextHtml", () => {
     expect(result).toContain('src="/images/a.png"');
     expect(result).toContain('alt="A"');
   });
+
+  it("jsdom 非依存（Vercel serverless で ESM/CJS 競合を起こさない）", async () => {
+    const packageJson = await import("../../package.json", { with: { type: "json" } });
+    const deps = packageJson.default.dependencies as Record<string, string>;
+    expect(deps["isomorphic-dompurify"]).toBeUndefined();
+    expect(deps["sanitize-html"]).toBeDefined();
+  });
 });

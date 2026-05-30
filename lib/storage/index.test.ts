@@ -5,12 +5,18 @@ vi.mock("node:fs/promises", () => ({
   writeFile: vi.fn().mockResolvedValue(undefined),
 }));
 
+vi.mock("@vercel/blob", () => ({
+  put: vi.fn(),
+}));
+
 const originalEnv = { ...process.env };
 
 describe("getStorageProvider", () => {
   beforeEach(() => {
     vi.resetModules();
     process.env = { ...originalEnv };
+    delete process.env.VERCEL;
+    delete process.env.BLOB_READ_WRITE_TOKEN;
   });
 
   afterEach(() => {
@@ -46,6 +52,22 @@ describe("getStorageProvider", () => {
         originalFilename: "x.png",
         mimeType: "image/png",
       }),
-    ).rejects.toThrow("R2 storage is not implemented");
+    ).rejects.toThrow("R2 storage is not configured");
+  });
+
+  it("STORAGE_PROVIDER=blob では BlobStorageProvider", async () => {
+    process.env.STORAGE_PROVIDER = "blob";
+    const { getStorageProvider } = await import("./index");
+
+    const provider = getStorageProvider();
+
+    await expect(
+      provider.upload({
+        siteId: "site-1",
+        buffer: Buffer.from("x"),
+        originalFilename: "x.png",
+        mimeType: "image/png",
+      }),
+    ).rejects.toThrow("Vercel Blob storage is not configured");
   });
 });
