@@ -1,23 +1,30 @@
 # headless-cms MCP Server
 
-MCP server for AI agent operations on the headless CMS.  
-Uses shared [`lib/cms-agent`](../../lib/cms-agent/) (content-ops, field-ops, api-client) — same write path as the developer page and `npm run cms:cli`.
+MCP server for AI agent operations on the headless CMS.
+
+> **推奨: packages 版** — `@headless/cms-mcp`（`packages/headless-cms-mcp/`）は repo root の `@/` alias に依存せず起動できる。本リポジトリでは `npm run cms:mcp` が packages 版を指す。フロント repo 単体でも workspace 同梱で同じ構成が使える。  
+> 本ファイルはレガシー配置 `mcp/headless-cms/` の説明。新規設定は packages 版のパス（`packages/headless-cms-mcp/src/server.ts`）を使うこと。
+
+Uses shared [`@headless/cms-agent`](../../packages/headless-cms-agent/) (formerly `lib/cms-agent`) — same write path as the developer page and `npm run cms`.
 
 ## Setup
 
 ```bash
-# From the repository root (tsx + @/ path alias require root install):
+# From the repository root (recommended — packages version, no @/ alias):
 npm install
 
-# MCP-local SDK deps (optional if only using root npm run cms:mcp):
+npm run cms:mcp
+# equivalent: tsx packages/headless-cms-mcp/src/server.ts
+```
+
+Legacy path (`mcp/headless-cms/`) still works if you set `cwd` to repo root for `@/` resolution, but **prefer the packages version** above.
+
+```bash
+# Legacy MCP-local SDK deps (optional):
 cd mcp/headless-cms && npm install
 ```
 
-Run the server from the **repo root** so `tsx` resolves `@/lib/cms-agent`:
-
-```bash
-npm run cms:mcp
-```
+Run the server from the **repo root** via `npm run cms:mcp` (packages version):
 
 ## Environment Variables
 
@@ -38,7 +45,7 @@ Add to `~/.cursor/mcp.json` (or Cursor Settings → MCP):
   "mcpServers": {
     "headless-cms": {
       "command": "npx",
-      "args": ["tsx", "/ABSOLUTE/PATH/TO/0529headless/mcp/headless-cms/src/server.ts"],
+      "args": ["tsx", "/ABSOLUTE/PATH/TO/0529headless/packages/headless-cms-mcp/src/server.ts"],
       "cwd": "/ABSOLUTE/PATH/TO/0529headless",
       "env": {
         "CMS_ADMIN_API_KEY": "your-admin-api-key",
@@ -57,7 +64,7 @@ For production:
   "mcpServers": {
     "headless-cms": {
       "command": "npx",
-      "args": ["tsx", "/ABSOLUTE/PATH/TO/0529headless/mcp/headless-cms/src/server.ts"],
+      "args": ["tsx", "/ABSOLUTE/PATH/TO/0529headless/packages/headless-cms-mcp/src/server.ts"],
       "cwd": "/ABSOLUTE/PATH/TO/0529headless",
       "env": {
         "CMS_ADMIN_API_KEY": "your-admin-api-key",

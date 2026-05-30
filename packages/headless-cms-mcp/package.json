@@ -1,0 +1,11 @@
+{
+  "name": "@headless/cms-mcp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for headless CMS agent operations",
+  "dependencies": {
+    "@headless/cms-agent": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  }
+}

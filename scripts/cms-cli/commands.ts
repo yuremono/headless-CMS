@@ -15,13 +15,18 @@ import {
   type CmsAgentOptions,
   type DeveloperContentSnapshot,
 } from '@/lib/cms-agent';
-import { createCmsAgentClient, type CmsAgentConfig } from '@/lib/cms-agent/api-client';
+import { createCmsAgentClient } from '@/lib/cms-agent/api-client';
 import {
   addFieldGroup,
   setFieldValue,
   type FieldPathSpec,
 } from '@/lib/cms-agent/field-ops';
-import type { AssetRecord, ContentRecord, CmsClientResult } from '@/lib/cms-agent/types';
+import type {
+  AssetRecord,
+  CmsAgentConfig,
+  ContentRecord,
+  CmsClientResult,
+} from '@/lib/cms-agent/types';
 
 // ---------------------------------------------------------------------------
 // 型定義
@@ -264,7 +269,7 @@ function applyFieldAdd(
 
   if (pathList.length === 1 && pathList[0] === fieldName) {
     let nextData = setFieldValue(data, fieldName, '');
-    const nextFormats = {
+    const nextFormats: Record<string, 'plain' | 'richText'> = {
       ...fieldFormats,
       [fieldName]: useRich ? 'richText' : 'plain',
     };
@@ -507,7 +512,7 @@ export async function assetUpload(args: CliArgs): Promise<void> {
   }
 
   const filename = filePath.split('/').pop() ?? 'upload';
-  const blob = new File([fileBuffer], filename);
+  const blob = new File([Uint8Array.from(fileBuffer)], filename);
 
   const result = unwrapClientResult<AssetRecord>(
     await client.uploadAsset(siteId, blob, { filename }),

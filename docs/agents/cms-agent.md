@@ -7,11 +7,15 @@ developer ページと同じ経路 — **Admin API（PATCH + publish）** — �
 
 | レイヤ | パス | 役割 |
 |--------|------|------|
-| 共有ライブラリ | `lib/cms-agent/` | Admin API HTTP クライアント、コンテンツ取得・保存・公開、フィールド操作 |
+| 共有ライブラリ（推奨） | `packages/headless-cms-agent/` (`@headless/cms-agent`) | Admin API HTTP クライアント、コンテンツ取得・保存・公開、フィールド操作（`@/` 非依存・自己完結） |
+| 共有ライブラリ（後方互換） | `lib/cms-agent/` | 上記 package への re-export。既存 `@/lib/cms-agent` import 用 |
 | CLI | `scripts/cms-cli.ts` → `npm run cms -- …` | ターミナルからの操作 |
-| MCP | `mcp/headless-cms/` → `npm run cms:mcp` | Cursor 等の MCP クライアントからツール呼び出し |
+| MCP（推奨） | `packages/headless-cms-mcp/` → `npm run cms:mcp` | Cursor 等の MCP クライアントからツール呼び出し |
+| MCP（レガシー） | `mcp/headless-cms/` | 旧配置。新規は packages 版を使う |
 
-`lib/cms-agent` は CLI と MCP の両方が import する。管理画面の `adminFetch` とは独立したサーバー専用実装。
+`@headless/cms-agent` は CLI・MCP・フロント repo 同梱版の共通ライブラリ。管理画面の `adminFetch` とは独立したサーバー専用実装。
+
+> **packages 版が推奨** — MCP は repo root の `@/` alias なしで `packages/headless-cms-mcp` から起動できる。フロント repo 単体でも `@headless/cms-agent` + `@headless/cms-mcp` を workspace 依存で同梱可能。
 
 ## 環境変数
 
@@ -42,7 +46,7 @@ npm run cms -- content publish
 2. Cursor Settings → MCP、または `~/.cursor/mcp.json` にサーバー定義を追加
 3. `npm run cms:mcp` で起動するか、`cwd` をリポジトリルートにして npm script 経由で起動
 
-設定例・利用可能ツール・典型ワークフロー: [mcp/headless-cms/README.md](../../mcp/headless-cms/README.md)
+設定例・利用可能ツール・典型ワークフロー: [mcp/headless-cms/README.md](../../mcp/headless-cms/README.md)（レガシー） / packages 版は `packages/headless-cms-mcp/`（`npm run cms:mcp`）
 
 ## 制約
 

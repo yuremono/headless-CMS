@@ -7,7 +7,7 @@ import {
   renameFieldPrefix,
   type FieldPathSpec,
 } from './field-ops';
-import type { ComposableFieldFormat } from '../admin/field-type-catalog';
+import type { ComposableFieldFormat } from './field-catalog';
 
 // ---------------------------------------------------------------------------
 // setFieldValue

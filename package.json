@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "next dev",
     "dev:stop": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true",
@@ -22,7 +25,7 @@
     "deploy": "bash scripts/deploy-prod.sh cms",
     "deploy:front": "bash scripts/deploy-prod.sh front",
     "deploy:all": "bash scripts/deploy-prod.sh all",
-    "cms:mcp": "tsx mcp/headless-cms/src/server.ts",
+    "cms:mcp": "tsx packages/headless-cms-mcp/src/server.ts",
     "cms": "tsx scripts/cms-cli.ts"
   },
   "keywords": [],
