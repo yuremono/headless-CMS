@@ -31,6 +31,20 @@ const IMAGE_BUNDLE_SUFFIXES: Array<{ type: ComposableFieldType; suffix: string; 
 const TITLE_SUFFIX = 'title';
 const TEXT_SUFFIX = 'text';
 
+const IMAGE_BUNDLE_SUFFIX_LIST = ['image.url', 'image.alt', 'href'] as const;
+
+const KNOWN_FIELD_SUFFIXES: Array<{
+  suffix: string;
+  type: ComposableFieldType;
+  bundle?: 'image';
+}> = [
+  { suffix: 'image.url', type: 'imageUrl', bundle: 'image' },
+  { suffix: 'image.alt', type: 'imageAlt', bundle: 'image' },
+  { suffix: 'href', type: 'href', bundle: 'image' },
+  { suffix: TITLE_SUFFIX, type: 'title' },
+  { suffix: TEXT_SUFFIX, type: 'text' },
+];
+
 export function normalizePrefix(prefix: string): string {
   return prefix.trim();
 }
@@ -172,6 +186,103 @@ export function getFieldTypeLabel(type: ComposableFieldType): string {
     default:
       return type;
   }
+}
+
+function collectLeafPaths(data: Record<string, unknown>, pathPrefix = ''): string[] {
+  const paths: string[] = [];
+
+  for (const [key, value] of Object.entries(data)) {
+    const path = pathPrefix ? `${pathPrefix}.${key}` : key;
+
+    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+      paths.push(...collectLeafPaths(value as Record<string, unknown>, path));
+      continue;
+    }
+
+    paths.push(path);
+  }
+
+  return paths;
+}
+
+function matchKnownSuffix(path: string): { prefix: string; suffix: string } | null {
+  for (const { suffix } of KNOWN_FIELD_SUFFIXES) {
+    if (path === suffix) {
+      return { prefix: '', suffix };
+    }
+
+    const dottedSuffix = `.${suffix}`;
+    if (path.endsWith(dottedSuffix)) {
+      return {
+        prefix: path.slice(0, -dottedSuffix.length),
+        suffix,
+      };
+    }
+  }
+
+  return null;
+}
+
+export function restoreGroupsFromData(
+  data: Record<string, unknown>,
+  createId: () => string = () => `group-${Date.now()}`,
+): ComposableFieldGroup[] {
+  const prefixSuffixes = new Map<string, Set<string>>();
+
+  for (const path of collectLeafPaths(data)) {
+    const matched = matchKnownSuffix(path);
+    if (!matched) {
+      continue;
+    }
+
+    const suffixSet = prefixSuffixes.get(matched.prefix) ?? new Set<string>();
+    suffixSet.add(matched.suffix);
+    prefixSuffixes.set(matched.prefix, suffixSet);
+  }
+
+  const groups: ComposableFieldGroup[] = [];
+
+  for (const [prefix, suffixes] of prefixSuffixes) {
+    const fields: ComposableFieldRow[] = [];
+
+    if (suffixes.has(TITLE_SUFFIX)) {
+      fields.push({
+        type: 'title',
+        suffix: TITLE_SUFFIX,
+        jsonPath: buildJsonPath(prefix, TITLE_SUFFIX),
+        value: readDraftFromData(data, prefix, TITLE_SUFFIX),
+      });
+    }
+
+    if (suffixes.has(TEXT_SUFFIX)) {
+      fields.push({
+        type: 'text',
+        suffix: TEXT_SUFFIX,
+        jsonPath: buildJsonPath(prefix, TEXT_SUFFIX),
+        value: readDraftFromData(data, prefix, TEXT_SUFFIX),
+      });
+    }
+
+    const hasImageBundle = IMAGE_BUNDLE_SUFFIX_LIST.some((suffix) => suffixes.has(suffix));
+    if (hasImageBundle) {
+      for (const row of expandImageBundle(prefix)) {
+        fields.push({
+          ...row,
+          value: readDraftFromData(data, prefix, row.suffix),
+        });
+      }
+    }
+
+    if (fields.length > 0) {
+      groups.push({
+        id: createId(),
+        prefix,
+        fields,
+      });
+    }
+  }
+
+  return groups.sort((left, right) => left.prefix.localeCompare(right.prefix));
 }
 
 function readDraftFromData(

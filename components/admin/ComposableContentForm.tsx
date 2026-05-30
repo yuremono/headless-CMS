@@ -15,7 +15,11 @@ import {
 import { FieldAddPanel } from './FieldAddPanel';
 import { FieldGroup } from './FieldGroup';
 import type { ContentRecord, ContentTypeDefinition } from './admin-data-types';
-import type { ComposableFieldGroup, ComposableFieldRow } from '@/lib/admin/field-type-catalog';
+import {
+  restoreGroupsFromData,
+  type ComposableFieldGroup,
+  type ComposableFieldRow,
+} from '@/lib/admin/field-type-catalog';
 
 interface ComposableContentFormProps {
   siteId: string;
@@ -51,7 +55,9 @@ export function ComposableContentForm({
 }: ComposableContentFormProps) {
   const router = useRouter();
   const { readOnly } = useAdminAccess();
-  const [groups, setGroups] = useState<ComposableFieldGroup[]>([]);
+  const [groups, setGroups] = useState<ComposableFieldGroup[]>(() =>
+    restoreGroupsFromData(record.data ?? {}, createGroupId),
+  );
   const [statusMessage, setStatusMessage] = useState('');
   const [statusKind, setStatusKind] = useState<'success' | 'error'>('success');
   const [isPending, setIsPending] = useState(false);

@@ -5,6 +5,7 @@ import {
   expandImageBundle,
   migratePathsOnPrefixChange,
   previewPathsForSelection,
+  restoreGroupsFromData,
   validatePrefix,
 } from './field-type-catalog';
 
@@ -102,5 +103,72 @@ describe('previewPathsForSelection', () => {
     expect(
       previewPathsForSelection('hero', { title: false, text: false, image: true }),
     ).toEqual(['hero.image.url', 'hero.image.alt', 'hero.href']);
+  });
+});
+
+describe('restoreGroupsFromData', () => {
+  let groupCounter = 0;
+  const createId = () => `group-${++groupCounter}`;
+
+  it('空 data では空配列', () => {
+    expect(restoreGroupsFromData({}, createId)).toEqual([]);
+  });
+
+  it('title / text / 画像バンドルを prefix ごとに 1 グループへ復元', () => {
+    const data = {
+      card3_1: {
+        title: '見出し',
+        text: '本文',
+        image: { url: 'https://img', alt: 'alt' },
+        href: 'https://link',
+      },
+      test: { title: 'テスト' },
+    };
+
+    const groups = restoreGroupsFromData(data, createId);
+
+    expect(groups).toHaveLength(2);
+    expect(groups[0]?.prefix).toBe('card3_1');
+    expect(groups[0]?.fields.map((field) => field.type)).toEqual([
+      'title',
+      'text',
+      'imageUrl',
+      'imageAlt',
+      'href',
+    ]);
+    expect(groups[0]?.fields[0]?.value).toBe('見出し');
+    expect(groups[1]?.prefix).toBe('test');
+    expect(groups[1]?.fields).toHaveLength(1);
+    expect(groups[1]?.fields[0]?.type).toBe('title');
+  });
+
+  it('画像バンドルの一部だけ存在しても 3 フィールドを復元', () => {
+    const groups = restoreGroupsFromData(
+      { hero: { image: { url: 'https://img' } } },
+      createId,
+    );
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.fields.filter((field) => field.bundle === 'image')).toHaveLength(3);
+    expect(groups[0]?.fields.find((field) => field.type === 'imageUrl')?.value).toBe('https://img');
+  });
+
+  it('同一 prefix のフィールドは 1 グループにマージ', () => {
+    const groups = restoreGroupsFromData(
+      { hero: { title: 'A', text: 'B' } },
+      createId,
+    );
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.prefix).toBe('hero');
+    expect(groups[0]?.fields.map((field) => field.type)).toEqual(['title', 'text']);
+  });
+
+  it('prefix 空のルートフィールドも復元', () => {
+    const groups = restoreGroupsFromData({ title: 'ルート', text: '本文' }, createId);
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.prefix).toBe('');
+    expect(groups[0]?.fields.map((field) => field.type)).toEqual(['title', 'text']);
   });
 });
