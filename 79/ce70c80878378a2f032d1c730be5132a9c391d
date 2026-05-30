@@ -1,0 +1,348 @@
+lib/cms-agent/content-ops.ts
+  s_81cfada49a7dd9::t_803176a20f3a64 1-7,10-13,16-52,56,58-60,62-77,79-197,199,205-206,210-211,214,219,222-230,232,242-251,253,264-265,268-271
+  s_2c85eca415559e::t_f672afd432cf4c 8-9,14-15,53-55,57,61,78,198,200-204,207-209,212-213,215-218,220-221,231,233-241,252,254-263,266-267
+docs/agents/project.md
+  s_20d0e3215b457d::t_8ffa34ab1c70c6 33-44
+  s_038f0d84063814::t_bf3edb55487319 11
+  s_20d0e3215b457d::t_50f366453bd1a8 62,64
+SPEC.md
+  h_53dad1e32c3c71 3-4
+scripts/vercel-env-checklist.md
+  s_547ab27bc6db00::t_8e891511aa81a1 22
+mcp/headless-cms/package.json
+  s_8e3d98b36b45e6::t_971d34a2304c06 1-10
+mcp/headless-cms/src/tools.ts
+  s_f8800034b1767b::t_1214268ede41a8 1,3-15,43-57,109,171,176,181,207,214,219,226-227,236-253,259-272,281-282,284,290,293-305,317,327,329,331-332,336-348,354-359,367-369
+  s_8e3d98b36b45e6::t_1093e7e29c1b2f 2,16-42,58-108,110-170,172-175,177-180,182-206,208-213,215-218,220-225,228-235,254-258,273-280,283,285-289,291-292,306-316,318-326,328,330,333-335,349-353,360-366,370-372
+lib/cms-agent/content-ops.test.ts
+  s_81cfada49a7dd9::t_854199690281c8 1-114,117-133,138-144,148-154,159-402
+  s_2c85eca415559e::t_6701e4822573dc 115-116
+  s_81cfada49a7dd9::t_ea1f59513550f3 134-137,145-147,155-158
+package.json
+  s_2515bd7b1e462a::t_39070522a7c89c 24,26
+  s_8e3d98b36b45e6::t_b664744c3ab157 25
+  s_547ab27bc6db00::t_dd2c0a09bd339f 21-23
+components/admin/ComposableContentForm.tsx
+  s_93abaa12202cf3::t_e91b79ee07d392 203
+  s_93abaa12202cf3::t_c5d9a5202e2ced 183
+  s_c04a6ab489d0e7::t_57bf06253a06c7 18,20-21,47-54,81,92,117-120
+  s_ef7ca5361e74c0::t_b4f4e08455a5e3 215
+  s_ef7ca5361e74c0::t_f59e15b749005f 105-116,121-127
+  h_53dad1e32c3c71 177,179
+lib/cms-agent/types.ts
+  s_750875462b0277::t_584c3c1094820c 1-73
+  s_2c85eca415559e::t_f5a9c8914ee5db 74-92
+USER_SETUP.md
+  s_547ab27bc6db00::t_4372b31c365021 30-38
+  s_547ab27bc6db00::t_7932e41ce5cca8 24,39
+  s_547ab27bc6db00::t_062abd186fc050 23,25-27
+README.md
+  s_547ab27bc6db00::t_9b4e4dcc7c7be8 5-9,14,20-21,28,30,32
+  s_547ab27bc6db00::t_1e7429091ffa6b 10
+  s_547ab27bc6db00::t_515dde40230659 11,19
+  s_038f0d84063814::t_fa6fdf8683759b 12-13
+lib/cms-agent/field-ops.ts
+  s_8da25feaec0e0a::t_0000fabc8d9055 1-355
+index.scss
+  h_53dad1e32c3c71 29
+lib/sanitize/data-json.ts
+  s_c04a6ab489d0e7::t_128f8a40fdc29b 1-5
+  s_c04a6ab489d0e7::t_e7159c2c6035d9 189-209
+  s_c04a6ab489d0e7::t_8532933a8e8ee3 150-162
+  s_c04a6ab489d0e7::t_518ac12b90d83b 107,110-126,129,133-140
+lib/admin/field-type-catalog.ts
+  s_c04a6ab489d0e7::t_2623ec6a42c7d6 39-43,47,49-52,55
+  s_c04a6ab489d0e7::t_9c479fcaeeb7e6 56
+  s_c04a6ab489d0e7::t_5bbbc422c16d37 162-165,174-220
+  s_c04a6ab489d0e7::t_c47ec9c4e573a2 463
+  s_c04a6ab489d0e7::t_562b3c015dd8d0 580,582-633,635,639,642-645,649-658,660,663,666,676,687,710-736,751-764,767
+  s_404c68cf68f442::t_bc7c4d23f0da83 81-128,151-157
+  s_c04a6ab489d0e7::t_16640f39a6c95e 129-150
+  s_c04a6ab489d0e7::t_be3a3ae1e6046f 581
+  s_2d6beb28070140::t_3573c41e0c7453 223-228,237,240
+  s_c04a6ab489d0e7::t_e03fba31bc7e8c 395-404,415-432,439-440,442-445,451-462,464-572
+  s_c04a6ab489d0e7::t_721a0f2ff91ed2 634
+  s_c04a6ab489d0e7::t_97eafa7f3e42ac 353-361
+.env.example
+  s_547ab27bc6db00::t_66d73ef1e89480 16
+next-env.d.ts
+  s_ef7ca5361e74c0::t_9b5be2ccc0e184 3
+lib/content/field-manifest.test.ts
+  s_c04a6ab489d0e7::t_c16099bff95320 44-56
+scss/_components.scss
+  h_53dad1e32c3c71 141
+mcp/headless-cms/src/server.ts
+  s_8e3d98b36b45e6::t_c52c0a2b3a0167 1-6,8-20,22-33,40-53
+  s_f8800034b1767b::t_1b4ae8d4b37a8c 7,21,34-39
+AGENTS.md
+  s_547ab27bc6db00::t_6723bda1268119 14,26-29,31-39
+  s_94babb98a9a9b5::t_e8c82e648b4496 138-143
+  s_038f0d84063814::t_edbe8b5c9aabfd 18-23
+  s_547ab27bc6db00::t_2ffee633cf23fa 5-13,15-17,24-25,30,40-66,69-111,186-187
+  s_20d0e3215b457d::t_8a5bc52d1602d7 67-68
+  s_c04a6ab489d0e7::t_695ca36bdb9955 128
+  s_20d0e3215b457d::t_e8a38cbc9648a1 131
+lib/cms-agent/field-ops.test.ts
+  s_8da25feaec0e0a::t_8ebd489cea797d 1-287
+scripts/vercel-env-paste.md
+  s_547ab27bc6db00::t_ca66c9efb4318a 9
+  s_547ab27bc6db00::t_0cb31b89ffd9f9 33
+docs/vercel-deploy.md
+  s_547ab27bc6db00::t_d2f35a60ad75fd 23
+  s_547ab27bc6db00::t_54ff49c12f00c7 9
+  s_038f0d84063814::t_11c23d16e194bd 177,179
+  s_547ab27bc6db00::t_71188437bfceea 6-8
+  s_547ab27bc6db00::t_b85d9b1393c3a9 18-19
+  s_547ab27bc6db00::t_1a7b42c902f342 134
+  s_547ab27bc6db00::t_6afc6820d802f4 123
+  s_547ab27bc6db00::t_ffc9cb13174a3a 163
+FIELD.md
+  s_94babb98a9a9b5::t_57ffe231f38bae 193
+  s_94babb98a9a9b5::t_c12037ac418907 129-130,133-162
+  s_038f0d84063814::t_d0272ea02a34d7 1-2,4,8,10,19,23,27,29,31,33,38,103,120-123,125,163,165,167-168,170,183,196,199-221,223
+  s_038f0d84063814::t_4c78350b9c9429 3,28,30,39,132,198,235
+  s_94babb98a9a9b5::t_f98cbd2b1d5320 172
+  s_94babb98a9a9b5::t_cbe8b5634dc4db 5-6,22,26,32,34,41-80,102,104-107,110-113,119,126-128,131,171,173-182,184-185,187-192,194,222,224-233,236
+  s_94babb98a9a9b5::t_6432901ef5a3f5 81-101,108-109,114-118
+  s_038f0d84063814::t_0c9e059932ca4f 7,9,11-18,20-21,25,35-37,40,124,164,166,169,195,197
+  s_94babb98a9a9b5::t_8768d1cc82704c 186
+  h_53dad1e32c3c71 24,234,237
+lib/cms-agent/api-client.ts
+  s_750875462b0277::t_c63c3490f07951 1-8,10-13,15-90,92,101-159,176-239
+  s_2c85eca415559e::t_6eac725d2f1295 9,14
+  s_2c85eca415559e::t_9e30ac8de46ceb 160-175
+  s_2c85eca415559e::t_82fde980c5fad6 91,93-100
+lib/cms-agent/index.ts
+  s_81cfada49a7dd9::t_c954105900f7fc 10-19,22-27
+  s_8da25feaec0e0a::t_4966ac199c67f5 9,20
+  s_750875462b0277::t_2eba531ff9b4fd 21
+  s_2c85eca415559e::t_f1d79260eda6ad 1-8,28-56
+scripts/deploy-prod.sh
+  s_547ab27bc6db00::t_6734209b2c4c9f 1-46
+lib/cms-agent/api-client.test.ts
+  s_750875462b0277::t_8d84921f08b24e 1-373
+components/admin/FieldGroup.tsx
+  s_884666abf9ba45::t_b429dc98e1a2e2 96
+  s_c04a6ab489d0e7::t_7633c85378cccb 154
+  s_c04a6ab489d0e7::t_646624a75ed441 151-152
+  s_c04a6ab489d0e7::t_5ae66efabb91c1 549-551,554-567
+  s_c04a6ab489d0e7::t_ae89965f1e92d2 5,10
+  s_c04a6ab489d0e7::t_47cb05cb0e388d 115-132,137
+  s_c04a6ab489d0e7::t_68a766d52d6bcd 477-482,484-486,495-503,507-508,510,514-538,540-541,543-548,552-553
+  s_884666abf9ba45::t_c4b6dcf36bbcfa 450-472
+  s_c04a6ab489d0e7::t_91917cbedd5e48 149-150,153,155-195,198,202-209
+  s_c04a6ab489d0e7::t_76dc9f2aa24b92 487-494
+  s_2d6beb28070140::t_e8a6a93de4eb59 433
+  s_c04a6ab489d0e7::t_dcafb89dfed9a7 222-402
+  s_884666abf9ba45::t_08bb4fad9facb3 25
+  s_93abaa12202cf3::t_118c2d4721d76a 408
+  s_c04a6ab489d0e7::t_e8b24a7ed54c41 64-80
+lib/content/field-manifest.ts
+  s_c04a6ab489d0e7::t_eba1f4f9d00e95 63-65,77-92
+  s_c04a6ab489d0e7::t_54df7b529cc098 5-6
+lib/admin/field-type-catalog.test.ts
+  s_c04a6ab489d0e7::t_a59653c0b0006c 4-5,7,12
+  s_404c68cf68f442::t_fb5825937f3c5e 22-87
+  s_404c68cf68f442::t_8700a6d71c3ee3 9,14,17
+  s_2d6beb28070140::t_912cbf23ca2922 122,125,128-133,136-142
+  s_c04a6ab489d0e7::t_14df9ed716ca85 322-385
+mcp/headless-cms/src/client.ts
+  s_f8800034b1767b::t_015d55d8e2be46 1-5,8-14,24-31,34-36,38,41-69,71
+  s_8e3d98b36b45e6::t_57e787b04c006d 15-23,32-33,37,39-40,70,72
+  s_f8800034b1767b::t_0dfa8974c042ef 6-7
+scripts/cms-cli.ts
+  s_d4219fb065e874::t_df5f26593af166 13-15
+  s_2515bd7b1e462a::t_61f619c0e55235 1-12,16-167
+docs/agents/cms-cli.md
+  s_2515bd7b1e462a::t_c7fa0ec3f2cbaf 1-199
+docs/agents/cms-agent.md
+  s_20d0e3215b457d::t_bf90350e334b05 1-51
+components/admin/admin-api.ts
+  s_c04a6ab489d0e7::t_99e801ff0f9c56 386,388-418,421,424-433,436
+components/admin/AdminLayout.tsx
+  h_53dad1e32c3c71 70
+components/admin/FieldAddPanel.tsx
+  s_93abaa12202cf3::t_05065750b98ad7 80
+  s_c04a6ab489d0e7::t_22eec3c635d113 123-136
+  s_c04a6ab489d0e7::t_015d792d713845 16-20
+  s_c04a6ab489d0e7::t_4aed46e90faa30 71,73
+  s_0f801ff744d26a::t_57e40605cce8b1 98
+  s_c04a6ab489d0e7::t_efe0fec06363b8 50
+  s_93abaa12202cf3::t_69641fb5a0d9b6 175
+  s_2d6beb28070140::t_f3863ff31e358a 83
+scripts/cms-cli/commands.ts
+  s_d4219fb065e874::t_8d6d24539e3791 3,9-24,52,55,64-65,68-69,72-76,78-80,82-83,85,87-92,96-110,133-187,192,199-200,202,205,207-208,212,216,218-221,223-224,226-239,241-243,245-252,254-262,265-271,274-293,295-303,305-306,315-316,319-321,326,336-338,354-355,357,359,361-379,382-391,403-404,406,408-409,421-423,428-431,433-442,454-456,461-464,467-473,475-482,494-495,511-513
+  s_2515bd7b1e462a::t_5e57333032ab2f 1-2,4-8,25-51,53-54,56-63,66-67,70-71,77,81,84,86,93-95,111-132,188-191,193-198,201,203-204,206,209-211,213-215,217,222,225,240,244,253,263-264,272-273,294,304,307-314,317-318,322-325,327-335,339-353,356,358,360,380-381,392-402,405,407,410-420,424-427,432,443-453,457-460,465-466,474,483-493,496-510,514-517
+lib/sanitize/composable.test.ts
+  s_c04a6ab489d0e7::t_4e476c2287c4b5 34-46
+mcp/headless-cms/README.md
+  s_f8800034b1767b::t_6bea317d3056a5 4,9,11-19
+  s_8e3d98b36b45e6::t_9d99d9aebd4574 1-3,5-8,10,20-25,27-28,31-41,43-60,62-176
+  s_f8800034b1767b::t_ab79924e60a4fb 42,61
+  s_f8800034b1767b::t_f8a4b1de79822b 26,29-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "79ce70c80878378a2f032d1c730be5132a9c391d",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_038f0d84063814": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "cedfe4a7-141c-40d6-94c2-b544189c7f7d",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_0f801ff744d26a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b7a59de9-26bd-445b-abab-a5b2f9a38745",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_20d0e3215b457d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "30b9505e-af1e-4ae7-af0a-10a8c2da13b6",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_2515bd7b1e462a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ef4a648c-1520-463f-b205-33b3d6290e77",
+        "model": "claude-4.6-sonnet-medium-thinking"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_2c85eca415559e": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "62287c82-a59a-4793-ac13-18d55f45df68",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_2d6beb28070140": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "31b6ff55-184e-4671-ba32-422b88a17c91",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_404c68cf68f442": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a10851b5-90f3-450a-94ba-8d17183c231b",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_547ab27bc6db00": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1b7d069c-9b80-4b33-88ec-256fc6797252",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_750875462b0277": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "65ce23bf-ad25-4b08-8826-daad977f3dcd",
+        "model": "claude-4.6-sonnet-medium-thinking"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_81cfada49a7dd9": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "6fca88f6-2299-4ebc-9df0-382f8135153a",
+        "model": "claude-4.6-sonnet-medium-thinking"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_884666abf9ba45": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "dfcdc157-43ec-4617-930a-71e8819983d0",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_8da25feaec0e0a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "c497d1cb-a31d-420f-ac42-927fb2dfc71e",
+        "model": "claude-4.6-sonnet-medium-thinking"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_8e3d98b36b45e6": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "f58ecd40-697b-4bef-bb39-fc6c7f2f5398",
+        "model": "claude-4.6-sonnet-medium-thinking"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_93abaa12202cf3": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b4827642-5588-4d22-b558-dbadfeb5d924",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_94babb98a9a9b5": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b46b896a-b46c-4a01-bf45-73d1cf9f11d3",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_c04a6ab489d0e7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "282b5f9c-8492-478d-b33c-1a7c8b6423df",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d4219fb065e874": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "0e414390-1b5b-4cd8-9ec6-ba1d4c0c17d5",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_ef7ca5361e74c0": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "0543ef07-bc1c-4859-8dd9-a6a077562b89",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_f8800034b1767b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "32b79c35-29c0-4a16-896f-d6a32314eb91",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
