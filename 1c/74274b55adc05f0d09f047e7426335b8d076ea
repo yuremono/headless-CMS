@@ -1,0 +1,24 @@
+packages/headless-cms-mcp/package.json
+  s_d74bc07997266e::t_d3a6ca9719e594 8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "1c74274b55adc05f0d09f047e7426335b8d076ea",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_d74bc07997266e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e79f8-2ca2-7210-bed1-85f8e03c1b2c",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
