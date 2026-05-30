@@ -383,19 +383,57 @@ export function writeFieldValue(data: Record<string, unknown>, key: string, valu
     return;
   }
 
-  let current = data;
+  let current: Record<string, unknown> | unknown[] = data;
   for (let index = 0; index < parts.length - 1; index += 1) {
-    const part = parts[index];
-    const next = current[part];
+    const part = parts[index]!;
+    const nextPart = parts[index + 1];
+    const nextIsIndex = nextPart !== undefined && /^\d+$/.test(nextPart);
 
-    if (!next || typeof next !== 'object' || Array.isArray(next)) {
-      current[part] = {};
+    if (Array.isArray(current)) {
+      const arrayIndex = Number.parseInt(part, 10);
+      if (!Number.isFinite(arrayIndex)) {
+        return;
+      }
+      const existing = current[arrayIndex];
+      if (
+        nextIsIndex
+          ? !Array.isArray(existing)
+          : !existing || typeof existing !== 'object' || Array.isArray(existing)
+      ) {
+        current[arrayIndex] = nextIsIndex ? [] : {};
+      }
+      current = current[arrayIndex] as Record<string, unknown> | unknown[];
+      continue;
     }
 
-    current = current[part] as Record<string, unknown>;
+    const record = current as Record<string, unknown>;
+    const next = record[part];
+
+    if (nextIsIndex) {
+      if (!Array.isArray(next)) {
+        record[part] = [];
+      }
+      current = record[part] as unknown[];
+      continue;
+    }
+
+    if (!next || typeof next !== 'object' || Array.isArray(next)) {
+      record[part] = {};
+    }
+
+    current = record[part] as Record<string, unknown>;
   }
 
-  current[parts[parts.length - 1] ?? ''] = value;
+  const leaf = parts[parts.length - 1] ?? '';
+  if (Array.isArray(current)) {
+    const arrayIndex = Number.parseInt(leaf, 10);
+    if (Number.isFinite(arrayIndex)) {
+      current[arrayIndex] = value;
+    }
+    return;
+  }
+
+  (current as Record<string, unknown>)[leaf] = value;
 }
 
 export function formatFieldDraftValue(

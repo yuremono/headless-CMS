@@ -6,7 +6,7 @@ Supabase: [portfolio-cms](https://supabase.com/dashboard/project/dvcaumqooopebex
 
 ---
 
-## CMS（プロジェクト: `0529headless-cms`）
+## CMS（プロジェクト: `headless-cms`）
 
 ```
 DATABASE_URL=postgresql://postgres.dvcaumqooopebexajsdw:＜DBパスワード＞@aws-0-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true
@@ -30,7 +30,7 @@ postgresql://postgres:＜DBパスワード＞@db.dvcaumqooopebexajsdw.supabase.c
 
 ---
 
-## フロント（プロジェクト: `0529headless-front`）
+## フロント（プロジェクト: `headless-front`）
 
 ```
 CMS_API_BASE_URL=https://0529headless-cms.vercel.app

@@ -15,7 +15,10 @@ import { FieldAddPanel } from './FieldAddPanel';
 import { FieldGroup } from './FieldGroup';
 import type { ContentRecord, ContentTypeDefinition } from './admin-data-types';
 import {
+  buildRepeatableArrayValue,
   collectComposableFieldFormats,
+  duplicateFieldGroup,
+  nextDuplicatePrefix,
   restoreGroupsFromData,
   type ComposableFieldFormat,
   type ComposableFieldGroup,
@@ -41,6 +44,14 @@ function mergeDataForSave(
   const merged = structuredClone(baseData) as Record<string, unknown>;
 
   for (const group of groups) {
+    if (group.repeatable) {
+      const normalizedPrefix = group.prefix.trim();
+      if (normalizedPrefix) {
+        merged[normalizedPrefix] = buildRepeatableArrayValue(group.items ?? []);
+      }
+      continue;
+    }
+
     for (const field of group.fields) {
       writeFieldValue(merged, field.jsonPath, field.value);
     }
@@ -67,7 +78,7 @@ export function ComposableContentForm({
 
   const sourceData = useMemo(() => record.data ?? {}, [record.data]);
 
-  function handleAddGroup(prefix: string, fields: ComposableFieldRow[]) {
+  function handleAddGroup(prefix: string, fields: ComposableFieldRow[], repeatable = false) {
     if (fields.length === 0) {
       return;
     }
@@ -78,6 +89,7 @@ export function ComposableContentForm({
         id: createGroupId(),
         prefix,
         fields,
+        ...(repeatable ? { repeatable: true as const, items: [] } : {}),
       },
     ]);
   }
@@ -88,6 +100,29 @@ export function ComposableContentForm({
 
   function removeGroup(groupId: string) {
     setGroups((current) => current.filter((group) => group.id !== groupId));
+  }
+
+  function handleDuplicateGroup(groupId: string) {
+    setGroups((current) => {
+      const sourceIndex = current.findIndex((group) => group.id === groupId);
+      if (sourceIndex === -1) {
+        return current;
+      }
+
+      const source = current[sourceIndex];
+      const newPrefix = nextDuplicatePrefix(
+        source.prefix,
+        current.map((group) => group.prefix),
+      );
+      const duplicated = {
+        ...duplicateFieldGroup(source, newPrefix),
+        id: createGroupId(),
+      };
+
+      const next = [...current];
+      next.splice(sourceIndex + 1, 0, duplicated);
+      return next;
+    });
   }
 
   async function persist(action: 'save' | 'publish') {
@@ -139,22 +174,15 @@ export function ComposableContentForm({
   }
 
   return (
-    <section data-l="ContentForm" className="ComposableContentForm space-y-5 border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">
+    <section data-l="ContentForm" className="ComposableContentForm space-y-5 ">
       <div>
-        
-        <h3 className="mt-2 text-2xl font-semibold text-white">ページ名</h3>
+        <h3 className="text-2xl font-semibold text-white">ページ名</h3>
         <p className="mt-2 text-sm text-slate-300">
           {readOnly
             ? '閲覧専用です。フィールドの追加・編集はできません。'
-            : 'JSON Path を追加・保存し、サイトやアプリで取得します。'}
+            : 'フィールドを追加・保存し、サイトやアプリで取得します。'}
         </p>
       </div>
-
-      {/* {!readOnly ? (
-        <div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4 text-sm text-sky-100">
-          下書き保存・公開は管理 API へ PATCH / publish を送信します。`x-session-token` が必要です。
-        </div>
-      ) : null} */}
 
       <div className="composable_content_form_layout">
         <FieldAddPanel
@@ -172,7 +200,7 @@ export function ComposableContentForm({
         <div className="composable_content_form_main">
           {groups.length === 0 ? (
             <p className="composable_content_form_empty text-sm text-slate-400">
-              フィールドグループはまだありません。左のパネルから追加してください。
+              フィールドはまだありません。左のパネルから追加してください。
             </p>
           ) : (
             <div className="composable_content_form_groups space-y-4">
@@ -184,6 +212,7 @@ export function ComposableContentForm({
                   sourceData={sourceData}
                   onChange={(next) => updateGroup(group.id, next)}
                   onRemove={() => removeGroup(group.id)}
+                  onDuplicate={() => handleDuplicateGroup(group.id)}
                   readOnly={readOnly}
                 />
               ))}

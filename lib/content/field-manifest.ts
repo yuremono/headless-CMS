@@ -2,6 +2,8 @@ import {
   collectLeafPaths,
   isComposableFieldFormat,
   matchKnownSuffix,
+  parseWildcardFormatPath,
+  resolveFormatFromMap,
   supportsFormat,
   type ComposableFieldFormat,
   type ComposableFieldType,
@@ -58,7 +60,9 @@ export function buildFieldManifest(
     if (byPath.has(path)) {
       return;
     }
-    const format = supportsFormat(type) ? formats[path] ?? "plain" : "plain";
+    const format = supportsFormat(type)
+      ? resolveFormatFromMap(formats, path) ?? "plain"
+      : "plain";
     byPath.set(path, { path, type, format });
   };
 
@@ -70,6 +74,22 @@ export function buildFieldManifest(
   }
 
   for (const path of Object.keys(formats)) {
+    const wildcard = parseWildcardFormatPath(path);
+    if (wildcard) {
+      for (const leafPath of collectLeafPaths(dataJson)) {
+        const matched = matchKnownSuffix(leafPath);
+        if (
+          matched &&
+          matched.prefix === wildcard.fieldPrefix &&
+          matched.arrayIndex !== undefined &&
+          matched.suffix === wildcard.suffix
+        ) {
+          register(leafPath, matched.type);
+        }
+      }
+      continue;
+    }
+
     const matched = matchKnownSuffix(path);
     if (matched) {
       register(path, matched.type);

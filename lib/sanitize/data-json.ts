@@ -1,3 +1,8 @@
+import {
+  collectLeafPaths,
+  matchKnownSuffix,
+  parseWildcardFormatPath,
+} from "@/lib/admin/field-type-catalog";
 import { clonePlainObject, isPlainObject } from "@/lib/http";
 import type {
   ContentFieldDefinition,
@@ -99,17 +104,40 @@ function setExistingPathValue(
   value: unknown,
 ): void {
   const parts = path.split(".");
-  let current: Record<string, unknown> = data;
+  let current: Record<string, unknown> | unknown[] = data;
 
   for (let index = 0; index < parts.length - 1; index += 1) {
-    const next = current[parts[index] ?? ""];
-    if (!isPlainObject(next)) {
+    const part = parts[index] ?? "";
+
+    if (Array.isArray(current)) {
+      const arrayIndex = Number.parseInt(part, 10);
+      if (!Number.isFinite(arrayIndex) || arrayIndex < 0 || arrayIndex >= current.length) {
+        return;
+      }
+      const next = current[arrayIndex];
+      if (next === null || typeof next !== "object") {
+        return;
+      }
+      current = next as Record<string, unknown> | unknown[];
+      continue;
+    }
+
+    const next = current[part];
+    if (next === null || typeof next !== "object") {
       return;
     }
-    current = next;
+    current = next as Record<string, unknown> | unknown[];
   }
 
   const leaf = parts[parts.length - 1] ?? "";
+  if (Array.isArray(current)) {
+    const arrayIndex = Number.parseInt(leaf, 10);
+    if (Number.isFinite(arrayIndex) && arrayIndex >= 0 && arrayIndex < current.length) {
+      current[arrayIndex] = value;
+    }
+    return;
+  }
+
   if (leaf in current) {
     current[leaf] = value;
   }
@@ -119,6 +147,19 @@ function readPathValue(data: Record<string, unknown>, path: string): unknown {
   const parts = path.split(".");
   let current: unknown = data;
   for (const part of parts) {
+    if (current === null || current === undefined) {
+      return undefined;
+    }
+
+    if (Array.isArray(current)) {
+      const arrayIndex = Number.parseInt(part, 10);
+      if (!Number.isFinite(arrayIndex) || arrayIndex < 0 || arrayIndex >= current.length) {
+        return undefined;
+      }
+      current = current[arrayIndex];
+      continue;
+    }
+
     if (!isPlainObject(current)) {
       return undefined;
     }
@@ -145,6 +186,27 @@ async function sanitizeComposableRichText(
     if (!isComposableRichTextFormat(format)) {
       continue;
     }
+
+    const wildcard = parseWildcardFormatPath(path);
+    if (wildcard) {
+      for (const leafPath of collectLeafPaths(dataJson)) {
+        const matched = matchKnownSuffix(leafPath);
+        if (
+          !matched ||
+          matched.prefix !== wildcard.fieldPrefix ||
+          matched.arrayIndex === undefined ||
+          matched.suffix !== wildcard.suffix
+        ) {
+          continue;
+        }
+        const value = readPathValue(dataJson, leafPath);
+        if (typeof value === "string") {
+          setExistingPathValue(dataJson, leafPath, await sanitizeRichTextHtml(value));
+        }
+      }
+      continue;
+    }
+
     const value = readPathValue(dataJson, path);
     if (typeof value === "string") {
       setExistingPathValue(dataJson, path, await sanitizeRichTextHtml(value));

@@ -41,6 +41,19 @@ describe("buildFieldManifest", () => {
     expect(manifest.paths).toEqual([{ path: "hero.text", type: "text", format: "richText" }]);
   });
 
+  it("繰り返し配列の leaf パスと wildcard format を反映する", () => {
+    const manifest = buildFieldManifest(
+      "topPage",
+      { composableFieldFormats: { "cards.*.title": "richText" } },
+      { cards: [{ title: "A", text: "b" }] },
+    );
+
+    expect(manifest.paths).toEqual([
+      { path: "cards.0.text", type: "text", format: "plain" },
+      { path: "cards.0.title", type: "title", format: "richText" },
+    ]);
+  });
+
   it("既知 suffix に一致しないパスは無視する", () => {
     const manifest = buildFieldManifest("topPage", {}, { hero: { caption: "x" }, count: 3 });
     expect(manifest.paths).toEqual([]);

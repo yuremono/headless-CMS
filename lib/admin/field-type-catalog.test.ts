@@ -1,16 +1,89 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildJsonPath,
+  buildRepeatableArrayValue,
+  buildWildcardFormatPath,
   collectComposableFieldFormats,
+  createArrayItemFromTemplate,
   createFieldsFromSelection,
+  duplicateFieldGroup,
   expandImageBundle,
   isComposableFieldFormat,
+  matchKnownSuffix,
   migratePathsOnPrefixChange,
+  nextDuplicatePrefix,
   previewPathsForSelection,
   restoreGroupsFromData,
+  splitAutoSerial,
   supportsFormat,
   validatePrefix,
 } from './field-type-catalog';
+
+describe('splitAutoSerial', () => {
+  it('末尾 01〜99 なら base と serial を返す', () => {
+    expect(splitAutoSerial('hero01')).toEqual({ base: 'hero', serial: 1 });
+    expect(splitAutoSerial('hero99')).toEqual({ base: 'hero', serial: 99 });
+    expect(splitAutoSerial('card10')).toEqual({ base: 'card', serial: 10 });
+  });
+
+  it('連番がなければ serial は null', () => {
+    expect(splitAutoSerial('hero')).toEqual({ base: 'hero', serial: null });
+    expect(splitAutoSerial('hero00')).toEqual({ base: 'hero00', serial: null });
+    expect(splitAutoSerial('hero0101')).toEqual({ base: 'hero01', serial: 1 });
+  });
+});
+
+describe('nextDuplicatePrefix', () => {
+  it('オリジナル複製: hero + [hero] → hero01', () => {
+    expect(nextDuplicatePrefix('hero', ['hero'])).toBe('hero01');
+  });
+
+  it('オリジナル再複製: hero + [hero, hero01] → hero02', () => {
+    expect(nextDuplicatePrefix('hero', ['hero', 'hero01'])).toBe('hero02');
+  });
+
+  it('複製済み複製: hero01 + [hero, hero01] → hero02', () => {
+    expect(nextDuplicatePrefix('hero01', ['hero', 'hero01'])).toBe('hero02');
+  });
+
+  it('複製済み複製: hero02 + [hero, hero01, hero02] → hero03', () => {
+    expect(nextDuplicatePrefix('hero02', ['hero', 'hero01', 'hero02'])).toBe('hero03');
+  });
+});
+
+describe('duplicateFieldGroup', () => {
+  it('行の value / format / jsonPath を新 prefix へ写像する', () => {
+    const group = {
+      id: 'g-hero',
+      prefix: 'hero',
+      fields: [
+        {
+          type: 'title' as const,
+          suffix: 'title',
+          jsonPath: 'hero.title',
+          value: '見出し',
+          format: 'richText' as const,
+        },
+        {
+          type: 'text' as const,
+          suffix: 'text',
+          jsonPath: 'hero.text',
+          value: '本文',
+          format: 'plain' as const,
+        },
+      ],
+    };
+
+    const duplicated = duplicateFieldGroup(group, 'hero01');
+
+    expect(duplicated.prefix).toBe('hero01');
+    expect(duplicated.fields[0]?.jsonPath).toBe('hero01.title');
+    expect(duplicated.fields[0]?.value).toBe('見出し');
+    expect(duplicated.fields[0]?.format).toBe('richText');
+    expect(duplicated.fields[1]?.jsonPath).toBe('hero01.text');
+    expect(duplicated.fields[1]?.value).toBe('本文');
+  });
+});
 
 describe('buildJsonPath', () => {
   it('prefix 空のとき suffix のみ', () => {
@@ -46,16 +119,27 @@ describe('expandImageBundle', () => {
 describe('validatePrefix', () => {
   it('空は有効', () => {
     expect(validatePrefix('').valid).toBe(true);
+    expect(validatePrefix('   ').valid).toBe(true);
   });
 
-  it('英字始まりセグメントは有効', () => {
+  it('英数字・_・- とドット区切りは有効', () => {
     expect(validatePrefix('hero').valid).toBe(true);
     expect(validatePrefix('hero.block').valid).toBe(true);
+    expect(validatePrefix('hero-1').valid).toBe(true);
+    expect(validatePrefix('1hero').valid).toBe(true);
+    expect(validatePrefix('hero2').valid).toBe(true);
+    expect(validatePrefix('item-1').valid).toBe(true);
+    expect(validatePrefix('card.0').valid).toBe(true);
+    expect(validatePrefix('card3_1').valid).toBe(true);
   });
 
-  it('不正文字は無効', () => {
-    expect(validatePrefix('hero-1').valid).toBe(false);
-    expect(validatePrefix('1hero').valid).toBe(false);
+  it('空セグメント・危険文字・不正記号は無効', () => {
+    expect(validatePrefix('hero..block').valid).toBe(false);
+    expect(validatePrefix('.hero').valid).toBe(false);
+    expect(validatePrefix('hero.').valid).toBe(false);
+    expect(validatePrefix('hero/block').valid).toBe(false);
+    expect(validatePrefix('hero 1').valid).toBe(false);
+    expect(validatePrefix('hero@mail').valid).toBe(false);
   });
 });
 
@@ -233,5 +317,69 @@ describe('format', () => {
 
     const formats = collectComposableFieldFormats(groups);
     expect(formats).toEqual({ 'hero.title': 'richText', 'hero.text': 'plain' });
+  });
+});
+
+describe('repeatable array fields', () => {
+  const createId = () => 'g-array';
+
+  it('matchKnownSuffix は配列インデックス付きパスを解釈する', () => {
+    expect(matchKnownSuffix('cards.0.title')).toEqual({
+      prefix: 'cards',
+      suffix: 'title',
+      type: 'title',
+      arrayIndex: 0,
+    });
+  });
+
+  it('restoreGroupsFromData は配列フィールドを繰り返しグループとして復元する', () => {
+    const groups = restoreGroupsFromData(
+      {
+        cards: [
+          { title: 'A', text: '1' },
+          { title: 'B', text: '2' },
+        ],
+      },
+      createId,
+      { 'cards.*.title': 'richText' },
+    );
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.repeatable).toBe(true);
+    expect(groups[0]?.prefix).toBe('cards');
+    expect(groups[0]?.items).toHaveLength(2);
+    expect(groups[0]?.items?.[0]?.fields.find((f) => f.suffix === 'title')?.value).toBe('A');
+    expect(groups[0]?.fields.find((f) => f.suffix === 'title')?.format).toBe('richText');
+  });
+
+  it('空配列と wildcard format だけでも繰り返しグループを復元する', () => {
+    const groups = restoreGroupsFromData({ cards: [] }, createId, { 'cards.*.text': 'richText' });
+
+    expect(groups).toHaveLength(1);
+    expect(groups[0]?.repeatable).toBe(true);
+    expect(groups[0]?.items).toEqual([]);
+  });
+
+  it('collectComposableFieldFormats は繰り返しで wildcard キーを使う', () => {
+    const groups = restoreGroupsFromData(
+      { cards: [{ title: 'A' }] },
+      createId,
+      { 'cards.*.title': 'richText' },
+    );
+
+    const formats = collectComposableFieldFormats(groups);
+    expect(formats).toEqual({ [buildWildcardFormatPath('cards', 'title')]: 'richText' });
+  });
+
+  it('buildRepeatableArrayValue は items から JSON 配列を組み立てる', () => {
+    const item = createArrayItemFromTemplate(
+      'cards',
+      0,
+      createFieldsFromSelection('cards', { title: true, text: true, image: false }, {}),
+    );
+    item.fields.find((f) => f.suffix === 'title')!.value = '見出し';
+    item.fields.find((f) => f.suffix === 'text')!.value = '本文';
+
+    expect(buildRepeatableArrayValue([item])).toEqual([{ title: '見出し', text: '本文' }]);
   });
 });

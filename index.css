@@ -5548,11 +5548,15 @@ body > * .in600 {
 }
 
 .AdminLayout {
-  @apply min-h-screen;
+  @apply h-screen overflow-hidden;
+}
+
+.SidebarAside {
+  @apply min-h-0 overflow-y-auto;
 }
 
 .AdminMain {
-  @apply min-w-0;
+  @apply min-h-0 min-w-0 overflow-y-auto;
 }
 
 .AdminPageHeader {
@@ -5648,6 +5652,22 @@ body > * .in600 {
   @apply overflow-visible text-slate-100;
 }
 
+.field_group_header {
+  @apply cursor-pointer list-none;
+}
+
+.field_group_toggle {
+  @apply pointer-events-none mt-1 shrink-0 rounded-lg border border-white/10 p-1.5 text-slate-400;
+}
+
+.field_group_toggle_icon {
+  @apply block h-4 w-4 transition-transform duration-300;
+}
+
+.FieldGroup[open] .field_group_toggle_icon {
+  @apply rotate-180;
+}
+
 .composable_content_form_layout {
   @apply flex flex-col items-stretch gap-4 overflow-visible lg:flex-row lg:items-start lg:gap-6;
 }
@@ -5661,7 +5681,7 @@ body > * .in600 {
 }
 
 .FieldAddPanel {
-  @apply lg:sticky lg:top-6 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start;
+  @apply lg:sticky lg:top-0 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start;
 }
 
 @tailwind base;
@@ -5706,6 +5726,7 @@ body > * .in600 {
 
 html {
   font-size: var(--FZ);
+  overflow: clip;
 }
 
 :where(.PageRoot),

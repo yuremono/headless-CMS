@@ -67,7 +67,7 @@ export async function AdminLayout( {
                                 >
                                         <AdminNav site={site ?? null} authProvider={authProvider} />
                                 </aside>
-                                <main className="AdminMain space-y-6">{children}</main>
+                                <main className="AdminMain space-y-6 border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">{children}</main>
                         </div>
                 </AdminAccessProvider>
         );

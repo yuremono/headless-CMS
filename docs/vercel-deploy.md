@@ -3,6 +3,10 @@
 **最終更新:** 2026-05-29  
 **対象:** CMS（Next.js + Prisma）と案件フロント（静的 HTML + CSR）を本番接続する
 
+> **通常運用:** 更新後の本番反映は [AGENTS.md](../AGENTS.md) の「本番デプロイ」→ `npm run deploy`。  
+> 初回のみ [USER_SETUP.md](../USER_SETUP.md) または本書の手順 A〜E。  
+> Vercel プロジェクト名: `headless-cms` / `headless-front`（ダッシュボードでリネーム後、URL が `*.vercel.app` と一致すること）。
+
 ---
 
 ## 概要
@@ -11,12 +15,12 @@
 |----------------|------------|--------------|----------------------|
 | CMS | ヘッドレス CMS 本体 | Vercel（要インポート） | ローカル PG のみ |
 | DB | Supabase PostgreSQL | Supabase | ユーザーが作成 |
-| 公開サイト | 案件フロント | Vercel | `https://0529headless-front.vercel.app` |
-| CMS | ヘッドレス CMS 本体 | Vercel | `https://0529headless-cms.vercel.app`（**`DATABASE_URL` 要設定**） |
+| 公開サイト | 案件フロント | Vercel | `https://headless-front.vercel.app` |
+| CMS | ヘッドレス CMS 本体 | Vercel | `https://headless-cms.vercel.app`（**`DATABASE_URL` 要設定**） |
 
 ダッシュボード例: [Vercel チーム](https://vercel.com/5alvia0fficinali50-gmailcoms-projects)
 
-フロント URL 例: `https://0529headless-front.vercel.app`
+フロント URL 例: `https://headless-front.vercel.app`
 
 ---
 
@@ -116,7 +120,7 @@ npx tsx prisma/seed.ts
 | `CMS_PUBLIC_API_KEY` | 本番推奨 | 未設定時のみ `public-dev-key` フォールバック |
 | `CMS_ADMIN_API_KEY` | 推奨 | 管理 API 用 |
 | `STORAGE_PROVIDER` | はい | `local`（MVP。Vercel 上のアップロードは永続化されない点に注意） |
-| `FRONTEND_BASE_URL` | フロント接続時 | 初回デプロイ後に `https://0529headless-front.vercel.app` を追加して **Redeploy** |
+| `FRONTEND_BASE_URL` | フロント接続時 | 初回デプロイ後に `https://headless-front.vercel.app` を追加して **Redeploy** |
 
 5. **Deploy**  
 6. デプロイ URL を `APP_URL` に合わせて更新し、再度 **Redeploy**（初回 URL 確定後）  
@@ -127,7 +131,7 @@ npx tsx prisma/seed.ts
 
 ## D. フロント — Vercel 環境変数（ユーザー作業）
 
-プロジェクト例: `0529headless-front`（既存デプロイあり）
+プロジェクト例: `headless-front`（既存デプロイあり）
 
 **Settings → Environment Variables**（Production + Preview）:
 
@@ -156,7 +160,7 @@ npx vercel --prod
 
 1. CMS 管理画面にログイン（`/login`）  
 2. トップページを編集して **公開**  
-3. `https://0529headless-front.vercel.app` を再読み込み  
+3. `https://headless-front.vercel.app` を再読み込み  
 4. 変更が反映されれば OK（CSR のためフロントの再デプロイは不要）  
 
 失敗時:
@@ -170,8 +174,9 @@ npx vercel --prod
 
 | 項目 | 内容 |
 |------|------|
+| **DB 共有運用** | **ローカルと本番は同一 Supabase DB を共有**（`.env.local` の `DATABASE_URL` が本番 Supabase を指す）。`localhost:3000` の編集は即本番へ反映される。独立 DB に戻すには `.env.local` の `DATABASE_URL` 行を削除（`.env` の `localhost` に戻る）。詳細は [AGENTS.md](../AGENTS.md) 参照 |
 | migrate / seed | Vercel ビルドでは実行しない。必ずローカル（Direct URL） |
-| 再 seed | 本番データがある環境では実行しない（ID・API キーが変わる） |
+| 再 seed | 本番データがある環境では実行しない（ID・API キーが変わる）。**共有 DB 運用中は特に厳禁** |
 | `STORAGE_PROVIDER=local` | サーバーレスではアップロードファイルが永続化されない |
 | 単一 CORS origin | `FRONTEND_BASE_URL` は 1 origin。ローカルと本番を同時に使う場合は切り替えまたは CMS 拡張が必要 |
 | 公開 API キー | フロントはビルド時に JS へ埋め込み。本番はキーローテーションとリスク許容を理解すること |

@@ -2,6 +2,113 @@
 
 制作会社向け CMS 基盤。コンテンツの作成・編集・API配信に専念し、表示フロントエンドとは分離する。
 
+**本リポジトリのメイン作業ドキュメントはこのファイル（AGENTS.md）です。**
+
+---
+
+## メイン作業ページ（developer / composable 編集）
+
+| 環境 | URL |
+|------|-----|
+| **ローカル** | http://localhost:3000/sites/main-site/developer |
+| **本番（動作確認済み）** | https://0529headless-cms.vercel.app/sites/main-site/developer |
+
+`npm run dev` 起動後にローカル URL を開く。本番は `npm run deploy` で反映。
+
+> **【重要】DB 共有運用（ローカル = 本番）**
+> ローカルと本番は **同一の Supabase データベース**（`portfolio-cms` / schema `headless_cms`）を共有しています。`.env.local` の `DATABASE_URL` が本番と同じ Supabase（セッションプーラー 5432）を指すため、`localhost:3000` での編集は **即座に本番データへ反映**されます。
+> - `npx prisma migrate reset` / `npx tsx prisma/seed.ts` の再実行は **本番データを破壊**するため実行しない。
+> - スキーマ変更時のみ `docs/vercel-deploy.md` の手順に従い Direct(5432) で `migrate` する。
+> - 独立したローカル DB に戻す場合は `.env.local` の `DATABASE_URL` 行を削除して dev を再起動する（`.env` の `localhost` 設定に戻る）。
+
+### Vercel（本番）
+
+| 役割 | プロジェクト名 | Production URL（現状） |
+|------|----------------|------------------------|
+| CMS | `headless-cms` | https://0529headless-cms.vercel.app |
+| 案件フロント | `headless-front` | https://0529headless-front.vercel.app |
+
+ログイン（本番）: https://0529headless-cms.vercel.app/login
+
+**ドメイン注意:** `headless-cms.vercel.app` および `2020.headless-cms.talks.smakosh.com` は**別の Vercel プロジェクト**（旧 Gatsby 等）に紐づいており、そこへリダイレクトされると 404 になります。本番作業は上記 `0529headless-cms.vercel.app` を使うか、ダッシュボードで旧プロジェクトからドメインを外したあと、当プロジェクト `headless-cms` に再割り当てしてください。
+
+```bash
+# ドメイン解放後（CLI）
+npx vercel alias set <最新 production deployment URL> headless-cms.vercel.app
+npx vercel domains add 2020.headless-cms.talks.smakosh.com   # 当チームで DNS 管理している場合
+```
+
+---
+
+## セットアップ（ローカル）
+
+```bash
+npm install
+cp .env.example .env.local
+# .env.local の DATABASE_URL 等を編集
+
+npx prisma migrate deploy   # 開発初回は npx prisma migrate dev でも可
+npx tsx prisma/seed.ts      # または npm run prisma:seed
+```
+
+デモログインは `.env.example` の `ADMIN_DEMO_EMAIL` / `ADMIN_DEMO_PASSWORD` を参照。
+
+## コマンド
+
+| コマンド | 用途 |
+|---------|------|
+| `npm run dev` | 開発サーバー（管理画面 + API） |
+| `npm run build` | プロダクションビルド |
+| `npm run start` | ビルド結果の起動 |
+| `npm test` | Vitest 単体テスト |
+| `npm run test:coverage` | カバレッジ付き（`lib/**` + `app/api/**`） |
+| `npm run deploy` | 本番デプロイ（CMS / Vercel production） |
+| `npm run deploy:all` | 本番デプロイ（CMS + 案件フロント） |
+| `npm run cms -- …` | CMS CLI（Admin API 経由。詳細 `docs/agents/cms-cli.md`） |
+| `npm run cms:mcp` | CMS MCP サーバー起動（Cursor 連携。詳細 `docs/agents/cms-agent.md`） |
+
+DB: `npx prisma migrate dev` / `npx prisma studio` / `npx tsx prisma/seed.ts`
+
+## 本番デプロイ（Vercel）
+
+**前提:** [Vercel CLI](https://vercel.com/docs/cli) で `vercel login` 済み。CMS / フロントは Vercel にリンク済み。
+
+### 更新後（いつもの運用）
+
+```bash
+npm run deploy
+```
+
+フロントも同時: `npm run deploy:all`（内部は `npx vercel --prod --yes`）。migrate / seed は含まない。
+
+| コマンド | 対象 |
+|---------|------|
+| `npm run deploy` | CMS のみ |
+| `npm run deploy:front` | 案件フロントのみ |
+| `npm run deploy:all` | CMS + フロント |
+
+コンテンツ **公開** は管理画面から。CSR 公開サイトの再デプロイは不要。
+
+**DB スキーマ変更時のみ:**
+
+```bash
+npx prisma migrate deploy
+npm run deploy
+```
+
+### 初回セットアップ
+
+1. `cp .env.supabase.local.example .env.supabase.local` に DB パスワード  
+2. `./scripts/setup-supabase-deploy.sh`（1 回）
+
+要約: [USER_SETUP.md](./USER_SETUP.md)。トラブル時: [docs/vercel-deploy.md](./docs/vercel-deploy.md)。
+
+## Preview デモ
+
+[examples/preview/](examples/preview/README.md) — CMS `:3000` + 別ポートで静的デモ（例: `:3001`）。`FRONTEND_BASE_URL=http://localhost:3001` でプレビューリンク連携。
+
+---
+
 ## 設計の核心
 
 | 原則 | 内容 |
@@ -18,13 +125,21 @@
 | いつ | 読むファイル |
 |------|-------------|
 | 要件・機能追加・Phase判断・成功条件 | `SPEC.md` |
+| composable フィールド UI・複製・繰り返し配列 | `FIELD.md` |
 | 技術スタック・ディレクトリ・コマンド・実装状態 | `docs/agents/project.md` |
 | API設計・DB・セキュリティ・MVP範囲 | `docs/agents/architecture.md` |
+| CMS CLI / MCP（エージェント操作） | `docs/agents/cms-agent.md` → `docs/agents/cms-cli.md` / `mcp/headless-cms/README.md` |
 | コーディング規約・管理画面CSS | `docs/agents/coding.md` |
 
 ## サブエージェント・マルチタスク
 
 サブエージェントを起動する、またはマルチタスクモードでスポーンするときは、**作業開始前に関連ドキュメントを読むよう必ず指示する**。
+
+### モデル選択
+
+- **原則:** サブエージェントには **親エージェントと同じモデル** を使う。`model` 引数は **指定しない**（省略時は親と同一になる）。
+- **例外:** ユーザーがモデル名を **明示した場合のみ**、その指定どおりに `model` を渡してよい。
+- **禁止:** 速度・コスト・タスク内容などを理由に、親エージェントが **独自の判断でモデルを選ぶこと**。
 
 | 状況 | 親エージェントが伝えること |
 |------|---------------------------|
@@ -68,7 +183,8 @@
 
 ## ブラウザ確認
 
-管理画面の見た目確認時は `agent-browser` スキル。保存先: `tmp/browser-checks/`
+管理画面の見た目確認時は `agent-browser` スキル。保存先: `tmp/browser-checks/`  
+**優先確認 URL:** http://localhost:3000/sites/main-site/developer
 
 ## 禁止事項
 

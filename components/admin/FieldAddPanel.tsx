@@ -13,7 +13,11 @@ import {
 
 interface FieldAddPanelProps {
   sourceData: Record<string, unknown>;
-  onAdd: (prefix: string, fields: ReturnType<typeof createFieldsFromSelection>) => void;
+  onAdd: (
+    prefix: string,
+    fields: ReturnType<typeof createFieldsFromSelection>,
+    repeatable?: boolean,
+  ) => void;
   readOnly?: boolean;
   siteId: string;
   contentTypeSlug: string;
@@ -43,6 +47,7 @@ export function FieldAddPanel({
   const [prefix, setPrefix] = useState('');
   const [selection, setSelection] = useState<ComposableFieldSelection>(emptySelection);
   const [format, setFormat] = useState<ComposableFieldFormat>('plain');
+  const [repeatable, setRepeatable] = useState(false);
 
   const prefixValidation = useMemo(() => validatePrefix(prefix), [prefix]);
   const previewPaths = useMemo(
@@ -63,18 +68,19 @@ export function FieldAddPanel({
 
     const normalized = normalizePrefix(prefix);
     const fields = createFieldsFromSelection(normalized, selection, sourceData, format);
-    onAdd(normalized, fields);
+    onAdd(normalized, fields, repeatable);
     setSelection(emptySelection);
+    setRepeatable(false);
   }
 
   const showFormatChoice = selection.title || selection.text;
 
   return (
     <div data-l="FieldPanel" className="FieldAddPanel rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-      <h4 className="text-sm font-semibold text-white">JSON Path を追加</h4>
+      <h4 className="text-sm font-semibold text-white">フィールドを追加</h4>
 
       <label className="field_add_panel_prefix mt-4 block">
-        <span className="text-sm font-medium text-white">Path Name</span>
+        <span className="text-sm font-medium text-white">Field name</span>
         <input
           className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20"
           value={prefix}
@@ -89,7 +95,7 @@ export function FieldAddPanel({
       </label>
 
       <fieldset className="field_add_panel_types mt-4 space-y-2" disabled={readOnly}>
-        <legend className="text-sm font-medium text-white">Path の種類</legend>
+        <legend className="text-sm font-medium text-white">Field Path</legend>
         <label className="flex items-center gap-2 text-sm text-slate-200">
           <input
             type="checkbox"
@@ -113,6 +119,20 @@ export function FieldAddPanel({
             onChange={() => toggleType('image')}
           />
           画像（URL・代替テキスト・リンク先をセット追加）
+        </label>
+        <label className="flex items-start gap-2 text-sm text-slate-200">
+          <input
+            type="checkbox"
+            className="mt-1"
+            checked={repeatable}
+            onChange={() => setRepeatable((current) => !current)}
+          />
+          <span>
+            繰り返し（配列）
+            <span className="block text-xs text-slate-400">
+              同一構成の要素を JSON 配列として保存します（例: cards[]）。
+            </span>
+          </span>
         </label>
       </fieldset>
 
@@ -152,7 +172,7 @@ export function FieldAddPanel({
 
       {previewPaths.length > 0 ? (
         <div data-l="PathPreview" className="field_add_panel_preview mt-4 rounded-xl border border-white/10 bg-slate-950/50 p-3">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">追加される JSON Path</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">追加されるフィールドパス</p>
           <ul className="mt-2 space-y-1 font-mono text-xs text-sky-100">
             {previewPaths.map((path) => (
               <li key={path}>{path}</li>

@@ -8,7 +8,7 @@ MVP 推奨構成（`SPEC.md` §10.2 準拠）:
 |------|------|
 | フレームワーク | Next.js（App Router） |
 | 言語 | TypeScript |
-| DB / ORM | PostgreSQL + Prisma |
+| DB / ORM | PostgreSQL + Prisma（**ローカル・本番ともに同一 Supabase を共有**。`.env.local` の `DATABASE_URL` 参照 / 詳細は [AGENTS.md](../../AGENTS.md) の「DB 共有運用」） |
 | 認証 | Supabase Auth / Auth.js |
 | 画像ストレージ | Cloudflare R2（S3互換） |
 | スタイリング | Sass + Tailwind CSS **v3**（v4 禁止） |
@@ -30,6 +30,18 @@ Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS �
 | `npx tsx prisma/seed.ts` | デモデータ投入（`npm run prisma:seed` の代替推奨） |
 | `npm test` | Vitest 単体テスト |
 | `npm run test:coverage` | カバレッジ付きテスト |
+| `npm run cms -- <group> <command> [options]` | CMS CLI — developer ページ相当の操作（Admin API 経由）。詳細 [cms-cli.md](./cms-cli.md) |
+| `npm run cms:mcp` | CMS MCP サーバー — Cursor 等から AI エージェント操作。詳細 [cms-agent.md](./cms-agent.md) |
+
+### CMS CLI / MCP 環境変数
+
+| 変数 | 用途 |
+|------|------|
+| `CMS_ADMIN_API_KEY` | 管理 API キー（本番必須。開発は `admin-dev-key` フォールバック） |
+| `CMS_BASE_URL` | CMS オリジン（未設定時 `http://localhost:3000`） |
+| `CMS_SITE_ID` | MCP のデフォルトサイト slug（未設定時 `main-site`） |
+
+> CLI / MCP は **Admin API（PATCH + publish）のみ** を使用する。DB 直書き・`migrate reset`・`seed` は禁止。
 
 ## ディレクトリ構成
 
@@ -47,7 +59,9 @@ Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS �
 | `lib/content/` | コンテンツ store / service / delivery / mappers / types。配信キャッシュ失効は `delivery-tags.ts`（`revalidateTag`）+ `delivery.ts`（`unstable_cache`） |
 | `lib/schemas/` | コンテンツモデル・フィールド型・バリデーション |
 | `lib/sanitize/` | richText HTML サニタイズ（`data_json` 向け） |
+| `lib/cms-agent/` | CLI / MCP 共通の Admin API クライアント・コンテンツ操作（`docs/agents/cms-agent.md`） |
 | `lib/preview/` | プレビュー URL・トークン解決 |
+| `mcp/headless-cms/` | MCP サーバー（`npm run cms:mcp`）。README: `mcp/headless-cms/README.md` |
 | `lib/sections/` | **未作成（将来）** — セクション型は `content-types/*.json` + SectionEditor |
 | `lib/storage/` | 画像・ファイルアップロード（`local` / `r2` stub） |
 | `middleware.mjs` | `/api/*` 向け CORS（`FRONTEND_BASE_URL`） |

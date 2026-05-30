@@ -36,11 +36,24 @@ export interface ComposableFieldRow {
   format?: ComposableFieldFormat;
 }
 
+export interface ComposableArrayItem {
+  id: string;
+  fields: ComposableFieldRow[];
+}
+
 export interface ComposableFieldGroup {
   id: string;
   prefix: string;
+  /** 非繰り返し時の行、または繰り返し時のテンプレート定義。 */
   fields: ComposableFieldRow[];
+  /** 繰り返しフィールド（JSON 配列）のとき true。 */
+  repeatable?: boolean;
+  /** 繰り返し時の配列要素。空配列も可（FIELD.md プラン2）。 */
+  items?: ComposableArrayItem[];
 }
+
+const ARRAY_INDEX_SEGMENT_RE = /^\d+$/;
+const WILDCARD_FORMAT_PATH_RE = /^(.+)\.\*\.(.+)$/;
 
 const IMAGE_BUNDLE_SUFFIXES: Array<{ type: ComposableFieldType; suffix: string; label: string }> = [
   { type: 'imageUrl', suffix: 'image.url', label: '画像URL' },
@@ -65,8 +78,89 @@ const KNOWN_FIELD_SUFFIXES: Array<{
   { suffix: TEXT_SUFFIX, type: 'text' },
 ];
 
+/** フィールド複製用: 末尾 01〜99 の2桁連番（FIELD.md プラン1） */
+const AUTO_SERIAL_SUFFIX_RE = /(0[1-9]|[1-9][0-9])$/;
+
+export function splitAutoSerial(name: string): { base: string; serial: number | null } {
+  const match = name.match(new RegExp(`^(.+)${AUTO_SERIAL_SUFFIX_RE.source}$`));
+  if (!match) {
+    return { base: name, serial: null };
+  }
+  return { base: match[1]!, serial: Number.parseInt(match[2]!, 10) };
+}
+
+/**
+ * 複製先フィールドネームを決める（ベース名抽出 + 空き最小2桁番号）。
+ * existingPrefixes には複製元を含む画面上の全ネームを渡す。
+ */
+export function nextDuplicatePrefix(sourcePrefix: string, existingPrefixes: string[]): string {
+  const { base } = splitAutoSerial(sourcePrefix);
+  let maxSerial = 0;
+
+  for (const prefix of existingPrefixes) {
+    const split = splitAutoSerial(prefix);
+    if (split.base !== base) {
+      continue;
+    }
+    if (split.serial === null) {
+      maxSerial = Math.max(maxSerial, 0);
+    } else {
+      maxSerial = Math.max(maxSerial, split.serial);
+    }
+  }
+
+  const next = maxSerial + 1;
+  const suffix = next <= 99 ? String(next).padStart(2, '0') : String(next);
+  return `${base}${suffix}`;
+}
+
+/** フィールドグループを複製し、行の jsonPath / value / format を newPrefix へ写像する。id は呼び出し側で差し替える。 */
+export function duplicateFieldGroup(
+  group: ComposableFieldGroup,
+  newPrefix: string,
+): ComposableFieldGroup {
+  const fields = migratePathsOnPrefixChange(
+    group.prefix,
+    newPrefix,
+    group.fields.map((field) => ({ ...field })),
+    {},
+  );
+
+  if (group.repeatable && group.items) {
+    const items = group.items.map((item, index) => ({
+      ...item,
+      fields: migratePathsOnPrefixChange(
+        group.prefix,
+        newPrefix,
+        item.fields.map((field) => ({
+          ...field,
+          jsonPath: buildArrayElementJsonPath(newPrefix, index, field.suffix),
+        })),
+        {},
+      ),
+    }));
+
+    return {
+      ...group,
+      prefix: newPrefix,
+      fields,
+      items,
+    };
+  }
+
+  return {
+    ...group,
+    prefix: newPrefix,
+    fields,
+  };
+}
+
 export function normalizePrefix(prefix: string): string {
   return prefix.trim();
+}
+
+export function isArrayIndexSegment(segment: string): boolean {
+  return ARRAY_INDEX_SEGMENT_RE.test(segment);
 }
 
 export function buildJsonPath(prefix: string, suffix: string): string {
@@ -77,6 +171,61 @@ export function buildJsonPath(prefix: string, suffix: string): string {
   return `${normalizedPrefix}.${suffix}`;
 }
 
+/** 配列要素の jsonPath（例: cards + 0 + title → cards.0.title） */
+export function buildArrayElementJsonPath(
+  fieldPrefix: string,
+  index: number,
+  suffix: string,
+): string {
+  const normalizedPrefix = normalizePrefix(fieldPrefix);
+  if (!normalizedPrefix) {
+    return `${index}.${suffix}`;
+  }
+  return `${normalizedPrefix}.${index}.${suffix}`;
+}
+
+/** composableFieldFormats 用テンプレートキー（例: cards.*.title） */
+export function buildWildcardFormatPath(fieldPrefix: string, suffix: string): string {
+  const normalizedPrefix = normalizePrefix(fieldPrefix);
+  if (!normalizedPrefix) {
+    return `*.${suffix}`;
+  }
+  return `${normalizedPrefix}.*.${suffix}`;
+}
+
+export function parseWildcardFormatPath(
+  path: string,
+): { fieldPrefix: string; suffix: string } | null {
+  const match = path.match(WILDCARD_FORMAT_PATH_RE);
+  if (!match) {
+    return null;
+  }
+  return { fieldPrefix: match[1]!, suffix: match[2]! };
+}
+
+export function resolveFormatFromMap(
+  formats: Record<string, ComposableFieldFormat>,
+  jsonPath: string,
+): ComposableFieldFormat | undefined {
+  if (formats[jsonPath]) {
+    return formats[jsonPath];
+  }
+
+  const matched = matchKnownSuffix(jsonPath);
+  if (!matched || matched.arrayIndex === undefined) {
+    return undefined;
+  }
+
+  const wildcardKey = buildWildcardFormatPath(matched.prefix, matched.suffix);
+  return formats[wildcardKey];
+}
+
+/** Field name（prefix）のドット区切りセグメント: 英数字・_・- のみ。数字始まり可。 */
+const PREFIX_SEGMENT_RE = /^[a-zA-Z0-9_-]+$/;
+
+export const PREFIX_VALIDATION_MESSAGE =
+  'Field name can only use letters, numbers, underscores, and hyphens. Separate nested keys with dots.';
+
 export function validatePrefix(prefix: string): { valid: boolean; message?: string } {
   const normalized = normalizePrefix(prefix);
   if (!normalized) {
@@ -85,10 +234,10 @@ export function validatePrefix(prefix: string): { valid: boolean; message?: stri
 
   const segments = normalized.split('.');
   for (const segment of segments) {
-    if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(segment)) {
+    if (!segment || !PREFIX_SEGMENT_RE.test(segment)) {
       return {
         valid: false,
-        message: 'prefix は英字始まりの英数字（ドット区切り可）のみ使用できます。',
+        message: PREFIX_VALIDATION_MESSAGE,
       };
     }
   }
@@ -201,6 +350,15 @@ export function collectComposableFieldFormats(
   const formats: Record<string, ComposableFieldFormat> = {};
 
   for (const group of groups) {
+    if (group.repeatable) {
+      for (const field of group.fields) {
+        if (supportsFormat(field.type)) {
+          formats[buildWildcardFormatPath(group.prefix, field.suffix)] = field.format ?? 'plain';
+        }
+      }
+      continue;
+    }
+
     for (const field of group.fields) {
       if (supportsFormat(field.type)) {
         formats[field.jsonPath] = field.format ?? 'plain';
@@ -234,7 +392,16 @@ export function collectLeafPaths(data: Record<string, unknown>, pathPrefix = '')
   for (const [key, value] of Object.entries(data)) {
     const path = pathPrefix ? `${pathPrefix}.${key}` : key;
 
-    if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => {
+        if (item !== null && typeof item === 'object' && !Array.isArray(item)) {
+          paths.push(...collectLeafPaths(item as Record<string, unknown>, `${path}.${index}`));
+        }
+      });
+      continue;
+    }
+
+    if (value !== null && typeof value === 'object') {
       paths.push(...collectLeafPaths(value as Record<string, unknown>, path));
       continue;
     }
@@ -245,25 +412,164 @@ export function collectLeafPaths(data: Record<string, unknown>, pathPrefix = '')
   return paths;
 }
 
-export function matchKnownSuffix(
-  path: string,
-): { prefix: string; suffix: string; type: ComposableFieldType } | null {
+function splitPrefixWithOptionalIndex(prefixPart: string): {
+  prefix: string;
+  arrayIndex?: number;
+} {
+  const match = prefixPart.match(/^(.+)\.(\d+)$/);
+  if (!match) {
+    return { prefix: prefixPart };
+  }
+
+  return { prefix: match[1]!, arrayIndex: Number.parseInt(match[2]!, 10) };
+}
+
+export function matchKnownSuffix(path: string): {
+  prefix: string;
+  suffix: string;
+  type: ComposableFieldType;
+  arrayIndex?: number;
+} | null {
   for (const { suffix, type } of KNOWN_FIELD_SUFFIXES) {
     if (path === suffix) {
       return { prefix: '', suffix, type };
     }
 
     const dottedSuffix = `.${suffix}`;
-    if (path.endsWith(dottedSuffix)) {
-      return {
-        prefix: path.slice(0, -dottedSuffix.length),
-        suffix,
-        type,
-      };
+    if (!path.endsWith(dottedSuffix)) {
+      continue;
     }
+
+    const prefixPart = path.slice(0, -dottedSuffix.length);
+    const { prefix, arrayIndex } = splitPrefixWithOptionalIndex(prefixPart);
+    return { prefix, suffix, type, arrayIndex };
   }
 
   return null;
+}
+
+function createArrayItemFields(
+  fieldPrefix: string,
+  index: number,
+  templateFields: ComposableFieldRow[],
+  element: Record<string, unknown>,
+  formats: Record<string, ComposableFieldFormat>,
+): ComposableFieldRow[] {
+  return templateFields.map((template) => {
+    const jsonPath = buildArrayElementJsonPath(fieldPrefix, index, template.suffix);
+    return {
+      ...template,
+      jsonPath,
+      value: readDraftFromData(element, '', template.suffix),
+      format:
+        template.format ??
+        resolveFormatFromMap(formats, jsonPath) ??
+        formats[buildWildcardFormatPath(fieldPrefix, template.suffix)] ??
+        'plain',
+    };
+  });
+}
+
+export function createArrayItemFromTemplate(
+  fieldPrefix: string,
+  index: number,
+  templateFields: ComposableFieldRow[],
+  sourceElement: Record<string, unknown> = {},
+  formats: Record<string, ComposableFieldFormat> = {},
+  createItemId: () => string = () => `item-${Date.now()}`,
+): ComposableArrayItem {
+  return {
+    id: createItemId(),
+    fields: createArrayItemFields(fieldPrefix, index, templateFields, sourceElement, formats),
+  };
+}
+
+function buildTemplateFieldsFromSuffixes(
+  fieldPrefix: string,
+  suffixes: Set<string>,
+  formats: Record<string, ComposableFieldFormat>,
+): ComposableFieldRow[] {
+  const fields: ComposableFieldRow[] = [];
+
+  if (suffixes.has(TITLE_SUFFIX)) {
+    const suffix = TITLE_SUFFIX;
+    const wildcard = buildWildcardFormatPath(fieldPrefix, suffix);
+    fields.push({
+      type: 'title',
+      suffix,
+      jsonPath: buildJsonPath(fieldPrefix, suffix),
+      value: '',
+      format: formats[wildcard] ?? formats[buildJsonPath(fieldPrefix, suffix)] ?? 'plain',
+    });
+  }
+
+  if (suffixes.has(TEXT_SUFFIX)) {
+    const suffix = TEXT_SUFFIX;
+    const wildcard = buildWildcardFormatPath(fieldPrefix, suffix);
+    fields.push({
+      type: 'text',
+      suffix,
+      jsonPath: buildJsonPath(fieldPrefix, suffix),
+      value: '',
+      format: formats[wildcard] ?? formats[buildJsonPath(fieldPrefix, suffix)] ?? 'plain',
+    });
+  }
+
+  const hasImageBundle = IMAGE_BUNDLE_SUFFIX_LIST.some((suffix) => suffixes.has(suffix));
+  if (hasImageBundle) {
+    for (const row of expandImageBundle(fieldPrefix)) {
+      fields.push({ ...row, value: '' });
+    }
+  }
+
+  return fields;
+}
+
+function elementObjectToFields(
+  fieldPrefix: string,
+  index: number,
+  element: Record<string, unknown>,
+  templateFields: ComposableFieldRow[],
+  formats: Record<string, ComposableFieldFormat>,
+): ComposableFieldRow[] {
+  return createArrayItemFields(fieldPrefix, index, templateFields, element, formats);
+}
+
+function fieldsToElementObject(fields: ComposableFieldRow[]): Record<string, unknown> {
+  const element: Record<string, unknown> = {};
+  for (const field of fields) {
+    writeFieldValueInObject(element, field.suffix, field.value);
+  }
+  return element;
+}
+
+/** 配列要素オブジェクトへ suffix ベースで値を書き込む（admin-api と同等のネスト生成）。 */
+function writeFieldValueInObject(
+  data: Record<string, unknown>,
+  key: string,
+  value: unknown,
+): void {
+  const parts = key.split('.');
+  if (parts.length === 1) {
+    data[key] = value;
+    return;
+  }
+
+  let current = data;
+  for (let index = 0; index < parts.length - 1; index += 1) {
+    const part = parts[index]!;
+    const next = current[part];
+    if (!next || typeof next !== 'object' || Array.isArray(next)) {
+      current[part] = {};
+    }
+    current = current[part] as Record<string, unknown>;
+  }
+
+  current[parts[parts.length - 1] ?? ''] = value;
+}
+
+export function buildRepeatableArrayValue(items: ComposableArrayItem[]): unknown[] {
+  return items.map((item) => fieldsToElementObject(item.fields));
 }
 
 export function restoreGroupsFromData(
@@ -271,33 +577,93 @@ export function restoreGroupsFromData(
   createId: () => string = () => `group-${Date.now()}`,
   formats: Record<string, ComposableFieldFormat> = {},
 ): ComposableFieldGroup[] {
-  const prefixSuffixes = new Map<string, Set<string>>();
+  const groups: ComposableFieldGroup[] = [];
+  const arrayPrefixes = new Set<string>();
+  const objectPrefixSuffixes = new Map<string, Set<string>>();
+  let itemIdCounter = 0;
+  const createItemId = () => `item-${++itemIdCounter}`;
+
+  const registerObjectSuffix = (prefix: string, suffix: string) => {
+    const suffixSet = objectPrefixSuffixes.get(prefix) ?? new Set<string>();
+    suffixSet.add(suffix);
+    objectPrefixSuffixes.set(prefix, suffixSet);
+  };
+
+  for (const [key, value] of Object.entries(data)) {
+    if (!Array.isArray(value)) {
+      continue;
+    }
+
+    const fieldPrefix = key;
+    const suffixes = new Set<string>();
+
+    for (const path of collectLeafPaths(data)) {
+      const matched = matchKnownSuffix(path);
+      if (!matched || matched.prefix !== fieldPrefix || matched.arrayIndex === undefined) {
+        continue;
+      }
+      suffixes.add(matched.suffix);
+    }
+
+    for (const formatPath of Object.keys(formats)) {
+      const wildcard = parseWildcardFormatPath(formatPath);
+      if (wildcard?.fieldPrefix === fieldPrefix) {
+        suffixes.add(wildcard.suffix);
+      }
+    }
+
+    const templateFields = buildTemplateFieldsFromSuffixes(fieldPrefix, suffixes, formats);
+    if (templateFields.length === 0) {
+      continue;
+    }
+
+    const items = value
+      .filter((item): item is Record<string, unknown> => item !== null && typeof item === 'object' && !Array.isArray(item))
+      .map((element, index) => ({
+        id: createItemId(),
+        fields: elementObjectToFields(fieldPrefix, index, element, templateFields, formats),
+      }));
+
+    groups.push({
+      id: createId(),
+      prefix: fieldPrefix,
+      fields: templateFields,
+      repeatable: true,
+      items,
+    });
+    arrayPrefixes.add(fieldPrefix);
+  }
 
   for (const path of collectLeafPaths(data)) {
     const matched = matchKnownSuffix(path);
-    if (!matched) {
+    if (!matched || matched.arrayIndex !== undefined) {
       continue;
     }
-
-    const suffixSet = prefixSuffixes.get(matched.prefix) ?? new Set<string>();
-    suffixSet.add(matched.suffix);
-    prefixSuffixes.set(matched.prefix, suffixSet);
+    if (arrayPrefixes.has(matched.prefix)) {
+      continue;
+    }
+    registerObjectSuffix(matched.prefix, matched.suffix);
   }
 
-  // data に値が無くても format だけ定義済みのパスを拾う（リッチ指定が空保存後も保持される）。
   for (const path of Object.keys(formats)) {
-    const matched = matchKnownSuffix(path);
-    if (!matched) {
+    const wildcard = parseWildcardFormatPath(path);
+    if (wildcard) {
+      if (!arrayPrefixes.has(wildcard.fieldPrefix)) {
+        const existing = objectPrefixSuffixes.get(wildcard.fieldPrefix) ?? new Set<string>();
+        existing.add(wildcard.suffix);
+        objectPrefixSuffixes.set(wildcard.fieldPrefix, existing);
+      }
       continue;
     }
-    const suffixSet = prefixSuffixes.get(matched.prefix) ?? new Set<string>();
-    suffixSet.add(matched.suffix);
-    prefixSuffixes.set(matched.prefix, suffixSet);
+
+    const matched = matchKnownSuffix(path);
+    if (!matched || matched.arrayIndex !== undefined || arrayPrefixes.has(matched.prefix)) {
+      continue;
+    }
+    registerObjectSuffix(matched.prefix, matched.suffix);
   }
 
-  const groups: ComposableFieldGroup[] = [];
-
-  for (const [prefix, suffixes] of prefixSuffixes) {
+  for (const [prefix, suffixes] of objectPrefixSuffixes) {
     const fields: ComposableFieldRow[] = [];
 
     if (suffixes.has(TITLE_SUFFIX)) {
@@ -307,7 +673,7 @@ export function restoreGroupsFromData(
         suffix: TITLE_SUFFIX,
         jsonPath,
         value: readDraftFromData(data, prefix, TITLE_SUFFIX),
-        format: formats[jsonPath] ?? 'plain',
+        format: resolveFormatFromMap(formats, jsonPath) ?? 'plain',
       });
     }
 
@@ -318,7 +684,7 @@ export function restoreGroupsFromData(
         suffix: TEXT_SUFFIX,
         jsonPath,
         value: readDraftFromData(data, prefix, TEXT_SUFFIX),
-        format: formats[jsonPath] ?? 'plain',
+        format: resolveFormatFromMap(formats, jsonPath) ?? 'plain',
       });
     }
 
@@ -341,6 +707,33 @@ export function restoreGroupsFromData(
     }
   }
 
+  for (const formatPath of Object.keys(formats)) {
+    const wildcard = parseWildcardFormatPath(formatPath);
+    if (!wildcard || arrayPrefixes.has(wildcard.fieldPrefix)) {
+      continue;
+    }
+
+    const hasGroup = groups.some((group) => group.repeatable && group.prefix === wildcard.fieldPrefix);
+    if (hasGroup) {
+      continue;
+    }
+
+    const suffixes = new Set([wildcard.suffix]);
+    const templateFields = buildTemplateFieldsFromSuffixes(wildcard.fieldPrefix, suffixes, formats);
+    if (templateFields.length === 0) {
+      continue;
+    }
+
+    groups.push({
+      id: createId(),
+      prefix: wildcard.fieldPrefix,
+      fields: templateFields,
+      repeatable: true,
+      items: [],
+    });
+    arrayPrefixes.add(wildcard.fieldPrefix);
+  }
+
   return groups.sort((left, right) => left.prefix.localeCompare(right.prefix));
 }
 
@@ -355,9 +748,23 @@ function readDraftFromData(
   let current: unknown = data;
 
   for (const part of parts) {
-    if (!current || typeof current !== 'object') {
+    if (current === null || current === undefined) {
       return '';
     }
+
+    if (Array.isArray(current)) {
+      const index = Number.parseInt(part, 10);
+      if (!Number.isFinite(index) || index < 0 || index >= current.length) {
+        return '';
+      }
+      current = current[index];
+      continue;
+    }
+
+    if (typeof current !== 'object') {
+      return '';
+    }
+
     current = (current as Record<string, unknown>)[part];
   }
 

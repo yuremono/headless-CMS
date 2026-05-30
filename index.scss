@@ -26,6 +26,7 @@
 }
 html{
         font-size: var(--FZ);
+        overflow: clip;
 }
 :where(.PageRoot),
 :where(#root)>div {//index.scss tailwind overwrite

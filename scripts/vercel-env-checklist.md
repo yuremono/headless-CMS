@@ -19,7 +19,7 @@ Supabase 既存: `dvcaumqooopebexajsdw`（[ダッシュボード](https://supaba
 - [ ] `ADMIN_DEMO_PASSWORD`（seed と一致）
 - [ ] `CMS_PUBLIC_API_KEY` / `CMS_ADMIN_API_KEY`（本番推奨）
 - [ ] `STORAGE_PROVIDER` — `local`
-- [ ] `FRONTEND_BASE_URL` — `https://0529headless-front.vercel.app`（フロント確定後）
+- [ ] `FRONTEND_BASE_URL` — `https://headless-front.vercel.app`（フロント確定後）
 
 ## フロント（Vercel → Environment Variables → Redeploy）
 

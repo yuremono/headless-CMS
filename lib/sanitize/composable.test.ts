@@ -31,6 +31,19 @@ describe("sanitizeContentDataJson - composable richText", () => {
     expect((result.hero as Record<string, unknown>).title).toBe("<b>x</b>");
   });
 
+  it("cards.*.title の wildcard で配列要素の richText をサニタイズする", async () => {
+    const schema = { composableFieldFormats: { "cards.*.title": "richText" } };
+    const data = {
+      cards: [{ title: '<em>ok</em><script>x</script>' }],
+    };
+
+    const result = await sanitizeContentDataJson(data, schema);
+    const title = ((result.cards as Array<Record<string, unknown>>)[0]?.title as string) ?? "";
+
+    expect(title).toContain("<em>ok</em>");
+    expect(title).not.toContain("<script>");
+  });
+
   it("存在しないパスの format 指定は無視する", async () => {
     const schema = { composableFieldFormats: { "missing.path": "richText" } };
     const data = { hero: { title: "x" } };
