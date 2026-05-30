@@ -5,7 +5,7 @@
   "type": "module",
   "description": "MCP server for headless CMS agent operations",
   "dependencies": {
-    "@headless/cms-agent": "workspace:*",
+    "@headless/cms-agent": "1.0.0",
     "@modelcontextprotocol/sdk": "^1.12.0"
   }
 }
