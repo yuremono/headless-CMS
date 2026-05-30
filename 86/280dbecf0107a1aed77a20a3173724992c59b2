@@ -1,0 +1,191 @@
+app/api/admin/sites/[siteId]/content/[contentType]/manifest/route.ts
+  s_d84fae77790de6::t_1aa66a0649b84c 1-28
+lib/storage/validate.ts
+  s_d168678408384c::t_fc67c35b75960b 2,4-6,10-28,64-106,109,121,125,129,146,149-158,167-169
+lib/sanitize/html.ts
+  s_d84fae77790de6::t_8538bc970618fb 37-42
+  s_762c3ecd8e07fa::t_468fd16f44f206 1-4,34-36,43-45,53
+lib/content/service.ts
+  s_d84fae77790de6::t_91c1b6accf9a8c 169-193
+  s_d84fae77790de6::t_a30ebbdc43ac8c 63,66-81
+  s_d84fae77790de6::t_09b59602b06bee 346
+  s_d84fae77790de6::t_3a71dc89a99233 320
+lib/storage/upload-asset.test.ts
+  s_d168678408384c::t_bff687cfbf80f8 130,132-138
+lib/storage/config.test.ts
+  s_d168678408384c::t_1048646c8fa5e9 8-9,20,38-39,47-58,61-62,64-65,72-73
+.env.example
+  s_d168678408384c::t_d427a6be05ffa2 54-57,59,61-64,69
+components/admin/FieldAddPanel.tsx
+  s_547ab27bc6db00::t_fdc7f179cf7c56 4,18-23
+  s_547ab27bc6db00::t_47a3fc08dcfb95 32-42
+  s_d84fae77790de6::t_19752063333557 119-152
+  s_d84fae77790de6::t_390a7bb4946373 45
+  s_d84fae77790de6::t_c40ae7dd95bf8d 65,70
+  s_547ab27bc6db00::t_a91cc6450a826f 174-212
+  s_d84fae77790de6::t_e138d51ac4cd1c 10
+components/admin/RichInlineEditor.tsx
+  s_d84fae77790de6::t_f1f9c262af9ae0 1-125
+lib/sanitize/composable.test.ts
+  s_d84fae77790de6::t_e742eeea661b21 1-40
+lib/storage/index.ts
+  s_d168678408384c::t_17a129396e73af 1,14-23,27,30-35
+lib/content/field-manifest.test.ts
+  s_d84fae77790de6::t_b089b02c473382 1-48
+components/admin/ComposableContentForm.tsx
+  s_547ab27bc6db00::t_59de1b273737ea 160-170
+  s_d84fae77790de6::t_2ad0abcae1d185 18,20,30
+  s_d84fae77790de6::t_a92695096d3e08 57,62
+  s_d84fae77790de6::t_e5e613d990ab42 103
+components/admin/ContentEditView.tsx
+  s_d84fae77790de6::t_487f8fc7a63d8d 11-31
+  s_d84fae77790de6::t_91757703bba276 103
+  s_d84fae77790de6::t_410e80bec3327e 69-71
+package-lock.json
+  ai_agent 10,14,17,24,33,101-594,1817-1828,2818-2937,3042-3046,3048-3075,3308-3325,3428-3433,3645-3649,3669-3676,3719-3786,3789-3800,3926-3937,4042-4078,4285-4315,4360-4382,4422-4427,4438-4445,4533-4541,5187-5202,5204-5205,5789,5903-5917,6095-6106,6314-6325,6736-6746,6748
+components/admin/MediaUploadZone.tsx
+  s_d168678408384c::t_9f780122d93370 1-4,6-180
+  s_d168678408384c::t_566bc3e70ca3a3 5
+lib/content/field-manifest.ts
+  s_d84fae77790de6::t_0e0ff78cc0d995 1-81
+components/admin/ImageFieldInput.tsx
+  s_d168678408384c::t_06083fe1288681 124
+  s_d168678408384c::t_50d3cddb65d3f0 3,5,29,32-38,42,69,87,89-123,125-214
+lib/admin/field-type-catalog.test.ts
+  s_d84fae77790de6::t_9414774e0b8740 4,7,11
+  s_d84fae77790de6::t_45fe633d1c6576 178-237
+lib/storage/blob.test.ts
+  s_d168678408384c::t_d229a82a00db3e 1-24
+lib/storage/media-types.ts
+  s_d168678408384c::t_90c5ec6f928f97 1-114
+components/admin/AssetGrid.tsx
+  s_d168678408384c::t_ada1185d7f18b7 112-119
+lib/sanitize/data-json.test.ts
+  s_d84fae77790de6::t_26b53e9861eca9 227
+  s_762c3ecd8e07fa::t_97b8876f02afd5 170-194
+  s_762c3ecd8e07fa::t_8911a7cc3269f3 195-223
+components/admin/MediaLibrary.tsx
+  s_d168678408384c::t_9b6749ba2d642e 3
+  s_d168678408384c::t_54da8c9b4e0086 8,36-38,40-43,45-53,55,57,61-64,74-106
+components/admin/admin-api.ts
+  s_d84fae77790de6::t_10367c731df530 348,355
+lib/content/service.test.ts
+  s_d84fae77790de6::t_8b38db8f2e0262 436
+  s_d84fae77790de6::t_dc729c6c6fdda2 414
+  s_d84fae77790de6::t_9780fd8a84bdf7 394-413,415-435,437-439
+  s_d84fae77790de6::t_2cbde2e7212b9c 78
+  s_d84fae77790de6::t_50e9f8238f749d 311-347
+lib/admin/field-type-catalog.ts
+  s_d84fae77790de6::t_cf586155e48b63 113,124,135
+  s_d84fae77790de6::t_681a220bc9ea1b 231
+  s_d84fae77790de6::t_a9a8e78726cd0b 248-251,253,261
+  s_d84fae77790de6::t_e2fa1a09f15e6d 272,287-297,304,308,310,315,319,321
+  s_d84fae77790de6::t_4194300cf4676b 197-213
+  s_d84fae77790de6::t_82479651701869 5-22,35-36
+lib/storage/upload-asset.ts
+  s_d168678408384c::t_5ed7a0a9412c3e 4,29,33,62-73
+lib/content/types.ts
+  s_d84fae77790de6::t_98c98a42538916 39-40,48-49,58-59
+app/(admin)/sites/[siteId]/contents/[contentType]/[id]/page.tsx
+  s_adc75a79329528::t_9713cadcbafa2b 1,9
+lib/content/store.test.ts
+  s_d84fae77790de6::t_9d594028f6fa9c 294-328
+  s_d84fae77790de6::t_160d381b2d678c 47
+  s_d84fae77790de6::t_bc35e98b496119 10
+lib/storage/blob.ts
+  s_d168678408384c::t_72fcc957277e90 1-33
+lib/storage/local.ts
+  s_d168678408384c::t_050f47d0f1c192 4,13-19
+lib/sanitize/html.test.ts
+  s_762c3ecd8e07fa::t_25719bc0f463aa 32-38
+README.md
+  h_53dad1e32c3c71 49,55
+lib/storage/r2.test.ts
+  s_d168678408384c::t_ee01e1178b56f6 5,15
+lib/storage/index.test.ts
+  s_d168678408384c::t_8c396a177b6761 8-11,18-19,55-71
+components/admin/FieldGroup.tsx
+  s_d84fae77790de6::t_bedf3513d13bb7 6,8,13
+  s_d84fae77790de6::t_e5e914b336ff58 92-98
+  s_d84fae77790de6::t_522119efe30cb2 33-40
+  s_d84fae77790de6::t_355ae177434dac 146-213
+.gitignore
+  s_d168678408384c::t_68414a4381d2c7 64
+lib/storage/validate.test.ts
+  s_d168678408384c::t_6fe0bd5c93da1b 3,24-34,46,62,75,86-106,111,123,131-151
+lib/storage/r2.ts
+  s_d168678408384c::t_303f3a300fe2d0 1-3,6-35,37-65
+lib/storage/config.ts
+  s_d168678408384c::t_33187e877b5c0f 1-15,17,28-30,32,37-39,41-44,46,60-71
+components/admin/AdminNav.tsx
+  h_53dad1e32c3c71 36,38,41,47
+  s_964df2618910a2::t_01c7c29fb8cf70 14-19
+lib/sanitize/data-json.ts
+  s_d84fae77790de6::t_804400b741f236 91-154,161-167
+lib/content/store.ts
+  s_d84fae77790de6::t_d325954f8bba5d 256-260,263
+  s_d84fae77790de6::t_c6df9366465d87 8
+  s_d84fae77790de6::t_7caffe0c8b93fb 316-320,323
+  s_d84fae77790de6::t_bd33c5aef1b08b 60-104
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "86280dbecf0107a1aed77a20a3173724992c59b2",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_547ab27bc6db00": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1b7d069c-9b80-4b33-88ec-256fc6797252",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_762c3ecd8e07fa": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1b076ade-620c-47b8-967c-7c96342ba72e",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_964df2618910a2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "83cd2f68-a0fd-4184-9bb6-2c9d3db212c8",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_adc75a79329528": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "62787f8c-191f-4ff7-8b55-9b3accda6d76",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d168678408384c": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ffe25ea1-0f39-4f23-97e2-900509b3bbc3",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_d84fae77790de6": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "63cb9e22-fd73-4a34-aba4-b235da2ee1ee",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
