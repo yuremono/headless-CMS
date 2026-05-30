@@ -1,0 +1,116 @@
+components/admin/MediaUploadZone.tsx
+  s_547ab27bc6db00::t_a9fa0613257e4e 132,134
+components/admin/ContentEditView.tsx
+  s_c551fe21504c5a::t_9f9a9c0ee2270b 80,95
+components/admin/AdminApiNotice.tsx
+  s_547ab27bc6db00::t_ab489d19d0cb09 16
+components/admin/FieldGroup.tsx
+  s_547ab27bc6db00::t_f22c294cb34d00 205
+  s_547ab27bc6db00::t_17fd796e6a1a42 265-266
+  s_547ab27bc6db00::t_774a1d09984209 278,280
+  s_7d8f1e50aaa66d::t_b367d676094756 3,61-69,80-82,134-140,143,145,147,157,184,191,325
+  s_0011a908f9ae87::t_5da1f78a45d494 188
+  s_547ab27bc6db00::t_01791541857259 305-306
+  s_0011a908f9ae87::t_8456f8e5977495 158-159,161,164-178
+  s_c551fe21504c5a::t_225776878f92c4 141,144,146,148-156,183,185-186
+  h_53dad1e32c3c71 142,160,162-163
+  s_547ab27bc6db00::t_a2abb853cf28f1 198-199
+  s_547ab27bc6db00::t_59fb8151b36d71 193-194
+  s_c551fe21504c5a::t_ff856cef359803 83-85
+components/admin/RichInlineEditor.tsx
+  s_547ab27bc6db00::t_57c7e65bd42732 84,86
+  s_547ab27bc6db00::t_2b6cfb7b7337c3 111
+components/admin/AdminNav.tsx
+  s_547ab27bc6db00::t_e2d7eba5e32591 33
+  s_547ab27bc6db00::t_a89195eef112b5 83
+  s_547ab27bc6db00::t_98a43ff96d6d22 49
+  s_547ab27bc6db00::t_c3373771600c15 66
+scss/_components.scss
+  s_c551fe21504c5a::t_d9e26207763faa 8-12,16
+  s_c551fe21504c5a::t_8ef9159cee364a 112,114-116,118-120,122-123,125-127
+  s_7d8f1e50aaa66d::t_1df1489c44b34a 113,117,121,124
+components/admin/FieldAddPanel.tsx
+  h_53dad1e32c3c71 74,77,171
+  s_547ab27bc6db00::t_cd1094cfa822f7 73
+  s_547ab27bc6db00::t_e14a7bccfbf641 154
+  s_547ab27bc6db00::t_96c5cfb12a8a1f 175
+  s_62a0796af3ba26::t_ded68e1d026ea1 155
+  s_62a0796af3ba26::t_c31a9a811b4b46 92
+components/admin/AssetGrid.tsx
+  s_547ab27bc6db00::t_cd728523b4d467 123
+  s_547ab27bc6db00::t_0769120b74ae87 138
+  s_547ab27bc6db00::t_f9b5b0759e2968 92,95-96
+  s_547ab27bc6db00::t_df3b441c3bbd59 84
+  s_547ab27bc6db00::t_77f404a46b5a29 107
+components/admin/ComposableContentForm.tsx
+  h_53dad1e32c3c71 144,149,153,157
+  s_547ab27bc6db00::t_87383170870b0f 142
+components/admin/AdminLayout.tsx
+  s_c551fe21504c5a::t_7b603124e2361d 58-61,63-65,67-73
+  h_53dad1e32c3c71 62,66
+components/admin/ImageFieldInput.tsx
+  s_547ab27bc6db00::t_36aa2110531410 90-91
+  s_547ab27bc6db00::t_41c618233c0a1b 98
+  s_547ab27bc6db00::t_fd4e0f14dd4fee 118
+  s_547ab27bc6db00::t_9251434e33fb05 136
+  s_547ab27bc6db00::t_2588127e61806d 176,182-183
+  s_547ab27bc6db00::t_6bae5317c63d0c 197
+prisma/migrations/migration_lock.toml
+  s_547ab27bc6db00::t_31e76b011177c9 2
+components/admin/AdminPageHeader.tsx
+  s_547ab27bc6db00::t_89981804204293 12
+  s_547ab27bc6db00::t_bc9ec10d473be2 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "e47ca76593b01e9b8ad29855212a0764ec19a45f",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_0011a908f9ae87": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "207e5422-24bc-4951-8a84-2fcedaf7e835",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_547ab27bc6db00": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "1b7d069c-9b80-4b33-88ec-256fc6797252",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_62a0796af3ba26": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "d696abaa-db6d-4528-91ec-02114f9f19af",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_7d8f1e50aaa66d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "f4293d78-8021-40a8-9f42-06b2f43e3846",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_c551fe21504c5a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "f7cf3259-72a2-406b-9e09-4b1862cf5be3",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
