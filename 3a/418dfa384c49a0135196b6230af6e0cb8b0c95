@@ -1,0 +1,96 @@
+packages/headless-cms-agent/src/index.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-75
+packages/headless-cms-mcp/src/server.ts
+  s_40590d1b6cc122::t_6ff4848afab0c2 7
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-6,8-53
+lib/cms-agent/api-client.ts
+  s_40590d1b6cc122::t_068a171886ea45 1-2
+lib/cms-agent/field-ops.ts
+  s_40590d1b6cc122::t_b9ee195c9355d5 1-2
+packages/headless-cms-agent/src/field-catalog.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-778
+packages/headless-cms-agent/src/field-ops.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-355
+packages/headless-cms-mcp/src/tools.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-7,11-372
+  s_40590d1b6cc122::t_8e1da10a14880e 8-10
+lib/cms-agent/index.ts
+  s_40590d1b6cc122::t_d6e113e6e5274a 1-2
+packages/headless-cms-agent/src/content-ops.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-271
+lib/admin/field-type-catalog.ts
+  s_40590d1b6cc122::t_46299f958c4e7c 1-2
+mcp/headless-cms/README.md
+  s_40590d1b6cc122::t_56fee9eb90db61 3-8
+  s_40590d1b6cc122::t_0c9297dcaffd6c 48,67
+  s_40590d1b6cc122::t_c947f3657e1364 13,16-17,20,23-24,27
+package.json
+  s_40590d1b6cc122::t_20449f0fbc1139 28
+  s_40590d1b6cc122::t_a949fc89c75722 6-8
+docs/agents/cms-agent.md
+  s_40590d1b6cc122::t_416407f0149f72 49
+  s_40590d1b6cc122::t_e03cbe0c5ef56f 10-11,13-14,16-18
+packages/headless-cms-agent/package.json
+  s_40590d1b6cc122::t_1ba7388564b861 1-15
+lib/cms-agent/types.ts
+  s_40590d1b6cc122::t_6502c762992e5c 1-2
+lib/cms-agent/content-ops.ts
+  s_40590d1b6cc122::t_690ed4e710801e 1-2
+packages/headless-cms-mcp/src/client.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1,3-5,7,9-13,15-72
+  s_40590d1b6cc122::t_58c70ba6ba3346 2,6,8,14
+lib/cms-agent/field-ops.test.ts
+  s_ef933977082a10::t_098fdbe3fe82f9 10
+packages/headless-cms-agent/src/api-client.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-239
+packages/headless-cms-mcp/package.json
+  s_40590d1b6cc122::t_825dcd8107aca9 1-7,9-11
+  s_94babb98a9a9b5::t_7299f5db44fe1f 8
+tsconfig.json
+  s_94babb98a9a9b5::t_b8f034494021e9 43-45
+lib/cms-agent/field-catalog.ts
+  s_40590d1b6cc122::t_0081d1f0cf357b 1-2
+scripts/cms-cli/commands.ts
+  s_94babb98a9a9b5::t_c89f5b5673af0d 272
+  s_94babb98a9a9b5::t_50c876510f59ea 18,24-29
+  s_94babb98a9a9b5::t_d11639260395f9 515
+packages/headless-cms-agent/src/types.ts
+  s_40590d1b6cc122::t_ed20bb82fc0508 1-92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "3a418dfa384c49a0135196b6230af6e0cb8b0c95",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_40590d1b6cc122": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "005a6505-b28d-4ae2-b812-4e8e23a01591",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_94babb98a9a9b5": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b46b896a-b46c-4a01-bf45-73d1cf9f11d3",
+        "model": "composer-2.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_ef933977082a10": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "5be6f3bd-826d-4496-8f9b-10cfe09cb456",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
