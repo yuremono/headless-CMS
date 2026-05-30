@@ -102,5 +102,21 @@
 .FieldAddPanel,
 .FieldGroup,
 .ComposableContentForm {
-  @apply text-slate-100;
+  @apply overflow-visible text-slate-100;
+}
+
+.composable_content_form_layout {
+  @apply flex flex-col items-stretch gap-4 overflow-visible lg:flex-row lg:items-start lg:gap-6;
+}
+
+.composable_content_form_main {
+  @apply min-w-0 flex-1;
+}
+
+.composable_content_form_groups {
+  @apply min-w-0;
+}
+
+.FieldAddPanel {
+  @apply lg:sticky lg:top-6 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start;
 }

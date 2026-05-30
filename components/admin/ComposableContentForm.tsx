@@ -152,27 +152,31 @@ export function ComposableContentForm({
         </div>
       ) : null}
 
-      <FieldAddPanel sourceData={sourceData} onAdd={handleAddGroup} readOnly={readOnly} />
+      <div className="composable_content_form_layout">
+        <FieldAddPanel sourceData={sourceData} onAdd={handleAddGroup} readOnly={readOnly} />
 
-      {groups.length === 0 ? (
-        <p className="composable_content_form_empty text-sm text-slate-400">
-          フィールドグループはまだありません。上のパネルから追加してください。
-        </p>
-      ) : (
-        <div className="composable_content_form_groups space-y-4">
-          {groups.map((group) => (
-            <FieldGroup
-              key={group.id}
-              siteId={siteId}
-              group={group}
-              sourceData={sourceData}
-              onChange={(next) => updateGroup(group.id, next)}
-              onRemove={() => removeGroup(group.id)}
-              readOnly={readOnly}
-            />
-          ))}
+        <div className="composable_content_form_main">
+          {groups.length === 0 ? (
+            <p className="composable_content_form_empty text-sm text-slate-400">
+              フィールドグループはまだありません。左のパネルから追加してください。
+            </p>
+          ) : (
+            <div className="composable_content_form_groups space-y-4">
+              {groups.map((group) => (
+                <FieldGroup
+                  key={group.id}
+                  siteId={siteId}
+                  group={group}
+                  sourceData={sourceData}
+                  onChange={(next) => updateGroup(group.id, next)}
+                  onRemove={() => removeGroup(group.id)}
+                  readOnly={readOnly}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       <AdminActionNotice kind={statusKind} message={statusMessage} />
 
