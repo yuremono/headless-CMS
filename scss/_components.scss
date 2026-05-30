@@ -86,10 +86,21 @@
 }
 
 .MediaLibrary,
-.AssetGrid {
+.AssetGrid,
+.MediaUploadZone {
   @apply text-slate-100;
 }
 
+.MediaUploadZone_drop_zone {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-sky-400/30;
+}
+
 .FieldRenderer {
+  @apply text-slate-100;
+}
+
+.FieldAddPanel,
+.FieldGroup,
+.ComposableContentForm {
   @apply text-slate-100;
 }
