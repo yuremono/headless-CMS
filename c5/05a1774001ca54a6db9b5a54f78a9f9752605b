@@ -1,0 +1,199 @@
+scss/index.scss
+  s_1876c354179164::t_2f4103ef790e43 42-43,45,47-48
+  s_b2cb0ee24c189b::t_ccb10e71e7acff 145-154
+  h_53dad1e32c3c71 83-84,128,221
+components/admin/admin-ui-classes.ts
+  s_9c415afd036cfb::t_2cdd01c7de5ab0 13,17
+  s_9c415afd036cfb::t_f603ed1db61023 21,23
+  h_53dad1e32c3c71 8,25,27,29,33,35
+  s_9c415afd036cfb::t_d0d7c04af7d7cc 15,19
+components/admin/ImageFieldInput.tsx
+  h_53dad1e32c3c71 35,49,53,100,144,162,174,199,269,277,282,287,296,305,332
+components/admin/ContentForm.tsx
+  s_1876c354179164::t_3d6311604affb5 118-119
+  s_1876c354179164::t_86c30bce288ce5 116-117,120-122,182,189,262,273,280-295
+  s_1876c354179164::t_45d960f9d30d31 135
+  h_53dad1e32c3c71 152,165
+  s_1876c354179164::t_0d7a0ee530a670 263
+lib/content/store.ts
+  s_b2cb0ee24c189b::t_fc1a073a8fca9c 102,104-105,117
+  s_b2cb0ee24c189b::t_7e021d38f9eb85 80-81,101,103,106
+  s_b2cb0ee24c189b::t_7b9571d4a23d8c 9,73,76,110-112,115,119-121,289,353
+  s_b2cb0ee24c189b::t_cfa1dcc563b5d2 84-88
+  s_b2cb0ee24c189b::t_7c43fbe46d6b90 8,63,67,70-72,74,91-97,107-109,114,116,118,283,286-288,290,347,350-352,354
+  s_b2cb0ee24c189b::t_cf8c1ee4f4557e 64
+components/admin/ContentEditView.tsx
+  s_b2cb0ee24c189b::t_408a5cca84655c 16-17,58-59,98-103,105-108,110-112,114,156-157,190-191
+  s_b2cb0ee24c189b::t_ffb29b83a479d3 6,60-97,104,109,113,158,192
+  s_b2cb0ee24c189b::t_18ad9feca98655 31-39,44-50,52-54,57,115-116,166,194
+  s_b2cb0ee24c189b::t_ae310479fce8a3 40-43,51,55-56
+USER_SETUP.md
+  s_b93a543906a08c::t_ebc7354c45bd83 22
+components/admin/RichInlineEditor.tsx
+  s_1876c354179164::t_fb3940562eeadb 85
+components/admin/AdminActionNotice.tsx
+  s_1876c354179164::t_dc7ba9bf33db61 3-4,11-24
+  h_53dad1e32c3c71 30,32-33
+components/admin/admin-api.ts
+  s_b2cb0ee24c189b::t_2b9a414a3f0f09 353,355-360,380
+  s_b2cb0ee24c189b::t_d07a7bb2b776ff 361-372,381
+  s_b2cb0ee24c189b::t_d8e9822aa01fe4 354
+  s_b93a543906a08c::t_c8019187bfcb89 3-4,8-10
+components/admin/SectionFieldForm.tsx
+  s_1876c354179164::t_6920ab7af86dde 56,93,122,236
+  s_1876c354179164::t_7598b1d260347b 18,51,99,106,127,134
+components/admin/SectionArrayItemEditor.tsx
+  s_1876c354179164::t_b031f3fa43bd71 17,37
+  s_1876c354179164::t_f14143035e74fa 98
+components/admin/MediaUploadZone.tsx
+  s_9c415afd036cfb::t_7f9fe3e514f5f3 174
+  s_1876c354179164::t_f14143035e74fa 135
+  s_9c415afd036cfb::t_2cdd01c7de5ab0 138
+components/admin/SectionEditor.tsx
+  s_1876c354179164::t_f14143035e74fa 234,273,277,279,300,416
+  s_1876c354179164::t_2fc60e12a4a747 235,244,249,251,324,347,350,360,378,389,403,434,455
+  s_1876c354179164::t_fb3940562eeadb 305
+lib/auth/index.ts
+  s_b93a543906a08c::t_a1dd82baead03c 180,220
+  s_b93a543906a08c::t_796ab547711267 178-179,181-194
+  s_b93a543906a08c::t_efef7b8f4dd097 6,217-219,221,297-299
+components/admin/LogoutButton.tsx
+  h_53dad1e32c3c71 6,35
+components/admin/ContentList.tsx
+  h_53dad1e32c3c71 89
+components/admin/SeoFields.tsx
+  s_1876c354179164::t_f14143035e74fa 92-93,113
+  s_1876c354179164::t_2fc60e12a4a747 96,114
+scripts/setup-supabase-deploy.sh
+  s_b93a543906a08c::t_a1f6636bbfd832 79-80
+  s_b93a543906a08c::t_fe112948c0cf86 75
+.env.example
+  s_b93a543906a08c::t_b26d12c1e63c28 32,34-36
+  s_b93a543906a08c::t_7b55fecc8b1794 43
+.env.supabase.local.example
+  s_b93a543906a08c::t_2e5ba66ecd36f8 7-8,10
+  s_b93a543906a08c::t_6287d416a885c1 9
+components/admin/AdminNav.tsx
+  s_9c415afd036cfb::t_b47fbae0249dde 52,71
+  s_9c415afd036cfb::t_55c8a9f7a6d620 83
+  s_9c415afd036cfb::t_f419866741febf 10,13,32,36,38-42
+  h_53dad1e32c3c71 31,33-35,37,45,47,61,79
+lib/auth/dev-session-tokens.ts
+  s_b93a543906a08c::t_e1639a1033aa36 1-5
+lib/content/types.ts
+  s_b2cb0ee24c189b::t_3557ddd2e90ee5 41-48,50-51,76-77,90-91
+  s_b2cb0ee24c189b::t_1c8a50c0818436 52-66,78-79,92-93
+  s_b2cb0ee24c189b::t_65cd3f0a7fc262 49
+scripts/vercel-env-paste.md
+  s_b93a543906a08c::t_225d47cdf66f06 20-21
+  s_b93a543906a08c::t_2d17da9c881d4f 16
+app/api/admin/sites/[siteId]/content/[contentType]/route.ts
+  s_1876c354179164::t_3548c7c7281030 8,62-102
+components/admin/FieldGroup.tsx
+  s_9c415afd036cfb::t_0bc61130810979 15,520,613,650
+  s_9c415afd036cfb::t_6af087a169cd9c 499,523
+  s_1876c354179164::t_9fdaef37e18739 446,697
+  s_1876c354179164::t_dc7ba9bf33db61 3,114,517,680,693-694
+  s_9c415afd036cfb::t_01b3a71a6fe233 17-18,503,513,577
+  s_9c415afd036cfb::t_7f9fe3e514f5f3 361,477,543,571,597
+  s_9c415afd036cfb::t_635f20d3838ec0 606
+  s_9c415afd036cfb::t_55c8a9f7a6d620 458
+  s_9c415afd036cfb::t_90ad57c70d55c4 647
+  s_1876c354179164::t_35beba8fd2346a 39,111,392
+  s_1876c354179164::t_fba782e4265f09 516,658-679,681-692,695-696
+components/admin/FieldRenderer.tsx
+  s_1876c354179164::t_63b3ca9dd1a486 16,23,65
+lib/auth/site-role.ts
+  s_b93a543906a08c::t_c73ac01c83311a 13-16
+  s_b93a543906a08c::t_7a91028c494086 3,12,17-29,79-81,125-127
+  s_b93a543906a08c::t_722056f1b0df03 68
+package.json
+  s_9c415afd036cfb::t_11cdf3bcbe568f 40
+lib/auth/roles.ts
+  s_b93a543906a08c::t_a4d76aa143d5fb 60,62
+components/admin/AdminPageHeader.tsx
+  s_1876c354179164::t_f14143035e74fa 11
+components/admin/AdminLayout.tsx
+  s_9c415afd036cfb::t_f419866741febf 74,89
+  h_53dad1e32c3c71 66,72
+  s_1876c354179164::t_f14143035e74fa 65,80-81
+components/admin/AssetGrid.tsx
+  s_1876c354179164::t_4c8f893e75509e 92,136,235-236
+  h_53dad1e32c3c71 84,99,101-102,105,110,115,121,129,139,145,152,154,160,166,175,182,201,218,234
+app/api/admin/auth/login/route.ts
+  s_b93a543906a08c::t_af5f96485078e0 3,25-42
+AGENTS.md
+  h_53dad1e32c3c71 17
+components/admin/FieldAddPanel.tsx
+  h_53dad1e32c3c71 98,114-115,124,133,142,151,160-161,171,174,184,215
+  s_b2cb0ee24c189b::t_8bc2d53de80804 35,54,68-69,81-82,108-109
+  s_9c415afd036cfb::t_7f9fe3e514f5f3 95,198
+  s_9c415afd036cfb::t_55c8a9f7a6d620 248
+  s_9c415afd036cfb::t_67a2c07051732b 195
+  s_9c415afd036cfb::t_2df7339315e42b 118,127,136,145,165,178
+  s_9c415afd036cfb::t_50237bbf424eb9 9-10,239
+  s_b2cb0ee24c189b::t_5b7ed08b649fdf 3,36,55,83,216-217,245
+  s_1876c354179164::t_cc73944345cec3 70,113,159,206-213,220-222,224-232
+components/admin/ComposableContentForm.tsx
+  s_b2cb0ee24c189b::t_d7df3cf9fb6371 284-285,293
+  h_53dad1e32c3c71 5,18,37-38,43-66,71-283,291-292,294-299,324-325,331,333-341,343-348,353-354,357-359,375-381,385-388,390-400,404-406,408-416,420-434,436-479,483-487,491-494,496,498-504,506,510-516,527-528,532,544,547,556-565,567-569,571-648,651-739
+  s_1876c354179164::t_cf7b5df047af02 332,566
+  s_b2cb0ee24c189b::t_d91bb519556407 342
+  s_1876c354179164::t_dc7ba9bf33db61 480-482
+  s_b2cb0ee24c189b::t_4addf60e9ad0d4 570
+lib/content/store.test.ts
+  s_b2cb0ee24c189b::t_6eb704451d1167 339-395
+  s_b2cb0ee24c189b::t_5fed7c6d2a1357 316-338
+app/(admin)/login/page.tsx
+  s_b93a543906a08c::t_171465dde1446a 12-14,17-18,20-22,24,27-29,31,33-35,37-45
+  h_53dad1e32c3c71 19,23,25-26,30,32
+components/admin/LoginForm.tsx
+  s_b93a543906a08c::t_2e1fe150406392 7-13,17-18,25-26,32,70,76,87,89-91,93-100,102-110,112-132
+  s_b93a543906a08c::t_f1040804fb5cb6 69,75
+  h_53dad1e32c3c71 88,92,101,111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "c505a1774001ca54a6db9b5a54f78a9f9752605b",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_1876c354179164": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e82e0-919b-75c0-b56d-f922b5d560c5",
+        "model": "gpt-5.4-mini"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_9c415afd036cfb": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e81b4-fb0f-77a2-8f9b-5cb874657148",
+        "model": "gpt-5.4-mini"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_b2cb0ee24c189b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e821d-7720-79b2-b2bc-8d601dc1b1d6",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_b93a543906a08c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e826d-e666-7120-990b-65a21099e9ef",
+        "model": "gpt-5.4-mini"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
