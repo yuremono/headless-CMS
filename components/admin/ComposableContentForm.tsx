@@ -867,7 +867,7 @@ export function ComposableContentForm({
 
                         <div
 				data-l="FieldAddPanel"
-                                className=" mt-0 flex min-w-0 flex-1 flex-col items-stretch gap-4  lg:flex-row lg:items-start lg:gap-6 border-x border-TC/20 px-4 lg:px-6 lg:overflow-y-auto ">
+                                className=" mt-0 flex min-w-0 flex-1 flex-col items-stretch gap-4  lg:flex-row lg:items-start lg:gap-6 lg:border-l border-TC/20 lg:pl-6  lg:overflow-y-auto ">
 				<FieldAddPanel
 					sourceData={sourceData}
 					onAdd={handleAddGroup}
@@ -896,7 +896,7 @@ export function ComposableContentForm({
 
                                 <div
 				        data-l="FieldGroupWrapper"
-                                        className="min-w-0 flex-1 h-full overflow-y-auto pr-2 pt-1">
+                                        className="min-w-0 flex-1 h-full overflow-y-auto pr-2 ">
 					{groups.length === 0 ? (
 						<p className="text-sm text-GR">
 							フィールドはまだありません。左のパネルから追加してください。
@@ -906,7 +906,7 @@ export function ComposableContentForm({
 							このディレクトリにはフィールドがありません。左のパネルから追加してください。
 						</p>
 					) : (
-						<div className="min-w-0 ">
+						<div className="min-w-0 border-t border-TC/20">
 							{visibleGroups.map((group) => (
 								<FieldGroup
 									key={group.id}

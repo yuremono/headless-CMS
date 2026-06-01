@@ -5,15 +5,7 @@ import { roleRank, type SiteRole } from "./roles";
 
 const DEMO_SESSION_EMAIL = process.env.ADMIN_DEMO_EMAIL ?? "admin@example.com";
 
-function isDevFallbackAllowed(): boolean {
-  return process.env.NODE_ENV !== "production";
-}
-
 function roleForDevSessionToken(token: string): SiteRole | null {
-  if (!isDevFallbackAllowed()) {
-    return null;
-  }
-
   if (token === DEV_SESSION_TOKENS.readonly || token === authDevTokens.sessionReadOnly) {
     return "viewer";
   }

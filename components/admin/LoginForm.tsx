@@ -32,21 +32,28 @@ export function LoginForm({
   const [formPassword, setFormPassword] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [initialSessionChecked, setInitialSessionChecked] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
     }
 
+    router.prefetch(redirectTo);
+
     if (hasPersistedAdminSession()) {
       router.replace(redirectTo);
+      return;
     }
+
+    setInitialSessionChecked(true);
   }, [redirectTo, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage('');
     setSubmitting(true);
+    let shouldResetSubmitting = true;
 
     try {
       if (authProvider === 'authjs') {
@@ -62,30 +69,40 @@ export function LoginForm({
         }
 
         persistAdminSession(result.data.sessionToken);
-        router.push(redirectTo);
+        shouldResetSubmitting = false;
+        router.replace(redirectTo);
         return;
       }
 
       if (formEmail === email && formPassword === readonlyPassword) {
         persistAdminSession(ADMIN_READONLY_SESSION_TOKEN);
-        router.push(redirectTo);
+        shouldResetSubmitting = false;
+        router.replace(redirectTo);
         return;
       }
 
       if (formEmail === email && formPassword === editorPassword) {
         persistAdminSession(ADMIN_EDITOR_SESSION_TOKEN);
-        router.push(redirectTo);
+        shouldResetSubmitting = false;
+        router.replace(redirectTo);
         return;
       }
 
       setMessage('メールアドレスまたはパスワードが一致しません。');
     } finally {
-      setSubmitting(false);
+      if (shouldResetSubmitting) {
+        setSubmitting(false);
+      }
     }
   }
 
 	return (
-    <form className="LoginForm space-y-5 border border-TC/20 bg-WH p-6 shadow-sm" onSubmit={handleSubmit}>
+    <form
+      className={`LoginForm space-y-5 border border-TC/20 bg-WH p-6 shadow-sm transition-opacity duration-300 ${
+        initialSessionChecked ? 'opacity-100' : 'opacity-0'
+      }`}
+      onSubmit={handleSubmit}
+    >
       <div>
         <h2 className="text-2xl font-semibold text-TC">ログイン</h2>
         {authProvider !== 'none' ? (
@@ -125,9 +142,18 @@ export function LoginForm({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full rounded-full border border-TC/15 bg-SC/10 px-5 py-3 text-sm font-medium text-TC transition hover:bg-SC/20 disabled:opacity-60"
+        className="flex min-h-[46px] w-full items-center justify-center rounded-full border border-TC/15 bg-SC/10 px-5 py-3 text-sm font-medium text-TC transition hover:bg-SC/20 disabled:opacity-60"
+        aria-busy={submitting}
       >
-        {submitting ? 'ログイン中…' : 'ログイン'}
+        {submitting ? (
+          <span
+            className="block h-5 w-5 animate-spin rounded-full border-2 border-TC/20 border-t-TC"
+            aria-label="ログイン中"
+            role="status"
+          />
+        ) : (
+          'ログイン'
+        )}
       </button>
     </form>
   );
