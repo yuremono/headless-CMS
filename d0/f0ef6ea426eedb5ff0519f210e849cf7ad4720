@@ -1,0 +1,104 @@
+components/admin/FieldGroup.tsx
+  h_53dad1e32c3c71 449
+components/admin/AssetGrid.tsx
+  s_5da38f4e7aab14::t_c391792dc46525 40-68
+  s_5da38f4e7aab14::t_8c9e800e83e205 197-202,212-217
+  s_5da38f4e7aab14::t_c7389395366221 4,15,77,90-102,211
+  s_5da38f4e7aab14::t_febc6853b272d4 3,14,76,85-86,134-159,169-174,239-256,356-403
+  s_5da38f4e7aab14::t_dc25f159eb9e5f 17,79,238
+  s_5da38f4e7aab14::t_a983fe31a4b4eb 87,191-196,218-222
+  s_342b8f21cfede3::t_be5b0c055978b2 308
+lib/content/service.test.ts
+  s_5da38f4e7aab14::t_ff2c1429d3f0fc 47,70,86
+  s_5da38f4e7aab14::t_29408c27656722 499-515
+  s_5da38f4e7aab14::t_ca64cfbf5f74c6 120
+app/api/admin/sites/[siteId]/assets/[assetId]/route.ts
+  s_5da38f4e7aab14::t_abcd4b1b5a598c 2,36-58
+components/admin/admin-ui-classes.ts
+  h_53dad1e32c3c71 15
+components/admin/MediaUploadZone.tsx
+  h_53dad1e32c3c71 136
+  s_342b8f21cfede3::t_6af695d814fa9f 21-22,44-45,137-145,147-154,157-158,160,162-194,196-206
+components/admin/MediaLibraryBrowser.tsx
+  s_5da38f4e7aab14::t_0863fab368663e 14,28,178
+  s_342b8f21cfede3::t_392eebb8df77d8 1-3,5-13,15,17-18,21-27,29,31-32,35-41,43-44,50,52,55,59,65,71,76,94-95,97,99-130,139,154-164,168-174,177,179-183
+  s_342b8f21cfede3::t_2eddd21ea8bf56 45-48,60-63,89,92,96
+  s_342b8f21cfede3::t_09d82ce51d0962 49,51,53,56-58,64,66-68,70,72-75,77,90-91,93
+  s_5da38f4e7aab14::t_48b73b877fd0b8 54,69
+  s_5da38f4e7aab14::t_5bb204b5a21553 19,33,131-138,175
+  s_342b8f21cfede3::t_d1a2ff857eca03 42,78-88,140-151,153
+  s_342b8f21cfede3::t_755146ec15eb88 152
+  s_5da38f4e7aab14::t_9f430656a1fc33 20,34,176
+  s_5da38f4e7aab14::t_7930ee958e502f 4,165-167
+  s_342b8f21cfede3::t_267c1e4be8d66f 16,30,98
+components/admin/ContentList.tsx
+  h_53dad1e32c3c71 100,204
+components/admin/ImageFieldInput.tsx
+  s_5da38f4e7aab14::t_2f9f26e3285fbb 5
+  s_5da38f4e7aab14::t_54d94d8d1b457f 122-125,127-134
+  s_5da38f4e7aab14::t_f5c07a04ece12e 165-167,268-269,272-284,286,288-290,294-295,297-308,310-311,313-334,336
+  s_5da38f4e7aab14::t_1e4f2d2222ebc7 271
+  h_53dad1e32c3c71 1,3,7,13-14,20-21,34-49,51-65,67,70,75,77,80,82,84,86,90,92,95,99,102-103,106,108,113,121,140,142-146,162-164,169-172,176,178-180,182-189,191-197,199-204,207-243,270,285,287,292,335
+  s_5da38f4e7aab14::t_3b5c5f7ac5320a 50,81,137-139,291
+lib/db/assets.ts
+  s_5da38f4e7aab14::t_7bba5f6e105450 107-120
+app/api/admin/sites/[siteId]/assets/[assetId]/route.test.ts
+  s_5da38f4e7aab14::t_4e28207905c6e4 2,7,10,14,95-121
+components/admin/AdminNav.tsx
+  h_53dad1e32c3c71 41-42,46,65,84,87
+components/admin/ComposableContentForm.tsx
+  s_342b8f21cfede3::t_fddbb29acc0972 19,414-416,622-625,627-628
+  s_5da38f4e7aab14::t_56c64f3d6be60c 846,934
+  s_5da38f4e7aab14::t_fbfd88cdb5ec37 953
+  s_342b8f21cfede3::t_bdd90aef26bdd0 410,429-439,882-893
+  s_342b8f21cfede3::t_dd55baaa28bf11 983-991
+  s_342b8f21cfede3::t_0783e8aaa02202 18
+  s_342b8f21cfede3::t_339aa9ce732460 840-843,849-851
+  s_5da38f4e7aab14::t_df274a0e1ef876 931-932,935-947,950-952,955-960,963-978,980-982,993-999,1002
+  s_5da38f4e7aab14::t_0004d334ab3212 413,626
+  s_342b8f21cfede3::t_7f7cf453807816 3
+  s_5da38f4e7aab14::t_435124db305924 844-845,847-848
+  s_342b8f21cfede3::t_b53dc0716151ab 412,948,954,979,1000-1001
+  h_53dad1e32c3c71 1,4-7,14-17,20,30,59-60,67-68,84,89,110,114,118,120,126,128,140,147-148,165,169,173,182,188,191,196-197,200,206,210,213,222,227-228,232-235,237,251,266,286,288,297,299,302,307,311,313,318,343,350,356,361,366,378,389,406-408,419,426,428,443,448,465-466,472,477,479,481,483,490,497,500-501,503,509,515,521,531,542,544,552,556,559,563,569,573,578,580,585,587,590,593,597,604-605,610,615,617,630-631,633-634,636-637,641,643-644,650,655,659,663-664,667,671-672,674,679-680,686,694,698-699,702,710-711,714,717,741-745,748,753-754,758,779,786,800,814,833-839,852-853,857,859,867,869-870,876-877,896,898-899,909,933,949,961-962,992,1018
+components/admin/LogoutButton.tsx
+  h_53dad1e32c3c71 37,39
+components/admin/ContentForm.tsx
+  h_53dad1e32c3c71 177
+components/admin/ContentTypeList.tsx
+  h_53dad1e32c3c71 29
+components/admin/FieldAddPanel.tsx
+  h_53dad1e32c3c71 93
+lib/content/service.ts
+  s_5da38f4e7aab14::t_f1b8969d900a68 250-264
+components/admin/MediaLibrary.tsx
+  s_342b8f21cfede3::t_a0cddf633d99f7 4,16-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "d0f0ef6ea426eedb5ff0519f210e849cf7ad4720",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_342b8f21cfede3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e835f-ea52-70c1-ba84-50d9963c0bfd",
+        "model": "gpt-5.4-mini"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    },
+    "s_5da38f4e7aab14": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e839d-2f20-7e43-8375-db0898ca6b66",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
