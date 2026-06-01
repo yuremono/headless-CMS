@@ -823,5 +823,4 @@ export function getRecentUpdatedAt(contents: ContentRecord[]) {
 
 export const adminDemoCredentials = {
   email: process.env.ADMIN_DEMO_EMAIL ?? 'admin@example.com',
-  password: process.env.ADMIN_DEMO_PASSWORD ?? 'admin1234',
 };

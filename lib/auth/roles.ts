@@ -57,9 +57,9 @@ export function hasPermission(role: SiteRole, permission: AdminPermission): bool
   return PERMISSIONS_BY_ROLE[role].has(permission);
 }
 
-/** `PHASE3_ENFORCE_ROLES=true` のときのみ API で拒否する（既定は骨格のみ・全許可） */
+/** 本番はロール強制を既定で有効。開発/テストは `PHASE3_ENFORCE_ROLES=true` で明示有効化。 */
 export function isRoleEnforcementEnabled(): boolean {
-  return process.env.PHASE3_ENFORCE_ROLES === "true";
+  return process.env.NODE_ENV === "production" || process.env.PHASE3_ENFORCE_ROLES === "true";
 }
 
 export function permissionDeniedFailure(): {

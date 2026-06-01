@@ -89,11 +89,11 @@ export function SeoFields({ draft, onChange, defaultOpen = false, readOnly = fal
 		"mt-2 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20";
 
   return (
-		<div className="SeoFields lg:col-span-2">
-			<header className="SeoFields_header">
+		<div className="SeoFields overflow-hidden border border-WH/20 bg-BK/40 lg:col-span-2">
+			<header className="SeoFieldsHeader bg-BK/30 px-4 py-3">
 				<button
 					type="button"
-					className="SeoFields_toggle flex w-full items-center gap-3 text-left"
+					className="SeoFieldsToggle flex w-full items-center gap-3 text-left"
 					aria-expanded={isOpen}
 					onClick={() => setIsOpen((current) => !current)}
 				>
@@ -110,8 +110,8 @@ export function SeoFields({ draft, onChange, defaultOpen = false, readOnly = fal
 			</header>
 
 			{isOpen ? (
-				<div className="SeoFields_body">
-					<div className="SeoFields_grid grid gap-5 lg:grid-cols-2">
+				<div className="SeoFieldsBody border-t border-WH/20 px-4 py-4">
+					<div className="SeoFieldsGrid grid gap-5 lg:grid-cols-2">
 						<label className="block">
 							<span className="text-sm font-medium text-white">
 								SEOタイトル

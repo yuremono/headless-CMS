@@ -231,8 +231,8 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
   }
 
   return (
-		<div className="SectionEditor lg:col-span-2">
-			<div className="SectionEditor_header flex flex-wrap items-center justify-between gap-3">
+		<div className="SectionEditor border border-WH/20 bg-BK/40 p-4 lg:col-span-2">
+			<div className="SectionEditorHeader flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<p className="text-sm font-medium text-white">{label}</p>
 					{helpText ? (
@@ -241,14 +241,14 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 						</p>
 					) : null}
 				</div>
-				<span className="SectionEditor_count rounded-full border border-white/10 px-3 py-1 text-xs text-slate-300">
+				<span className="SectionEditorCount rounded-full border border-white/10 px-3 py-1 text-xs text-slate-300">
 					{sections.length} 件
 				</span>
 			</div>
 
-			<div className="SectionEditor_list mt-4 space-y-3">
+			<div className="SectionEditorList mt-4 space-y-3">
 				{sections.length === 0 ? (
-					<p className="SectionEditor_empty rounded-md border border-dashed border-white/15 px-4 py-6 text-sm text-slate-400">
+					<p className="SectionEditorEmpty rounded-md border border-dashed border-white/15 px-4 py-6 text-sm text-slate-400">
 						セクションがありません。下の追加ボタンから作成してください。
 					</p>
 				) : (
@@ -270,13 +270,13 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 						return (
 							<article
 								key={section.id}
-								className={`SectionEditor_item rounded-md border bg-slate-950/50 ${
+								className={`SectionEditorItem overflow-hidden rounded-md border bg-slate-950/50 ${
 									isHidden
 										? "border-amber-400/30 opacity-70"
 										: "border-white/10"
-								} ${isDragging ? "SectionEditor_item_is_dragging" : ""} ${
+								} ${isDragging ? "SectionEditorItemIsDragging opacity-50" : ""} ${
 									isDropTarget
-										? "SectionEditor_item_drop_target"
+										? "SectionEditorItemDropTarget border-SC/60 ring-2 ring-SC/30"
 										: ""
 								}`}
 								onDragOver={(event) => {
@@ -297,12 +297,12 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 									clearDragState();
 								}}
 							>
-								<header className="SectionEditor_itemHeader flex flex-wrap items-center gap-2 px-4 py-3">
+								<header className="SectionEditorItemHeader flex flex-wrap items-center gap-2 bg-BK/30 px-4 py-3">
 									{!readOnly ? (
 										<button
 											type="button"
 											draggable
-											className="SectionEditor_dragHandle shrink-0"
+											className="SectionEditorDragHandle shrink-0 cursor-grab rounded-md border border-WH/20 px-2 py-1 text-xs leading-none text-GR transition hover:bg-WH/5 active:cursor-grabbing"
 											aria-label="並び替え（ドラッグ）"
 											onDragStart={(event) => {
 												event.dataTransfer.effectAllowed =
@@ -321,7 +321,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 									) : null}
 									<button
 										type="button"
-										className="SectionEditor_toggle flex min-w-0 flex-1 items-center gap-3 text-left"
+										className="SectionEditorToggle flex min-w-0 flex-1 items-center gap-3 text-left"
 										aria-expanded={isOpen}
 										onClick={() => toggleOpen(section.id)}
 									>
@@ -344,10 +344,10 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 									</button>
 
 									{!readOnly ? (
-										<div className="SectionEditor_actions flex items-center gap-1">
+										<div className="SectionEditorActions flex items-center gap-1">
 											<button
 												type="button"
-												className="SectionEditor_duplicate rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5"
+												className="SectionEditorDuplicate rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5"
 												aria-label="複製"
 												onClick={() =>
 													handleDuplicate(index)
@@ -357,7 +357,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 											</button>
 											<button
 												type="button"
-												className={`SectionEditor_visibility rounded-md border px-2 py-1 text-xs transition ${
+												className={`SectionEditorVisibility rounded-md border px-2 py-1 text-xs transition ${
 													isHidden
 														? "border-emerald-400/30 text-emerald-200 hover:bg-emerald-400/10"
 														: "border-amber-400/30 text-amber-200 hover:bg-amber-400/10"
@@ -375,7 +375,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 											</button>
 											<button
 												type="button"
-												className="SectionEditor_move rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+												className="SectionEditorMove rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
 												aria-label="上へ移動"
 												disabled={index === 0}
 												onClick={() =>
@@ -386,7 +386,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 											</button>
 											<button
 												type="button"
-												className="SectionEditor_move rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
+												className="SectionEditorMove rounded-md border border-white/10 px-2 py-1 text-xs text-slate-300 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-40"
 												aria-label="下へ移動"
 												disabled={
 													index ===
@@ -400,7 +400,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 											</button>
 											<button
 												type="button"
-												className="SectionEditor_remove rounded-md border border-AC/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-AC/10"
+												className="SectionEditorRemove rounded-md border border-AC/30 px-2 py-1 text-xs text-rose-200 transition hover:bg-AC/10"
 												aria-label="削除"
 												onClick={() =>
 													handleRemove(index)
@@ -413,7 +413,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 								</header>
 
 								{isOpen ? (
-									<div className="SectionEditor_body border-t border-white/10 px-4 py-4">
+									<div className="SectionEditorBody border-t border-white/10 bg-BK/20 px-4 py-4">
 										<SectionFieldForm
 											type={section.type}
 											data={section.data}
@@ -431,7 +431,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 			</div>
 
 			{!readOnly ? (
-				<div className="SectionEditor_add mt-4 flex flex-wrap items-end gap-3">
+				<div className="SectionEditorAdd mt-4 flex flex-wrap items-end gap-3">
 					<label className="block min-w-[12rem] flex-1">
 						<span className="text-xs font-medium text-slate-300">
 							追加する型
@@ -452,7 +452,7 @@ export function SectionEditor({ label, value, sectionTemplates = [], helpText, o
 					</label>
 					<button
 						type="button"
-						className="SectionEditor_addButton rounded-full border border-sky-400/40 bg-sky-400/10 px-4 py-2 text-sm font-medium text-sky-100 transition hover:bg-sky-400/20"
+						className="SectionEditorAddButton rounded-full border border-sky-400/40 bg-sky-400/10 px-4 py-2 text-sm font-medium text-sky-100 transition hover:bg-sky-400/20"
 						onClick={handleAdd}
 					>
 						セクションを追加

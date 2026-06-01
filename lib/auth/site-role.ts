@@ -1,5 +1,6 @@
 import type { AuthContext, AuthMode } from "./index";
 import { authDevTokens } from "./index";
+import { DEV_SESSION_TOKENS } from "./dev-session-tokens";
 import { roleRank, type SiteRole } from "./roles";
 
 const DEMO_SESSION_EMAIL = process.env.ADMIN_DEMO_EMAIL ?? "admin@example.com";
@@ -8,8 +9,24 @@ function isDevFallbackAllowed(): boolean {
   return process.env.NODE_ENV !== "production";
 }
 
-function isDevSessionToken(token: string): boolean {
-  return isDevFallbackAllowed() && token === authDevTokens.session;
+function roleForDevSessionToken(token: string): SiteRole | null {
+  if (!isDevFallbackAllowed()) {
+    return null;
+  }
+
+  if (token === DEV_SESSION_TOKENS.readonly || token === authDevTokens.sessionReadOnly) {
+    return "viewer";
+  }
+
+  if (
+    token === DEV_SESSION_TOKENS.editor ||
+    token === authDevTokens.session ||
+    token === authDevTokens.sessionEditor
+  ) {
+    return "owner";
+  }
+
+  return null;
 }
 
 /** 管理 API キーはサイトスコープのサービス主体として owner 相当（キー単位ロールは将来） */
@@ -48,7 +65,7 @@ async function resolveDemoUserId(): Promise<string | null> {
 
 /**
  * 認証済みリクエストのサイト内ロールを解決する。
- * デモセッション・管理 API キーは Phase 3 骨格として owner 相当を返し、既存デモログインを壊さない。
+ * デモセッションは token に応じて viewer / owner を返し、既存デモログインを壊さない。
  */
 export async function resolveActorSiteRole(
   siteIdOrSlug: string,
@@ -59,8 +76,9 @@ export async function resolveActorSiteRole(
     return modeRole;
   }
 
-  if (context.mode === "session" && isDevSessionToken(context.token)) {
-    return "owner";
+  const devRole = roleForDevSessionToken(context.token);
+  if (devRole) {
+    return devRole;
   }
 
   const { resolveSiteId } = await import("@/lib/db/site-resolver");
@@ -104,8 +122,9 @@ export async function resolveGlobalActorRole(context: AuthContext): Promise<Site
     return modeRole;
   }
 
-  if (context.mode === "session" && isDevSessionToken(context.token)) {
-    return "owner";
+  const devRole = roleForDevSessionToken(context.token);
+  if (devRole) {
+    return devRole;
   }
 
   const userId = context.userId ?? (await resolveDemoUserId());

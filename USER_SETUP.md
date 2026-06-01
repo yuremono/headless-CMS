@@ -19,7 +19,7 @@ cp .env.supabase.local.example .env.supabase.local
 
 ## 3. 確認
 
-1. https://headless-cms0529.vercel.app/login — `admin@example.com` / `HeadlessCMS-Demo-2026`
+1. https://headless-cms0529.vercel.app/login — `ADMIN_DEMO_EMAIL` と `ADMIN_READONLY_PASSWORD` / `ADMIN_EDITOR_PASSWORD`
 2. **メイン作業ページ（本番）:** https://headless-cms0529.vercel.app/sites/main-site/developer
 3. コンテンツを **公開**
 4. https://headless-front0529.vercel.app を **再読み込み**

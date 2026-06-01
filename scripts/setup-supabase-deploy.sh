@@ -72,9 +72,12 @@ vercel_env "$ROOT" APP_URL "$CMS_VERCEL_URL" production
 vercel_env "$ROOT" APP_URL "$CMS_VERCEL_URL" preview
 vercel_env "$ROOT" CMS_AUTH_PROVIDER authjs production
 vercel_env "$ROOT" CMS_ENFORCE_ADMIN_LOGIN true production
+vercel_env "$ROOT" PHASE3_ENFORCE_ROLES true production
 vercel_env "$ROOT" AUTH_SECRET "$AUTH_SECRET" production
 vercel_env "$ROOT" PREVIEW_TOKEN_SECRET "$PREVIEW_TOKEN_SECRET" production
 vercel_env "$ROOT" ADMIN_DEMO_EMAIL admin@example.com production
+vercel_env "$ROOT" ADMIN_READONLY_PASSWORD "${ADMIN_READONLY_PASSWORD:-view}" production
+vercel_env "$ROOT" ADMIN_EDITOR_PASSWORD "${ADMIN_EDITOR_PASSWORD:-e06}" production
 vercel_env "$ROOT" ADMIN_DEMO_PASSWORD "$ADMIN_DEMO_PASSWORD" production
 vercel_env "$ROOT" CMS_PUBLIC_API_KEY public-dev-key production
 vercel_env "$ROOT" STORAGE_PROVIDER local production

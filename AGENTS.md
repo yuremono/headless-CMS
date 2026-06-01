@@ -14,6 +14,7 @@
 | **本番（動作確認済み）** | https://headless-cms0529.vercel.app/ |
 
 `npm run dev` 起動後にローカル URL を開く。本番は `npm run deploy` で反映。
+ユーザー管理のターミナルで`npm run dev` を実行している前提で行動する。停止した場合はユーザーに再起動を促す。 
 
 > **【重要】DB 共有運用（ローカル = 本番）**
 > ローカルと本番は **同一の Supabase データベース**（`portfolio-cms` / schema `headless_cms`）を共有しています。`.env.local` の `DATABASE_URL` が本番と同じ Supabase（セッションプーラー 5432）を指すため、`localhost:3000` での編集は **即座に本番データへ反映**されます。

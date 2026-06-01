@@ -24,7 +24,6 @@ export default async function AdminRootPage() {
       contentType="topPage"
       id={topPageRecord.id}
       formLayout="composable"
-      hideSidebar
     />
   );
 }

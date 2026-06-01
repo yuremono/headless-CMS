@@ -132,10 +132,10 @@ export function MediaUploadZone({
 		<div data-l="UploadZone" className="MediaUploadZone space-y-3">
 			<div
 				data-l="DropZone"
-				className={`MediaUploadZone_drop_zone rounded-md border border-dashed p-6 text-center transition ${
+				className={`MediaUploadZoneDropZone rounded-md border border-dashed p-6 text-center outline-none transition focus-visible:ring-2 focus-visible:ring-SC/30 ${
 					isDragOver
 						? "border-SC bg-SC/25"
-						: "border-WH/35 bg-BC/40 hover:border-WH/50"
+						: "border-TC/35 hover:border-TC/50"
 				} ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
 				onDragOver={handleDragOver}
 				onDragLeave={handleDragLeave}
@@ -171,7 +171,7 @@ export function MediaUploadZone({
 					}}
 				/>
 
-				<p className="text-sm font-medium text-WH">
+				<p className="text-sm font-medium">
 					{isUploading ? "アップロード中…" : buttonLabel}
 				</p>
 				<p className="mt-2 text-xs leading-5 text-GR">{dropHint}</p>

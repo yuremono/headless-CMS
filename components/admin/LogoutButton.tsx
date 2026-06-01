@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import type { CmsAuthProvider } from '../../lib/auth/production-config';
 import { adminFetch, clearAdminSession, resolveClientSessionToken } from './admin-api';
-import { adminBtnDangerSm } from './admin-ui-classes';
+import { adminBtnLg } from './admin-ui-classes';
 
 interface LogoutButtonProps {
   className?: string;
@@ -32,7 +32,7 @@ export function LogoutButton({
   return (
     <button
       type="button"
-      className={`w-full ${className ?? adminBtnDangerSm}`}
+      className={`w-full py-3 bg-WH border border-TC/20 hover:bg-SC/10 transition`}
       onClick={handleLogout}
       aria-label="ログアウト"
     >

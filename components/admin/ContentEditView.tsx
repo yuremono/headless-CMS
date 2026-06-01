@@ -3,6 +3,7 @@ import { AdminLayout } from './AdminLayout';
 import { AdminPageHeader } from './AdminPageHeader';
 import { AdminApiNotice } from './AdminApiNotice';
 import { ComposableContentForm } from './ComposableContentForm';
+import type { ComposableFieldDefinitions, ComposableFieldDirectories } from './ComposableContentForm';
 import { ContentForm } from './ContentForm';
 import { PreviewLink } from './PreviewLink';
 import { loadContent, resolveContentTypeDefinition, resolveSiteSummary } from './AdminData';
@@ -12,12 +13,8 @@ import { getAuthProvider } from '@/lib/auth/production-config';
 import { getSchemaByType } from '@/lib/content/service';
 import { isComposableFieldFormat, type ComposableFieldFormat } from '@/lib/admin/field-type-catalog';
 
-async function loadComposableFieldFormats(
-  siteId: string,
-  contentType: string,
-): Promise<Record<string, ComposableFieldFormat>> {
-  const schema = await getSchemaByType(siteId, contentType);
-  const raw = schema?.schemaJson?.composableFieldFormats;
+function readComposableFieldFormats(schemaJson: Record<string, unknown>): Record<string, ComposableFieldFormat> {
+  const raw = schemaJson.composableFieldFormats;
   if (!raw || typeof raw !== 'object') {
     return {};
   }
@@ -29,6 +26,92 @@ async function loadComposableFieldFormats(
     }
   }
   return formats;
+}
+
+function isComposableFieldDirectories(value: unknown): value is ComposableFieldDirectories {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const directories = (value as { directories?: unknown }).directories;
+  if (!Array.isArray(directories)) {
+    return false;
+  }
+  const activeDirectoryId = (value as { activeDirectoryId?: unknown }).activeDirectoryId;
+  if (activeDirectoryId !== undefined && typeof activeDirectoryId !== 'string') {
+    return false;
+  }
+
+  return directories.every((directory) => {
+    if (!directory || typeof directory !== 'object') {
+      return false;
+    }
+
+    const candidate = directory as { id?: unknown; name?: unknown; prefixes?: unknown };
+    return (
+      typeof candidate.id === 'string' &&
+      typeof candidate.name === 'string' &&
+      Array.isArray(candidate.prefixes) &&
+      candidate.prefixes.every((prefix) => typeof prefix === 'string')
+    );
+  });
+}
+
+function isComposableFieldDefinitions(value: unknown): value is ComposableFieldDefinitions {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+
+  const groups = (value as { groups?: unknown }).groups;
+  if (!Array.isArray(groups)) {
+    return false;
+  }
+
+  return groups.every((group) => {
+    if (!group || typeof group !== 'object') {
+      return false;
+    }
+    const candidate = group as { prefix?: unknown; repeatable?: unknown; fields?: unknown };
+    if (
+      typeof candidate.prefix !== 'string' ||
+      (candidate.repeatable !== undefined && typeof candidate.repeatable !== 'boolean') ||
+      !Array.isArray(candidate.fields)
+    ) {
+      return false;
+    }
+
+    return candidate.fields.every((field) => {
+      if (!field || typeof field !== 'object') {
+        return false;
+      }
+      const row = field as { type?: unknown; suffix?: unknown; format?: unknown; bundle?: unknown };
+      return (
+        typeof row.type === 'string' &&
+        typeof row.suffix === 'string' &&
+        (row.format === undefined || row.format === 'plain' || row.format === 'richText') &&
+        (row.bundle === undefined || row.bundle === 'image')
+      );
+    });
+  });
+}
+
+async function loadComposableMetadata(
+  siteId: string,
+  contentType: string,
+): Promise<{
+  fieldFormats: Record<string, ComposableFieldFormat>;
+  fieldDirectories: ComposableFieldDirectories | undefined;
+  fieldDefinitions: ComposableFieldDefinitions | undefined;
+}> {
+  const schema = await getSchemaByType(siteId, contentType);
+  const schemaJson = (schema?.schemaJson ?? {}) as Record<string, unknown>;
+  const rawDirectories = schemaJson.composableFieldDirectories;
+  const rawDefinitions = schemaJson.composableFieldDefinitions;
+  return {
+    fieldFormats: readComposableFieldFormats(schemaJson),
+    fieldDirectories: isComposableFieldDirectories(rawDirectories) ? rawDirectories : undefined,
+    fieldDefinitions: isComposableFieldDefinitions(rawDefinitions) ? rawDefinitions : undefined,
+  };
 }
 
 interface ContentEditViewProps {
@@ -70,9 +153,9 @@ export async function ContentEditView({
   const authProvider = getAuthProvider();
 
   const isComposable = formLayout === 'composable';
-  const fieldFormats = isComposable
-    ? await loadComposableFieldFormats(siteId, contentType)
-    : {};
+  const composableMetadata = isComposable
+    ? await loadComposableMetadata(siteId, contentType)
+    : { fieldFormats: {}, fieldDirectories: undefined, fieldDefinitions: undefined };
   const pageTitle = isComposable
     ? 'ページ名'
     : access.readOnly
@@ -80,7 +163,7 @@ export async function ContentEditView({
       : `${definition.label} 編集`;
 
   return (
-    <AdminLayout site={site} hideSidebar={hideSidebar}>
+    <AdminLayout site={site} hideSidebar={isComposable ? true : hideSidebar}>
       {/* <AdminPageHeader
         title={pageTitle}
         subtitle={`対象コンテンツ: ${record.data.title}`}
@@ -104,9 +187,11 @@ export async function ContentEditView({
           contentType={definition}
           record={record.data}
           previewUrl={previewUrl}
-          fieldFormats={fieldFormats}
+          fieldFormats={composableMetadata.fieldFormats}
+          fieldDirectories={composableMetadata.fieldDirectories}
+          fieldDefinitions={composableMetadata.fieldDefinitions}
           authProvider={authProvider}
-          showLogout={hideSidebar}
+          showLogout={isComposable || hideSidebar}
         />
       ) : (
         <ContentForm

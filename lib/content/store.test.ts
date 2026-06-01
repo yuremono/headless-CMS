@@ -313,6 +313,86 @@ describe("createContent", () => {
     );
   });
 
+  it("composableFieldFormats は指定時に現在値で置き換え、消えた richText を残さない", async () => {
+    mockedFindUnique.mockResolvedValue(
+      makeModel({ schemaJson: { fields: [], composableFieldFormats: { "old.title": "richText" } } }),
+    );
+    mockedCreate.mockResolvedValue(makeContent());
+    mockedUpdateModel.mockResolvedValue(makeModel());
+
+    await createContent("site-1", "news", {
+      title: "T",
+      composableFieldFormats: {},
+    });
+
+    expect(mockedUpdateModel).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          schemaJson: expect.objectContaining({
+            composableFieldFormats: {},
+          }),
+        }),
+      }),
+    );
+  });
+
+  it("composableFieldDirectories を schema_json へマージし dataJson には入れない", async () => {
+    mockedFindUnique.mockResolvedValue(
+      makeModel({ schemaJson: { fields: [], composableFieldFormats: { "hero.title": "richText" } } }),
+    );
+    mockedCreate.mockResolvedValue(makeContent());
+    mockedUpdateModel.mockResolvedValue(makeModel());
+
+    await createContent("site-1", "news", {
+      title: "T",
+      dataJson: { hero: { title: "見出し" } },
+      composableFieldDirectories: {
+        directories: [{ id: "hero", name: "ヒーロー", prefixes: ["hero"] }],
+      },
+    });
+
+    expect(mockedUpdateModel).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: "model-news" },
+        data: expect.objectContaining({
+          schemaJson: expect.objectContaining({
+            composableFieldFormats: { "hero.title": "richText" },
+            composableFieldDirectories: {
+              directories: [{ id: "hero", name: "ヒーロー", prefixes: ["hero"] }],
+            },
+          }),
+        }),
+      }),
+    );
+    expect(mockedCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          dataJson: { hero: { title: "見出し" } },
+        }),
+      }),
+    );
+  });
+
+  it("composableFieldDirectories は空構造でも schema_json へ保存する", async () => {
+    mockedCreate.mockResolvedValue(makeContent());
+    mockedUpdateModel.mockResolvedValue(makeModel());
+
+    await createContent("site-1", "news", {
+      title: "T",
+      composableFieldDirectories: { directories: [] },
+    });
+
+    expect(mockedUpdateModel).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          schemaJson: expect.objectContaining({
+            composableFieldDirectories: { directories: [] },
+          }),
+        }),
+      }),
+    );
+  });
+
   it("format に変更が無ければ contentModel.update を呼ばない", async () => {
     mockedFindUnique.mockResolvedValue(
       makeModel({ schemaJson: { fields: [], composableFieldFormats: { "hero.title": "richText" } } }),

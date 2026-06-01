@@ -1,6 +1,6 @@
 'use client';
 
-import type { MouseEvent } from 'react';
+import { useState, type MouseEvent } from 'react';
 import {
   createArrayItemFromTemplate,
   getFieldTypeLabel,
@@ -12,12 +12,10 @@ import {
   type ComposableFieldGroup,
   type ComposableFieldRow,
 } from '@/lib/admin/field-type-catalog';
+import { X } from '@phosphor-icons/react';
 import {
-	adminBtnDangerSm,
-	adminBtnDangerXs,
-	adminBtnEmeraldSm,
-	adminBtnSkySm,
-	adminBtnVioletXs,
+	adminBtnDanger,
+	adminBtnSm,
 	adminFieldControl,
 	adminFieldControlTextarea,
 	adminFormatBtn,
@@ -38,6 +36,7 @@ interface FieldGroupProps {
   onRemove: () => void;
   onDuplicate?: () => void;
   readOnly?: boolean;
+  disablePersistentActions?: boolean;
 }
 
 function updateFieldRow(
@@ -109,8 +108,10 @@ export function FieldGroup({
   onRemove,
   onDuplicate,
   readOnly = false,
+  disablePersistentActions = false,
 }: FieldGroupProps) {
   const prefixValidation = validatePrefix(group.prefix);
+  const [confirmingRemove, setConfirmingRemove] = useState(false);
 
   function handleSummaryClick(event: MouseEvent<HTMLElement>) {
     if (isInteractiveSummaryTarget(event.target)) {
@@ -357,7 +358,7 @@ export function FieldGroup({
 
     return (
 		<div data-l="ImageBundle" className={`${adminTintInfo} p-4`}>
-			<p className="text-sm font-medium text-WH">
+			<p className="text-sm font-medium">
 				{labelPrefix}画像セット
 			</p>
 			<div data-l="BundleFields" className="mt-3 space-y-4">
@@ -388,6 +389,7 @@ export function FieldGroup({
 								)
 							}
 							readOnly={readOnly}
+							disableUpload={disablePersistentActions}
 						/>
 					</div>
 				) : null}
@@ -441,6 +443,7 @@ export function FieldGroup({
   }
 
   return (
+		<>
 		<details
 			data-l="FieldGroup"
 			className={`FieldGroup group ${adminPanel} p-4`}
@@ -452,7 +455,7 @@ export function FieldGroup({
 				onClick={handleSummaryClick}
 			>
 				<span
-					className="pointer-events-none shrink-0 rounded-md border border-WH/20 p-1.5 text-GR"
+					className="pointer-events-none shrink-0 rounded-md border border-TC/20 p-1.5 text-GR"
 					aria-hidden="true"
 				>
 					<svg
@@ -471,7 +474,7 @@ export function FieldGroup({
 					data-l="PrefixRow"
 					className="flex min-w-[12rem] flex-1 flex-row items-center gap-3"
 				>
-					<span className="shrink-0 text-sm font-medium text-WH">
+					<span className="shrink-0 text-sm font-medium">
 						Field name
 					</span>
 					<label className="min-w-0 flex-1">
@@ -493,11 +496,11 @@ export function FieldGroup({
 					</label>
 				</div>
 				{!readOnly ? (
-					<>
+					<div className="flex gap-1">
 						<button
 							type="button"
 							data-l="Duplicate"
-							className={adminBtnSkySm}
+							className={adminBtnSm}
 							onClick={(event) => {
 								event.preventDefault();
 								onDuplicate?.();
@@ -507,15 +510,17 @@ export function FieldGroup({
 						</button>
 						<button
 							type="button"
-							className={adminBtnDangerSm}
+							className={adminBtnDanger}
 							onClick={(event) => {
 								event.preventDefault();
-								onRemove();
+								event.stopPropagation();
+								setConfirmingRemove(true);
 							}}
 						>
+							<X aria-hidden="true" className="h-3.5 w-3.5 shrink-0" weight="bold" />
 							削除
 						</button>
-					</>
+					</div>
 				) : null}
 			</summary>
 
@@ -535,7 +540,7 @@ export function FieldGroup({
 						data-l="ArrayTemplate"
 						className={`space-y-4 ${adminTintInfo} p-4`}
 					>
-						<p className="text-sm font-medium text-WH">
+						<p className="text-sm font-medium">
 							フィールド定義（テンプレート）
 						</p>
 						{scalarFields.map((field, fieldIndex) =>
@@ -563,13 +568,13 @@ export function FieldGroup({
 				{group.repeatable ? (
 					<div data-l="ArrayItems" className="space-y-4">
 						<div className="flex flex-wrap items-center justify-between gap-2">
-							<p className="text-sm font-medium text-WH">
+							<p className="text-sm font-medium">
 								要素（{(group.items ?? []).length} 件）
 							</p>
 							{!readOnly ? (
 								<button
 									type="button"
-									className={adminBtnDangerSm}
+									className={adminBtnDanger}
 									onClick={handleAddArrayItem}
 								>
 									要素を追加
@@ -589,7 +594,7 @@ export function FieldGroup({
 									className={`space-y-4 ${adminPanelInset} p-4`}
 								>
 									<div className="flex flex-wrap items-center justify-between gap-2">
-										<p className="text-sm font-medium text-WH">
+										<p className="text-sm font-medium">
 											要素 {itemIndex + 1}
 											<span className="ml-2 font-mono text-xs text-GR">
 												{group.prefix}.{itemIndex}
@@ -598,13 +603,14 @@ export function FieldGroup({
 										{!readOnly ? (
 											<button
 												type="button"
-												className={adminBtnDangerXs}
+												className={adminBtnDanger}
 												onClick={() =>
 													handleRemoveArrayItem(
 														item.id,
 													)
 												}
 											>
+												<X aria-hidden="true" className="h-3.5 w-3.5 shrink-0" weight="bold" />
 												要素を削除
 											</button>
 										) : null}
@@ -638,9 +644,10 @@ export function FieldGroup({
 						{!readOnly ? (
 							<button
 								type="button"
-								className={adminBtnVioletXs}
+								className={adminBtnDanger}
 								onClick={handleRemoveBundle}
 							>
+								<X aria-hidden="true" className="h-3.5 w-3.5 shrink-0" weight="bold" />
 								画像セットを削除
 							</button>
 						) : null}
@@ -648,5 +655,45 @@ export function FieldGroup({
 				) : null}
 			</div>
 		</details>
+		{confirmingRemove ? (
+			<div
+				className="fixed inset-0 z-50 flex items-center justify-center bg-TC/30 p-4"
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={`FieldGroupDeleteDialogTitle-${group.id}`}
+			>
+				<div className="w-full max-w-sm rounded-md border border-TC/20 bg-WH p-5 shadow-xl">
+					<h2
+						id={`FieldGroupDeleteDialogTitle-${group.id}`}
+						className="text-base font-bold text-TC"
+					>
+						フィールドを削除しますか？
+					</h2>
+					<p className="mt-2 text-sm text-GR">
+						{group.prefix || "このフィールド"} を削除します。この操作は保存前の編集内容から取り消せません。
+					</p>
+					<div className="mt-5 flex justify-end gap-2">
+						<button
+							type="button"
+							className="rounded-md border border-TC/20 px-3 py-2 text-sm text-TC transition hover:bg-TC/5"
+							onClick={() => setConfirmingRemove(false)}
+						>
+							キャンセル
+						</button>
+						<button
+							type="button"
+							className="inline-flex items-center gap-1 rounded-md border border-AC/40 bg-AC px-3 py-2 text-sm font-bold text-WH transition hover:bg-AC/80"
+							onClick={() => {
+								setConfirmingRemove(false);
+								onRemove();
+							}}
+						>
+							削除
+						</button>
+					</div>
+				</div>
+			</div>
+		) : null}
+		</>
   );
 }

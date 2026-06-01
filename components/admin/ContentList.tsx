@@ -86,7 +86,7 @@ export function ContentList({ siteId, contentType, records }: ContentListProps) 
     const updated = response.data ? mapApiContentRecord(response.data) : record;
     setItems((current) => current.map((item) => (item.id === record.id ? updated : item)));
     setMessageKind('success');
-    setMessage(action === 'publish' ? '公開しました。' : '非公開にしました。');
+    setMessage(action === 'publish' ? '公開しました' : '非公開にしました');
     setIsPending(false);
   }
 

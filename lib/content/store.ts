@@ -5,6 +5,8 @@ import { revalidateDeliveryContent } from "@/lib/content/delivery-tags";
 import { clonePlainObject, isPlainObject } from "@/lib/http";
 import { toContentModelRecord, toContentRecord } from "./mappers";
 import type {
+  ComposableFieldDirectories,
+  ComposableFieldDefinitions,
   ComposableFieldFormatMap,
   ContentCollectionResult,
   ContentModelRecord,
@@ -58,40 +60,65 @@ async function getContentModel(siteId: string, contentType: string) {
 }
 
 /**
- * composable フィールドの format を schema_json.composableFieldFormats へマージする。
- * richText のパスのみ保持し、plain に戻されたパスは削除してスキーマを肥大化させない。
+ * composable 編集 UI の管理メタデータを schema_json へマージする。
+ * fieldFormats 指定時は現在のフォーム状態を正として richText のみ保存する。
  * 変更があれば DB を更新し、いずれにせよ最新の schema_json を返す（サニタイズに使う）。
  */
-async function applyComposableFieldFormats(
+async function applyComposableMetadata(
   modelId: string,
   schemaJson: Record<string, unknown>,
-  incoming: ComposableFieldFormatMap | undefined,
+  incoming: {
+    fieldFormats?: ComposableFieldFormatMap;
+    fieldDirectories?: ComposableFieldDirectories;
+    fieldDefinitions?: ComposableFieldDefinitions;
+  },
 ): Promise<Record<string, unknown>> {
-  if (!incoming) {
+  if (!incoming.fieldFormats && !incoming.fieldDirectories && !incoming.fieldDefinitions) {
     return schemaJson;
   }
 
-  const existingRaw = isPlainObject(schemaJson.composableFieldFormats)
-    ? (schemaJson.composableFieldFormats as Record<string, unknown>)
-    : {};
+  const hasExistingFormats = isPlainObject(schemaJson.composableFieldFormats);
+  const existingRaw = hasExistingFormats ? (schemaJson.composableFieldFormats as Record<string, unknown>) : {};
   const next: Record<string, "richText"> = {};
 
-  for (const [path, format] of Object.entries(existingRaw)) {
-    if (format === "richText") {
-      next[path] = "richText";
+  if (!incoming.fieldFormats) {
+    for (const [path, format] of Object.entries(existingRaw)) {
+      if (format === "richText") {
+        next[path] = "richText";
+      }
     }
   }
-  for (const [path, format] of Object.entries(incoming)) {
-    if (format === "richText") {
-      next[path] = "richText";
-    } else {
-      delete next[path];
+  if (incoming.fieldFormats) {
+    for (const [path, format] of Object.entries(incoming.fieldFormats)) {
+      if (format === "richText") {
+        next[path] = "richText";
+      } else {
+        delete next[path];
+      }
     }
   }
 
-  const merged = { ...schemaJson, composableFieldFormats: next };
+  const merged = { ...schemaJson };
+  if (incoming.fieldFormats) {
+    merged.composableFieldFormats = next;
+  } else if (hasExistingFormats) {
+    merged.composableFieldFormats = schemaJson.composableFieldFormats;
+  }
+  if (incoming.fieldDirectories) {
+    merged.composableFieldDirectories = incoming.fieldDirectories;
+  }
+  if (incoming.fieldDefinitions) {
+    merged.composableFieldDefinitions = incoming.fieldDefinitions;
+  }
 
-  const changed = JSON.stringify(existingRaw) !== JSON.stringify(next);
+  const existingDirectories = schemaJson.composableFieldDirectories;
+  const existingDefinitions = schemaJson.composableFieldDefinitions;
+  const changed =
+    (incoming.fieldFormats !== undefined && JSON.stringify(existingRaw) !== JSON.stringify(next)) ||
+    (incoming.fieldDirectories !== undefined &&
+      JSON.stringify(existingDirectories) !== JSON.stringify(incoming.fieldDirectories)) ||
+    (incoming.fieldDefinitions !== undefined &&
+      JSON.stringify(existingDefinitions) !== JSON.stringify(incoming.fieldDefinitions));
   if (changed) {
     await prisma.contentModel.update({
       where: { id: modelId },
@@ -253,10 +280,14 @@ export async function createContent(
   }
 
   const status = normalizeStatus(input.status);
-  const schemaJson = await applyComposableFieldFormats(
+  const schemaJson = await applyComposableMetadata(
     model.id,
     asRecord(model.schemaJson),
-    input.composableFieldFormats,
+    {
+      fieldFormats: input.composableFieldFormats,
+      fieldDirectories: input.composableFieldDirectories,
+      fieldDefinitions: input.composableFieldDefinitions,
+    },
   );
   const dataJson = await sanitizeDataJson(
     input.dataJson ? clonePlainObject(input.dataJson) : {},
@@ -313,10 +344,14 @@ export async function updateContent(
     return null;
   }
 
-  const schemaJson = await applyComposableFieldFormats(
+  const schemaJson = await applyComposableMetadata(
     model.id,
     asRecord(model.schemaJson),
-    input.composableFieldFormats,
+    {
+      fieldFormats: input.composableFieldFormats,
+      fieldDirectories: input.composableFieldDirectories,
+      fieldDefinitions: input.composableFieldDefinitions,
+    },
   );
   const dataJson = await sanitizeDataJson(
     input.dataJson ? clonePlainObject(input.dataJson) : asRecord(current.dataJson),

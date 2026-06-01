@@ -113,6 +113,13 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
   }
 
   async function persist(action: 'save' | 'publish') {
+    if (readOnly) {
+      setStatusKind("error");
+      setStatusMessage("");
+      window.setTimeout(() => setStatusMessage("編集権限がありません。"), 0);
+      return;
+    }
+
     setIsPending(true);
     setStatusMessage('');
 
@@ -125,7 +132,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 		const endpoint =
 			mode === "create"
 				? `/api/admin/sites/${siteId}/content/${contentType.slug}`
-				: `/api/admin/sites/${siteId}/content/${contentType.slug}/${record?.id}`;
+				: `/api/admin/sites/${siteId}/content/${contentType.slug}?id=${encodeURIComponent(record?.id ?? "")}`;
 
 		const method = mode === "create" ? "POST" : "PATCH";
 		const response = await adminFetch<ApiContentRecord>(endpoint, {
@@ -140,22 +147,9 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 
 		const saved = mapApiContentRecord(response.data);
 
-		if (action === "publish" && mode === "edit" && record?.id) {
-			const publishResult = await adminFetch<ApiContentRecord>(
-				`/api/admin/sites/${siteId}/content/${contentType.slug}/${record.id}/publish`,
-				{ method: "POST" },
-			);
-
-			if (!publishResult.ok || !publishResult.data) {
-				throw new Error(
-					publishResult.error ?? `HTTP ${publishResult.status}`,
-				);
-			}
-		}
-
 		setStatusKind("success");
 		setStatusMessage(
-			action === "publish" ? "公開しました。" : "下書きを保存しました。",
+			action === "publish" ? "公開しました" : "下書きを保存しました",
 		);
 
 		if (mode === "create") {
@@ -168,7 +162,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 		router.refresh();
 	} catch (cause) {
 		const message =
-			cause instanceof Error ? cause.message : "保存に失敗しました。";
+			cause instanceof Error ? cause.message : "保存に失敗しました";
 		setStatusKind("error");
 		setStatusMessage(`API エラー: ${message}`);
 	} finally {
@@ -185,14 +179,14 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 					</p>
 					<h3 className="mt-2 text-2xl font-semibold text-white">
 						{readOnly
-							? `${contentType.label} の詳細`
+							? `${contentType.label} を編集`
 							: mode === "create"
 								? `${contentType.label} を新規作成`
 								: `${contentType.label} を編集`}
 					</h3>
 					<p className="mt-2 text-sm text-slate-300">
 						{readOnly
-							? "閲覧専用です。編集操作は表示されません。"
+							? "閲覧専用です。入力内容は保存・公開されません。"
 							: "スキーマに従ってフィールドを自動生成しています。"}
 					</p>
 				</div>
@@ -226,8 +220,6 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 							updateField("title", event.target.value)
 						}
 						placeholder="タイトルを入力"
-						disabled={readOnly}
-						readOnly={readOnly}
 					/>
 				</label>
 				<label className="block">
@@ -241,8 +233,6 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 							updateField("slug", event.target.value)
 						}
 						placeholder="slug"
-						disabled={readOnly}
-						readOnly={readOnly}
 					/>
 				</label>
 			</div>
@@ -269,7 +259,8 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 									contentType.schemaJson.sectionTemplates
 								}
 								onChange={updateField}
-								readOnly={readOnly}
+								readOnly={false}
+								disablePersistentActions={readOnly}
 							/>
 						);
 					})}
@@ -279,33 +270,29 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 				<SeoFields
 					draft={draft}
 					onChange={updateField}
-					readOnly={readOnly}
+					readOnly={false}
 				/>
 			</div>
 
 			<AdminActionNotice kind={statusKind} message={statusMessage} />
 
 			<div className="flex flex-wrap gap-3">
-				{!readOnly ? (
-					<>
-						<button
-							type="button"
-							className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
-							onClick={() => void persist("save")}
-							disabled={isPending}
-						>
-							下書きを保存
-						</button>
-						<button
-							type="button"
-							className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
-							onClick={() => void persist("publish")}
-							disabled={isPending || mode === "create"}
-						>
-							公開
-						</button>
-					</>
-				) : null}
+				<button
+					type="button"
+					className="rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+					onClick={() => void persist("save")}
+					disabled={isPending}
+				>
+					下書きを保存
+				</button>
+				<button
+					type="button"
+					className="rounded-full border border-emerald-400/40 bg-emerald-400/10 px-5 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+					onClick={() => void persist("publish")}
+					disabled={isPending || mode === "create"}
+				>
+					公開
+				</button>
 				{mode === "edit" && previewUrl ? (
 					<a
 						href={previewUrl}

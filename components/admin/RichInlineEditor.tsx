@@ -82,7 +82,7 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
   }
 
   return (
-    <div data-l="RichEditor" className="RichInlineEditor mt-2">
+    <div data-l="RichEditor" className="RichInlineEditor mt-2 block">
       {!readOnly ? (
         <div
           data-l="EditorToolbar"

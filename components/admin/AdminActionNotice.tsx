@@ -1,21 +1,36 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 interface AdminActionNoticeProps {
   kind: 'success' | 'error';
   message: string;
 }
 
 export function AdminActionNotice({ kind, message }: AdminActionNoticeProps) {
-  if (!message) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (!message) {
+      setVisible(false);
+      return undefined;
+    }
+
+    setVisible(true);
+    const timerId = window.setTimeout(() => setVisible(false), 1500);
+    return () => window.clearTimeout(timerId);
+  }, [message]);
+
+  if (!message || !visible) {
     return null;
   }
 
   return (
 		<p
-			className={`AdminActionNotice rounded-md border px-4 py-3 text-sm ${
+			className={`AdminActionNotice  font-bold text-sm ${
 				kind === "success"
-					? "border-third/60 bg-fourth/50 text-BK"
-					: "border-AC/70 bg-AC/35 text-BK"
+					? " text-SC"
+					: " text-AC"
 			}`}
 			role="status"
 		>

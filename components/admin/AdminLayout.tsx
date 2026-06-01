@@ -62,23 +62,23 @@ export async function AdminLayout( {
                                 data-l="LayoutShell"
                                 className={
                                         hideSidebar
-                                                ? 'AdminLayout AdminLayout--no_sidebar grid bg-BC px-4 py-4 text-WH lg:px-6 lg:py-6'
-                                                : 'AdminLayout grid bg-BC px-4 py-4 text-WH lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6 lg:py-6'
+                                                ? 'AdminLayout AdminLayoutNoSidebar grid grid-cols-1 px-4 py-4 lg:h-screen lg:px-6 lg:py-6'
+                                                : 'AdminLayout grid  px-4 py-4  lg:grid-cols-[280px_minmax(0,1fr)] lg:px-6 lg:py-6 gap-4 lg:gap-6'
                                 }
                         >
                                 {hideSidebar ? null : (
                                         <aside
                                                 data-l="SidebarAside"
-                                                className="SidebarAside flex flex-col p-5 "
+                                                className="SidebarAside flex flex-col"
                                         >
-                                                <AdminNav site={site ?? null} authProvider={authProvider} />
+                                                <AdminNav site={site ?? null} authProvider={authProvider} readOnly={access.readOnly} />
                                         </aside>
                                 )}
                                 <main
                                         className={
                                                 hideSidebar
-                                                        ? 'AdminMain AdminMain--full space-y-6 border border-WH/10 bg-WH/5 p-5 shadow-xl shadow-BC/20'
-                                                        : 'AdminMain space-y-6 border border-WH/10 bg-WH/5 p-5 shadow-xl shadow-BC/20'
+                                                        ? 'AdminMain min-h-0 min-w-0 space-y-6 overflow-y-auto'
+                                                        : 'AdminMain min-h-0 min-w-0 space-y-6 overflow-y-auto'
                                         }
                                 >
                                         {children}

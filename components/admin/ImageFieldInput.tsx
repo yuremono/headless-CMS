@@ -32,7 +32,7 @@ from './admin-api';
 import {
         adminBadgeRequired,
         adminBadgeSuccess,
-        adminBtnGhostSm,
+        adminBtnSm,
         adminFieldControl
 }
 
@@ -46,10 +46,11 @@ interface ImageFieldInputProps {
         value: ImageFieldValue;
         onChange: (value: ImageFieldValue)=> void;
         readOnly?: boolean;
+        disableUpload?: boolean;
 }
 
 export function ImageFieldInput( {
-                siteId, label, required, helpText, value, onChange, readOnly=false
+                siteId, label, required, helpText, value, onChange, readOnly=false, disableUpload=false
         }
 
         : ImageFieldInputProps) {
@@ -96,11 +97,7 @@ export function ImageFieldInput( {
                                 setLibraryLoading(true);
                                 setLibraryError('');
 
-                                const result=await adminFetch<ApiAssetCollection>(`/api/admin/sites/$ {
-                                                siteId
-                                        }
-
-                                        /assets`);
+                                const result=await adminFetch<ApiAssetCollection>(`/api/admin/sites/${siteId}/assets`);
 
                                 if (cancelled) {
                                         return;
@@ -144,7 +141,7 @@ export function ImageFieldInput( {
 				{" "}
 				<div
 					data-l="FieldLabel"
-					className="flex items-center gap-2 text-sm font-medium text-WH"
+					className="flex items-center gap-2 text-sm font-medium"
 				>
 					{" "}
 					<span> {label}</span>{" "}
@@ -162,7 +159,7 @@ export function ImageFieldInput( {
 							{" "}
 							<button
 								type="button"
-								className={adminBtnGhostSm}
+								className={adminBtnSm}
 								onClick={() => setIsLibraryOpen(true)}
 							>
 								{" "}
@@ -174,7 +171,7 @@ export function ImageFieldInput( {
 						<span className={adminBadgeSuccess}>登録済み</span>
 					) : null}
 				</div>{" "}
-				{!readOnly ? (
+				{!readOnly && !disableUpload ? (
 					<div data-l="UploadWrap" className="mt-4">
 						{" "}
 						<MediaUploadZone
@@ -199,7 +196,7 @@ export function ImageFieldInput( {
 				{value.url ? (
 					<div
 						data-l="FieldPreview"
-						className="ImageFieldInput_preview mt-4 overflow-hidden rounded-md border border-WH/20 bg-BK/50 p-3"
+						className="ImageFieldInput_preview mt-4 overflow-hidden rounded-md border border-TC/20 p-3"
 					>
 						{" "}
 						{previewIsVideo ? (
@@ -269,7 +266,7 @@ export function ImageFieldInput( {
 				{isLibraryOpen ? (
 					<div
 						data-l="LibraryModal"
-						className="ImageFieldInput_modal fixed inset-0 z-50 flex items-center justify-center bg-BK/80 p-4 backdrop-blur-sm"
+						className="ImageFieldInput_modal fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
 						role="dialog"
 						aria-modal="true"
 						aria-label="メディアライブラリ"
@@ -277,17 +274,17 @@ export function ImageFieldInput( {
 						{" "}
 						<div
 							data-l="ModalPanel"
-							className="ImageFieldInput_modalPanel flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-WH/20 shadow-2xl"
+							className="ImageFieldInput_modalPanel flex max-h-[90vh] w-full max-w-5xl flex-col overflow-hidden border border-TC/20 bg-WH/70"
 						>
 							{" "}
 							<div
 								data-l="ModalHeader"
-								className="flex items-center justify-between border-b border-WH/20 px-5 py-4"
+								className="flex items-center justify-between border-b border-TC/20 px-5 py-4"
 							>
 								{" "}
 								<div>
 									{" "}
-									<p className="text-lg font-semibold text-WH">
+									<p className="text-lg font-semibold">
 										メディアライブラリ
 									</p>{" "}
 									<p className="text-sm text-GR">
@@ -296,7 +293,7 @@ export function ImageFieldInput( {
 								</div>{" "}
 								<button
 									type="button"
-									className={adminBtnGhostSm}
+									className={adminBtnSm}
 									onClick={() => setIsLibraryOpen(false)}
 								>
 									{" "}
@@ -305,7 +302,7 @@ export function ImageFieldInput( {
 							</div>{" "}
 							<div
 								data-l="ModalBody"
-								className="overflow-y-auto px-5 py-5"
+								className="min-h-0 flex-1 overflow-y-auto px-5 py-5"
 							>
 								{" "}
 								{libraryLoading ? (

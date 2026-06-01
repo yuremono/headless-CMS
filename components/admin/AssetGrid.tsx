@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { adminFetch, type ApiAssetRecord } from './admin-api';
-import { adminBtnGhostSm, adminFieldControlCompact } from "./admin-ui-classes";
 
 interface AssetGridProps {
   siteId: string;
@@ -82,10 +81,7 @@ export function AssetGrid({
 
   if (assets.length === 0) {
     return (
-		<div
-			data-l="AssetEmpty"
-			className="AssetGrid border border-dashed border-WH/35 bg-BC/40 p-10 text-center text-sm text-GR"
-		>
+		<div className="AssetGrid  border border-dashed border-WH/15 bg-GR/30 p-10 text-center text-sm text-GR">
 			アップロード済みのアセットはまだありません。
 		</div>
 	);
@@ -93,44 +89,36 @@ export function AssetGrid({
 
   return (
     <ul className="AssetGrid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {assets.map((asset, assetIndex) => {
+      {assets.map((asset) => {
         const isSelected = selectable && selectedUrl === asset.url;
         const isSaving = savingId === asset.id;
-        const itemLabel = `ItemPreview${assetIndex + 1}`;
-        const metaLabel = `ItemMeta${assetIndex + 1}`;
 
         return (
 			<li
 				key={asset.id}
-				className={`AssetGrid_item overflow-hidden  border bg-BK/50 ${
+				className={`AssetGrid_item overflow-hidden  border  ${
 					isSelected
-						? "border-SC/60 ring-2 ring-SC/20"
-						: "border-WH/20"
+						? "border-SC/60 ring-1 ring-SC/20"
+						: "border-WH/0"
 				}`}
 			>
-				<div
-					data-l={itemLabel}
-					className="AssetGrid_preview relative aspect-[4/3] overflow-hidden bg-BK/80"
-				>
+				<div className="AssetGrid_preview relative aspect-[4/3] overflow-hidden bg-GR/80">
 					{asset.mimeType.startsWith("image/") ? (
 						<img
 							src={asset.url}
 							alt={asset.alt ?? asset.filename}
-							className="h-full w-full object-cover"
+							className="h-full w-full object-contain"
 						/>
 					) : asset.mimeType.startsWith("video/") ? (
 						<video
 							src={asset.url}
-							className="h-full w-full object-cover"
+							className="h-full w-full object-contain"
 							controls
 							preload="metadata"
 							aria-label={asset.alt ?? asset.filename}
 						/>
 					) : (
-						<div
-							data-l="MimeFallback"
-							className="flex h-full items-center justify-center text-sm text-GR"
-						>
+						<div className="flex h-full items-center justify-center text-sm text-GR">
 							{asset.mimeType}
 						</div>
 					)}
@@ -138,47 +126,44 @@ export function AssetGrid({
 					{selectable ? (
 						<button
 							type="button"
-							className="absolute inset-0 bg-BK/0 transition hover:bg-BK/20"
+							className="absolute inset-0  transition "
 							aria-label={`${asset.filename} を選択`}
 							onClick={() => onSelect?.(asset)}
 						/>
 					) : null}
 				</div>
 
-				<div
-					data-l={metaLabel}
-					className="AssetGrid_meta space-y-3 p-4"
-				>
+				<div className="AssetGrid_meta space-y-3 p-4">
 					<div>
 						<p
-							className="truncate text-sm font-medium text-WH"
+							className="truncate text-sm font-medium "
 							title={asset.filename}
 						>
 							{asset.filename}
 						</p>
 						<p
-							className="mt-1 truncate text-xs text-GR"
+							className="mt-1 truncate text-xs "
 							title={asset.url}
 						>
 							{asset.url}
 						</p>
 					</div>
 
-					<dl className="grid grid-cols-2 gap-2 text-xs text-GR">
+					<dl className="grid grid-cols-2 gap-2 text-xs ">
 						<div>
-							<dt className="text-GR">MIME</dt>
+							<dt className="">MIME</dt>
 							<dd className="mt-0.5 truncate">
 								{asset.mimeType}
 							</dd>
 						</div>
 						<div>
-							<dt className="text-GR">サイズ</dt>
+							<dt className="">サイズ</dt>
 							<dd className="mt-0.5">
 								{formatFileSize(asset.size)}
 							</dd>
 						</div>
 						<div className="col-span-2">
-							<dt className="text-GR">寸法</dt>
+							<dt className="">寸法</dt>
 							<dd className="mt-0.5">
 								{formatDimensions(asset.width, asset.height)}
 							</dd>
@@ -187,14 +172,14 @@ export function AssetGrid({
 
 					{selectable ? (
 						<>
-							<p className="text-xs text-GR">
+							<p className="text-xs ">
 								{asset.alt?.trim()
 									? asset.alt
 									: "代替テキスト未設定"}
 							</p>
 							<button
 								type="button"
-								className={`w-full ${adminBtnGhostSm}`}
+								className="w-full rounded-full border  px-4 py-2 text-sm font-medium transition "
 								onClick={() => onSelect?.(asset)}
 							>
 								この画像を使う
@@ -213,7 +198,7 @@ export function AssetGrid({
 									代替テキスト
 								</span>
 								<input
-									className={adminFieldControlCompact}
+									className="mt-2 w-full rounded-2xl border border-WH/10 bg-GR/70 px-3 py-2 text-sm outline-none transition placeholder: focus:border-SC/60 focus:ring-2 focus:ring-SC/20"
 									type="text"
 									value={draftAlts[asset.id] ?? ""}
 									placeholder="画像の説明"
@@ -230,7 +215,7 @@ export function AssetGrid({
 							</label>
 							<button
 								type="button"
-								className={`${adminBtnGhostSm} disabled:cursor-not-allowed disabled:opacity-60`}
+								className="rounded-full border border-WH/15 px-4 py-2 text-sm font-medium transition hover:bg-WH/10 disabled:cursor-not-allowed disabled:opacity-60"
 								disabled={
 									isSaving ||
 									(draftAlts[asset.id] ?? "") ===
@@ -246,7 +231,9 @@ export function AssetGrid({
 					)}
 
 					{errors[asset.id] ? (
-						<p className="text-xs text-AC">{errors[asset.id]}</p>
+						<p className="text-xs text-rose-300">
+							{errors[asset.id]}
+						</p>
 					) : null}
 				</div>
 			</li>

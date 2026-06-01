@@ -1,7 +1,6 @@
 'use client';
 
 import { CardListItemsEditor, FaqItemsEditor, FeatureListItemsEditor } from './SectionArrayItemEditor';
-import { useAdminAccess } from './AdminAccessContext';
 
 interface SectionFieldFormProps {
   type: string;
@@ -16,6 +15,7 @@ interface FieldProps {
   onChange: (value: string) => void;
   multiline?: boolean;
   placeholder?: string;
+  readOnly?: boolean;
 }
 
 function readString(data: Record<string, unknown>, key: string): string {
@@ -48,13 +48,12 @@ function writeNested(
   return { ...data, [parentKey]: nextParent };
 }
 
-function SectionInput({ label, value, onChange, multiline, placeholder }: FieldProps) {
-  const { readOnly } = useAdminAccess();
+function SectionInput({ label, value, onChange, multiline, placeholder, readOnly = false }: FieldProps) {
   const className =
 		"mt-1 w-full rounded-md border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20";
 
   return (
-    <label className="SectionFieldForm_field block">
+    <label className="SectionFieldFormField block">
       <span className="text-xs font-medium text-slate-300">{label}</span>
       {multiline ? (
         <textarea
@@ -91,18 +90,20 @@ function ImageFields({
   readOnly?: boolean;
 }) {
   return (
-    <div className="SectionFieldForm_image grid gap-3 sm:grid-cols-2">
+    <div className="SectionFieldFormImage grid gap-3 sm:grid-cols-2">
       <SectionInput
         label="画像 URL"
         value={readNestedString(data, 'image', 'url')}
         placeholder="https://example.com/image.jpg"
         onChange={(value) => onChange(writeNested(data, 'image', 'url', value))}
+        readOnly={readOnly}
       />
       <SectionInput
         label="代替テキスト"
         value={readNestedString(data, 'image', 'alt')}
         placeholder="画像の説明"
         onChange={(value) => onChange(writeNested(data, 'image', 'alt', value))}
+        readOnly={readOnly}
       />
     </div>
   );
@@ -118,17 +119,19 @@ function ButtonFields({
   readOnly?: boolean;
 }) {
   return (
-    <div className="SectionFieldForm_button grid gap-3 sm:grid-cols-2">
+    <div className="SectionFieldFormButton grid gap-3 sm:grid-cols-2">
       <SectionInput
         label="ボタンラベル"
         value={readNestedString(data, 'button', 'label')}
         onChange={(value) => onChange(writeNested(data, 'button', 'label', value))}
+        readOnly={readOnly}
       />
       <SectionInput
         label="リンク先"
         value={readNestedString(data, 'button', 'href')}
         placeholder="/contact"
         onChange={(value) => onChange(writeNested(data, 'button', 'href', value))}
+        readOnly={readOnly}
       />
     </div>
   );
@@ -230,7 +233,7 @@ export function SectionFieldForm({ type, data, onChange, readOnly = false }: Sec
 				multiline
 				onChange={(value) => onChange({ ...data, body: value })}
 			/>
-			<label className="SectionFieldForm_field block">
+			<label className="SectionFieldFormField block">
 				<span className="text-xs font-medium text-slate-300">
 					画像位置
 				</span>

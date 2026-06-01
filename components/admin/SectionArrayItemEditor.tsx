@@ -1,6 +1,5 @@
 'use client';
 
-import { useAdminAccess } from './AdminAccessContext';
 interface ArrayFieldDef {
   key: string;
   label: string;
@@ -15,6 +14,7 @@ interface SectionArrayItemEditorProps {
   emptyItem: Record<string, unknown>;
   itemLabel?: (item: Record<string, unknown>, index: number) => string;
   onChange: (items: Record<string, unknown>[]) => void;
+  readOnly?: boolean;
 }
 
 function readString(record: Record<string, unknown>, key: string): string {
@@ -34,9 +34,8 @@ export function SectionArrayItemEditor({
   emptyItem,
   itemLabel,
   onChange,
+  readOnly = false,
 }: SectionArrayItemEditorProps) {
-  const { readOnly } = useAdminAccess();
-
   function updateItem(index: number, key: string, value: string) {
     onChange(
       items.map((item, itemIndex) => (itemIndex === index ? { ...item, [key]: value } : item)),
@@ -96,7 +95,7 @@ export function SectionArrayItemEditor({
 										? item.id
 										: `item-${index}`
 								}
-								className="SectionArrayItemEditor_item rounded-md border border-white/10 bg-slate-950/40 p-3"
+								className="SectionArrayItemEditorItem rounded-md border border-white/10 bg-BK/30 p-3"
 							>
 								<header className="mb-3 flex flex-wrap items-center justify-between gap-2">
 									<p className="truncate text-sm font-medium text-white">

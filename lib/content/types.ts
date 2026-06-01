@@ -38,6 +38,32 @@ export interface ListContentsInput {
 
 export type ComposableFieldFormatMap = Record<string, "plain" | "richText">;
 
+export interface ComposableFieldDirectory {
+  id: string;
+  name: string;
+  prefixes: string[];
+}
+
+export interface ComposableFieldDirectories {
+  directories: ComposableFieldDirectory[];
+  activeDirectoryId?: string;
+}
+
+export interface ComposableFieldDefinition {
+  prefix: string;
+  repeatable?: boolean;
+  fields: Array<{
+    type: string;
+    suffix: string;
+    format?: "plain" | "richText";
+    bundle?: "image";
+  }>;
+}
+
+export interface ComposableFieldDefinitions {
+  groups: ComposableFieldDefinition[];
+}
+
 export interface CreateContentInput {
   slug?: string | null;
   title?: string | null;
@@ -47,6 +73,10 @@ export interface CreateContentInput {
   updatedBy?: string | null;
   /** composable フィールドビルダーの title/text 保存形式（jsonPath -> format）。schema_json へ反映する。 */
   composableFieldFormats?: ComposableFieldFormatMap;
+  /** composable フィールドディレクトリ UI 用メタデータ。schema_json へ反映し、data_json には入れない。 */
+  composableFieldDirectories?: ComposableFieldDirectories;
+  /** composable フィールド定義メタデータ。空値・plain・画像・空配列でも UI を復元するため schema_json へ反映する。 */
+  composableFieldDefinitions?: ComposableFieldDefinitions;
 }
 
 export interface UpdateContentInput {
@@ -57,6 +87,10 @@ export interface UpdateContentInput {
   updatedBy?: string | null;
   /** composable フィールドビルダーの title/text 保存形式（jsonPath -> format）。schema_json へ反映する。 */
   composableFieldFormats?: ComposableFieldFormatMap;
+  /** composable フィールドディレクトリ UI 用メタデータ。schema_json へ反映し、data_json には入れない。 */
+  composableFieldDirectories?: ComposableFieldDirectories;
+  /** composable フィールド定義メタデータ。空値・plain・画像・空配列でも UI を復元するため schema_json へ反映する。 */
+  composableFieldDefinitions?: ComposableFieldDefinitions;
 }
 
 export interface ContentCollectionResult {

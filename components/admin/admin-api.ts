@@ -1,9 +1,13 @@
 /** 管理 API 向け fetch・認証・レスポンス変換（components/admin 専用） */
 
+import { DEV_SESSION_TOKENS } from '@/lib/auth/dev-session-tokens';
+
 export const ADMIN_SESSION_COOKIE = 'cms_session';
 export const ADMIN_SESSION_STORAGE_KEY = 'cms_session_token';
 export const ADMIN_SESSION_LOGGED_OUT_KEY = 'cms_session_logged_out';
-export const ADMIN_DEV_SESSION_TOKEN = 'session-dev-token';
+export const ADMIN_READONLY_SESSION_TOKEN = DEV_SESSION_TOKENS.readonly;
+export const ADMIN_EDITOR_SESSION_TOKEN = DEV_SESSION_TOKENS.editor;
+export const ADMIN_DEV_SESSION_TOKEN = ADMIN_EDITOR_SESSION_TOKEN;
 
 export interface ApiErrorBody {
   error?: string;
@@ -346,6 +350,26 @@ export function buildContentWriteBody(input: {
   data: Record<string, unknown>;
   status?: 'draft' | 'published' | 'unpublished';
   fieldFormats?: Record<string, 'plain' | 'richText'>;
+  fieldDirectories?: {
+    activeDirectoryId?: string;
+    directories: Array<{
+      id: string;
+      name: string;
+      prefixes: string[];
+    }>;
+  };
+  fieldDefinitions?: {
+    groups: Array<{
+      prefix: string;
+      repeatable?: boolean;
+      fields: Array<{
+        type: string;
+        suffix: string;
+        format?: 'plain' | 'richText';
+        bundle?: 'image';
+      }>;
+    }>;
+  };
 }) {
   return {
     title: input.title,
@@ -353,6 +377,8 @@ export function buildContentWriteBody(input: {
     status: input.status ?? 'draft',
     data: input.data,
     ...(input.fieldFormats ? { fieldFormats: input.fieldFormats } : {}),
+    ...(input.fieldDirectories ? { fieldDirectories: input.fieldDirectories } : {}),
+    ...(input.fieldDefinitions ? { fieldDefinitions: input.fieldDefinitions } : {}),
   };
 }
 

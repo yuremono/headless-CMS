@@ -13,13 +13,14 @@ interface FieldRendererProps {
   sectionTemplates?: string[];
   onChange: (key: string, value: FieldDraftValue) => void;
   readOnly?: boolean;
+  disablePersistentActions?: boolean;
 }
 
 function isImageFieldValue(value: FieldDraftValue): value is ImageFieldValue {
   return typeof value === 'object' && value !== null && 'url' in value && 'alt' in value;
 }
 
-export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange, readOnly = false }: FieldRendererProps) {
+export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange, readOnly = false, disablePersistentActions = false }: FieldRendererProps) {
   const fieldKey = getFieldKey(field);
   const baseClass =
 		"mt-2 w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-500 focus:border-sky-400/60 focus:ring-2 focus:ring-sky-400/20";
@@ -61,6 +62,7 @@ export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange
         value={imageValue}
         onChange={(nextValue) => onChange(fieldKey, nextValue)}
         readOnly={readOnly}
+        disableUpload={disablePersistentActions}
       />
     );
   }

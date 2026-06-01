@@ -3,6 +3,7 @@ import { verifySignedPreviewToken } from "../preview/signed-preview-token";
 import { getAuthProvider } from "./production-config";
 import { resolveProductionSession } from "./session-bridge";
 import type { SiteRole } from "./roles";
+import { DEV_SESSION_TOKENS } from "./dev-session-tokens";
 
 export type AuthMode = "public" | "admin" | "session" | "preview";
 
@@ -42,8 +43,6 @@ export type AuthResult = { ok: true; context: AuthContext } | { ok: false; failu
 const DEV_PUBLIC_KEY = "public-dev-key";
 const DEV_ADMIN_KEY = "admin-dev-key";
 const DEV_PREVIEW_TOKEN = "preview-dev-token";
-const DEV_SESSION_TOKEN = "session-dev-token";
-
 function makeFailure(status: 401 | 403, code: string, error: string): AuthResult {
   return { ok: false, failure: { status, code, error } };
 }
@@ -176,6 +175,23 @@ export async function validateSession(request: Request, siteId: string): Promise
     return makeFailure(401, "missing_session", "Session is required.");
   }
 
+  if (
+    providedToken === DEV_SESSION_TOKENS.readonly ||
+    providedToken === DEV_SESSION_TOKENS.editor
+  ) {
+    const isReadonly = providedToken === DEV_SESSION_TOKENS.readonly;
+    return {
+      ok: true,
+      context: {
+        mode: "session",
+        siteId,
+        token: providedToken,
+        scope: isReadonly ? "read" : "write",
+        actorId: `user:${isReadonly ? "readonly" : "editor"}`,
+      },
+    };
+  }
+
   if (getAuthProvider() !== "none") {
     const productionSession = await resolveProductionSession(request, providedToken);
     if (productionSession) {
@@ -198,7 +214,11 @@ export async function validateSession(request: Request, siteId: string): Promise
     if (providedToken !== configuredToken) {
       return makeFailure(403, "invalid_session", "Session is invalid.");
     }
-  } else if (!isDevFallbackAllowed() || providedToken !== DEV_SESSION_TOKEN) {
+  } else if (
+    !isDevFallbackAllowed() ||
+    (providedToken !== DEV_SESSION_TOKENS.readonly &&
+      providedToken !== DEV_SESSION_TOKENS.editor)
+  ) {
     return makeFailure(403, "invalid_session", "Session is invalid.");
   }
 
@@ -274,5 +294,7 @@ export const authDevTokens = {
   public: DEV_PUBLIC_KEY,
   admin: DEV_ADMIN_KEY,
   preview: DEV_PREVIEW_TOKEN,
-  session: DEV_SESSION_TOKEN,
+  session: DEV_SESSION_TOKENS.editor,
+  sessionReadOnly: DEV_SESSION_TOKENS.readonly,
+  sessionEditor: DEV_SESSION_TOKENS.editor,
 };
