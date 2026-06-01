@@ -44,6 +44,7 @@ vi.mock("@/lib/db/site-resolver", () => ({
 vi.mock("@/lib/db/assets", () => ({
   listAssets: vi.fn(),
   updateAsset: vi.fn(),
+  deleteAsset: vi.fn(),
 }));
 
 import {
@@ -66,7 +67,7 @@ import {
   unpublishContent,
   updateContent,
 } from "@/lib/content/store";
-import { listAssets, updateAsset } from "@/lib/db/assets";
+import { deleteAsset, listAssets, updateAsset } from "@/lib/db/assets";
 import { resolveSiteId } from "@/lib/db/site-resolver";
 import { getAdminContent, listAdminContentTypes, listAdminContents } from "@/lib/db/sites";
 import {
@@ -82,6 +83,7 @@ import {
   listAdminContentsUi,
   listDeliveryContents,
   patchAdminAsset,
+  removeAdminAsset,
   duplicateAdminContent,
   publishAdminContent,
   removeAdminContent,
@@ -115,6 +117,7 @@ const mockedGetAdminContent = vi.mocked(getAdminContent);
 const mockedResolveSiteId = vi.mocked(resolveSiteId);
 const mockedListAssets = vi.mocked(listAssets);
 const mockedUpdateAsset = vi.mocked(updateAsset);
+const mockedDeleteAsset = vi.mocked(deleteAsset);
 
 const okAuth = {
   ok: true as const,
@@ -492,5 +495,22 @@ describe("getAdminAssets / patchAdminAsset", () => {
     const result = await patchAdminAsset("main-site", "asset-1", { alt: "Alt" });
 
     expect(result).toMatchObject({ asset: expect.objectContaining({ alt: "Alt" }) });
+  });
+
+  it("removeAdminAsset はサイト未解決時は null", async () => {
+    mockedResolveSiteId.mockResolvedValue(null);
+
+    await expect(removeAdminAsset("unknown", "asset-1")).resolves.toBeNull();
+  });
+
+  it("removeAdminAsset は削除結果を返す", async () => {
+    mockedResolveSiteId.mockResolvedValue("site-1");
+    mockedDeleteAsset.mockResolvedValue(true);
+
+    await expect(removeAdminAsset("main-site", "asset-1")).resolves.toBe(true);
+    expect(mockedDeleteAsset).toHaveBeenCalledWith({
+      assetId: "asset-1",
+      siteId: "site-1",
+    });
   });
 });

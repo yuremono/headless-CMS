@@ -28,20 +28,22 @@ export function AdminNav({ site, authProvider = 'none', readOnly = false }: Admi
     : [];
 
   return (
-          <nav className="AdminNav flex h-full flex-col gap-6">
-                  <div data-l="NavBrand">
-                    <h1 className="text-lg font-normal pt-1">
-                                  Composable ( Headless ) CMS
-                                  <span className="block opacity-50 [font-size:0.75em]">inspired by microCMS.</span>
-                    </h1>
-                    <p className="mt-2 text-sm text-GR">
-                      {readOnly
-                        ? '閲覧専用です。フィールドの追加・編集はできません。'
-                        : 'フィールドを追加・保存し、サイトやアプリで取得します。'}
-                    </p>
-                  </div>
+		<nav className="AdminNav flex h-full flex-col gap-6">
+			<div data-l="NavBrand">
+				<h1 className="text-lg font-normal pt-1">
+					Composable ( Headless ) CMS
+					<span className="block opacity-50 [font-size:0.75em]">
+						inspired by microCMS.
+					</span>
+				</h1>
+				<p className="mt-2 text-sm text-GR">
+					{readOnly
+						? "閲覧専用です。フィールドの追加・編集はできません。"
+						: "フィールドを追加・保存し、サイトやアプリで取得します。"}
+				</p>
+			</div>
 			<div data-l="NavMain" className="space-y-2">
-				<p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+				<p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
 					Directory
 				</p>
 				<ul className="">
@@ -60,7 +62,7 @@ export function AdminNav({ site, authProvider = 'none', readOnly = false }: Admi
 
 			{/* {siteItems.length > 0 ? (
 				<div data-l="NavSite" className="space-y-2">
-					<p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+					<p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
 						Site tools
 					</p>
 					<ul className="space-y-1">
@@ -79,10 +81,10 @@ export function AdminNav({ site, authProvider = 'none', readOnly = false }: Admi
 			) : null} */}
 
 			<div
-				data-l="NavAccount"
+				data-l=""
 				className="mt-auto space-y-2 border-t border-TC/10 pt-5"
 			>
-				<p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+				<p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
 					Account
 				</p>
 				<LogoutButton authProvider={authProvider} />

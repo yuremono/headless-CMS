@@ -1,15 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { PATCH } from "./route";
+import { DELETE, PATCH } from "./route";
 
 vi.mock("@/lib/content/service", () => ({
   resolveAdminRequest: vi.fn(),
   patchAdminAsset: vi.fn(),
+  removeAdminAsset: vi.fn(),
 }));
 
-import { patchAdminAsset, resolveAdminRequest } from "@/lib/content/service";
+import { patchAdminAsset, removeAdminAsset, resolveAdminRequest } from "@/lib/content/service";
 
 const mockedResolve = vi.mocked(resolveAdminRequest);
 const mockedPatch = vi.mocked(patchAdminAsset);
+const mockedRemove = vi.mocked(removeAdminAsset);
 
 describe("PATCH /api/admin/sites/[siteId]/assets/[assetId]", () => {
   beforeEach(() => {
@@ -89,5 +91,33 @@ describe("PATCH /api/admin/sites/[siteId]/assets/[assetId]", () => {
     );
 
     expect(response.status).toBe(404);
+  });
+
+  it("削除成功", async () => {
+    mockedRemove.mockResolvedValue(true);
+
+    const response = await DELETE(
+      new Request("https://example.com/api/admin/sites/site-1/assets/asset-1", {
+        method: "DELETE",
+      }),
+      { params: Promise.resolve({ siteId: "site-1", assetId: "asset-1" }) },
+    );
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({ ok: true });
+  });
+
+  it("削除対象未存在 404", async () => {
+    mockedRemove.mockResolvedValue(false);
+
+    const response = await DELETE(
+      new Request("https://example.com/api/admin/sites/site-1/assets/missing", {
+        method: "DELETE",
+      }),
+      { params: Promise.resolve({ siteId: "site-1", assetId: "missing" }) },
+    );
+
+    expect(response.status).toBe(404);
+    await expect(response.json()).resolves.toMatchObject({ code: "asset_not_found" });
   });
 });

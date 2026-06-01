@@ -1,5 +1,5 @@
 import { errorResponse, jsonResponse, readJsonBody } from "@/lib/http";
-import { patchAdminAsset, resolveAdminRequest } from "@/lib/content/service";
+import { patchAdminAsset, removeAdminAsset, resolveAdminRequest } from "@/lib/content/service";
 
 export async function PATCH(
   request: Request,
@@ -32,4 +32,28 @@ export async function PATCH(
   }
 
   return jsonResponse(result.asset);
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ siteId: string; assetId: string }> },
+): Promise<Response> {
+  const { siteId, assetId } = await params;
+  const resolved = await resolveAdminRequest(request, siteId, { permission: "content:write" });
+
+  if (!resolved.ok) {
+    return errorResponse(resolved.failure.status, resolved.failure.code, resolved.failure.error);
+  }
+
+  const deleted = await removeAdminAsset(siteId, assetId);
+
+  if (deleted === null) {
+    return errorResponse(404, "site_not_found", "Site was not found.");
+  }
+
+  if (!deleted) {
+    return errorResponse(404, "asset_not_found", "Asset was not found.");
+  }
+
+  return jsonResponse({ ok: true });
 }

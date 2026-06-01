@@ -34,9 +34,9 @@ export function LogoutButton({
       type="button"
       className={`w-full py-3 bg-WH border border-TC/20 hover:bg-SC/10 transition`}
       onClick={handleLogout}
-      aria-label="ログアウト"
+      aria-label="Log Out"
     >
-      ログアウト
+      Log Out
     </button>
   );
 }

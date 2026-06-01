@@ -12,7 +12,7 @@ export const adminFieldControlTextarea = `${adminFieldControl} min-h-[8rem] mt-2
 export const adminFieldControlCompact =
   'mt-2 w-full rounded-md border border-TC/25 px-3 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30';
 
-export const adminPanel = 'border border-TC/20';
+export const adminPanel = 'border-b border-TC/20';
 
 export const adminPanelInset = "rounded-md border border-TC/20";
 

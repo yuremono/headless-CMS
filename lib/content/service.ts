@@ -247,6 +247,21 @@ export async function patchAdminAsset(
   return { asset };
 }
 
+export async function removeAdminAsset(siteId: string, assetId: string) {
+  const { deleteAsset } = await import("@/lib/db/assets");
+  const { resolveSiteId } = await import("@/lib/db/site-resolver");
+  const resolvedSiteId = await resolveSiteId(siteId);
+
+  if (!resolvedSiteId) {
+    return null;
+  }
+
+  return deleteAsset({
+    assetId,
+    siteId: resolvedSiteId,
+  });
+}
+
 const MEMBER_MANAGE_PERMISSION = { permission: "member:manage" as const };
 
 export async function getAdminMembers(siteId: string) {

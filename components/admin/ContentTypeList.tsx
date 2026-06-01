@@ -26,7 +26,7 @@ export function ContentTypeList({ siteId, contentTypes, records }: ContentTypeLi
 				>
 					<div className="flex items-start justify-between gap-4">
 						<div>
-							<p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+							<p className="text-xs uppercase tracking-widest text-slate-400">
 								{type.kind}
 							</p>
 							<h3 className="mt-2 text-xl font-semibold text-white">

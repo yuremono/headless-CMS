@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { X } from '@phosphor-icons/react';
+import { useEffect, useState } from 'react';
 import { adminFetch, type ApiAssetRecord } from './admin-api';
 
 interface AssetGridProps {
@@ -10,7 +11,10 @@ interface AssetGridProps {
   selectedUrl?: string;
   onSelect?: (asset: ApiAssetRecord) => void;
   onAssetUpdated?: (asset: ApiAssetRecord) => void;
+  onAssetDeleted?: (asset: ApiAssetRecord) => void;
+  onAssetsReadyChange?: (ready: boolean) => void;
   readOnly?: boolean;
+  allowDelete?: boolean;
 }
 
 function formatFileSize(bytes: number): string {
@@ -33,6 +37,35 @@ function formatDimensions(width: number | null, height: number | null): string {
   return `${width} × ${height}`;
 }
 
+export function AssetGridSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <ul
+      className="AssetGrid grid min-h-[520px] gap-4 sm:grid-cols-2 xl:grid-cols-3"
+      aria-hidden="true"
+    >
+      {Array.from({ length: count }).map((_, index) => (
+        <li
+          key={index}
+          className="AssetGrid_item overflow-hidden border border-WH/0"
+        >
+          <div className="AssetGrid_preview relative aspect-[4/3] overflow-hidden bg-GR/80">
+            <div className="h-full w-full animate-pulse bg-WH/20" />
+          </div>
+          <div className="AssetGrid_meta space-y-3 p-4">
+            <div className="h-4 w-2/5 animate-pulse rounded bg-GR/30" />
+            <div className="h-3 w-full animate-pulse rounded bg-GR/20" />
+            <div className="grid grid-cols-2 gap-2">
+              <div className="h-9 animate-pulse rounded bg-GR/20" />
+              <div className="h-9 animate-pulse rounded bg-GR/20" />
+            </div>
+            <div className="h-11 animate-pulse rounded-full bg-GR/20" />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function AssetGrid({
   siteId,
   assets,
@@ -40,13 +73,32 @@ export function AssetGrid({
   selectedUrl,
   onSelect,
   onAssetUpdated,
+  onAssetDeleted,
+  onAssetsReadyChange,
   readOnly = false,
+  allowDelete = !readOnly,
 }: AssetGridProps) {
   const [draftAlts, setDraftAlts] = useState<Record<string, string>>(() =>
     Object.fromEntries(assets.map((asset) => [asset.id, asset.alt ?? ''])),
   );
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingAssetDelete, setPendingAssetDelete] = useState<ApiAssetRecord | null>(null);
+  const [loadedAssetIds, setLoadedAssetIds] = useState<Record<string, boolean>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    const previewAssets = assets.filter(
+      (asset) =>
+        asset.mimeType.startsWith("image/") ||
+        asset.mimeType.startsWith("video/"),
+    );
+    const isReady =
+      previewAssets.length === 0 ||
+      previewAssets.every((asset) => loadedAssetIds[asset.id]);
+
+    onAssetsReadyChange?.(isReady);
+  }, [assets, loadedAssetIds, onAssetsReadyChange]);
 
   async function saveAlt(asset: ApiAssetRecord) {
     const nextAlt = draftAlts[asset.id] ?? '';
@@ -79,6 +131,32 @@ export function AssetGrid({
     onAssetUpdated?.(result.data);
   }
 
+  async function deleteAsset(asset: ApiAssetRecord) {
+    setDeletingId(asset.id);
+    setErrors((current) => {
+      const next = { ...current };
+      delete next[asset.id];
+      return next;
+    });
+
+    const result = await adminFetch<{ ok: boolean }>(`/api/admin/sites/${siteId}/assets/${asset.id}`, {
+      method: 'DELETE',
+    });
+
+    setDeletingId(null);
+
+    if (!result.ok) {
+      setErrors((current) => ({
+        ...current,
+        [asset.id]: result.error ?? 'アセットの削除に失敗しました。',
+      }));
+      return;
+    }
+
+    setPendingAssetDelete(null);
+    onAssetDeleted?.(asset);
+  }
+
   if (assets.length === 0) {
     return (
 		<div className="AssetGrid  border border-dashed border-WH/15 bg-GR/30 p-10 text-center text-sm text-GR">
@@ -88,10 +166,12 @@ export function AssetGrid({
   }
 
   return (
-    <ul className="AssetGrid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {assets.map((asset) => {
-        const isSelected = selectable && selectedUrl === asset.url;
-        const isSaving = savingId === asset.id;
+		<>
+			<ul className="AssetGrid grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+				{assets.map((asset) => {
+					const isSelected = selectable && selectedUrl === asset.url;
+					const isSaving = savingId === asset.id;
+					const isDeleting = deletingId === asset.id;
 
         return (
 			<li
@@ -108,6 +188,18 @@ export function AssetGrid({
 							src={asset.url}
 							alt={asset.alt ?? asset.filename}
 							className="h-full w-full object-contain"
+							onLoad={() =>
+								setLoadedAssetIds((current) => ({
+									...current,
+									[asset.id]: true,
+								}))
+							}
+							onError={() =>
+								setLoadedAssetIds((current) => ({
+									...current,
+									[asset.id]: true,
+								}))
+							}
 						/>
 					) : asset.mimeType.startsWith("video/") ? (
 						<video
@@ -116,6 +208,18 @@ export function AssetGrid({
 							controls
 							preload="metadata"
 							aria-label={asset.alt ?? asset.filename}
+							onLoadedMetadata={() =>
+								setLoadedAssetIds((current) => ({
+									...current,
+									[asset.id]: true,
+								}))
+							}
+							onError={() =>
+								setLoadedAssetIds((current) => ({
+									...current,
+									[asset.id]: true,
+								}))
+							}
 						/>
 					) : (
 						<div className="flex h-full items-center justify-center text-sm text-GR">
@@ -130,6 +234,26 @@ export function AssetGrid({
 							aria-label={`${asset.filename} を選択`}
 							onClick={() => onSelect?.(asset)}
 						/>
+					) : null}
+					{allowDelete ? (
+						<button
+							type="button"
+							className="absolute right-2 top-2 z-10 inline-flex h-7 w-7 items-center justify-center rounded-full border border-AC/50 bg-transparent text-SC transition hover:bg-AC/50 disabled:cursor-not-allowed disabled:opacity-60"
+							onClick={(event) => {
+								event.preventDefault();
+								event.stopPropagation();
+								setPendingAssetDelete(asset);
+							}}
+							disabled={isDeleting}
+							aria-label={`${asset.filename} を削除`}
+							title="画像を削除"
+						>
+							<X
+								size={16}
+								aria-hidden="true"
+								weight="bold"
+							/>
+						</button>
 					) : null}
 				</div>
 
@@ -172,11 +296,6 @@ export function AssetGrid({
 
 					{selectable ? (
 						<>
-							<p className="text-xs ">
-								{asset.alt?.trim()
-									? asset.alt
-									: "代替テキスト未設定"}
-							</p>
 							<button
 								type="button"
 								className="w-full rounded-full border  px-4 py-2 text-sm font-medium transition "
@@ -186,11 +305,7 @@ export function AssetGrid({
 							</button>
 						</>
 					) : readOnly ? (
-						<p className="text-xs text-GR">
-							{asset.alt?.trim()
-								? asset.alt
-								: "代替テキスト未設定"}
-						</p>
+						null
 					) : (
 						<>
 							<label className="block">
@@ -238,7 +353,53 @@ export function AssetGrid({
 				</div>
 			</li>
 		);
-      })}
-    </ul>
+				})}
+			</ul>
+			{pendingAssetDelete ? (
+				<div
+					className="fixed inset-0 z-50 flex items-center justify-center bg-TC/30 p-4"
+					role="dialog"
+					aria-modal="true"
+					aria-labelledby="AssetDeleteDialogTitle"
+				>
+					<div className="w-full max-w-sm rounded-md border border-TC/20 bg-WH p-5 shadow-xl">
+						<h2
+							id="AssetDeleteDialogTitle"
+							className="text-base font-bold text-TC"
+						>
+							画像を削除しますか？
+						</h2>
+						<p className="mt-2 text-sm text-GR">
+							{pendingAssetDelete.filename} を削除します。この操作は取り消せません。
+						</p>
+						{errors[pendingAssetDelete.id] ? (
+							<p className="mt-3 text-xs text-rose-300">
+								{errors[pendingAssetDelete.id]}
+							</p>
+						) : null}
+						<div className="mt-5 flex justify-end gap-2">
+							<button
+								type="button"
+								className="rounded-md border border-TC/20 px-3 py-2 text-sm text-TC transition hover:bg-TC/5"
+								onClick={() => setPendingAssetDelete(null)}
+								disabled={deletingId === pendingAssetDelete.id}
+							>
+								キャンセル
+							</button>
+							<button
+								type="button"
+								className="inline-flex items-center gap-1 rounded-md border border-AC/40 bg-AC px-3 py-2 text-sm font-bold text-WH transition hover:bg-AC/80 disabled:cursor-not-allowed disabled:opacity-60"
+								onClick={() => {
+									void deleteAsset(pendingAssetDelete);
+								}}
+								disabled={deletingId === pendingAssetDelete.id}
+							>
+								{deletingId === pendingAssetDelete.id ? "削除中…" : "削除"}
+							</button>
+						</div>
+					</div>
+				</div>
+			) : null}
+		</>
   );
 }

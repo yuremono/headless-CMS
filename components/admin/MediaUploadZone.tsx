@@ -18,6 +18,8 @@ interface MediaUploadZoneProps {
   buttonLabel?: string;
   dropHint?: string;
   alt?: string;
+  compact?: boolean;
+  buttonClassName?: string;
   onUploadStart?: () => void;
   onUploadComplete?: (result: MediaUploadResult) => void;
   onBatchComplete?: (results: MediaUploadResult[]) => void;
@@ -39,6 +41,8 @@ export function MediaUploadZone({
   buttonLabel = 'メディアをアップロード',
   dropHint = 'ここにファイルをドラッグ&ドロップ、またはクリックして選択',
   alt,
+  compact = false,
+  buttonClassName,
   onUploadStart,
   onUploadComplete,
   onBatchComplete,
@@ -129,61 +133,77 @@ export function MediaUploadZone({
   }
 
   return (
-		<div data-l="UploadZone" className="MediaUploadZone space-y-3">
-			<div
-				data-l="DropZone"
-				className={`MediaUploadZoneDropZone rounded-md border border-dashed p-6 text-center outline-none transition focus-visible:ring-2 focus-visible:ring-SC/30 ${
-					isDragOver
-						? "border-SC bg-SC/25"
-						: "border-TC/35 hover:border-TC/50"
-				} ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
-				onDragOver={handleDragOver}
-				onDragLeave={handleDragLeave}
-				onDrop={handleDrop}
-				onClick={() => {
-					if (!disabled && !isUploading) {
-						fileInputRef.current?.click();
-					}
+		<div data-l="UploadZone" className="MediaUploadZone ">
+			<input
+				ref={fileInputRef}
+				className="sr-only"
+				type="file"
+				accept={accept}
+				multiple={multiple}
+				disabled={disabled || isUploading}
+				onChange={(event) => {
+					void uploadFiles(collectFiles(event.target.files));
 				}}
-				role="button"
-				tabIndex={disabled ? -1 : 0}
-				aria-label={dropHint}
-				onKeyDown={(event) => {
-					if (
-						(event.key === "Enter" || event.key === " ") &&
-						!disabled &&
-						!isUploading
-					) {
-						event.preventDefault();
-						fileInputRef.current?.click();
-					}
-				}}
-			>
-				<input
-					ref={fileInputRef}
-					className="sr-only"
-					type="file"
-					accept={accept}
-					multiple={multiple}
-					disabled={disabled || isUploading}
-					onChange={(event) => {
-						void uploadFiles(collectFiles(event.target.files));
-					}}
-				/>
+			/>
 
-				<p className="text-sm font-medium">
+			{compact ? (
+				<button
+					type="button"
+					className={
+						buttonClassName ??
+						"rounded-full text-sm font-medium transition disabled:cursor-not-allowed px-4 py-2 border border-SC/50 bg-WH text-SC hover:bg-SC hover:text-WH disabled:opacity-60"
+					}
+					disabled={disabled || isUploading}
+					onClick={() => {
+						fileInputRef.current?.click();
+					}}
+				>
 					{isUploading ? "アップロード中…" : buttonLabel}
-				</p>
-				<p className="mt-2 text-xs leading-5 text-GR">{dropHint}</p>
-				{multiple ? (
-					<p className="mt-1 text-xs text-GR">
-						複数ファイルの一括選択に対応しています。
+				</button>
+			) : (
+				<div
+					data-l="DropZone"
+					className={`MediaUploadZoneDropZone rounded-md border border-dashed p-6 text-center outline-none transition focus-visible:ring-2 focus-visible:ring-SC/30 ${
+						isDragOver
+							? "border-SC bg-SC/25"
+							: "border-TC/35 hover:border-TC/50"
+					} ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
+					onDragOver={handleDragOver}
+					onDragLeave={handleDragLeave}
+					onDrop={handleDrop}
+					onClick={() => {
+						if (!disabled && !isUploading) {
+							fileInputRef.current?.click();
+						}
+					}}
+					role="button"
+					tabIndex={disabled ? -1 : 0}
+					aria-label={dropHint}
+					onKeyDown={(event) => {
+						if (
+							(event.key === "Enter" || event.key === " ") &&
+							!disabled &&
+							!isUploading
+						) {
+							event.preventDefault();
+							fileInputRef.current?.click();
+						}
+					}}
+				>
+					<p className="text-sm font-medium">
+						{isUploading ? "アップロード中…" : buttonLabel}
 					</p>
-				) : null}
-				{progress ? (
-					<p className="mt-3 text-xs text-SC">{progress}</p>
-				) : null}
-			</div>
+					<p className="mt-2 text-xs leading-5 text-GR">{dropHint}</p>
+					{multiple ? (
+						<p className="mt-1 text-xs text-GR">
+							複数ファイルの一括選択に対応しています。
+						</p>
+					) : null}
+					{progress ? (
+						<p className="mt-3 text-xs text-SC">{progress}</p>
+					) : null}
+				</div>
+			)}
 
 			{lastError ? <p className="text-xs text-AC">{lastError}</p> : null}
 		</div>

@@ -174,7 +174,7 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 		<section className="ContentForm space-y-5  border border-white/10 bg-white/5 p-5 shadow-xl shadow-slate-950/20">
 			<div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
 				<div>
-					<p className="text-xs uppercase tracking-[0.3em] text-slate-400">
+					<p className="text-xs uppercase tracking-widest text-slate-400">
 						{contentType.kind}
 					</p>
 					<h3 className="mt-2 text-2xl font-semibold text-white">

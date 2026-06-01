@@ -90,7 +90,7 @@ export function FieldAddPanel({
   return (
     <div
       data-l="FieldPanel"
-      className={`FieldAddPanel ${adminPanel} p-4 lg:sticky lg:top-0 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start`}
+      className={`FieldAddPanel p-4 p border border-TC/20 lg:w-72 lg:max-w-full lg:shrink-0 lg:self-start`}
     >
       <h4 className="text-sm font-semibold">フィールドを追加</h4>
 

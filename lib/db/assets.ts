@@ -104,3 +104,17 @@ export async function updateAsset(input: {
 
   return mapAssetRecord(asset);
 }
+
+export async function deleteAsset(input: {
+  assetId: string;
+  siteId: string;
+}): Promise<boolean> {
+  const result = await prisma.asset.deleteMany({
+    where: {
+      id: input.assetId,
+      siteId: input.siteId,
+    },
+  });
+
+  return result.count > 0;
+}

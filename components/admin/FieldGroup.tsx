@@ -446,7 +446,7 @@ export function FieldGroup({
 		<>
 		<details
 			data-l="FieldGroup"
-			className={`FieldGroup group ${adminPanel} p-4`}
+			className={`FieldGroup group ${adminPanel}   pb-4 mb-4 `}
 			aria-label={`フィールド: ${group.prefix || "（Field name 未入力）"}`}
 		>
 			<summary
