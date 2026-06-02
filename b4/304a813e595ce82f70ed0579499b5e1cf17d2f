@@ -1,0 +1,70 @@
+scripts/vercel-env-paste.md
+  s_38ae790ba6212f::t_e34b21669d4acc 42
+docs/vercel-deploy.md
+  s_38ae790ba6212f::t_ce955842c088b2 85,139,142,167
+  s_38ae790ba6212f::t_4e3770d145d0c6 55,67
+  s_38ae790ba6212f::t_e34b21669d4acc 176-177
+docs/agents/cms-agent.md
+  s_38ae790ba6212f::t_4e3770d145d0c6 4,58
+vitest.config.ts
+  s_38ae790ba6212f::t_b02aa2811dc25e 19-24
+examples/preview/README.md
+  s_38ae790ba6212f::t_ce955842c088b2 53,55,64
+examples/preview/js/config.js
+  s_38ae790ba6212f::t_e34b21669d4acc 5
+AGENTS.md
+  s_38ae790ba6212f::t_c0120557c206d0 62
+scripts/setup-supabase-deploy.sh
+  s_38ae790ba6212f::t_96cf4e2911a51a 36,38
+components/admin/AdminLayout.tsx
+  s_38ae790ba6212f::t_793e8e7896440a 8,20,43-44,46-47
+  s_38ae790ba6212f::t_0a08134e020405 50,53
+  s_38ae790ba6212f::t_2b4aab92773d8a 39
+docs/delivery-guide.md
+  s_38ae790ba6212f::t_4e3770d145d0c6 59
+  s_38ae790ba6212f::t_ce955842c088b2 382,390
+  s_38ae790ba6212f::t_fd8555d0210942 118,121,332,334,336
+docs/agents/cms-cli.md
+  s_38ae790ba6212f::t_4e3770d145d0c6 3
+docs/agents/static-html-export-design.md
+  s_38ae790ba6212f::t_e34b21669d4acc 15
+README.md
+  s_38ae790ba6212f::t_c0120557c206d0 5,7,9,11-20,28-30,32,34-41
+components/admin/ContentForm.tsx
+  s_38ae790ba6212f::t_bc60a25c6a56cf 307,310
+docs/agents/project.md
+  s_38ae790ba6212f::t_4e3770d145d0c6 32,88
+scripts/cms-cli.ts
+  s_38ae790ba6212f::t_dab7fd1511589b 3,81
+USER_SETUP.md
+  s_38ae790ba6212f::t_dab7fd1511589b 23
+docs/FIELD.md
+  s_38ae790ba6212f::t_4e3770d145d0c6 3
+docs/agents/architecture.md
+  s_38ae790ba6212f::t_bc60a25c6a56cf 119
+docs/agents/cms-mcp.md
+  s_38ae790ba6212f::t_4e3770d145d0c6 5,108
+scripts/vercel-env-checklist.md
+  s_38ae790ba6212f::t_4e3770d145d0c6 19,30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "b4304a813e595ce82f70ed0579499b5e1cf17d2f",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_38ae790ba6212f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e8655-33f0-7f30-8ce4-a4356df61f8d",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
