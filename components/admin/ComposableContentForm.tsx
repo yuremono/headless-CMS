@@ -2,9 +2,28 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Folder, FolderOpen, FolderPlus, X } from "@phosphor-icons/react";
+import {
+	Folder,
+	FolderOpen,
+	FolderPlus,
+        QuestionIcon,
+        ImageSquareIcon,
+	X,
+} from "@phosphor-icons/react";
 import type { CmsAuthProvider } from "@/lib/auth/production-config";
 import { useAdminAccess } from "./AdminAccessContext";
+import {
+	adminBtnDanger,
+	adminBtnSm,
+	adminDeleteIconButton,
+	adminFieldControl,
+	adminFieldControlTextarea,
+	adminFormatBtn,
+	adminFormatBtnActive,
+	adminPanel,
+	adminPanelInset,
+	adminTintInfo,
+} from "./admin-ui-classes";
 import {
 	adminFetch,
 	buildContentWriteBody,
@@ -409,6 +428,7 @@ export function ComposableContentForm({
 	);
 	const [statusVisible, setStatusVisible] = useState(false);
 	const [isPending, setIsPending] = useState(false);
+	const [isManualOpen, setIsManualOpen] = useState(false);
 	const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 	const [libraryAssetsReady, setLibraryAssetsReady] = useState(false);
 	const [libraryDescription, setLibraryDescription] =
@@ -691,21 +711,21 @@ export function ComposableContentForm({
 		>
 			<aside
 				data-l="DirectoryAside"
-				className="DirectoryAside lg:w-64 lg:shrink-0 pt-2"
+				className="DirectoryAside lg:w-64 lg:shrink-0 "
 			>
-				<nav className="AdminNav flex min-h-full flex-col gap-6">
+				<nav className="AdminNav flex min-h-full flex-col ">
 					<div data-l="NavBrand">
-						<h1 className=" text-xl font-medium text-SC tracking-wider">
+						<h1 className=" text-xl font-bold text-SC/50 tracking-wider">
 							Modular{" "}
-							<span className="text-SC [font-size:1em]">
+							<span className=" [font-size:1em]">
 								Headless
 							</span>{" "}
 							CMS
-							<span className="block text-GR [font-size:0.75em]">
+							<span className="block font-normal  [font-size:0.75em]">
 								inspired by microCMS.
 							</span>
 						</h1>
-						<p className="mt-2 text-sm ">
+						<p className="mt-2  ">
 							{readOnly
 								? "閲覧専用です。入力内容は保存・公開されません。"
 								: "フィールドを追加・保存し、サイトやアプリで取得します。"}
@@ -713,20 +733,20 @@ export function ComposableContentForm({
 					</div>
 
 					<div data-l="NavMain" className="space-y-4">
-						<div className="flex items-center justify-between gap-2">
-							<p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+						<div className="flex items-center justify-between gap-2 mt-6">
+							<p className="text-xs font-bold uppercase tracking-widest text-SC/50">
 								Directory
 							</p>
 							<button
 								type="button"
-								className="inline-flex items-end gap-2 rounded-full border border-SC/50 px-3 py-1 text-xs text-SC transition hover:bg-SC hover:text-WH"
+								className="inline-flex items-end gap-1 rounded-md border border-TC/25 px-2 py-0.5 text-xs text-GR transition hover:bg-SC hover:text-WH"
 								onClick={handleAddDirectory}
 							>
 								<FolderPlus size={20} />
 								作成
 							</button>
 						</div>
-						<ul className="space-y-2">
+						<ul className="">
 							{directories.map((directory) => {
 								const isActive =
 									directory.id === activeDirectory?.id;
@@ -738,10 +758,10 @@ export function ComposableContentForm({
 										<div
 											role="button"
 											tabIndex={0}
-											className={`relative w-full rounded-md border p-1 pr-10 text-left text-sm transition ${
+											className={`relative w-full BtnBase [--gradStart:--TR] [--gradEnd:--TR]  p-2 pr-10 text-left  transition ${
 												isActive
-													? "border-SC/60 bg-SC/15"
-													: "border-TR  hover:bg-WH"
+													? "bg-SC/15"
+													: " hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
 											}`}
 											onClick={() =>
 												setActiveDirectoryId(
@@ -768,7 +788,7 @@ export function ComposableContentForm({
 												<div className="min-w-0 flex-1">
 													<span className="group relative block">
 														<input
-															className="w-full rounded bg-transparent text-sm outline-none transition focus:bg-WH focus:text-TC"
+															className="w-full rounded bg-transparent  outline-none transition focus:bg-WH focus:text-TC"
 															value={
 																directory.name
 															}
@@ -804,10 +824,10 @@ export function ComposableContentForm({
 											</div>
 											{isActive &&
 											directories.length > 1 ? (
-												<button
-													type="button"
-													className="absolute right-2 top-1/2 inline-flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full border border-AC/50 bg-transparent text-SC transition hover:bg-AC/50"
-													onClick={(event) => {
+										<button
+											type="button"
+											className={`absolute right-2 top-1/2 -translate-y-1/2 ${adminDeleteIconButton}`}
+											onClick={(event) => {
 														event.preventDefault();
 														event.stopPropagation();
 														setPendingDirectoryDelete(
@@ -832,11 +852,41 @@ export function ComposableContentForm({
 					</div>
 					<div
 						data-l=""
-						className="mt-auto space-y-2 pt-4"
+						className="mt-auto pt-4"
                                         >
-                                                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-                                                Media
-							</p>
+						<button
+							type="button"
+							className="relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 text-left  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
+							aria-label="Manual"
+							onClick={() => setIsManualOpen(true)}
+						>
+							<QuestionIcon
+								size={32}
+								className="shrink-0 text-SC"
+								aria-hidden="true"
+							/>
+							<span className="font-medium text-TC">Manual</span>
+						</button>
+						<button
+							type="button"
+							className="relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 text-left  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
+                                                        aria-label="Media Library"
+                                                        onClick={() => {
+								setLibraryAssetsReady(false);
+								setLibraryReloadToken((current) => current + 1);
+								setIsLibraryOpen(true);
+							}}
+						>
+							<ImageSquareIcon
+								size={32}
+								className="shrink-0 text-SC"
+								aria-hidden="true"
+							/>
+							<span className="font-medium text-TC">Media Library</span>
+						</button>
+						{/* <p className="text-xs font-bold uppercase tracking-widest text-SC/50">
+							Media
+						</p>
 						<button
 							type="button"
 							className="w-full py-3 bg-WH border border-TC/20 hover:bg-SC/10 transition"
@@ -848,15 +898,15 @@ export function ComposableContentForm({
 							}}
 						>
 							Library
-						</button>
+						</button> */}
 					</div>
 
 					{showLogout ? (
 						<div
 							data-l="NavAccount"
-							className="space-y-2 border-t border-TC/10 pt-4"
+							className="space-y-2  pt-4"
 						>
-							<p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+							<p className="text-xs font-bold uppercase tracking-widest text-SC/50">
 								Account
 							</p>
 							<LogoutButton authProvider={authProvider} />
@@ -881,7 +931,7 @@ export function ComposableContentForm({
 					actionNotice={
 						statusMessage && statusVisible ? (
 							<p
-								className={`font-bold text-sm ${
+								className={`font-bold  ${
 									statusKind === "success"
 										? "text-SC"
 										: "text-AC"
@@ -898,11 +948,11 @@ export function ComposableContentForm({
 				        data-l="FieldGroupWrapper"
                                         className="min-w-0 flex-1 h-full overflow-y-auto pr-2 ">
 					{groups.length === 0 ? (
-						<p className="text-sm text-GR">
+						<p className=" text-GR">
 							フィールドはまだありません。左のパネルから追加してください。
 						</p>
 					) : visibleGroups.length === 0 ? (
-						<p className="text-sm text-GR">
+						<p className=" text-GR">
 							このディレクトリにはフィールドがありません。左のパネルから追加してください。
 						</p>
 					) : (
@@ -929,6 +979,119 @@ export function ComposableContentForm({
 				</div>
 			</div>
 			<dialog
+				data-l="ManualModal"
+				className={`content-center fixed inset-0 z-50 m-0 h-screen max-h-none w-screen max-w-none border-0 bg-transparent p-4 backdrop-blur-sm transition-opacity duration-300 ${
+					isManualOpen ? "grid" : "hidden"
+				} ${
+					isManualOpen
+						? "pointer-events-auto opacity-100"
+						: "pointer-events-none opacity-0"
+				}`}
+				open={isManualOpen}
+				aria-label="Manual"
+				onClick={(event) => {
+					if (event.target === event.currentTarget) {
+						setIsManualOpen(false);
+					}
+				}}
+			>
+				<div
+					className={`mx-auto flex w-full max-w-5xl flex-col overflow-hidden border border-TC/20 bg-WH/95 shadow-xl transition-opacity duration-300 ${
+						isManualOpen ? "opacity-100" : "opacity-0"
+					}`}
+				>
+					<div className="flex items-center justify-between border-b border-TC/20 px-5 py-4">
+						<div className="min-w-0 flex-1">
+							<h2 className=" font-bold text-TC mt-1">
+								ユーザーマニュアル
+							</h2>
+						</div>
+						<button
+							type="button"
+							className={adminBtnSm}
+							onClick={() => setIsManualOpen(false)}
+							aria-label="閉じる"
+						>
+							閉じる
+						</button>
+					</div>
+					<div className="relative max-h-[80vh] overflow-y-auto px-5 py-6">
+						<div className="grid gap-4 ">
+							<section className="">
+								<h3 className=" font-bold text-TC">
+									基本操作
+								</h3>
+								<ul className="mt-3 space-y-2  leading-6 text-GR">
+									<li>左側で編集する場所を選択します。</li>
+									<li>項目を追加する場合は、Field name を入力して種類を選びます。</li>
+									<li>入力内容は保存するまで確定しません。作業後は保存または公開を実行してください。</li>
+								</ul>
+							</section>
+							<section className="">
+								<h3 className=" font-bold text-TC">
+									ディレクトリ
+								</h3>
+								<ul className="mt-3 space-y-2  leading-6 text-GR">
+									<li>ディレクトリは、項目を分けて表示するための場所です。</li>
+									<li>名称欄をクリックすると、表示名を変更できます。</li>
+									<li>削除したディレクトリ内の項目は、先頭のディレクトリへ移動します。</li>
+								</ul>
+							</section>
+							<section className="">
+								<h3 className=" font-bold text-TC">
+									メディアライブラリ
+								</h3>
+								<ul className="mt-3 space-y-2  leading-6 text-GR">
+									<li>画像アップロードから、使用する画像を登録できます。</li>
+									<li>登録済みの画像は、画像を選ぶ画面でも利用できます。</li>
+									<li>不要な画像は削除できます。削除前に確認画面が表示されます。</li>
+								</ul>
+							</section>
+							<section className="">
+								<h3 className=" font-bold text-TC">
+									注意事項
+								</h3>
+								<ul className="mt-3 space-y-2  leading-6 text-GR">
+									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
+									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
+									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
+								</ul>
+							</section>
+							<section className="">
+								<h3 className=" font-bold text-TC">
+									注意事項
+								</h3>
+								<ul className="mt-3 space-y-2  leading-6 text-GR">
+									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
+									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
+									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
+								</ul>
+							</section>
+							<section className="">
+								<h3 className=" font-bold text-TC">
+									注意事項
+								</h3>
+								<ul className="mt-3 space-y-2  leading-6 text-GR">
+									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
+									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
+									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
+								</ul>
+							</section>
+							<section className="">
+								<h3 className=" font-bold text-TC">
+									注意事項
+								</h3>
+								<ul className="mt-3 space-y-2  leading-6 text-GR">
+									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
+									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
+									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
+								</ul>
+							</section>
+						</div>
+					</div>
+				</div>
+			</dialog>
+			<dialog
 				data-l="LibraryModal"
 				className={`content-center fixed inset-0 z-50 m-0 h-screen max-h-none w-screen max-w-none border-0 bg-transparent p-4 backdrop-blur-sm transition-opacity duration-300 ${
 					isLibraryOpen ? "grid" : "hidden"
@@ -954,10 +1117,10 @@ export function ComposableContentForm({
 				>
 					<div className="flex items-center justify-between border-b border-TC/20 px-5 py-4">
 						<div className="min-w-0 flex-1">
-							<p className="text-lg font-semibold text-TC">
+							<h2 className="font-bold text-TC pt-1">
 								メディアライブラリ
-							</p>
-							{/* <p className="text-sm text-GR">
+							</h2>
+							{/* <p className=" text-GR">
 									登録済みの画像から選択します。
 								</p> */}
 						</div>
@@ -970,8 +1133,8 @@ export function ComposableContentForm({
 							/>
 							<button
 								type="button"
-								className="rounded-full text-sm font-medium transition disabled:cursor-not-allowed px-4 py-2 border border-SC/50 bg-WH text-SC hover:bg-SC hover:text-WH disabled:opacity-60"
-								onClick={() => setIsLibraryOpen(false)}
+                                                                className={adminBtnSm}
+                                                                onClick={() => setIsLibraryOpen(false)}
 								aria-label="閉じる"
 							>
 								閉じる
@@ -981,7 +1144,7 @@ export function ComposableContentForm({
 					<div className="relative max-h-[80vh] overflow-y-auto px-5 py-6">
 						{/* <div className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center p-5">
 								<input
-									className="pointer-events-auto w-full max-w-2xl border-0 bg-WH/90 px-4 py-2 text-sm text-GR outline-none ring-1 ring-TC/10 focus:ring-2 focus:ring-SC/30"
+									className="pointer-events-auto w-full max-w-2xl border-0 bg-WH/90 px-4 py-2  text-GR outline-none ring-1 ring-TC/10 focus:ring-2 focus:ring-SC/30"
 									type="text"
 									value={libraryDescription}
 									onChange={(event) =>
@@ -1014,23 +1177,24 @@ export function ComposableContentForm({
 						>
 							ディレクトリを削除しますか？
 						</h2>
-						<p className="mt-2 text-sm text-GR">
+						<p className="mt-2  text-GR">
 							{pendingDirectoryDelete.name}{" "}
 							を削除します。中のフィールドは先頭のディレクトリへ移動します。
 						</p>
 						<div className="mt-5 flex justify-end gap-2">
 							<button
 								type="button"
-								className="rounded-md border border-TC/20 px-3 py-2 text-sm text-TC transition hover:bg-TC/5"
+								className="rounded-md border border-TC/20 px-3 py-2  text-TC transition hover:bg-TC/5"
 								onClick={() => setPendingDirectoryDelete(null)}
 							>
 								キャンセル
 							</button>
-							<button
-								type="button"
-								className="inline-flex items-center gap-1 rounded-md border border-AC/40 bg-AC px-3 py-2 text-sm font-bold text-WH transition hover:bg-AC/80"
-								onClick={handleConfirmDeleteDirectory}
-							>
+										<button
+											type="button"
+											className="inline-flex items-center gap-1 rounded-md border border-AC/40 bg-AC px-3 py-2  font-bold text-WH transition hover:bg-AC/80"
+											autoFocus
+											onClick={handleConfirmDeleteDirectory}
+										>
 								削除
 							</button>
 						</div>

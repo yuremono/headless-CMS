@@ -5,7 +5,7 @@ export const adminTextMuted = 'text-GR';
 export const adminTextMeta = 'text-xs text-GR';
 
 export const adminFieldControl =
-  'w-full rounded-md border border-TC/25 px-4 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30';
+  'w-full rounded-md border border-TC/25 px-2 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30';
 
 export const adminFieldControlTextarea = `${adminFieldControl} min-h-[8rem] mt-2`;
 
@@ -16,11 +16,17 @@ export const adminPanel = 'border-b border-TC/20';
 
 export const adminPanelInset = "rounded-md border border-TC/20";
 
-const adminBtnBase = 'rounded-full text-sm font-medium transition disabled:cursor-not-allowed';
+// const adminBtnBase = 'rounded-full text-sm font-medium transition disabled:cursor-not-allowed';
+const adminBtnBase = 'bg-BC border-2  [border-image-source:linear-gradient(160deg,var(--WH),var(--SC10))] [border-image-slice:1] text-sm font-medium transition disabled:cursor-not-allowed';
 
-export const adminBtnLg = `${adminBtnBase} px-5 py-3 border border-SC/50 bg-WH text-SC hover:bg-SC hover:text-WH disabled:opacity-60`;
+export const adminButtonBase2 =
+  'border-4  [border-image-source:linear-gradient(160deg,white,beige)] [border-image-slice:1]';
+export const adminDeleteIconButton =
+  'inline-flex h-7 w-7 items-center justify-center rounded-md border border-TR bg-transparent text-SC transition hover:bg-AC/50';
 
-export const adminBtnSm = `${adminBtnBase} px-4 py-2 border border-SC/50 bg-WH text-SC hover:bg-SC hover:text-WH disabled:opacity-60`;
+export const adminBtnLg = `${adminBtnBase} px-4 py-3 border border-SC/50  text-SC hover:bg-SC hover:text-WH disabled:opacity-60`;
+
+export const adminBtnSm = `${adminBtnBase} px-3 py-2 border border-SC/50  text-SC hover:bg-SC hover:text-WH disabled:opacity-60`;
 
 export const adminBtnDanger = `${adminBtnBase} inline-flex items-center justify-center gap-1 px-4 py-2 border border-AC/50 bg-transparent text-SC hover:bg-AC/50`;
 
@@ -30,7 +36,7 @@ export const adminFormatBtnActive = 'rounded-md border border-SC/70 bg-SC/35 px-
 
 export const adminBadgeRequired = 'rounded-full bg-SC/35 px-2 py-0.5 text-xs ';
 
-export const adminBadgeSuccess = 'bg-WH/50 px-3 py-1 text-xs ';
+export const adminBadgeSuccess = ' px-3 py-1 text-xs ';
 
-export const adminTintInfo = "rounded-md border border-SC/40 bg-WH/50";
+export const adminTintInfo = "rounded-md border border-SC/40 ";
 export const adminTintAccent = "rounded-md border border-SC/40 bg-SC/15";

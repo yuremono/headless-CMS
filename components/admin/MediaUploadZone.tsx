@@ -3,6 +3,17 @@
 import { useCallback, useRef, useState } from 'react';
 import { adminFetch, type ApiAssetRecord } from './admin-api';
 import { MEDIA_ACCEPT_ATTRIBUTE } from '@/lib/storage/media-types';
+import {
+	adminBtnDanger,
+	adminBtnSm,
+	adminFieldControl,
+	adminFieldControlTextarea,
+	adminFormatBtn,
+	adminFormatBtnActive,
+	adminPanel,
+	adminPanelInset,
+	adminTintInfo,
+} from "./admin-ui-classes";
 
 export interface MediaUploadResult {
   asset: ApiAssetRecord | null;
@@ -42,7 +53,7 @@ export function MediaUploadZone({
   dropHint = 'ここにファイルをドラッグ&ドロップ、またはクリックして選択',
   alt,
   compact = false,
-  buttonClassName,
+//   buttonClassName,
   onUploadStart,
   onUploadComplete,
   onBatchComplete,
@@ -149,10 +160,7 @@ export function MediaUploadZone({
 			{compact ? (
 				<button
 					type="button"
-					className={
-						buttonClassName ??
-						"rounded-full text-sm font-medium transition disabled:cursor-not-allowed px-4 py-2 border border-SC/50 bg-WH text-SC hover:bg-SC hover:text-WH disabled:opacity-60"
-					}
+					className={adminBtnSm}
 					disabled={disabled || isUploading}
 					onClick={() => {
 						fileInputRef.current?.click();

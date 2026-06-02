@@ -55,13 +55,9 @@ function updateFieldFormat(
   return fields.map((field) => (field.jsonPath === jsonPath ? { ...field, format } : field));
 }
 
-function removeImageBundle(fields: ComposableFieldRow[]): ComposableFieldRow[] {
-  return fields.filter((field) => field.bundle !== 'image');
-}
-
 function applyImageFieldValue(
-  fields: ComposableFieldRow[],
-  nextValue: ImageFieldValue,
+	fields: ComposableFieldRow[],
+	nextValue: ImageFieldValue,
 ): ComposableFieldRow[] {
   return fields.map((field) => {
     if (field.type === 'imageUrl') {
@@ -224,14 +220,7 @@ export function FieldGroup({
     onChange({ ...group, items });
   }
 
-  function handleRemoveBundle() {
-    onChange({
-      ...group,
-      fields: removeImageBundle(group.fields),
-    });
-  }
-
-  const scalarFields = group.fields.filter((field) => field.bundle !== 'image');
+	const scalarFields = group.fields.filter((field) => field.bundle !== 'image');
   const imageBundleFields = group.fields.filter((field) => field.bundle === 'image');
   const hasImageBundle = imageBundleFields.length > 0;
 
@@ -267,7 +256,7 @@ export function FieldGroup({
 
     return (
 		<input
-			className={adminFieldControl}
+			className="mt-2 w-full rounded-md border border-TC/25 px-4 py-2 text-sm  outline-none transition placeholder:text-GR focus:border-SC focus:ring-2 focus:ring-SC/30"
 			type={
 				field.type === "imageUrl" || field.type === "href"
 					? "url"
@@ -455,7 +444,7 @@ export function FieldGroup({
 				onClick={handleSummaryClick}
 			>
 				<span
-					className="pointer-events-none shrink-0 rounded-md border border-TC/20 p-1.5 text-GR"
+					className="pointer-events-none shrink-0 ArrowBG p-2 text-SC"
 					aria-hidden="true"
 				>
 					<svg
@@ -641,16 +630,6 @@ export function FieldGroup({
 								onChange({ ...group, fields: nextFields }),
 							"",
 						)}
-						{!readOnly ? (
-							<button
-								type="button"
-								className={adminBtnDanger}
-								onClick={handleRemoveBundle}
-							>
-								<X aria-hidden="true" className="h-3.5 w-3.5 shrink-0" weight="bold" />
-								画像セットを削除
-							</button>
-						) : null}
 					</div>
 				) : null}
 			</div>
@@ -683,6 +662,7 @@ export function FieldGroup({
 						<button
 							type="button"
 							className="inline-flex items-center gap-1 rounded-md border border-AC/40 bg-AC px-3 py-2 text-sm font-bold text-WH transition hover:bg-AC/80"
+							autoFocus
 							onClick={() => {
 								setConfirmingRemove(false);
 								onRemove();
