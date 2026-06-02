@@ -1,0 +1,36 @@
+components/admin/UserManual.md
+  s_2bfbd20af8fc79::t_8cf8e6b8c6889d 1-54
+components/admin/ComposableContentForm.tsx
+  s_2bfbd20af8fc79::t_ac94d5ed28b537 482,486-489
+  h_53dad1e32c3c71 816,947,953,956,960,970,973
+  s_2bfbd20af8fc79::t_cd3d95fafe3599 1093-1099
+  s_2bfbd20af8fc79::t_2d9740872849b3 3,61,75-154
+components/admin/ContentEditView.tsx
+  s_2bfbd20af8fc79::t_65e6c585e9569a 171-177,211
+  s_2bfbd20af8fc79::t_8fec2511634f95 1-2,18-29
+components/admin/LogoutButton.tsx
+  h_53dad1e32c3c71 35
+scss/index.scss
+  h_53dad1e32c3c71 110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "aa3ff77e4730f4a490cb2b80c405f75b993b171f",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_2bfbd20af8fc79": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e87d9-8c7a-7240-bd3d-f5a4d61f6bfc",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
