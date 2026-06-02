@@ -6,7 +6,7 @@
 
 ## メイン作業ページ
 
-[重要] 現在はトップページのみ編集する。ユーザーの指示がなければ他のページで使っているコンポーネントは編集しない。
+[重要] 現在の表示するページは`app/(admin)/page.tsx` `app/(admin)/login/page.tsx`のみ。ユーザーの指示がなければ他のページで使っているコンポーネントは編集しない。
 
 | 環境 | URL |
 |------|-----|
@@ -66,13 +66,11 @@ DB: `npx prisma migrate dev` / `npx prisma studio` / `npx tsx prisma/seed.ts`
 
 **前提:** [Vercel CLI](https://vercel.com/docs/cli) で `vercel login` 済み。CMS / フロントは Vercel にリンク済み。
 
-### 更新後（いつもの運用）
-
 ```bash
 npm run deploy
 ```
 
-フロントも同時: `npm run deploy:all`（内部は `npx vercel --prod --yes`）。migrate / seed は含まない。
+フロントも同時: `npm run deploy:all`（内部は `npx vercel --prod --yes`）migrate / seed は含まない。
 
 | コマンド | 対象 |
 |---------|------|
@@ -127,8 +125,6 @@ npm run deploy
 
 ## サブエージェント・マルチタスク
 
-サブエージェントを起動する、またはマルチタスクモードでスポーンするときは、**作業開始前に関連ドキュメントを読むよう必ず指示する**。
-
 ### モデル選択
 
 - **原則:** サブエージェントには **親エージェントと同じモデル** を使う。`model` 引数は **指定しない**（省略時は親と同一になる）。
@@ -143,7 +139,7 @@ npm run deploy
 | 環境・パス・コマンド | `docs/agents/project.md` |
 | 要件・スコープ判断 | `SPEC.md` |
 
-プロンプトに「関連ドキュメントを読んでから作業する」旨と、読むべきファイルパスを明示する。サブエージェントは会話履歴を引き継がないため、親が必要なコンテキストを渡す責任を持つ。
+プロンプトに読むべきファイルパスを明示する。親が必要なコンテキストを渡す責任を持つ。
 
 ## エージェントの責務
 
@@ -158,7 +154,6 @@ npm run deploy
 
 ## Execution rules
 
-- 誤った行動と指摘されたら `tasks/learning.yaml` に追記
 - `.gitignore` 対象を強制 push しない
 - ユーザー指示なしに本ファイル を編集しない
 - ブラウザ確認・ビルド・テストは指示なしでは実行しない
@@ -184,47 +179,3 @@ npm run deploy
 ## 誤変換に注意
 
 ユーザー発言に不自然な単語があれば文脈から適切に変換して回答する。
-
-
-<!-- headroom:rtk-instructions -->
-# RTK (Rust Token Killer) - Token-Optimized Commands
-
-When running shell commands, **always prefix with `rtk`**. This reduces context
-usage by 60-90% with zero behavior change. If rtk has no filter for a command,
-it passes through unchanged — so it is always safe to use.
-
-## Key Commands
-```bash
-# Git (59-80% savings)
-rtk git status          rtk git diff            rtk git log
-
-# Files & Search (60-75% savings)
-rtk ls <path>           rtk read <file>         rtk grep <pattern>
-rtk find <pattern>      rtk diff <file>
-
-# Test (90-99% savings) — shows failures only
-rtk pytest tests/       rtk cargo test          rtk test <cmd>
-
-# Build & Lint (80-90% savings) — shows errors only
-rtk tsc                 rtk lint                rtk cargo build
-rtk prettier --check    rtk mypy                rtk ruff check
-
-# Analysis (70-90% savings)
-rtk err <cmd>           rtk log <file>          rtk json <file>
-rtk summary <cmd>       rtk deps                rtk env
-
-# GitHub (26-87% savings)
-rtk gh pr view <n>      rtk gh run list         rtk gh issue list
-
-# Infrastructure (85% savings)
-rtk docker ps           rtk kubectl get         rtk docker logs <c>
-
-# Package managers (70-90% savings)
-rtk pip list            rtk pnpm install        rtk npm run <script>
-```
-
-## Rules
-- In command chains, prefix each segment: `rtk git add . && rtk git commit -m "msg"`
-- For debugging, use raw command without rtk prefix
-- `rtk proxy <cmd>` runs command without filtering but tracks usage
-<!-- /headroom:rtk-instructions -->
