@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { notFound } from 'next/navigation';
 import { AdminLayout } from './AdminLayout';
 import { AdminPageHeader } from './AdminPageHeader';
@@ -12,6 +14,19 @@ import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
 import { getAuthProvider } from '@/lib/auth/production-config';
 import { getSchemaByType } from '@/lib/content/service';
 import { isComposableFieldFormat, type ComposableFieldFormat } from '@/lib/admin/field-type-catalog';
+
+const MANUAL_MARKDOWN_PATH = path.join(
+	process.cwd(),
+	'components/admin/UserManual.md',
+);
+
+async function loadUserManualMarkdown(): Promise<string> {
+	try {
+		return await readFile(MANUAL_MARKDOWN_PATH, 'utf8');
+	} catch {
+		return '';
+	}
+}
 
 function readComposableFieldFormats(schemaJson: Record<string, unknown>): Record<string, ComposableFieldFormat> {
   const raw = schemaJson.composableFieldFormats;
@@ -153,12 +168,13 @@ export async function ContentEditView({
   const authProvider = getAuthProvider();
 
   const isComposable = formLayout === 'composable';
-  const composableMetadata = isComposable
-    ? await loadComposableMetadata(siteId, contentType)
-    : { fieldFormats: {}, fieldDirectories: undefined, fieldDefinitions: undefined };
-  const pageTitle = isComposable
-    ? 'ページ名'
-    : access.readOnly
+	const composableMetadata = isComposable
+		? await loadComposableMetadata(siteId, contentType)
+		: { fieldFormats: {}, fieldDirectories: undefined, fieldDefinitions: undefined };
+	const manualMarkdown = isComposable ? await loadUserManualMarkdown() : '';
+	const pageTitle = isComposable
+		? 'ページ名'
+		: access.readOnly
       ? `${definition.label} 詳細`
       : `${definition.label} 編集`;
 
@@ -192,6 +208,7 @@ export async function ContentEditView({
           fieldDefinitions={composableMetadata.fieldDefinitions}
           authProvider={authProvider}
           showLogout={isComposable || hideSidebar}
+          manualMarkdown={manualMarkdown}
         />
       ) : (
         <ContentForm

@@ -32,7 +32,7 @@ export function LogoutButton({
   return (
     <button
       type="button"
-      className={`w-full py-3 bg-WH border border-TC/20 hover:bg-SC/10 transition`}
+      className={`font-bold w-full py-3 bg-WH border border-TC/20 hover:bg-SC/10 transition`}
       onClick={handleLogout}
       aria-label="Log Out"
     >

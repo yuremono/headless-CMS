@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
 	Folder,
@@ -58,6 +58,7 @@ interface ComposableContentFormProps {
 	fieldDefinitions?: ComposableFieldDefinitions;
 	authProvider?: CmsAuthProvider;
 	showLogout?: boolean;
+	manualMarkdown?: string;
 }
 
 export interface ComposableFieldDirectory {
@@ -69,6 +70,88 @@ export interface ComposableFieldDirectory {
 export interface ComposableFieldDirectories {
 	directories: ComposableFieldDirectory[];
 	activeDirectoryId?: string;
+}
+
+type ManualMarkdownBlock =
+	| { type: "heading"; text: string }
+	| { type: "list"; items: string[] }
+	| { type: "paragraph"; text: string };
+
+function renderManualMarkdown(markdown: string): ReactNode[] {
+	const blocks: ManualMarkdownBlock[] = [];
+	let paragraph: string[] = [];
+	let list: string[] = [];
+
+	function flushParagraph() {
+		if (paragraph.length === 0) return;
+		blocks.push({ type: "paragraph", text: paragraph.join(" ") });
+		paragraph = [];
+	}
+
+	function flushList() {
+		if (list.length === 0) return;
+		blocks.push({ type: "list", items: list });
+		list = [];
+	}
+
+	for (const rawLine of markdown.split(/\r?\n/)) {
+		const line = rawLine.trim();
+
+		if (!line) {
+			flushParagraph();
+			flushList();
+			continue;
+		}
+
+		const heading = line.match(/^###\s+(.+)$/);
+		if (heading) {
+			flushParagraph();
+			flushList();
+			blocks.push({ type: "heading", text: heading[1] ?? "" });
+			continue;
+		}
+
+		const listItem = line.match(/^[-*]\s+(.+)$/);
+		if (listItem) {
+			flushParagraph();
+			list.push(listItem[1] ?? "");
+			continue;
+		}
+
+		flushList();
+		paragraph.push(line);
+	}
+
+	flushParagraph();
+	flushList();
+
+	return blocks.map((block, index) => {
+		const key = `${block.type}-${index}`;
+
+		if (block.type === "heading") {
+			return (
+				<h3 key={key} className="font-bold text-TC">
+					{block.text}
+				</h3>
+			);
+		}
+
+		if (block.type === "list") {
+			return (
+				<ul key={key} className="list-disc space-y-1 pl-5 leading-6 text-GR">
+					{block.items.map((item, itemIndex) => (
+						<li key={`${key}-${itemIndex}`}>{item}</li>
+					))}
+				</ul>
+			);
+		}
+
+		return (
+			<p key={key} className="leading-6 text-GR">
+				{block.text}
+			</p>
+		);
+	});
 }
 
 export interface ComposableFieldDefinition {
@@ -396,9 +479,14 @@ export function ComposableContentForm({
 	fieldDefinitions,
 	authProvider = "none",
 	showLogout = false,
+	manualMarkdown = "",
 }: ComposableContentFormProps) {
 	const router = useRouter();
 	const { readOnly } = useAdminAccess();
+	const manualContent = useMemo(
+		() => renderManualMarkdown(manualMarkdown),
+		[manualMarkdown],
+	);
 	const initialGroups = useMemo(
 		() =>
 			mergeGroupsWithDefinitions(
@@ -725,7 +813,7 @@ export function ComposableContentForm({
 								inspired by microCMS.
 							</span>
 						</h1>
-						<p className="mt-2  ">
+						<p className="mt-2 ">
 							{readOnly
 								? "閲覧専用です。入力内容は保存・公開されません。"
 								: "フィールドを追加・保存し、サイトやアプリで取得します。"}
@@ -856,20 +944,20 @@ export function ComposableContentForm({
                                         >
 						<button
 							type="button"
-							className="relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 text-left  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
+							className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
 							aria-label="Manual"
 							onClick={() => setIsManualOpen(true)}
 						>
 							<QuestionIcon
 								size={32}
-								className="shrink-0 text-SC"
+								className="shrink-0 "
 								aria-hidden="true"
 							/>
-							<span className="font-medium text-TC">Manual</span>
+							<span className="">Manual</span>
 						</button>
 						<button
 							type="button"
-							className="relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 text-left  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
+							className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
                                                         aria-label="Media Library"
                                                         onClick={() => {
 								setLibraryAssetsReady(false);
@@ -879,26 +967,11 @@ export function ComposableContentForm({
 						>
 							<ImageSquareIcon
 								size={32}
-								className="shrink-0 text-SC"
+								className="shrink-0 "
 								aria-hidden="true"
 							/>
-							<span className="font-medium text-TC">Media Library</span>
+							<span className="">Media Library</span>
 						</button>
-						{/* <p className="text-xs font-bold uppercase tracking-widest text-SC/50">
-							Media
-						</p>
-						<button
-							type="button"
-							className="w-full py-3 bg-WH border border-TC/20 hover:bg-SC/10 transition"
-							aria-label="Media Library"
-							onClick={() => {
-								setLibraryAssetsReady(false);
-								setLibraryReloadToken((current) => current + 1);
-								setIsLibraryOpen(true);
-							}}
-						>
-							Library
-						</button> */}
 					</div>
 
 					{showLogout ? (
@@ -1017,76 +1090,13 @@ export function ComposableContentForm({
 					</div>
 					<div className="relative max-h-[80vh] overflow-y-auto px-5 py-6">
 						<div className="grid gap-4 ">
-							<section className="">
-								<h3 className=" font-bold text-TC">
-									基本操作
-								</h3>
-								<ul className="mt-3 space-y-2  leading-6 text-GR">
-									<li>左側で編集する場所を選択します。</li>
-									<li>項目を追加する場合は、Field name を入力して種類を選びます。</li>
-									<li>入力内容は保存するまで確定しません。作業後は保存または公開を実行してください。</li>
-								</ul>
-							</section>
-							<section className="">
-								<h3 className=" font-bold text-TC">
-									ディレクトリ
-								</h3>
-								<ul className="mt-3 space-y-2  leading-6 text-GR">
-									<li>ディレクトリは、項目を分けて表示するための場所です。</li>
-									<li>名称欄をクリックすると、表示名を変更できます。</li>
-									<li>削除したディレクトリ内の項目は、先頭のディレクトリへ移動します。</li>
-								</ul>
-							</section>
-							<section className="">
-								<h3 className=" font-bold text-TC">
-									メディアライブラリ
-								</h3>
-								<ul className="mt-3 space-y-2  leading-6 text-GR">
-									<li>画像アップロードから、使用する画像を登録できます。</li>
-									<li>登録済みの画像は、画像を選ぶ画面でも利用できます。</li>
-									<li>不要な画像は削除できます。削除前に確認画面が表示されます。</li>
-								</ul>
-							</section>
-							<section className="">
-								<h3 className=" font-bold text-TC">
-									注意事項
-								</h3>
-								<ul className="mt-3 space-y-2  leading-6 text-GR">
-									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
-									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
-									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
-								</ul>
-							</section>
-							<section className="">
-								<h3 className=" font-bold text-TC">
-									注意事項
-								</h3>
-								<ul className="mt-3 space-y-2  leading-6 text-GR">
-									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
-									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
-									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
-								</ul>
-							</section>
-							<section className="">
-								<h3 className=" font-bold text-TC">
-									注意事項
-								</h3>
-								<ul className="mt-3 space-y-2  leading-6 text-GR">
-									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
-									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
-									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
-								</ul>
-							</section>
-							<section className="">
-								<h3 className=" font-bold text-TC">
-									注意事項
-								</h3>
-								<ul className="mt-3 space-y-2  leading-6 text-GR">
-									<li>削除操作は、確認画面で削除を押すと実行されます。</li>
-									<li>公開前に、入力内容と画像の表示状態を確認してください。</li>
-									<li>閲覧専用の場合、入力内容の保存や公開はできません。</li>
-								</ul>
-							</section>
+							{manualContent.length > 0 ? (
+								manualContent
+							) : (
+								<p className="leading-6 text-GR">
+									マニュアルファイルを読み込めませんでした。
+								</p>
+							)}
 						</div>
 					</div>
 				</div>
