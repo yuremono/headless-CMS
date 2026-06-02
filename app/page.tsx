@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
-import { ContentEditView } from '../../components/admin/ContentEditView';
-import { loadContents, loadDashboardSnapshot, siteRouteKey } from '../../components/admin/AdminData';
+import { ContentEditView } from '../components/admin/ContentEditView';
+import { loadContents, loadDashboardSnapshot, siteRouteKey } from '../components/admin/AdminData';
+
+/** Vercel ビルド時に DB へ接続しない（runtime のみ DB 使用） */
+export const dynamic = 'force-dynamic';
 
 export default async function AdminRootPage() {
   const snapshot = await loadDashboardSnapshot();

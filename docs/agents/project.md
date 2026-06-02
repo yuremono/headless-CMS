@@ -1,95 +1,72 @@
-# プロジェクト構成
+# プロジェクト概要
+
+制作会社向けのヘッドレス CMS 基盤。CMS は管理画面・管理 API・配信 API に専念し、表示フロントエンドは別リポジトリで構築する。
+
+## 現在の画面
+
+| 用途 | ファイル | URL |
+| --- | --- | --- |
+| 管理画面 | `app/page.tsx` | `/` |
+| ログイン | `app/login/page.tsx` | `/login` |
+
+`app/(admin)` route group、ダッシュボード、コンテンツタイプ管理、メディア一覧などの旧 UI ページは使用しない。
 
 ## 技術スタック
 
-MVP 推奨構成（`SPEC.md` §10.2 準拠）:
-
-| 領域 | 技術 |
-|------|------|
-| フレームワーク | Next.js（App Router） |
+| 項目 | 内容 |
+| --- | --- |
+| フレームワーク | Next.js App Router |
 | 言語 | TypeScript |
-| DB / ORM | PostgreSQL + Prisma（**ローカル・本番ともに同一 Supabase を共有**。`.env.local` の `DATABASE_URL` 参照 / 詳細は [AGENTS.md](../../AGENTS.md) の「DB 共有運用」） |
-| 認証 | Supabase Auth / Auth.js |
-| 画像ストレージ | Cloudflare R2（S3互換） |
-| スタイリング | Sass + Tailwind CSS **v3**（v4 禁止） |
-| デプロイ | Vercel |
+| DB / ORM | Supabase PostgreSQL + Prisma |
+| 認証 | Auth.js + アプリセッション |
+| ストレージ | Cloudflare R2 / S3 互換 |
+| スタイル | Sass + Tailwind CSS |
+| テスト | Vitest |
 
-Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS を先に配置済み）。
+## DB 運用
 
-## コマンド
+ローカルと本番は同一 Supabase DB を共有する。ローカル編集は本番データに反映される。
+
+- `migrate reset` と seed 再投入は禁止。
+- DB スキーマ変更時だけ `npx prisma migrate deploy` を使う。
+- CLI / MCP は Admin API 経由で操作し、DB 直書きしない。
+
+## 主要ディレクトリ
+
+| パス | 内容 |
+| --- | --- |
+| `app/` | 画面と Route Handler |
+| `app/api/` | 管理 API・配信 API・Auth API |
+| `components/admin/` | 管理画面コンポーネント |
+| `lib/content/` | コンテンツ保存・配信ロジック |
+| `lib/auth/` | 認証・権限 |
+| `lib/storage/` | 画像アップロード |
+| `packages/headless-cms-agent/` | CLI / MCP 共通ライブラリ |
+| `packages/headless-cms-mcp/` | MCP サーバー |
+| `prisma/` | Prisma schema / migrations |
+| `scss/` | Tailwind + CustomClass |
+
+## 主要コマンド
 
 | コマンド | 用途 |
-|---------|------|
-| `npm run dev` | 開発サーバー（管理画面 + API） |
+| --- | --- |
+| `npm run dev` | 開発サーバー |
 | `npm run build` | プロダクションビルド |
 | `npm run start` | ビルド結果の起動 |
-| `npx prisma migrate dev` | DBマイグレーション（開発） |
-| `npx prisma migrate deploy` | DBマイグレーション（本番相当・初回 setup） |
-| `npx prisma generate` | Prisma Client 再生成 |
-| `npx prisma studio` | DB GUI 確認 |
-| `npm test` | Vitest 単体テスト |
-| `npm run test:coverage` | カバレッジ付きテスト |
-| `npm run cms -- <group> <command> [options]` | CMS CLI — Admin Root 相当の操作（Admin API 経由）。詳細 [cms-cli.md](./cms-cli.md) |
-| `npm run cms:mcp` | CMS MCP サーバー — Cursor 等から AI エージェント操作。詳細 [cms-agent.md](./cms-agent.md) |
+| `npm test` | 単体テスト |
+| `npm run test:coverage` | カバレッジ測定 |
+| `npm run deploy` | CMS 本番デプロイ |
+| `npm run deploy:front` | 案件フロント本番デプロイ |
+| `npm run deploy:all` | CMS + 案件フロント本番デプロイ |
+| `npm run cms -- ...` | CMS CLI |
+| `npm run cms:mcp` | CMS MCP サーバー |
 
-### CMS CLI / MCP 環境変数
+## 関連ドキュメント
 
-| 変数 | 用途 |
-|------|------|
-| `CMS_ADMIN_API_KEY` | 管理 API キー（本番必須。開発は `admin-dev-key` フォールバック） |
-| `CMS_BASE_URL` | CMS オリジン（未設定時 `http://localhost:3000`） |
-| `CMS_SITE_ID` | MCP のデフォルトサイト slug（未設定時 `main-site`） |
-
-> CLI / MCP は **Admin API（PATCH + publish）のみ** を使用する。DB 直書き・`migrate reset`・`seed` は禁止。
-
-## ディレクトリ構成
-
-| パス | 役割 |
-|-----|------|
-| `SPEC.md` | 要件定義書 |
-| `app/` | Next.js App Router（ページ・レイアウト・API Route） |
-| `app/(admin)/` | 管理画面（ログイン後 UI） |
-| `app/api/admin/` | 管理API |
-| `app/api/sites/` | 配信API |
-| `components/admin/` | 管理画面コンポーネント |
-| `lib/db/` | Prisma クライアント・DB操作 |
-| `lib/auth/` | 認証・セッション・APIキー検証 |
-| `lib/admin/` | 管理画面 RSC 用 DB ローダー（`loader.ts`） |
-| `lib/content/` | コンテンツ store / service / delivery / mappers / types。配信キャッシュ失効は `delivery-tags.ts`（`revalidateTag`）+ `delivery.ts`（`unstable_cache`） |
-| `lib/schemas/` | コンテンツモデル・フィールド型・バリデーション |
-| `lib/sanitize/` | richText HTML サニタイズ（`data_json` 向け） |
-| `packages/headless-cms-agent/` | CLI / MCP 共通ライブラリ（`@headless/cms-agent`、`@/` 非依存） |
-| `packages/headless-cms-mcp/` | MCP サーバー（推奨、`npm run cms:mcp`） |
-| `lib/cms-agent/` | 上記 package への re-export（後方互換） |
-| `lib/preview/` | プレビュー URL・トークン解決 |
-| `mcp/headless-cms/` | MCP サーバー（レガシー配置） |
-| `docs/agents/cms-mcp.md` | MCP 使い方（Cursor 設定・ツール・トラブルシュート） |
-| `docs/agents/cms-agent.md` | CLI / MCP 構成概要 |
-| `lib/sections/` | **未作成（将来）** — セクション型は `content-types/*.json` + SectionEditor |
-| `lib/storage/` | 画像・ファイルアップロード（`local` / `r2` stub） |
-| `middleware.mjs` | `/api/*` 向け CORS（`FRONTEND_BASE_URL`） |
-| `content-types/` | コンテンツ種類スキーマ JSON（MVPはここで定義） |
-| `examples/preview/` | プレビュー検証用フロント（HTML or Astro） |
-| `prisma/schema.prisma` | DBスキーマ |
-| `index.scss` | Tailwind + CustomClass エントリ |
-| `scss/globals.scss` | Sass グローバルエントリ |
-| `scss/_01variables.scss` | 色・サイズ変数（oklch） |
-| `scss/_components.scss` | コンポーネント同名カスタムクラス（`@apply` 集約） |
-| `.env.example` | 環境変数例（実キー禁止） |
-| `docs/` | API仕様・運用メモ |
-| `tasks/` | 作業ログ・学習ログ |
-
-## 実装状態
-
-| 項目 | 状態 |
-|------|------|
-| 要件定義 | `SPEC.md` v0.2 |
-| CSS基盤 | `index.scss` / `scss/` 配置済み |
-| **Phase 1** | 完了 — Prisma（7テーブル）、`content-types/` 3種、配信/管理 API、APIキー、簡易ログイン |
-| **Phase 2 MVP** | 完了 — SectionEditor、SEO UI、画像アップロード、メディア、プレビューリンク、`examples/preview/`、duplicate/unpublish、richText サニタイズ |
-| Next.js | App Router（管理画面 + API Route）、`npm run build` 成功 |
-| テスト | Vitest **391 件**（65 ファイル）。カバレッジ対象は `lib/**` + `app/api/**`（目標 80% 維持）。UI / E2E は対象外 |
-| 未着手（Phase 3+） | 4ロール権限、本番認証（Supabase/Auth.js）、R2 本番運用、MCP/AI UI |
-| プロトタイプ目標 | 1サイト / 1ユーザー / 3モデル（topPage, page, news）/ セクション編集 / 公開API / プレビューAPI — **成立済み** |
-
-詳細な乖離メモ・ローカル手順は `docs/agents/handoff-2026-05-29.md` を参照。
+| 用途 | ファイル |
+| --- | --- |
+| アーキテクチャ | `docs/agents/architecture.md` |
+| DOM / CSS ルール | `docs/agents/coding.md` |
+| CLI | `docs/agents/cms-cli.md` |
+| MCP | `docs/agents/cms-mcp.md` |
+| デプロイ | `docs/vercel-deploy.md` |

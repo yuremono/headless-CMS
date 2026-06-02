@@ -25,12 +25,6 @@ async function sanitizeDataJson(
   return await sanitizeContentDataJson(dataJson, schemaJson);
 }
 
-function scheduleContentExportDeferred(record: ContentRecord): void {
-  void import("@/lib/static-export/hook").then(({ scheduleContentExport }) => {
-    scheduleContentExport(record);
-  });
-}
-
 // 公開保存・更新・削除のたびに配信キャッシュを即時失効させ、フロントへほぼ即時に反映する。
 async function revalidateDeliveryFor(
   siteIdOrSlug: string,
@@ -381,7 +375,6 @@ export async function updateContent(
   });
 
   const record = toContentRecord(row, contentType);
-  scheduleContentExportDeferred(record);
   await revalidateDeliveryFor(siteIdOrSlug, contentType, record);
   return record;
 }
@@ -458,7 +451,6 @@ export async function publishContent(
   });
 
   const record = toContentRecord(row, contentType);
-  scheduleContentExportDeferred(record);
   await revalidateDeliveryFor(siteIdOrSlug, contentType, record);
   return record;
 }
@@ -500,7 +492,6 @@ export async function unpublishContent(
   });
 
   const record = toContentRecord(row, contentType);
-  scheduleContentExportDeferred(record);
   await revalidateDeliveryFor(siteIdOrSlug, contentType, record);
   return record;
 }

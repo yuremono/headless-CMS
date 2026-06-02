@@ -18,7 +18,7 @@ export function getFrontendBaseUrl(): string | null {
 
 /**
  * フロントエンドプレビュー URL を組み立てる。
- * examples/preview のクエリ形式: ?siteId=&contentType=&previewToken=&slug|contentId=
+ * FRONTEND_BASE_URL のクエリ形式: ?siteId=&contentType=&previewToken=&slug|contentId=
  */
 export function buildPreviewUrl(input: BuildPreviewUrlInput): string | null {
   const baseUrl = getFrontendBaseUrl();

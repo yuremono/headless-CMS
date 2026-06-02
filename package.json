@@ -19,8 +19,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "export:preview": "tsx scripts/export-preview.ts",
-    "build:css:front": "CSS_OUT_DIR=../0529headless-front/css node scripts/build-front-css.mjs",
     "deploy": "bash scripts/deploy-prod.sh cms",
     "deploy:front": "bash scripts/deploy-prod.sh front",
     "deploy:all": "bash scripts/deploy-prod.sh all",

@@ -24,7 +24,7 @@ STORAGE_PROVIDER=local
 FRONTEND_BASE_URL=https://headless-front0529.vercel.app
 ```
 
-Direct（migrate/seed ローカルのみ・ユーザー名は `postgres`）:
+Direct（スキーマ変更時の migrate 用・ユーザー名は `postgres`）:
 
 ```
 postgresql://postgres:＜DBパスワード＞@db.dvcaumqooopebexajsdw.supabase.co:5432/postgres?sslmode=require
