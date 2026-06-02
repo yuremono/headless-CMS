@@ -1,0 +1,14 @@
+components/content-editor/ComposableDirectoryNav.tsx
+  h_53dad1e32c3c71 79,88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "00fb1c8a250149c3354703d5d8d1423b2bcd4c67",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
