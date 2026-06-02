@@ -41,7 +41,6 @@ cp .env.example .env.local
 # .env.local の DATABASE_URL 等を編集
 
 npx prisma migrate deploy   # 開発初回は npx prisma migrate dev でも可
-npx tsx prisma/seed.ts      # または npm run prisma:seed
 ```
 
 デモログインは `.env.example` の `ADMIN_DEMO_EMAIL` / `ADMIN_DEMO_PASSWORD` を参照。
@@ -60,7 +59,7 @@ npx tsx prisma/seed.ts      # または npm run prisma:seed
 | `npm run cms -- …` | CMS CLI（Admin API 経由。詳細 `docs/agents/cms-cli.md`） |
 | `npm run cms:mcp` | CMS MCP サーバー起動（Cursor 連携。詳細 `docs/agents/cms-agent.md`） |
 
-DB: `npx prisma migrate dev` / `npx prisma studio` / `npx tsx prisma/seed.ts`
+DB: `npx prisma migrate dev` / `npx prisma studio`
 
 ## 本番デプロイ（Vercel）
 

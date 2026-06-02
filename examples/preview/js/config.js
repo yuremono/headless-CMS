@@ -2,7 +2,7 @@
  * デモ用設定。README の環境変数に相当する値をここで指定する。
  * URL クエリで上書き可能（main.js の resolveConfig 参照）。
  *
- * 既定値は Prisma seed 後の開発環境（main-site）に合わせている。
+ * 既定値は共有 DB の開発環境（main-site）に合わせている。
  */
 export const defaultConfig = {
   /** CMS のベース URL（配信 API の origin） */

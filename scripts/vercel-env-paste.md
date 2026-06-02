@@ -39,5 +39,5 @@ CMS_API_BASE_URL=https://headless-cms0529.vercel.app
 SITE_ID=main-site
 PUBLIC_API_KEY=public-dev-key
 CONTENT_TYPE=topPage
-CONTENT_ID=＜seed 後に setup スクリプトが出力＞
+CONTENT_ID=＜DB から取得した topPage ID＞
 ```

@@ -52,7 +52,7 @@ flowchart LR
 ```
 
 1. Supabase で DB を用意する  
-2. **ローカル**から Direct 接続で `migrate deploy` と seed  
+2. **ローカル**から Direct 接続で `migrate deploy`
 3. CMS を Vercel に Import・env 設定・デプロイ  
 4. フロントの Vercel env を設定して **Redeploy**  
 5. CMS に `FRONTEND_BASE_URL` を入れて **Redeploy**  
@@ -64,7 +64,7 @@ flowchart LR
 
 1. [Supabase](https://supabase.com/) で新規プロジェクトを作成  
 2. **Settings → Database** で接続文字列を取得  
-   - **Direct（ポート 5432）** — `npx prisma migrate deploy` / `npx tsx prisma/seed.ts` 用  
+   - **Direct（ポート 5432）** — `npx prisma migrate deploy` 用
    - **Pooler（ポート 6543, `pgbouncer=true`）** — Vercel 上の CMS **runtime** 用  
 3. パスワード・URL はリポジトリにコミットしない  
 
@@ -80,11 +80,9 @@ CMS リポジトリで、**一時的に** Direct URL を `.env.local` に設定:
 npm install
 # .env.local に DATABASE_URL=<Supabase Direct 5432 URL>
 npx prisma migrate deploy
-# 本番用パスワードを ADMIN_DEMO_PASSWORD に設定してから:
-npx tsx prisma/seed.ts
 ```
 
-### seed 後にフロントへ渡す値
+### フロントへ渡す値
 
 | 用途 | 値の取り方 | 例（開発フォールバック利用時） |
 |------|------------|--------------------------------|
@@ -138,10 +136,10 @@ npx tsx prisma/seed.ts
 | 変数名 | 例（CMS 未デプロイ時はプレースホルダ） |
 |--------|----------------------------------------|
 | `CMS_API_BASE_URL` | `https://<your-cms>.vercel.app` |
-| `SITE_ID` | `main-site` または seed 後の site UUID |
+| `SITE_ID` | `main-site` または DB の site UUID |
 | `PUBLIC_API_KEY` | `public-dev-key`（本番は CMS で発行したキーに差し替え） |
 | `CONTENT_TYPE` | `topPage` |
-| `CONTENT_ID` | seed 後の topPage UUID（DB から取得） |
+| `CONTENT_ID` | topPage UUID（DB から取得） |
 
 設定後 **Deployments → Redeploy**（ビルド時に `npm run config` が `js/runtime-config.js` を生成）。
 
@@ -166,7 +164,7 @@ npx vercel --prod
 失敗時:
 
 - ブラウザ開発者ツールの CORS / 401 → `FRONTEND_BASE_URL`・`PUBLIC_API_KEY`・`CMS_API_BASE_URL` を確認  
-- 404 / 空データ → `CONTENT_ID` が seed 後の ID と一致しているか確認  
+- 404 / 空データ → `CONTENT_ID` が DB 上の ID と一致しているか確認
 
 ---
 
@@ -175,8 +173,8 @@ npx vercel --prod
 | 項目 | 内容 |
 |------|------|
 | **DB 共有運用** | **ローカルと本番は同一 Supabase DB を共有**（`.env.local` の `DATABASE_URL` が本番 Supabase を指す）。`localhost:3000` の編集は即本番へ反映される。独立 DB に戻すには `.env.local` の `DATABASE_URL` 行を削除（`.env` の `localhost` に戻る）。詳細は [AGENTS.md](../AGENTS.md) 参照 |
-| migrate / seed | Vercel ビルドでは実行しない。必ずローカル（Direct URL） |
-| 再 seed | 本番データがある環境では実行しない（ID・API キーが変わる）。**共有 DB 運用中は特に厳禁** |
+| migrate | Vercel ビルドでは実行しない。必ずローカル（Direct URL） |
+| seed | 本番データがある環境では実行しない（ID・API キーが変わる）。**共有 DB 運用中は特に厳禁** |
 | `STORAGE_PROVIDER=local` | サーバーレスではアップロードファイルが永続化されない |
 | 単一 CORS origin | `FRONTEND_BASE_URL` は 1 origin。ローカルと本番を同時に使う場合は切り替えまたは CMS 拡張が必要 |
 | 公開 API キー | フロントはビルド時に JS へ埋め込み。本番はキーローテーションとリスク許容を理解すること |

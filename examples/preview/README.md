@@ -50,9 +50,9 @@ API・CORS なしで公開 HTML を目視する場合:
 | **静的 HTML** | `generated/topPage.html` など | 不要 |
 | **静的ハブ** | `index.html?generated=1` | 任意 |
 
-## Seed 後の開発用 ID
+## 開発用 ID
 
-`npm run prisma:seed` 後、`js/config.js` のデフォルト:
+`js/config.js` のデフォルト:
 
 | 項目 | 値 |
 |------|-----|
@@ -61,7 +61,7 @@ API・CORS なしで公開 HTML を目視する場合:
 | topPage contentId | `cmpqwarp30009c8bow1pd00fn` |
 | page slug | `about` |
 
-再 seed で ID が変わったら `js/config.js` を更新してください。
+DB 上の ID が変わったら `js/config.js` を更新してください。
 
 ## URL クエリ（API プレビュー）
 

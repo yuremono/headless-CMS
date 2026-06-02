@@ -1,6 +1,6 @@
 /**
  * CMS CLI エントリーポイント
- * developer ページと同等の CMS 操作をコマンドラインから実行する。
+ * Admin Root と同等の CMS 操作をコマンドラインから実行する。
  *
  * 使用例:
  *   npm run cms -- content get --site main-site --type topPage
@@ -78,7 +78,7 @@ const [group, subcommand] = positionals;
 function printHelp(): void {
   process.stdout.write(
     [
-      'CMS CLI — developer ページ相当の操作をコマンドラインから実行',
+      'CMS CLI — Admin Root 相当の操作をコマンドラインから実行',
       '',
       '使用方法:',
       '  npm run cms -- <group> <command> [options]',

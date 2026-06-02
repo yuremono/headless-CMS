@@ -2,7 +2,7 @@
 
 AI エージェント（Cursor 等）から CMS コンテンツを編集するための **MCP（Model Context Protocol）** サーバーのセットアップと運用ガイド。
 
-developer ページと同じ **Admin API（PATCH + publish）** のみを使う。DB 直叩きはしない。
+Admin Root と同じ **Admin API（PATCH + publish）** のみを使う。DB 直叩きはしない。
 
 ---
 
@@ -105,7 +105,7 @@ npm run cms:mcp   # packages/headless-cms-mcp を起動
 | `cms_save_draft` | 下書き保存（非公開） |
 | `cms_publish` | 公開（配信 API へ `revalidateTag` で即時反映） |
 | `cms_set_field` | 単一フィールドパスの値を更新して下書き保存 |
-| `cms_add_field` | フィールドパスを追加（developer の「フィールド追加」相当） |
+| `cms_add_field` | フィールドパスを追加（Admin Root の「フィールド追加」相当） |
 | `cms_upload_asset` | 画像アップロード |
 
 ---

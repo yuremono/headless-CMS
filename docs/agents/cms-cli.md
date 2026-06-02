@@ -1,6 +1,6 @@
 # CMS CLI
 
-developer ページと同等の CMS 操作をコマンドラインから実行するツール。
+Admin Root と同等の CMS 操作をコマンドラインから実行するツール。
 Admin API（PATCH + publish）経由で操作し、DB の直叩きは行わない。
 
 ## 起動方法

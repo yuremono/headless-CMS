@@ -304,10 +304,10 @@ export function ContentForm({ siteId, contentType, record, mode, previewUrl }: C
 					</a>
 				) : null}
 				<Link
-					href={`/sites/${siteId}/contents/${contentType.slug}`}
+					href="/"
 					className="rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white"
 				>
-					一覧に戻る
+					管理画面に戻る
 				</Link>
 			</div>
 		</section>

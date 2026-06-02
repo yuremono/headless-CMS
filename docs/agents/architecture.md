@@ -116,7 +116,7 @@ reference / array / object / sectionArray
 | セクションUI | 追加 / 並び替え / 開閉 / 複製 / 削除 / 非表示 / 型別フォーム |
 | 公開フロー | 下書き保存 → プレビューリンク → 公開 |
 | **RSC データ取得** | Server Component は管理 API を HTTP で呼ばず、`lib/admin/loader.ts` → `lib/db/*` を直接呼び出す |
-| **Client 操作** | `ContentForm` / `ContentList` 等は `adminFetch` + `x-session-token`（または cookie `cms_session`） |
+| **Client 操作** | `ContentForm` / `ComposableContentForm` 等は `adminFetch` + `x-session-token`（または cookie `cms_session`） |
 
 ---
 

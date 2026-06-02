@@ -1,7 +1,7 @@
 # CMS エージェント操作（CLI / MCP）
 
 AI エージェントやスクリプトから CMS コンテンツを操作するための仕組み。
-developer ページと同じ経路 — **Admin API（PATCH + publish）** — のみを使い、DB への直接書き込みは行わない。
+Admin Root と同じ経路 — **Admin API（PATCH + publish）** — のみを使い、DB への直接書き込みは行わない。
 
 ## 構成
 
@@ -55,5 +55,5 @@ npm run cms -- content publish
 ## 制約
 
 - **Admin API 経由のみ** — Prisma / raw SQL / `migrate reset` / `seed` は CLI 側でブロック
-- 配信 API への反映は `publish` 操作で `revalidateTag` が走る（developer ページの公開と同じ）
+- 配信 API への反映は `publish` 操作で `revalidateTag` が走る（Admin Root の公開と同じ）
 - アセット削除・メンバー / サイト / Webhook 操作は対象外

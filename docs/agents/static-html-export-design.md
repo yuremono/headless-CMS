@@ -12,7 +12,7 @@
 | 出力先 | `examples/preview/generated/{draft\|published}/{contentType}/{slug\|id}.html`（設計どおり） |
 | サイト slug 階層 | **採用しない** — seed / デモは単一サイト（`main-site`）前提。複数サイト時は Phase 2 で `generated/{siteSlug}/draft/...` を検討 |
 | トリガー | `lib/content/store.ts` の `updateContent` / `publishContent` / `unpublishContent` 成功後に `scheduleContentExport`（失敗はログのみ） |
-| バッチ | `npm run export:preview`（`scripts/export-preview.ts`）、`prisma db seed` 末尾の `exportSiteContent` |
+| バッチ | `npm run export:preview`（`scripts/export-preview.ts`） |
 | unpublish | `generated/published/...` を削除。`generated/draft/...` は DB 通り更新 |
 | 未着手 | `PREVIEW_STATIC_EXPORT` 無効化、`build-preview-url` の静的パス、`createContent` / `deleteContent` フック、manifest 自動更新、レンダラーと `sections.js` の完全共有 |
 

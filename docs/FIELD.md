@@ -1,6 +1,6 @@
 # フィールド追加 UI 拡張プラン
 
-`FieldAddPanel` / `FieldGroup`（developer の composable 編集）の拡張・用語整理メモ。
+`FieldAddPanel` / `FieldGroup`（Admin Root の composable 編集）の拡張・用語整理メモ。
 
 > **SPEC.md について:** 開発当初の要件として凍結済み。本プランの内容は SPEC を編集せず、本ファイルを正とする。
 

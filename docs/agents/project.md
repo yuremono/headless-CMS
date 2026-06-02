@@ -27,10 +27,9 @@ Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS �
 | `npx prisma migrate deploy` | DBマイグレーション（本番相当・初回 setup） |
 | `npx prisma generate` | Prisma Client 再生成 |
 | `npx prisma studio` | DB GUI 確認 |
-| `npx tsx prisma/seed.ts` | デモデータ投入（`npm run prisma:seed` の代替推奨） |
 | `npm test` | Vitest 単体テスト |
 | `npm run test:coverage` | カバレッジ付きテスト |
-| `npm run cms -- <group> <command> [options]` | CMS CLI — developer ページ相当の操作（Admin API 経由）。詳細 [cms-cli.md](./cms-cli.md) |
+| `npm run cms -- <group> <command> [options]` | CMS CLI — Admin Root 相当の操作（Admin API 経由）。詳細 [cms-cli.md](./cms-cli.md) |
 | `npm run cms:mcp` | CMS MCP サーバー — Cursor 等から AI エージェント操作。詳細 [cms-agent.md](./cms-agent.md) |
 
 ### CMS CLI / MCP 環境変数
@@ -86,7 +85,7 @@ Next.js は **`src/` ディレクトリを使わない** ルート構成（CSS �
 |------|------|
 | 要件定義 | `SPEC.md` v0.2 |
 | CSS基盤 | `index.scss` / `scss/` 配置済み |
-| **Phase 1** | 完了 — Prisma（7テーブル）、`content-types/` 3種、seed、配信/管理 API、APIキー、簡易ログイン |
+| **Phase 1** | 完了 — Prisma（7テーブル）、`content-types/` 3種、配信/管理 API、APIキー、簡易ログイン |
 | **Phase 2 MVP** | 完了 — SectionEditor、SEO UI、画像アップロード、メディア、プレビューリンク、`examples/preview/`、duplicate/unpublish、richText サニタイズ |
 | Next.js | App Router（管理画面 + API Route）、`npm run build` 成功 |
 | テスト | Vitest **391 件**（65 ファイル）。カバレッジ対象は `lib/**` + `app/api/**`（目標 80% 維持）。UI / E2E は対象外 |

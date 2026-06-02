@@ -16,7 +16,7 @@ Supabase 既存: `dvcaumqooopebexajsdw`（[ダッシュボード](https://supaba
 - [ ] `CMS_ENFORCE_ADMIN_LOGIN` — `true`
 - [ ] `AUTH_SECRET`
 - [ ] `PREVIEW_TOKEN_SECRET`
-- [ ] `ADMIN_DEMO_PASSWORD`（seed と一致）
+- [ ] `ADMIN_DEMO_PASSWORD`
 - [ ] `CMS_PUBLIC_API_KEY` / `CMS_ADMIN_API_KEY`（本番推奨）
 - [ ] `STORAGE_PROVIDER` — `local`
 - [ ] `FRONTEND_BASE_URL` — `https://headless-front0529.vercel.app`（フロント確定後）
@@ -27,12 +27,11 @@ Supabase 既存: `dvcaumqooopebexajsdw`（[ダッシュボード](https://supaba
 - [ ] `SITE_ID` — `main-site` または UUID
 - [ ] `PUBLIC_API_KEY` — 本番キー（検証のみなら `public-dev-key`）
 - [ ] `CONTENT_TYPE` — `topPage`
-- [ ] `CONTENT_ID` — seed 後 DB から取得した topPage ID
+- [ ] `CONTENT_ID` — DB から取得した topPage ID
 
 ## ローカル一度だけ（Supabase Direct URL）
 
 - [ ] `npx prisma migrate deploy`
-- [ ] `npx tsx prisma/seed.ts`
 - [ ] `CONTENT_ID` を控える
 
 ## 確認

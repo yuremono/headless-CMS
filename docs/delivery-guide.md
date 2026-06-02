@@ -56,7 +56,7 @@ cp .env.example .env.local   # 本番はホスティング側の環境変数に�
 | `DATABASE_URL` | PostgreSQL 接続文字列 |
 | `APP_URL` | CMS の公開 URL（例: `https://cms.example.com`） |
 | `FRONTEND_BASE_URL` | 案件フロントの origin（プレビューリンク・CORS 用） |
-| `ADMIN_DEMO_EMAIL` / `ADMIN_DEMO_PASSWORD` | 開発用デモログイン（`CMS_AUTH_PROVIDER=none` 時）。seed の bcrypt ハッシュにも使用 |
+| `ADMIN_DEMO_EMAIL` / `ADMIN_DEMO_PASSWORD` | 開発用デモログイン（`CMS_AUTH_PROVIDER=none` 時） |
 | `AUTH_SECRET` | Auth.js セッション署名（本番必須） |
 | `CMS_AUTH_PROVIDER` | `none`（デモ） / `authjs`（本番推奨） / `supabase`（未実装） |
 | `CMS_ENFORCE_ADMIN_LOGIN` | `true` で未ログイン時に管理 UI を `/login` へ（本番推奨） |
@@ -70,10 +70,7 @@ cp .env.example .env.local   # 本番はホスティング側の環境変数に�
 
 ```bash
 npx prisma migrate deploy   # 開発初回は npx prisma migrate dev でも可
-npx tsx prisma/seed.ts      # デモサイト・コンテンツ種類・サンプルデータ投入
 ```
-
-`npm run prisma:seed` が環境によって失敗する場合は `npx tsx prisma/seed.ts` を使用してください。
 
 **seed で作成される主な内容**
 
@@ -118,10 +115,10 @@ npm run start
 CMS_AUTH_PROVIDER=authjs
 AUTH_SECRET=<long-random>
 CMS_ENFORCE_ADMIN_LOGIN=true
-ADMIN_DEMO_PASSWORD=<strong-password>   # seed 再実行後に admin@example.com で使用
+ADMIN_DEMO_PASSWORD=<strong-password>
 ```
 
-migrate 後は `npx tsx prisma/seed.ts` で `admin@example.com` に bcrypt ハッシュが入ります。
+ローカルと本番で Supabase DB を共有しているため、seed は実行しません。ログイン情報を変更する場合は、運用中の DB データを直接破壊しない手順で更新してください。
 
 ### 基本的な編集フロー
 
@@ -332,17 +329,12 @@ cd examples/preview && python3 -m http.server 3001
 
 ## 8. 運用
 
-### 8.1 再 seed
+### 8.1 seed 禁止
 
-```bash
-npx tsx prisma/seed.ts
-```
+ローカルと本番で同一 Supabase DB を共有しているため、seed は実行しません。
 
-**注意:** 再 seed は当該サイトのコンテンツ・API キーを再生成します。
+**注意:** seed は当該サイトのコンテンツ・API キーを再生成し、本番データを破壊する可能性があります。
 
-- コンテンツ ID（`contentId`）が変わる
-- DB 内 API キーが再発行される（旧キーは無効）
-- プレビューデモを使っている場合は [examples/preview/js/config.js](../examples/preview/js/config.js) の `siteId` / `contentId` を更新
 
 本番データがある環境では **再 seed しない** でください。
 
@@ -387,16 +379,15 @@ Supabase 利用時はダッシュボードの Backup 機能も併用できます
 ### 8.3 Supabase 接続
 
 1. Supabase プロジェクトを作成し、Settings → Database で接続文字列を取得
-2. **migrate / seed 用** — Direct 接続（ポート `5432`、`db.[ref].supabase.co`）を `DATABASE_URL` に設定
+2. **migrate 用** — Direct 接続（ポート `5432`、`db.[ref].supabase.co`）を `DATABASE_URL` に設定
 3. 実行:
 
    ```bash
    npx prisma migrate deploy
-   npx tsx prisma/seed.ts
    ```
 
 4. **アプリ runtime 用** — Pooler 接続（ポート `6543`、`pooler.supabase.com`、`pgbouncer=true`）に `DATABASE_URL` を切替（ [.env.example](../.env.example) のコメント参照）
-5. 再 seed 後はプレビューデモ等の `siteId` / `contentId` を更新
+5. seed は実行しない
 
 ### 8.4 本番チェックリスト
 

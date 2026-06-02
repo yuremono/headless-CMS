@@ -33,16 +33,9 @@ echo "==> PostgreSQL schema headless_cms（既存 public と共存）"
 cd "$ROOT"
 PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$DIRECT_URL" -c "CREATE SCHEMA IF NOT EXISTS headless_cms;" >/dev/null
 
-echo "==> Prisma db push (Direct)"
+echo "==> Prisma migrate deploy (Direct)"
 export DATABASE_URL="$DIRECT_URL"
-npx prisma db push --accept-data-loss
-
-echo "==> Seed"
-export ADMIN_DEMO_PASSWORD
-export AUTH_SECRET
-export PREVIEW_TOKEN_SECRET
-export CMS_PUBLIC_API_KEY="${CMS_PUBLIC_API_KEY:-public-dev-key}"
-npx tsx prisma/seed.ts
+npx prisma migrate deploy
 
 echo "==> topPage CONTENT_ID"
 CONTENT_ID="$(PGPASSWORD="$SUPABASE_DB_PASSWORD" psql "$DIRECT_URL" -t -A -c \
