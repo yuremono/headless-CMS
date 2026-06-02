@@ -1,0 +1,14 @@
+AGENTS.md
+  h_53dad1e32c3c71 9,142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "337f3303e8eb8760455d0bb73814c5d4d38dff2d",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
