@@ -1,0 +1,45 @@
+components/admin/FieldGroup.tsx
+  s_5c7d85d179e711::t_200584433a9e57 59-60,223
+  h_53dad1e32c3c71 259,447
+  s_5c7d85d179e711::t_0a73193bda62e7 665
+components/admin/ComposableContentForm.tsx
+  h_53dad1e32c3c71 10,16-17,19-26,714,716,718,720,724,728,736-737,742,749,761,763-764,791,855,859,864,870-887,901,907,909,934,951,955,1005-1007,1019-1021,1024,1030-1031,1034,1040-1041,1044,1050-1051,1054,1060-1089,1120,1122-1123,1136,1147,1180,1187,1194
+  s_5c7d85d179e711::t_d3504080e7e0a3 431
+  s_5c7d85d179e711::t_748ccf618f4151 5-9,11-12,1025-1026,1035,1037,1046
+  s_5c7d85d179e711::t_60b4c8ed14c59c 18,827-830
+  s_5c7d85d179e711::t_e41c90d1856fd7 982-1004,1008-1018,1022-1023,1027-1029,1032-1033,1036,1038-1039,1042-1043,1045,1047-1049,1052-1053,1055-1059,1090-1093
+  s_5c7d85d179e711::t_eea4f3e24b5a37 1192-1193,1195-1197
+  s_5c7d85d179e711::t_f99debd816be04 857-858,860-863,865-869,888-889
+scss/index.scss
+  h_53dad1e32c3c71 45,93,122-123,258,328-337
+components/admin/MediaUploadZone.tsx
+  h_53dad1e32c3c71 6-16,56,163
+components/admin/AssetGrid.tsx
+  s_5c7d85d179e711::t_caff35c2044117 5,240-243
+  s_5c7d85d179e711::t_e8ec67afd281d7 393
+components/admin/admin-ui-classes.ts
+  s_5c7d85d179e711::t_c6c250ad0a5aa2 24-25
+  s_5c7d85d179e711::t_938bbb1f60694c 22
+  h_53dad1e32c3c71 8,19-20,23,27,29,39,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "184c02b72d4780f1a2800a4010b9d5fdc83902d1",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_5c7d85d179e711": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e874e-de46-7d90-bb36-1f5be325cee4",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
