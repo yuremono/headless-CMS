@@ -35,7 +35,6 @@ export function ImageBundleEditor({
 	fields,
 	labelPrefix,
 	siteId,
-	sourceData,
 	readOnly,
 	onFieldsChange,
 }: ImageBundleEditorProps) {
@@ -55,12 +54,12 @@ export function ImageBundleEditor({
 				<div data-l="BundleImage">
 					<ImageFieldInput
 						siteId={siteId}
+						label={`${labelPrefix}画像`}
 						value={bundleValue}
 						onChange={(nextValue) =>
 							onFieldsChange(applyImageBundleValue(fields, nextValue))
 						}
-						disabled={readOnly}
-						sourceData={sourceData}
+						readOnly={readOnly}
 					/>
 				</div>
 				{hrefFields.map((field) => (

@@ -76,7 +76,7 @@ export function ComposableDirectoryNav({
 						作成
 					</button>
 				</div>
-				<ul className="space-y-2">
+				<ul className="">
 					{directories.map((directory) => {
 						const isActive = directory.id === activeDirectory?.id;
 						const DirectoryIcon = isActive ? FolderOpen : Folder;
@@ -85,7 +85,7 @@ export function ComposableDirectoryNav({
 							<li key={directory.id}>
 								<div
 									data-l="DirectoryItem"
-									className={`relative flex w-full items-center gap-3 rounded-md border border-TC/10 p-2 pr-10 text-left transition ${
+									className={`relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 pr-10 text-left transition ${
 										isActive
 											? "bg-SC/15"
 											: "hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
