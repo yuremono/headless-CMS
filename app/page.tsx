@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { ContentEditView } from '../components/admin/ContentEditView';
-import { loadContents, loadDashboardSnapshot, siteRouteKey } from '../components/admin/AdminData';
+import { loadContents, loadDashboardSnapshot, siteRouteKey } from '@/components/admin-data/AdminData';
+import { ContentEditView } from '@/components/content-editor/ContentEditView';
 
 /** Vercel ビルド時に DB へ接続しない（runtime のみ DB 使用） */
 export const dynamic = 'force-dynamic';

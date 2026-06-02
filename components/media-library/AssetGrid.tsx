@@ -2,8 +2,8 @@
 
 import { X } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
-import { adminDeleteIconButton } from './admin-ui-classes';
-import { adminFetch, type ApiAssetRecord } from './admin-api';
+import { adminDeleteIconButton } from '@/components/admin-layout/admin-ui-classes';
+import { adminFetch, type ApiAssetRecord } from '@/components/admin-data/admin-api';
 
 interface AssetGridProps {
   siteId: string;

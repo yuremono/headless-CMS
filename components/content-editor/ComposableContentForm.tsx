@@ -1,44 +1,39 @@
 "use client";
 
-import { type ReactNode, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-	Folder,
-	FolderOpen,
-	FolderPlus,
-        QuestionIcon,
-        ImageSquareIcon,
-	X,
-} from "@phosphor-icons/react";
 import type { CmsAuthProvider } from "@/lib/auth/production-config";
-import { useAdminAccess } from "./AdminAccessContext";
-import {
-	adminBtnDanger,
-	adminBtnSm,
-	adminDeleteIconButton,
-	adminFieldControl,
-	adminFieldControlTextarea,
-	adminFormatBtn,
-	adminFormatBtnActive,
-	adminPanel,
-	adminPanelInset,
-	adminTintInfo,
-} from "./admin-ui-classes";
+import { useAdminAccess } from "@/components/admin-layout/AdminAccessContext";
 import {
 	adminFetch,
 	buildContentWriteBody,
-	mapApiContentRecord,
-	writeFieldValue,
 	type ApiContentRecord,
-} from "./admin-api";
-import { FieldAddPanel } from "./FieldAddPanel";
-import { FieldGroup } from "./FieldGroup";
-import { LogoutButton } from "./LogoutButton";
-import { MediaLibraryBrowser } from "./MediaLibraryBrowser";
-import { MediaUploadZone, type MediaUploadResult } from "./MediaUploadZone";
-import type { ContentRecord, ContentTypeDefinition } from "./admin-data-types";
+} from "@/components/admin-data/admin-api";
+import { ComposableDirectoryNav } from "@/components/content-editor/ComposableDirectoryNav";
+import { DirectoryDeleteDialog } from "@/components/content-editor/DirectoryDeleteDialog";
+import { FieldAddPanel } from "@/components/content-editor/FieldAddPanel";
+import { FieldGroup } from "@/components/content-editor/FieldGroup";
+import { ManualModal } from "@/components/content-editor/ManualModal";
+import { MediaLibraryModal } from "@/components/content-editor/MediaLibraryModal";
+import type { MediaUploadResult } from "@/components/media-library/MediaUploadZone";
+import type { ContentRecord, ContentTypeDefinition } from "@/components/admin-data/admin-data-types";
 import {
-	buildRepeatableArrayValue,
+	DEFAULT_DIRECTORY_ID,
+	buildGroupsFromDefinitions,
+	collectComposableFieldDefinitions,
+	createDirectoryId,
+	createGroupId,
+	getGroupPrefix,
+	hydrateDirectories,
+	mergeDataForSave,
+	mergeGroupsWithDefinitions,
+	serializeDirectories,
+	uniqueStrings,
+	type ComposableFieldDefinitions,
+	type ComposableFieldDirectories,
+	type ComposableFieldDirectory,
+} from "@/components/content-editor/ComposableContentForm.model";
+import {
 	collectComposableFieldFormats,
 	duplicateFieldGroup,
 	nextDuplicatePrefix,
@@ -61,414 +56,6 @@ interface ComposableContentFormProps {
 	manualMarkdown?: string;
 }
 
-export interface ComposableFieldDirectory {
-	id: string;
-	name: string;
-	prefixes: string[];
-}
-
-export interface ComposableFieldDirectories {
-	directories: ComposableFieldDirectory[];
-	activeDirectoryId?: string;
-}
-
-type ManualMarkdownBlock =
-	| { type: "heading"; text: string }
-	| { type: "list"; items: string[] }
-	| { type: "paragraph"; text: string };
-
-function renderManualMarkdown(markdown: string): ReactNode[] {
-	const blocks: ManualMarkdownBlock[] = [];
-	let paragraph: string[] = [];
-	let list: string[] = [];
-
-	function flushParagraph() {
-		if (paragraph.length === 0) return;
-		blocks.push({ type: "paragraph", text: paragraph.join(" ") });
-		paragraph = [];
-	}
-
-	function flushList() {
-		if (list.length === 0) return;
-		blocks.push({ type: "list", items: list });
-		list = [];
-	}
-
-	for (const rawLine of markdown.split(/\r?\n/)) {
-		const line = rawLine.trim();
-
-		if (!line) {
-			flushParagraph();
-			flushList();
-			continue;
-		}
-
-		const heading = line.match(/^###\s+(.+)$/);
-		if (heading) {
-			flushParagraph();
-			flushList();
-			blocks.push({ type: "heading", text: heading[1] ?? "" });
-			continue;
-		}
-
-		const listItem = line.match(/^[-*]\s+(.+)$/);
-		if (listItem) {
-			flushParagraph();
-			list.push(listItem[1] ?? "");
-			continue;
-		}
-
-		flushList();
-		paragraph.push(line);
-	}
-
-	flushParagraph();
-	flushList();
-
-	return blocks.map((block, index) => {
-		const key = `${block.type}-${index}`;
-
-		if (block.type === "heading") {
-			return (
-				<h3 key={key} className="font-bold text-TC">
-					{block.text}
-				</h3>
-			);
-		}
-
-		if (block.type === "list") {
-			return (
-				<ul key={key} className="list-disc space-y-1 pl-5 leading-6 text-GR">
-					{block.items.map((item, itemIndex) => (
-						<li key={`${key}-${itemIndex}`}>{item}</li>
-					))}
-				</ul>
-			);
-		}
-
-		return (
-			<p key={key} className="leading-6 text-GR">
-				{block.text}
-			</p>
-		);
-	});
-}
-
-export interface ComposableFieldDefinition {
-	prefix: string;
-	repeatable?: boolean;
-	fields: Array<
-		Pick<ComposableFieldRow, "type" | "suffix" | "format" | "bundle">
-	>;
-}
-
-export interface ComposableFieldDefinitions {
-	groups: ComposableFieldDefinition[];
-}
-
-const DEFAULT_DIRECTORY_ID = "default";
-const DEFAULT_DIRECTORY_NAME = "Default";
-
-function createGroupId(): string {
-	return `group-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function createDirectoryId(): string {
-	return `directory-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function getGroupPrefix(group: ComposableFieldGroup): string {
-	return group.prefix.trim();
-}
-
-function uniqueStrings(values: string[]): string[] {
-	return Array.from(
-		new Set(values.map((value) => value.trim()).filter(Boolean)),
-	);
-}
-
-function createDefaultDirectory(
-	groups: ComposableFieldGroup[],
-): ComposableFieldDirectory {
-	return {
-		id: DEFAULT_DIRECTORY_ID,
-		name: DEFAULT_DIRECTORY_NAME,
-		prefixes: uniqueStrings(groups.map(getGroupPrefix)),
-	};
-}
-
-function hydrateDirectories(
-	input: ComposableFieldDirectories | undefined,
-	groups: ComposableFieldGroup[],
-): ComposableFieldDirectory[] {
-	const groupPrefixes = uniqueStrings(groups.map(getGroupPrefix));
-	const groupPrefixSet = new Set(groupPrefixes);
-	const directories =
-		input?.directories
-			.map((directory) => ({
-				id: directory.id.trim(),
-				name: directory.name.trim(),
-				prefixes: uniqueStrings(directory.prefixes).filter((prefix) =>
-					groupPrefixSet.has(prefix),
-				),
-			}))
-			.filter((directory) => directory.id && directory.name) ?? [];
-
-	if (directories.length === 0) {
-		return [createDefaultDirectory(groups)];
-	}
-
-	const assigned = new Set(
-		directories.flatMap((directory) => directory.prefixes),
-	);
-	const unassigned = groupPrefixes.filter((prefix) => !assigned.has(prefix));
-	if (unassigned.length === 0) {
-		return directories;
-	}
-
-	const defaultIndex = directories.findIndex(
-		(directory) => directory.id === DEFAULT_DIRECTORY_ID,
-	);
-	if (defaultIndex === -1) {
-		return [
-			{
-				id: DEFAULT_DIRECTORY_ID,
-				name: DEFAULT_DIRECTORY_NAME,
-				prefixes: unassigned,
-			},
-			...directories,
-		];
-	}
-
-	return directories.map((directory, index) =>
-		index === defaultIndex
-			? {
-					...directory,
-					prefixes: uniqueStrings([
-						...directory.prefixes,
-						...unassigned,
-					]),
-				}
-			: directory,
-	);
-}
-
-function serializeDirectories(
-	directories: ComposableFieldDirectory[],
-	groups: ComposableFieldGroup[],
-	activeDirectoryId: string,
-): ComposableFieldDirectories {
-	const groupPrefixSet = new Set(uniqueStrings(groups.map(getGroupPrefix)));
-	const serializedDirectories = directories
-		.map((directory) => ({
-			id: directory.id.trim(),
-			name: directory.name.trim(),
-			prefixes: uniqueStrings(directory.prefixes).filter((prefix) =>
-				groupPrefixSet.has(prefix),
-			),
-		}))
-		.filter((directory) => directory.id && directory.name);
-
-	return {
-		directories: serializedDirectories,
-		...(serializedDirectories.some(
-			(directory) => directory.id === activeDirectoryId,
-		)
-			? { activeDirectoryId }
-			: {}),
-	};
-}
-
-function deleteFieldValue(data: Record<string, unknown>, path: string): void {
-	const parts = path
-		.split(".")
-		.map((part) => part.trim())
-		.filter(Boolean);
-	if (parts.length === 0) {
-		return;
-	}
-
-	let current: unknown = data;
-	for (let index = 0; index < parts.length - 1; index += 1) {
-		if (!current || typeof current !== "object" || Array.isArray(current)) {
-			return;
-		}
-		current = (current as Record<string, unknown>)[parts[index]!];
-	}
-
-	if (!current || typeof current !== "object" || Array.isArray(current)) {
-		return;
-	}
-
-	delete (current as Record<string, unknown>)[parts[parts.length - 1]!];
-}
-
-function readFieldValue(data: Record<string, unknown>, path: string): string {
-	const parts = path
-		.split(".")
-		.map((part) => part.trim())
-		.filter(Boolean);
-	let current: unknown = data;
-
-	for (const part of parts) {
-		if (current === null || current === undefined) {
-			return "";
-		}
-		if (Array.isArray(current)) {
-			const index = Number.parseInt(part, 10);
-			if (
-				!Number.isFinite(index) ||
-				index < 0 ||
-				index >= current.length
-			) {
-				return "";
-			}
-			current = current[index];
-			continue;
-		}
-		if (typeof current !== "object") {
-			return "";
-		}
-		current = (current as Record<string, unknown>)[part];
-	}
-
-	return typeof current === "string" ||
-		typeof current === "number" ||
-		typeof current === "boolean"
-		? String(current)
-		: "";
-}
-
-function buildJsonPath(prefix: string, suffix: string): string {
-	return prefix ? `${prefix}.${suffix}` : suffix;
-}
-
-function buildGroupsFromDefinitions(
-	definitions: ComposableFieldDefinitions | undefined,
-	data: Record<string, unknown>,
-): ComposableFieldGroup[] {
-	if (!definitions?.groups.length) {
-		return [];
-	}
-
-	return definitions.groups
-		.map((definition) => {
-			const prefix = definition.prefix.trim();
-			const fields = definition.fields.map((field) => {
-				const jsonPath = buildJsonPath(prefix, field.suffix);
-				return {
-					type: field.type,
-					suffix: field.suffix,
-					jsonPath,
-					value: readFieldValue(data, jsonPath),
-					...(field.format ? { format: field.format } : {}),
-					...(field.bundle ? { bundle: field.bundle } : {}),
-				} satisfies ComposableFieldRow;
-			});
-
-			return {
-				id: createGroupId(),
-				prefix,
-				fields,
-				...(definition.repeatable
-					? { repeatable: true as const, items: [] }
-					: {}),
-			};
-		})
-		.filter((group) => group.prefix && group.fields.length > 0);
-}
-
-function mergeGroupsWithDefinitions(
-	dataGroups: ComposableFieldGroup[],
-	definitionGroups: ComposableFieldGroup[],
-): ComposableFieldGroup[] {
-	if (definitionGroups.length === 0) {
-		return dataGroups;
-	}
-
-	const byPrefix = new Map(
-		dataGroups.map((group) => [getGroupPrefix(group), group]),
-	);
-	for (const definitionGroup of definitionGroups) {
-		const prefix = getGroupPrefix(definitionGroup);
-		const current = byPrefix.get(prefix);
-		if (!current || current.fields.length === 0) {
-			byPrefix.set(prefix, definitionGroup);
-			continue;
-		}
-
-		const existingSuffixes = new Set(
-			current.fields.map((field) => field.suffix),
-		);
-		const missingFields = definitionGroup.fields.filter(
-			(field) => !existingSuffixes.has(field.suffix),
-		);
-		if (missingFields.length > 0) {
-			byPrefix.set(prefix, {
-				...current,
-				fields: [...current.fields, ...missingFields],
-			});
-		}
-	}
-
-	return Array.from(byPrefix.values()).sort((left, right) =>
-		left.prefix.localeCompare(right.prefix),
-	);
-}
-
-function collectComposableFieldDefinitions(
-	groups: ComposableFieldGroup[],
-): ComposableFieldDefinitions {
-	return {
-		groups: groups
-			.map((group) => ({
-				prefix: getGroupPrefix(group),
-				...(group.repeatable ? { repeatable: true } : {}),
-				fields: group.fields.map((field) => ({
-					type: field.type,
-					suffix: field.suffix,
-					...(field.format ? { format: field.format } : {}),
-					...(field.bundle ? { bundle: field.bundle } : {}),
-				})),
-			}))
-			.filter((group) => group.prefix && group.fields.length > 0),
-	};
-}
-
-function mergeDataForSave(
-	baseData: Record<string, unknown>,
-	groups: ComposableFieldGroup[],
-): Record<string, unknown> {
-	const merged = structuredClone(baseData) as Record<string, unknown>;
-	const nextPrefixes = new Set(uniqueStrings(groups.map(getGroupPrefix)));
-	const previousGroups = restoreGroupsFromData(baseData, createGroupId);
-
-	for (const previousGroup of previousGroups) {
-		const previousPrefix = getGroupPrefix(previousGroup);
-		if (previousPrefix && !nextPrefixes.has(previousPrefix)) {
-			deleteFieldValue(merged, previousPrefix);
-		}
-	}
-
-	for (const group of groups) {
-		if (group.repeatable) {
-			const normalizedPrefix = group.prefix.trim();
-			if (normalizedPrefix) {
-				merged[normalizedPrefix] = buildRepeatableArrayValue(
-					group.items ?? [],
-				);
-			}
-			continue;
-		}
-
-		for (const field of group.fields) {
-			writeFieldValue(merged, field.jsonPath, field.value);
-		}
-	}
-
-	return merged;
-}
-
 export function ComposableContentForm({
 	siteId,
 	contentType,
@@ -483,10 +70,6 @@ export function ComposableContentForm({
 }: ComposableContentFormProps) {
 	const router = useRouter();
 	const { readOnly } = useAdminAccess();
-	const manualContent = useMemo(
-		() => renderManualMarkdown(manualMarkdown),
-		[manualMarkdown],
-	);
 	const initialGroups = useMemo(
 		() =>
 			mergeGroupsWithDefinitions(
@@ -795,198 +378,25 @@ export function ComposableContentForm({
 	return (
 		<section
 			data-l="ContentForm"
-			className="ComposableContentForm flex h-full flex-col gap-4 overflow-visible lg:flex-row lg:gap-6"
+			className="ComposableContentForm flex lg:h-full flex-col gap-4 overflow-visible lg:flex-row lg:gap-6"
 		>
-			<aside
-				data-l="DirectoryAside"
-				className="DirectoryAside lg:w-64 lg:shrink-0 "
-			>
-				<nav className="AdminNav flex min-h-full flex-col ">
-					<div data-l="NavBrand">
-						<h1 className=" text-xl font-bold text-SC/50 tracking-wider">
-							Modular{" "}
-							<span className=" [font-size:1em]">
-								Headless
-							</span>{" "}
-							CMS
-							<span className="block font-normal  [font-size:0.75em]">
-								inspired by microCMS.
-							</span>
-						</h1>
-						<p className="mt-2 ">
-							{readOnly
-								? "閲覧専用です。入力内容は保存・公開されません。"
-								: "フィールドを追加・保存し、サイトやアプリで取得します。"}
-						</p>
-					</div>
-
-					<div data-l="NavMain" className="space-y-4">
-						<div className="flex items-center justify-between gap-2 mt-6">
-							<p className="text-xs font-bold uppercase tracking-widest text-SC/50">
-								Directory
-							</p>
-							<button
-								type="button"
-								className="inline-flex items-end gap-1 rounded-md border border-TC/25 px-2 py-0.5 text-xs text-GR transition hover:bg-SC hover:text-WH"
-								onClick={handleAddDirectory}
-							>
-								<FolderPlus size={20} />
-								作成
-							</button>
-						</div>
-						<ul className="">
-							{directories.map((directory) => {
-								const isActive =
-									directory.id === activeDirectory?.id;
-								const DirectoryIcon = isActive
-									? FolderOpen
-									: Folder;
-								return (
-									<li key={directory.id}>
-										<div
-											role="button"
-											tabIndex={0}
-											className={`relative w-full BtnBase [--gradStart:--TR] [--gradEnd:--TR]  p-2 pr-10 text-left  transition ${
-												isActive
-													? "bg-SC/15"
-													: " hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
-											}`}
-											onClick={() =>
-												setActiveDirectoryId(
-													directory.id,
-												)
-											}
-											onKeyDown={(event) => {
-												if (
-													event.key === "Enter" ||
-													event.key === " "
-												) {
-													event.preventDefault();
-													setActiveDirectoryId(
-														directory.id,
-													);
-												}
-											}}
-										>
-											<div className="flex items-center gap-2">
-												<DirectoryIcon
-													size={32}
-													className="shrink-0 text-SC"
-												/>
-												<div className="min-w-0 flex-1">
-													<span className="group relative block">
-														<input
-															className="w-full rounded bg-transparent  outline-none transition focus:bg-WH focus:text-TC"
-															value={
-																directory.name
-															}
-															onChange={(event) =>
-																handleRenameDirectory(
-																	directory.id,
-																	event.target
-																		.value,
-																)
-															}
-															onClick={(event) =>
-																event.stopPropagation()
-															}
-															onKeyDown={(
-																event,
-															) =>
-																event.stopPropagation()
-															}
-															aria-label="ディレクトリ名"
-														/>
-														<span className="pointer-events-none absolute left-0 top-full z-20 mt-1 whitespace-nowrap rounded bg-SC px-2 py-1 text-xs text-WH opacity-0 shadow group-hover:opacity-100 group-focus-within:opacity-100">
-															名称を変更できます
-														</span>
-													</span>
-													<span className="mt-1 block text-xs text-GR">
-														{
-															directory.prefixes
-																.length
-														}{" "}
-														fields
-													</span>
-												</div>
-											</div>
-											{isActive &&
-											directories.length > 1 ? (
-										<button
-											type="button"
-											className={`absolute right-2 top-1/2 -translate-y-1/2 ${adminDeleteIconButton}`}
-											onClick={(event) => {
-														event.preventDefault();
-														event.stopPropagation();
-														setPendingDirectoryDelete(
-															directory,
-														);
-													}}
-													aria-label={`${directory.name} を削除`}
-													title="ディレクトリを削除"
-												>
-													<X
-														size={16}
-														aria-hidden="true"
-														weight="bold"
-													/>
-												</button>
-											) : null}
-										</div>
-									</li>
-								);
-							})}
-						</ul>
-					</div>
-					<div
-						data-l=""
-						className="mt-auto pt-4"
-                                        >
-						<button
-							type="button"
-							className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
-							aria-label="Manual"
-							onClick={() => setIsManualOpen(true)}
-						>
-							<QuestionIcon
-								size={32}
-								className="shrink-0 "
-								aria-hidden="true"
-							/>
-							<span className="">Manual</span>
-						</button>
-						<button
-							type="button"
-							className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2  transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
-                                                        aria-label="Media Library"
-                                                        onClick={() => {
-								setLibraryAssetsReady(false);
-								setLibraryReloadToken((current) => current + 1);
-								setIsLibraryOpen(true);
-							}}
-						>
-							<ImageSquareIcon
-								size={32}
-								className="shrink-0 "
-								aria-hidden="true"
-							/>
-							<span className="">Media Library</span>
-						</button>
-					</div>
-
-					{showLogout ? (
-						<div
-							data-l="NavAccount"
-							className="space-y-2  pt-4"
-						>
-							<p className="text-xs font-bold uppercase tracking-widest text-SC/50">
-								Account
-							</p>
-							<LogoutButton authProvider={authProvider} />
-						</div>
-					) : null}
-				</nav>
-			</aside>
+			<ComposableDirectoryNav
+				readOnly={readOnly}
+				directories={directories}
+				activeDirectory={activeDirectory}
+				showLogout={showLogout}
+				authProvider={authProvider}
+				onAddDirectory={handleAddDirectory}
+				onSelectDirectory={setActiveDirectoryId}
+				onRenameDirectory={handleRenameDirectory}
+				onRequestDeleteDirectory={setPendingDirectoryDelete}
+				onOpenManual={() => setIsManualOpen(true)}
+				onOpenLibrary={() => {
+					setLibraryAssetsReady(false);
+					setLibraryReloadToken((current) => current + 1);
+					setIsLibraryOpen(true);
+				}}
+			/>
 
                         <div
 				data-l="FieldAddPanel"
@@ -1029,7 +439,10 @@ export function ComposableContentForm({
 							このディレクトリにはフィールドがありません。左のパネルから追加してください。
 						</p>
 					) : (
-						<div className="min-w-0 border-t border-TC/20">
+						<div
+							data-l="FieldGroupList"
+							className="min-w-0 border-t border-TC/20"
+						>
 							{visibleGroups.map((group) => (
 								<FieldGroup
 									key={group.id}
@@ -1051,166 +464,30 @@ export function ComposableContentForm({
 					)}
 				</div>
 			</div>
-			<dialog
-				data-l="ManualModal"
-				className={`content-center fixed inset-0 z-50 m-0 h-screen max-h-none w-screen max-w-none border-0 bg-transparent p-4 backdrop-blur-sm transition-opacity duration-300 ${
-					isManualOpen ? "grid" : "hidden"
-				} ${
-					isManualOpen
-						? "pointer-events-auto opacity-100"
-						: "pointer-events-none opacity-0"
-				}`}
+			<ManualModal
 				open={isManualOpen}
-				aria-label="Manual"
-				onClick={(event) => {
-					if (event.target === event.currentTarget) {
-						setIsManualOpen(false);
-					}
-				}}
-			>
-				<div
-					className={`mx-auto flex w-full max-w-5xl flex-col overflow-hidden border border-TC/20 bg-WH/95 shadow-xl transition-opacity duration-300 ${
-						isManualOpen ? "opacity-100" : "opacity-0"
-					}`}
-				>
-					<div className="flex items-center justify-between border-b border-TC/20 px-5 py-4">
-						<div className="min-w-0 flex-1">
-							<h2 className=" font-bold text-TC mt-1">
-								ユーザーマニュアル
-							</h2>
-						</div>
-						<button
-							type="button"
-							className={adminBtnSm}
-							onClick={() => setIsManualOpen(false)}
-							aria-label="閉じる"
-						>
-							閉じる
-						</button>
-					</div>
-					<div className="relative max-h-[80vh] overflow-y-auto px-5 py-6">
-						<div className="grid gap-4 ">
-							{manualContent.length > 0 ? (
-								manualContent
-							) : (
-								<p className="leading-6 text-GR">
-									マニュアルファイルを読み込めませんでした。
-								</p>
-							)}
-						</div>
-					</div>
-				</div>
-			</dialog>
-			<dialog
-				data-l="LibraryModal"
-				className={`content-center fixed inset-0 z-50 m-0 h-screen max-h-none w-screen max-w-none border-0 bg-transparent p-4 backdrop-blur-sm transition-opacity duration-300 ${
-					isLibraryOpen ? "grid" : "hidden"
-				} ${
-					isLibraryOpen && libraryAssetsReady
-						? "pointer-events-auto opacity-100"
-						: "pointer-events-none opacity-0"
-				}`}
+				manualMarkdown={manualMarkdown}
+				onClose={() => setIsManualOpen(false)}
+			/>
+
+			<MediaLibraryModal
 				open={isLibraryOpen}
-				aria-label="メディアライブラリ"
-				onClick={(event) => {
-					if (event.target === event.currentTarget) {
-						setIsLibraryOpen(false);
-					}
-				}}
-			>
-				<div
-					className={`mx-auto  flex w-full max-w-5xl flex-col overflow-hidden border border-TC/20 bg-WH/95 shadow-xl transition-opacity duration-300 ${
-						isLibraryOpen && libraryAssetsReady
-							? "opacity-100"
-							: "opacity-0"
-					}`}
-				>
-					<div className="flex items-center justify-between border-b border-TC/20 px-5 py-4">
-						<div className="min-w-0 flex-1">
-							<h2 className="font-bold text-TC pt-1">
-								メディアライブラリ
-							</h2>
-							{/* <p className=" text-GR">
-									登録済みの画像から選択します。
-								</p> */}
-						</div>
-						<div className="ml-4 flex items-center gap-2">
-							<MediaUploadZone
-								siteId={siteId}
-								compact
-								buttonLabel="画像アップロード"
-								onBatchComplete={handleLibraryUploadComplete}
-							/>
-							<button
-								type="button"
-                                                                className={adminBtnSm}
-                                                                onClick={() => setIsLibraryOpen(false)}
-								aria-label="閉じる"
-							>
-								閉じる
-							</button>
-						</div>
-					</div>
-					<div className="relative max-h-[80vh] overflow-y-auto px-5 py-6">
-						{/* <div className="pointer-events-none absolute inset-0 z-10 flex items-start justify-center p-5">
-								<input
-									className="pointer-events-auto w-full max-w-2xl border-0 bg-WH/90 px-4 py-2  text-GR outline-none ring-1 ring-TC/10 focus:ring-2 focus:ring-SC/30"
-									type="text"
-									value={libraryDescription}
-									onChange={(event) =>
-										setLibraryDescription(event.target.value)
-									}
-									aria-label="メディアライブラリの説明"
-								/>
-							</div> */}
-						<MediaLibraryBrowser
-							siteId={siteId}
-							readOnly
-							allowDelete={!readOnly}
-							reloadToken={libraryReloadToken}
-							onAssetsReadyChange={setLibraryAssetsReady}
-						/>
-					</div>
-				</div>
-			</dialog>
-			{pendingDirectoryDelete ? (
-				<div
-					className="fixed inset-0 z-50 flex items-center justify-center bg-TC/30 p-4"
-					role="dialog"
-					aria-modal="true"
-					aria-labelledby="DirectoryDeleteDialogTitle"
-				>
-					<div className="w-full max-w-sm rounded-md border border-TC/20 bg-WH p-5 shadow-xl">
-						<h2
-							id="DirectoryDeleteDialogTitle"
-							className="text-base font-bold text-TC"
-						>
-							ディレクトリを削除しますか？
-						</h2>
-						<p className="mt-2  text-GR">
-							{pendingDirectoryDelete.name}{" "}
-							を削除します。中のフィールドは先頭のディレクトリへ移動します。
-						</p>
-						<div className="mt-5 flex justify-end gap-2">
-							<button
-								type="button"
-								className="rounded-md border border-TC/20 px-3 py-2  text-TC transition hover:bg-TC/5"
-								onClick={() => setPendingDirectoryDelete(null)}
-							>
-								キャンセル
-							</button>
-										<button
-											type="button"
-											className="inline-flex items-center gap-1 rounded-md border border-AC/40 bg-AC px-3 py-2  font-bold text-WH transition hover:bg-AC/80"
-											autoFocus
-											onClick={handleConfirmDeleteDirectory}
-										>
-								削除
-							</button>
-						</div>
-					</div>
-				</div>
-			) : null}
+				assetsReady={libraryAssetsReady}
+				description={libraryDescription}
+				siteId={siteId}
+				readOnly={readOnly}
+				reloadToken={libraryReloadToken}
+				onDescriptionChange={setLibraryDescription}
+				onClose={() => setIsLibraryOpen(false)}
+				onUploadComplete={handleLibraryUploadComplete}
+				onAssetsReadyChange={setLibraryAssetsReady}
+			/>
+
+			<DirectoryDeleteDialog
+				directory={pendingDirectoryDelete}
+				onCancel={() => setPendingDirectoryDelete(null)}
+				onConfirm={handleConfirmDeleteDirectory}
+			/>
 		</section>
 	);
 }

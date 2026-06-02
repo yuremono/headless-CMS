@@ -1,5 +1,5 @@
-import { buildPreviewUrl } from "../../lib/preview";
-import type { ContentKind } from "./admin-data-types";
+import { buildPreviewUrl } from "@/lib/preview";
+import type { ContentKind } from "@/components/admin-data/admin-data-types";
 
 interface PreviewLinkProps {
   siteId: string;

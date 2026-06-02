@@ -2,23 +2,23 @@
 
 import { useEffect, useState } from "react";
 
-import { AssetGrid, AssetGridSkeleton } from "./AssetGrid";
+import { AssetGrid, AssetGridSkeleton } from "@/components/media-library/AssetGrid";
 
-import { MediaUploadZone, type MediaUploadResult } from "./MediaUploadZone";
+import { MediaUploadZone, type MediaUploadResult } from "@/components/media-library/MediaUploadZone";
 
 import {
 	adminFetch,
 	type ApiAssetCollection,
 	type ApiAssetRecord,
 	type ImageFieldValue,
-} from "./admin-api";
+} from "@/components/admin-data/admin-api";
 
 import {
 	adminBadgeRequired,
 	adminBadgeSuccess,
 	adminBtnSm,
 	adminFieldControl,
-} from "./admin-ui-classes";
+} from "@/components/admin-layout/admin-ui-classes";
 
 interface ImageFieldInputProps {
 	siteId: string;

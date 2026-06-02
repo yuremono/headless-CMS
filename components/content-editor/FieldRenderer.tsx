@@ -1,10 +1,10 @@
 'use client';
 
-import { getFieldKey } from './admin-api';
-import type { FieldDefinition } from './admin-data-types';
-import type { FieldDraftValue, ImageFieldValue } from './admin-api';
-import { ImageFieldInput } from './ImageFieldInput';
-import { SectionEditor } from './SectionEditor';
+import { getFieldKey } from '@/components/admin-data/admin-api';
+import type { FieldDefinition } from '@/components/admin-data/admin-data-types';
+import type { FieldDraftValue, ImageFieldValue } from '@/components/admin-data/admin-api';
+import { ImageFieldInput } from '@/components/media-library/ImageFieldInput';
+import { SectionEditor } from '@/components/content-editor/SectionEditor';
 
 interface FieldRendererProps {
   siteId: string;

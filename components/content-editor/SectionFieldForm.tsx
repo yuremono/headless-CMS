@@ -1,6 +1,6 @@
 'use client';
 
-import { CardListItemsEditor, FaqItemsEditor, FeatureListItemsEditor } from './SectionArrayItemEditor';
+import { CardListItemsEditor, FaqItemsEditor, FeatureListItemsEditor } from '@/components/content-editor/SectionArrayItemEditor';
 
 interface SectionFieldFormProps {
   type: string;

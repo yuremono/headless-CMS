@@ -3,17 +3,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useAdminAccess } from './AdminAccessContext';
-import { AdminActionNotice } from './AdminActionNotice';
-import { adminFetch, buildContentWriteBody, formatFieldDraftValue, getFieldKey, mapApiContentRecord, readFieldValue, writeFieldValue, type ApiContentRecord, type FieldDraftValue, type ImageFieldValue } from './admin-api';
-import { FieldRenderer } from './FieldRenderer';
+import { useAdminAccess } from '@/components/admin-layout/AdminAccessContext';
+import { AdminActionNotice } from '@/components/admin-layout/AdminActionNotice';
+import { adminFetch, buildContentWriteBody, formatFieldDraftValue, getFieldKey, mapApiContentRecord, readFieldValue, writeFieldValue, type ApiContentRecord, type FieldDraftValue, type ImageFieldValue } from '@/components/admin-data/admin-api';
+import { FieldRenderer } from '@/components/content-editor/FieldRenderer';
 import {
   buildSeoPayloadFromDraft,
   isSeoFieldKey,
   readSeoDraftFromData,
   SeoFields,
-} from './SeoFields';
-import type { ContentRecord, ContentTypeDefinition } from './admin-data-types';
+} from '@/components/content-editor/SeoFields';
+import type { ContentRecord, ContentTypeDefinition } from '@/components/admin-data/admin-data-types';
 
 interface ContentFormProps {
   siteId: string;

@@ -10,7 +10,7 @@ import {
   dbLoadSites,
   dbResolveSite,
 } from '@/lib/admin/loader';
-import { getFieldKey } from './admin-api';
+import { getFieldKey } from '@/components/admin-data/admin-api';
 import type {
   AdminLoadMeta,
   AdminLoadResult,
@@ -23,7 +23,7 @@ import type {
   FieldDefinition,
   FieldKind,
   SiteSummary,
-} from './admin-data-types';
+} from '@/components/admin-data/admin-data-types';
 
 export type {
   AdminLoadMeta,
@@ -39,8 +39,8 @@ export type {
   FieldKind,
   FieldOption,
   SiteSummary,
-} from './admin-data-types';
-export { siteRouteKey } from './admin-data-utils';
+} from '@/components/admin-data/admin-data-types';
+export { siteRouteKey } from '@/components/admin-data/admin-data-utils';
 
 const demoFieldsTopPage: FieldDefinition[] = [
   {

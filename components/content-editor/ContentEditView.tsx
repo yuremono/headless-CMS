@@ -1,14 +1,14 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { notFound } from 'next/navigation';
-import { AdminLayout } from './AdminLayout';
-import { AdminPageHeader } from './AdminPageHeader';
-import { AdminApiNotice } from './AdminApiNotice';
-import { ComposableContentForm } from './ComposableContentForm';
-import type { ComposableFieldDefinitions, ComposableFieldDirectories } from './ComposableContentForm';
-import { ContentForm } from './ContentForm';
-import { PreviewLink } from './PreviewLink';
-import { loadContent, resolveContentTypeDefinition, resolveSiteSummary } from './AdminData';
+import { AdminLayout } from '@/components/admin-layout/AdminLayout';
+import { AdminPageHeader } from '@/components/admin-layout/AdminPageHeader';
+import { AdminApiNotice } from '@/components/admin-layout/AdminApiNotice';
+import { ComposableContentForm } from '@/components/content-editor/ComposableContentForm';
+import type { ComposableFieldDefinitions, ComposableFieldDirectories } from '@/components/content-editor/ComposableContentForm.model';
+import { ContentForm } from '@/components/content-editor/ContentForm';
+import { PreviewLink } from '@/components/admin-layout/PreviewLink';
+import { loadContent, resolveContentTypeDefinition, resolveSiteSummary } from '@/components/admin-data/AdminData';
 import { buildPreviewUrl } from '@/lib/preview';
 import { getAdminUiAccess } from '@/lib/auth/admin-ui-access';
 import { getAuthProvider } from '@/lib/auth/production-config';
@@ -17,7 +17,7 @@ import { isComposableFieldFormat, type ComposableFieldFormat } from '@/lib/admin
 
 const MANUAL_MARKDOWN_PATH = path.join(
 	process.cwd(),
-	'components/admin/UserManual.md',
+	'components/content-editor/UserManual.md',
 );
 
 async function loadUserManualMarkdown(): Promise<string> {

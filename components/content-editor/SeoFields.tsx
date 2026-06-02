@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { FieldDraftValue } from './admin-api';
+import type { FieldDraftValue } from '@/components/admin-data/admin-api';
 
 export const SEO_FIELD_KEYS = [
   'seo.title',

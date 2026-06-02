@@ -1,5 +1,5 @@
-import { LoginForm } from '../../components/admin/LoginForm';
-import { getAuthProvider } from '../../lib/auth/production-config';
+import { LoginForm } from '@/components/admin-layout/LoginForm';
+import { getAuthProvider } from '@/lib/auth/production-config';
 
 interface LoginPageProps {
   searchParams: Promise<{ redirect?: string }>;

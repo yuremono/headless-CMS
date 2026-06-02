@@ -14,19 +14,19 @@ import {
         AdminAccessProvider
 }
 
-from './AdminAccessContext';
+from '@/components/admin-layout/AdminAccessContext';
 
 import type {
   SiteSummary
 }
 
-from './admin-data-types';
+from '@/components/admin-data/admin-data-types';
 
 import {
         siteRouteKey
 }
 
-from './admin-data-utils';
+from '@/components/admin-data/admin-data-utils';
 
 interface AdminLayoutProps {
         children: ReactNode;

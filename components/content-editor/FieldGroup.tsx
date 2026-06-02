@@ -23,10 +23,16 @@ import {
 	adminPanel,
 	adminPanelInset,
 	adminTintInfo,
-} from "./admin-ui-classes";
-import { ImageFieldInput } from './ImageFieldInput';
-import { RichInlineEditor } from './RichInlineEditor';
-import type { ImageFieldValue } from './admin-api';
+} from "@/components/admin-layout/admin-ui-classes";
+import { ImageBundleEditor } from '@/components/content-editor/ImageBundleEditor';
+import {
+	createArrayItemId,
+	isInteractiveSummaryTarget,
+	reindexArrayItems,
+	updateFieldFormat,
+	updateFieldRow,
+} from '@/components/content-editor/FieldGroup.model';
+import { RichInlineEditor } from '@/components/content-editor/RichInlineEditor';
 
 interface FieldGroupProps {
   siteId: string;
@@ -37,63 +43,6 @@ interface FieldGroupProps {
   onDuplicate?: () => void;
   readOnly?: boolean;
   disablePersistentActions?: boolean;
-}
-
-function updateFieldRow(
-  fields: ComposableFieldRow[],
-  jsonPath: string,
-  value: string,
-): ComposableFieldRow[] {
-  return fields.map((field) => (field.jsonPath === jsonPath ? { ...field, value } : field));
-}
-
-function updateFieldFormat(
-  fields: ComposableFieldRow[],
-  jsonPath: string,
-  format: ComposableFieldFormat,
-): ComposableFieldRow[] {
-  return fields.map((field) => (field.jsonPath === jsonPath ? { ...field, format } : field));
-}
-
-function applyImageFieldValue(
-	fields: ComposableFieldRow[],
-	nextValue: ImageFieldValue,
-): ComposableFieldRow[] {
-  return fields.map((field) => {
-    if (field.type === 'imageUrl') {
-      return { ...field, value: nextValue.url };
-    }
-    if (field.type === 'imageAlt') {
-      return { ...field, value: nextValue.alt };
-    }
-    return field;
-  });
-}
-
-function createArrayItemId(): string {
-  return `item-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function reindexArrayItems(
-  fieldPrefix: string,
-  items: ComposableArrayItem[],
-): ComposableArrayItem[] {
-  return items.map((item, index) => ({
-    ...item,
-    fields: item.fields.map((field) => ({
-      ...field,
-      jsonPath: `${fieldPrefix}.${index}.${field.suffix}`,
-    })),
-  }));
-}
-
-function isInteractiveSummaryTarget(target: EventTarget | null): boolean {
-  if (!(target instanceof HTMLElement)) {
-    return false;
-  }
-  return Boolean(
-    target.closest('input, button, textarea, select, a, [contenteditable="true"]'),
-  );
 }
 
 export function FieldGroup({
@@ -330,85 +279,18 @@ export function FieldGroup({
   function renderImageBundleForFields(
     fields: ComposableFieldRow[],
     onFieldsChange: (nextFields: ComposableFieldRow[]) => void,
-    labelPrefix: string,
+    labelPrefix = '',
   ) {
-    const bundleFields = fields.filter((field) => field.bundle === 'image');
-    if (bundleFields.length === 0) {
-      return null;
-    }
-
-    const urlField = bundleFields.find((field) => field.type === 'imageUrl');
-    const altField = bundleFields.find((field) => field.type === 'imageAlt');
-    const hrefFields = bundleFields.filter((field) => field.type === 'href');
-    const bundleValue: ImageFieldValue = {
-      url: String(urlField?.value ?? ''),
-      alt: String(altField?.value ?? ''),
-    };
-
     return (
-		<div data-l="ImageBundle" className={`${adminTintInfo} p-4`}>
-			<p className="text-sm font-medium">
-				{labelPrefix}画像セット
-			</p>
-			<div data-l="BundleFields" className="mt-3 space-y-4">
-				{urlField ? (
-					<div data-l="BundleImage">
-						<p className="text-xs text-GR">
-							{getFieldTypeLabel("imageUrl")} ·{" "}
-							<span className="font-mono">
-								{urlField.jsonPath}
-							</span>
-							{altField ? (
-								<>
-									{" "}
-									/{" "}
-									<span className="font-mono">
-										{altField.jsonPath}
-									</span>
-								</>
-							) : null}
-						</p>
-						<ImageFieldInput
-							siteId={siteId}
-							label="画像"
-							value={bundleValue}
-							onChange={(nextValue) =>
-								onFieldsChange(
-									applyImageFieldValue(fields, nextValue),
-								)
-							}
-							readOnly={readOnly}
-							disableUpload={disablePersistentActions}
-						/>
-					</div>
-				) : null}
-				{hrefFields.map((field, hrefIndex) => (
-					<div
-						key={field.jsonPath}
-						data-l={`BundleField${hrefIndex + 1}`}
-					>
-						<p className="text-xs text-GR">
-							{getFieldTypeLabel(field.type)} ·{" "}
-							<span className="font-mono">{field.jsonPath}</span>
-						</p>
-						{renderFieldInput(
-							field,
-							String(field.value ?? ""),
-							(next) => {
-								onFieldsChange(
-									updateFieldRow(
-										fields,
-										field.jsonPath,
-										next,
-									),
-								);
-							},
-						)}
-					</div>
-				))}
-			</div>
-		</div>
-	);
+      <ImageBundleEditor
+        fields={fields}
+        labelPrefix={labelPrefix}
+        siteId={siteId}
+        sourceData={sourceData}
+        readOnly={readOnly}
+        onFieldsChange={onFieldsChange}
+      />
+    );
   }
 
   function renderArrayItemFields(item: ComposableArrayItem) {

@@ -1,9 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import type { CmsAuthProvider } from '../../lib/auth/production-config';
-import { adminFetch, clearAdminSession, resolveClientSessionToken } from './admin-api';
-import { adminBtnLg } from './admin-ui-classes';
+import type { CmsAuthProvider } from '@/lib/auth/production-config';
+import { adminFetch, clearAdminSession, resolveClientSessionToken } from '@/components/admin-data/admin-api';
+import { adminBtnLg } from '@/components/admin-layout/admin-ui-classes';
 
 interface LogoutButtonProps {
   className?: string;

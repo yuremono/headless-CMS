@@ -3,13 +3,13 @@
 import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 import type { CmsAuthProvider } from '@/lib/auth/production-config';
-import { LogoutButton } from './LogoutButton';
+import { LogoutButton } from '@/components/admin-layout/LogoutButton';
 import {
   adminFieldControl,
   adminBtnLg,
   adminBtnSm,
   adminPanel,
-} from './admin-ui-classes';
+} from '@/components/admin-layout/admin-ui-classes';
 import {
   createFieldsFromSelection,
   normalizePrefix,

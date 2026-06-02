@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { SectionFieldForm } from './SectionFieldForm';
+import { SectionFieldForm } from '@/components/content-editor/SectionFieldForm';
 
 export interface SectionItem {
   type: string;

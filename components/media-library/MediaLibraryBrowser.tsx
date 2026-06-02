@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AssetGrid, AssetGridSkeleton } from './AssetGrid';
-import { MediaUploadZone, type MediaUploadResult } from './MediaUploadZone';
-import { adminFetch, type ApiAssetCollection, type ApiAssetRecord } from './admin-api';
-import type { AssetCollection } from './admin-data-types';
+import { AssetGrid, AssetGridSkeleton } from '@/components/media-library/AssetGrid';
+import { MediaUploadZone, type MediaUploadResult } from '@/components/media-library/MediaUploadZone';
+import { adminFetch, type ApiAssetCollection, type ApiAssetRecord } from '@/components/admin-data/admin-api';
+import type { AssetCollection } from '@/components/admin-data/admin-data-types';
 
 interface MediaLibraryBrowserProps {
   siteId: string;
@@ -137,7 +137,7 @@ export function MediaLibraryBrowser({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="">
       {message && noticeVisible ? (
         <p
           className={`font-bold text-sm ${

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { adminFetch, type ApiAssetRecord } from './admin-api';
+import { adminFetch, type ApiAssetRecord } from '@/components/admin-data/admin-api';
 import { MEDIA_ACCEPT_ATTRIBUTE } from '@/lib/storage/media-types';
 import {
 	adminBtnDanger,
@@ -13,7 +13,7 @@ import {
 	adminPanel,
 	adminPanelInset,
 	adminTintInfo,
-} from "./admin-ui-classes";
+} from "@/components/admin-layout/admin-ui-classes";
 
 export interface MediaUploadResult {
   asset: ApiAssetRecord | null;

@@ -2,15 +2,15 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import type { CmsAuthProvider } from '../../lib/auth/production-config';
-import { authProviderLabel } from '../../lib/auth/production-config';
+import type { CmsAuthProvider } from '@/lib/auth/production-config';
+import { authProviderLabel } from '@/lib/auth/production-config';
 import {
   ADMIN_EDITOR_SESSION_TOKEN,
   ADMIN_READONLY_SESSION_TOKEN,
   adminFetch,
   hasPersistedAdminSession,
   persistAdminSession,
-} from './admin-api';
+} from '@/components/admin-data/admin-api';
 
 interface LoginFormProps {
   email: string;

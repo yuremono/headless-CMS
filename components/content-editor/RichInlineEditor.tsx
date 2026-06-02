@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { adminFieldControl, adminFormatBtn, adminFormatBtnActive } from './admin-ui-classes';
+import { adminFieldControl, adminFormatBtn, adminFormatBtnActive } from '@/components/admin-layout/admin-ui-classes';
 
 interface RichInlineEditorProps {
   value: string;
