@@ -26,8 +26,7 @@
 | 項目 | 規約 |
 |------|------|
 | 基本 | すべて Tailwind CSS v3 |
-| セマンティッククラス | ルート要素にコンポーネント名と同じ **PascalCase** クラスを必ず付与（スタイル未定義でも可） |
-| SCSS切り出し | Tailwind が長文化する場合など、必要に応じて `scss/index.scss` に同名クラスを `@apply` で集約 |
+| セマンティッククラス | ルート要素にコンポーネント名と同じ **PascalCase** クラスを必ず付与（scssでのスタイルは定義しない） |
 
 ```tsx
 // components/admin/SectionEditor.tsx
@@ -36,24 +35,19 @@ export function SectionEditor() {
 }
 ```
 
-```scss
-// scss/index.scss（グローバル単一ファイル）
-.SectionEditor {
-  @apply flex flex-col  bg-background ;
-}
-```
-
 ### CSS エントリ
 
 | ファイル | 役割 |
 |---------|------|
-| `index.scss` | Tailwind（`@tailwind base/components/utilities`）+ CustomClass |
+| `index.scss` | Tailwind（`@tailwind base/components/utilities`）|
 | `app/layout.tsx` | 上記 CSS の読み込みを集約 |
 
 | 禁止 | 内容 |
 |------|------|
 | 追加グローバルCSS | `styles/global.scss` 等を新設しない |
 | コンポーネント別SCSS | 個別 `.scss` ファイルは作らない。`index.scss` に集約 |
+
+`index.scss`は基本的には編集しない。Tailwindで指定できないスタイルや、長すぎる記述を書く場合は必ずユーザーに報告する。
 
 ### ユーティリティ・変数
 
