@@ -1,0 +1,47 @@
+AGENTS.md
+  h_53dad1e32c3c71 45
+components/content-editor/ManualModal.tsx
+  h_53dad1e32c3c71 26
+  s_b3f02adfb694cc::t_b401da1bba7d2d 53
+scss/index.scss
+  h_53dad1e32c3c71 9,146,222-231,238,248,291-407,413,419,437,440,459
+  s_b3f02adfb694cc::t_963c933e438a7f 408-412,414-418,420-436,438-439,441-458
+next-env.d.ts
+  s_b3f02adfb694cc::t_1d2c471a99a161 3
+components/content-editor/ComposableDirectoryNav.tsx
+  h_53dad1e32c3c71 87,90,121,142,151
+components/content-editor/DirectoryDeleteDialog.tsx
+  s_b3f02adfb694cc::t_b401da1bba7d2d 50
+components/content-editor/ImageBundleEditor.tsx
+  s_b3f02adfb694cc::t_fc2ec8da48f758 50
+components/media-library/AssetGrid.tsx
+  h_53dad1e32c3c71 241
+components/content-editor/RichInlineEditor.tsx
+  s_b3f02adfb694cc::t_97b89cf922a93d 94,101,108,118
+components/content-editor/ContentEditView.tsx
+  h_53dad1e32c3c71 183
+components/content-editor/MediaLibraryModal.tsx
+  h_53dad1e32c3c71 38
+  s_b3f02adfb694cc::t_b401da1bba7d2d 74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "898c7b4e7ddaa541cde5e712f73a959e1b7ff333",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_b3f02adfb694cc": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e8b81-cf6a-7870-8a99-ffbf0d2f65b0",
+        "model": "gpt-5.4-mini"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
