@@ -1,6 +1,5 @@
 "use client";
 
-import { adminBtnSm } from "@/components/admin-layout/admin-ui-classes";
 import { MediaLibraryBrowser } from "@/components/media-library/MediaLibraryBrowser";
 import {
 	MediaUploadZone,
@@ -36,7 +35,7 @@ export function MediaLibraryModal({
 		<dialog
 			data-l="MediaManagerModal"
 			className={`content-center fixed inset-0 z-50 m-0 h-screen max-h-none w-screen max-w-none border-0 bg-transparent p-4 backdrop-blur-sm transition-opacity duration-300 ${
-				open ? "grid" : "hidden"
+				open ? "grid" : "block"
 			} ${
 				open && assetsReady
 					? "pointer-events-auto opacity-100"
@@ -59,7 +58,9 @@ export function MediaLibraryModal({
 					className="relative z-20 flex items-center justify-between border-b border-TC/20 bg-WH px-5 py-4"
 				>
 					<div>
-						<h2 className="mt-1 font-bold text-TC">メディアライブラリ</h2>
+						<h2 className="mt-1 font-bold text-TC">
+							メディアライブラリ
+						</h2>
 					</div>
 					<div className="ml-4 flex items-center gap-2">
 						<MediaUploadZone
@@ -70,7 +71,7 @@ export function MediaLibraryModal({
 						/>
 						<button
 							type="button"
-							className={adminBtnSm}
+							className="BtnSm"
 							onClick={onClose}
 							aria-label="閉じる"
 						>

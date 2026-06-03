@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { adminBtnSm } from "@/components/admin-layout/admin-ui-classes";
 import { renderManualMarkdown } from "@/components/content-editor/ComposableContentForm.model";
 
 interface ManualModalProps {
@@ -24,9 +23,11 @@ export function ManualModal({
 		<dialog
 			data-l="ManualModal"
 			className={`content-center fixed inset-0 z-50 m-0 h-screen max-h-none w-screen max-w-none border-0 bg-transparent p-4 backdrop-blur-sm transition-opacity duration-300 ${
-				open ? "grid" : "hidden"
+				open ? "grid" : "block"
 			} ${
-				open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+				open
+					? "pointer-events-auto opacity-100"
+					: "pointer-events-none opacity-0"
 			}`}
 			open={open}
 			aria-label="Manual"
@@ -44,10 +45,12 @@ export function ManualModal({
 					data-l="ManualHeader"
 					className="flex items-center justify-between border-b border-TC/20 px-5 py-4"
 				>
-					<h2 className="mt-1 font-bold text-TC">ユーザーマニュアル</h2>
+					<h2 className="mt-1 font-bold text-TC">
+						ユーザーマニュアル
+					</h2>
 					<button
 						type="button"
-						className={adminBtnSm}
+						className="BtnSm"
 						onClick={onClose}
 						aria-label="閉じる"
 					>

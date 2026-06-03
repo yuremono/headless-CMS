@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { adminFieldControl, adminFormatBtn, adminFormatBtnActive } from '@/components/admin-layout/admin-ui-classes';
 
 interface RichInlineEditorProps {
   value: string;
@@ -92,21 +91,21 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
         >
           <button
             type="button"
-            className={adminFormatBtn}
+            className="FormatBtn"
             onClick={() => applyTag('strong')}
           >
             太字
           </button>
           <button
             type="button"
-            className={`${adminFormatBtn} italic`}
+            className="FormatBtn italic"
             onClick={() => applyTag('em')}
           >
             斜体
           </button>
           <button
             type="button"
-            className={adminFormatBtnActive}
+            className="FormatBtnActive"
             onClick={() => applyTag('span', 'accent')}
           >
             アクセント
@@ -116,7 +115,7 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
       <div
         data-l="EditorArea"
         ref={editorRef}
-        className={`${adminFieldControl} min-h-[3rem]`}
+        className="FieldControl min-h-[3rem]"
         contentEditable={!readOnly}
         suppressContentEditableWarning
         role="textbox"

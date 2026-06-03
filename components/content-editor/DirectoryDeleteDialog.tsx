@@ -1,6 +1,5 @@
 "use client";
 
-import { adminBtnDanger } from "@/components/admin-layout/admin-ui-classes";
 import type { ComposableFieldDirectory } from "@/components/content-editor/ComposableContentForm.model";
 
 interface DirectoryDeleteDialogProps {
@@ -48,7 +47,7 @@ export function DirectoryDeleteDialog({
 					</button>
 					<button
 						type="button"
-						className={adminBtnDanger}
+						className="BtnDanger"
 						autoFocus
 						onClick={onConfirm}
 					>

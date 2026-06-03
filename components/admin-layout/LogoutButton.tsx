@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import type { CmsAuthProvider } from '@/lib/auth/production-config';
 import { adminFetch, clearAdminSession, resolveClientSessionToken } from '@/components/admin-data/admin-api';
-import { adminBtnLg } from '@/components/admin-layout/admin-ui-classes';
 
 interface LogoutButtonProps {
   className?: string;

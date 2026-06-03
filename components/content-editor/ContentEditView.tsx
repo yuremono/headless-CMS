@@ -180,22 +180,7 @@ export async function ContentEditView({
 
   return (
     <AdminLayout site={site} hideSidebar={isComposable ? true : hideSidebar}>
-      {/* <AdminPageHeader
-        title={pageTitle}
-        subtitle={`対象コンテンツ: ${record.data.title}`}
-        actions={
-          <>
-            <PreviewLink
-              siteId={siteId}
-              contentType={definition.slug}
-              kind={definition.kind}
-              contentId={definition.kind === 'single' ? record.data.id : undefined}
-              slug={definition.kind === 'collection' ? record.data.slug : undefined}
-              className="rounded-full border border-violet-400/40 bg-violet-400/10 px-4 py-2 text-sm font-medium text-violet-100 transition hover:bg-violet-400/20"
-            />
-          </>
-        }
-      /> */}
+
       <AdminApiNotice source={record.meta.source} error={record.meta.error} endpoint={record.meta.endpoint} />
       {isComposable ? (
         <ComposableContentForm

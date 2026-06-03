@@ -10,7 +10,6 @@ import {
 } from "@phosphor-icons/react";
 import type { CmsAuthProvider } from "@/lib/auth/production-config";
 import { LogoutButton } from "@/components/admin-layout/LogoutButton";
-import { adminDeleteIconButton } from "@/components/admin-layout/admin-ui-classes";
 import type { ComposableFieldDirectory } from "@/components/content-editor/ComposableContentForm.model";
 
 interface ComposableDirectoryNavProps {
@@ -85,10 +84,10 @@ export function ComposableDirectoryNav({
 							<li key={directory.id}>
 								<div
 									data-l="DirectoryItem"
-									className={`relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 pr-10 text-left transition ${
+									className={`relative flex w-full items-center gap-3 BtnTR hover:BtnBase  p-2 pr-10  text-medium text-sm transition ${
 										isActive
 											? "bg-SC/15"
-											: "hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
+											: "hover:bg-WH "
 									}`}
 									role="button"
 									tabIndex={0}
@@ -119,7 +118,7 @@ export function ComposableDirectoryNav({
 									{isActive && directories.length > 1 ? (
 										<button
 											type="button"
-											className={`absolute right-2 top-1/2 -translate-y-1/2 ${adminDeleteIconButton}`}
+											className={`absolute right-2 top-1/2 -translate-y-1/2 DeleteIconButton`}
 											onClick={(event) => {
 												event.stopPropagation();
 												onRequestDeleteDirectory(directory);
@@ -140,7 +139,7 @@ export function ComposableDirectoryNav({
 			<div data-l="NavTools" className="mt-auto pt-4">
 				<button
 					type="button"
-					className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
+					className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnTR hover:BtnBase  p-2 transition hover:bg-WH "
 					aria-label="Manual"
 					onClick={onOpenManual}
 				>
@@ -149,7 +148,7 @@ export function ComposableDirectoryNav({
 				</button>
 				<button
 					type="button"
-					className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnBase [--gradStart:--TR] [--gradEnd:--TR] p-2 transition hover:bg-WH hover:[--gradStart:--WH] hover:[--gradEnd:--SC10]"
+					className="text-SC/70 font-bold relative flex w-full items-center gap-3 BtnTR hover:BtnBase   p-2 transition hover:bg-WH "
 					aria-label="Media Library"
 					onClick={onOpenLibrary}
 				>

@@ -42,7 +42,7 @@
 | --- | --- |
 | `app/` | 画面と Route Handler |
 | `app/api/` | 管理 API・配信 API・Auth API |
-| `components/admin/` | 管理画面コンポーネント |
+| `components/` | 管理画面コンポーネント |
 | `lib/content/` | コンテンツ保存・配信ロジック |
 | `lib/auth/` | 認証・権限 |
 | `lib/storage/` | 画像アップロード |

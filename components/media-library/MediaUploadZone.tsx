@@ -1,19 +1,11 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
-import { adminFetch, type ApiAssetRecord } from '@/components/admin-data/admin-api';
-import { MEDIA_ACCEPT_ATTRIBUTE } from '@/lib/storage/media-types';
 import {
-	adminBtnDanger,
-	adminBtnSm,
-	adminFieldControl,
-	adminFieldControlTextarea,
-	adminFormatBtn,
-	adminFormatBtnActive,
-	adminPanel,
-	adminPanelInset,
-	adminTintInfo,
-} from "@/components/admin-layout/admin-ui-classes";
+  adminFetch,
+  type ApiAssetRecord,
+} from '@/components/admin-data/admin-api';
+import { MEDIA_ACCEPT_ATTRIBUTE } from '@/lib/storage/media-types';
 
 export interface MediaUploadResult {
   asset: ApiAssetRecord | null;
@@ -160,7 +152,7 @@ export function MediaUploadZone({
 			{compact ? (
 				<button
 					type="button"
-					className={adminBtnSm}
+					className="BtnSm"
 					disabled={disabled || isUploading}
 					onClick={() => {
 						fileInputRef.current?.click();

@@ -1,24 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { AssetGrid, AssetGridSkeleton } from "@/components/media-library/AssetGrid";
-
-import { MediaUploadZone, type MediaUploadResult } from "@/components/media-library/MediaUploadZone";
-
+import { useEffect, useState } from 'react';
+import { AssetGrid, AssetGridSkeleton } from '@/components/media-library/AssetGrid';
+import { MediaUploadZone, type MediaUploadResult } from '@/components/media-library/MediaUploadZone';
 import {
-	adminFetch,
-	type ApiAssetCollection,
-	type ApiAssetRecord,
-	type ImageFieldValue,
-} from "@/components/admin-data/admin-api";
-
-import {
-	adminBadgeRequired,
-	adminBadgeSuccess,
-	adminBtnSm,
-	adminFieldControl,
-} from "@/components/admin-layout/admin-ui-classes";
+  adminFetch,
+  type ApiAssetCollection,
+  type ApiAssetRecord,
+  type ImageFieldValue,
+} from '@/components/admin-data/admin-api';
 
 interface ImageFieldInputProps {
 	siteId: string;
@@ -148,7 +138,7 @@ export function ImageFieldInput({
 				{" "}
 				<span> {label}</span>{" "}
 				{required ? (
-					<span className={adminBadgeRequired}>必須</span>
+					<span className="BadgeRequired">必須</span>
 				) : null}
 			</div>{" "}
 			<div
@@ -161,7 +151,7 @@ export function ImageFieldInput({
 						{" "}
 						<button
 							type="button"
-							className={adminBtnSm}
+							className="BtnSm"
 							onClick={() => {
 								setLibraryAssetsReady(false);
 								setIsLibraryOpen(true);
@@ -173,7 +163,7 @@ export function ImageFieldInput({
 					</>
 				) : null}
 				{value.url ? (
-					<span className={adminBadgeSuccess}>登録済み</span>
+					<span className="BadgeSuccess">登録済み</span>
 				) : null}
 			</div>{" "}
 			{!readOnly && !disableUpload ? (
@@ -225,7 +215,7 @@ export function ImageFieldInput({
 					画像 URL
 				</span>{" "}
 				<input
-					className={adminFieldControl}
+					className="FieldControl"
 					type="url"
 					placeholder="/uploads/site-id/example.jpg"
 					value={value.url}
@@ -245,7 +235,7 @@ export function ImageFieldInput({
 					代替テキスト
 				</span>{" "}
 				<input
-					className={adminFieldControl}
+					className="FieldControl"
 					type="text"
 					placeholder="画像の説明"
 					value={value.alt}
@@ -268,7 +258,7 @@ export function ImageFieldInput({
 			<dialog
 				data-l="LibraryModal"
 				className={`content-center ImageFieldInput_modal fixed inset-0 z-50 m-0 h-screen max-h-none w-screen max-w-none border-0 bg-transparent p-4 backdrop-blur-sm transition-opacity duration-300 ${
-					isLibraryOpen ? "grid" : "hidden"
+					isLibraryOpen ? "grid" : "block"
 				} ${
 					isLibraryOpen && isLibraryModalReady
 						? "pointer-events-auto opacity-100"
@@ -304,7 +294,7 @@ export function ImageFieldInput({
 						</div>
 						<button
 							type="button"
-							className={adminBtnSm}
+							className="BtnSm"
 							onClick={() => setIsLibraryOpen(false)}
 						>
 							閉じる

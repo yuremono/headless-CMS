@@ -1,7 +1,6 @@
 "use client";
 
 import type { ImageFieldValue } from "@/components/admin-data/admin-api";
-import { adminTintInfo } from "@/components/admin-layout/admin-ui-classes";
 import { ImageFieldInput } from "@/components/media-library/ImageFieldInput";
 import type { ComposableFieldRow } from "@/lib/admin/field-type-catalog";
 
@@ -48,7 +47,7 @@ export function ImageBundleEditor({
 	};
 
 	return (
-		<div data-l="ImageBundle" className={`${adminTintInfo} p-4`}>
+ <div data-l="ImageBundle" className="TintInfo p-4">
 			<p className="font-bold text-TC">{labelPrefix}画像セット</p>
 			<div data-l="BundleFields" className="mt-3 space-y-4">
 				<div data-l="BundleImage">

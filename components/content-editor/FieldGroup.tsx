@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type MouseEvent } from 'react';
+import { X } from '@phosphor-icons/react';
 import {
   createArrayItemFromTemplate,
   getFieldTypeLabel,
@@ -12,25 +13,13 @@ import {
   type ComposableFieldGroup,
   type ComposableFieldRow,
 } from '@/lib/admin/field-type-catalog';
-import { X } from '@phosphor-icons/react';
-import {
-	adminBtnDanger,
-	adminBtnSm,
-	adminFieldControl,
-	adminFieldControlTextarea,
-	adminFormatBtn,
-	adminFormatBtnActive,
-	adminPanel,
-	adminPanelInset,
-	adminTintInfo,
-} from "@/components/admin-layout/admin-ui-classes";
 import { ImageBundleEditor } from '@/components/content-editor/ImageBundleEditor';
 import {
-	createArrayItemId,
-	isInteractiveSummaryTarget,
-	reindexArrayItems,
-	updateFieldFormat,
-	updateFieldRow,
+  createArrayItemId,
+  isInteractiveSummaryTarget,
+  reindexArrayItems,
+  updateFieldFormat,
+  updateFieldRow,
 } from '@/components/content-editor/FieldGroup.model';
 import { RichInlineEditor } from '@/components/content-editor/RichInlineEditor';
 
@@ -194,7 +183,7 @@ export function FieldGroup({
     if (field.type === 'text') {
       return (
 			<textarea
-				className={adminFieldControlTextarea}
+				className="FieldControlTextarea"
 				value={value}
 				onChange={(event) => onValueChange(event.target.value)}
 				disabled={readOnly}
@@ -247,7 +236,7 @@ export function FieldGroup({
 						<button
 							type="button"
 							className={
-								!isRich ? adminFormatBtnActive : adminFormatBtn
+								!isRich ? "FormatBtnActive" : "FormatBtn"
 							}
 							onClick={() =>
 								handleFormatChange(field.jsonPath, "plain")
@@ -258,7 +247,7 @@ export function FieldGroup({
 						<button
 							type="button"
 							className={
-								isRich ? adminFormatBtnActive : adminFormatBtn
+								isRich ? "FormatBtnActive" : "FormatBtn"
 							}
 							onClick={() =>
 								handleFormatChange(field.jsonPath, "richText")
@@ -350,7 +339,7 @@ export function FieldGroup({
 					</span>
 					<label className="min-w-0 flex-1">
 						<input
-							className={adminFieldControl}
+							className="FieldControl"
 							value={group.prefix}
 							onChange={(event) =>
 								handlePrefixChange(event.target.value)
@@ -371,7 +360,7 @@ export function FieldGroup({
 						<button
 							type="button"
 							data-l="Duplicate"
-							className={adminBtnSm}
+							className="BtnSm"
 							onClick={(event) => {
 								event.preventDefault();
 								onDuplicate?.();
@@ -381,7 +370,7 @@ export function FieldGroup({
 						</button>
 						<button
 							type="button"
-							className={adminBtnDanger}
+							className="BtnDanger"
 							onClick={(event) => {
 								event.preventDefault();
 								event.stopPropagation();
@@ -409,7 +398,7 @@ export function FieldGroup({
 				{group.repeatable ? (
 					<div
 						data-l="ArrayTemplate"
-						className={`space-y-4 ${adminTintInfo} p-4`}
+						className="space-y-4 TintInfo p-4"
 					>
 						<p className="text-sm font-medium">
 							フィールド定義（テンプレート）
@@ -445,7 +434,7 @@ export function FieldGroup({
 							{!readOnly ? (
 								<button
 									type="button"
-									className={adminBtnDanger}
+									className="BtnDanger"
 									onClick={handleAddArrayItem}
 								>
 									要素を追加
@@ -462,7 +451,7 @@ export function FieldGroup({
 								<div
 									key={item.id}
 									data-l={`ArrayItem${itemIndex + 1}`}
-									className={`space-y-4 ${adminPanelInset} p-4`}
+									className="space-y-4 PanelInset p-4"
 								>
 									<div className="flex flex-wrap items-center justify-between gap-2">
 										<p className="text-sm font-medium">
@@ -474,7 +463,7 @@ export function FieldGroup({
 										{!readOnly ? (
 											<button
 												type="button"
-												className={adminBtnDanger}
+												className="BtnDanger"
 												onClick={() =>
 													handleRemoveArrayItem(
 														item.id,

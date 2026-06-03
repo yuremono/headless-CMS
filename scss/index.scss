@@ -6,6 +6,7 @@
 // @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP&family=Shippori+Mincho:wght@400;800&display=swap');
 // @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@100..700&family=Jost:wght@100..900&family=Noto+Serif+JP:wght@200..900&family=Shippori+Mincho:wght@400;500;600;700&family=Viaoda+Libre&display=swap');
 
+
 :root {//font
         --Ser: "Noto Serif JP", serif;
 
@@ -123,8 +124,6 @@
         --h3FZ: clamp(14px, 1.8vw, 18px);
         --largeFZ: clamp(48px, 6.4vw, 96px);
 }
-
-
 :root{
         --trans: 400ms;
         --rad:4px;
@@ -139,27 +138,12 @@
         --boardR:var(--rad);
         --lineClamp:2;
 }
-:root{
-        interpolate-size: allow-keywords;
-}
-
-:where(details)::details-content {
-        height: 0;
-        overflow: hidden;
-        transition:
-        height var(--trans) ease,
-        content-visibility var(--trans) allow-discrete;
-}
-:where(details[open])::details-content {        height: auto;}
-:where(details > summary) {        list-style: none;}
-:where(details > summary)::-webkit-details-marker {        display: none;}
-
+:root{interpolate-size: allow-keywords;}
 :root{//ボーダー シャドウ デコレーション等
-
         --lineClamp:2;
         --bds: solid;
         --bdw: 1px;
-        --bdc: var(--TC30);  
+        --bdc: var(--TC20);  
         --line:var(--bdw) var(--bds) var(--bdc); 
         --tsw: 4px;
         --tsc: var(--MC);
@@ -197,26 +181,6 @@
         --3MY: calc(var(--MY)*3.0);
         --4MY: calc(var(--MY)*4.0);
 }
-
-//tailwind recovery
-@layer base{
-        .inline-size {container-type: inline-size;}
-        .rtl {direction: rtl;}
-        .ltr {direction: ltr;}
-        .text-align-last-justify{text-align-last: justify;}
-        .translateYH{translate: 0 -50%;}
-        .translateXH{translate: -50% 0;}
-        .translateXYH{translate: -50% -50%;}
-        .corner-bevel{corner-shape: bevel;}
-}
-.BabelRightDown{
-        border-radius: var(--rad) 0 var(--rad) 0;
-        corner-shape: bevel;
-}
-.BabelLeft{
-        border-radius: var(--rad) 0 0 var(--rad) ;
-        corner-shape: bevel;
-}
 html{
         font-size: var(--FZ);
         @apply lg:overflow-clip;
@@ -237,12 +201,10 @@ html{
         --pageTR: 0.5s;
         --initial-loading-min: 1000ms;
 }
-
 // :where(*) {//FireFox
 // 	scrollbar-color: color-mix(in srgb, transparent, var(--foreground) 20%) transparent;
 // 	scrollbar-width: thin;
 // }
-
 :where(*)::-webkit-scrollbar {
 	width: 0.375rem;
 	height: 0.25rem;
@@ -257,66 +219,23 @@ html{
 	border-radius: var(--rad);
 	background-color: color-mix(in srgb, transparent, var(--SC) 10%);
 }
-
+:where(details)::details-content {
+        height: 0;
+        overflow: hidden;
+        transition:
+        height var(--trans) ease,
+        content-visibility var(--trans) allow-discrete;
+}
+:where(details[open])::details-content {        height: auto;}
+:where(details > summary) {        list-style: none;}
+:where(details > summary)::-webkit-details-marker {        display: none;}
 svg {display: inline-block;}
 b,strong{font-weight: 500;}
-
-
-h1,.h1FZ {font-size: var(--h1FZ);}
-h2,.h2FZ {font-size: var(--h2FZ);}
-h3,.h3FZ {font-size: var(--h3FZ);}
-.largeFZ {font-size: var(--largeFZ);}
-h4,h5,h6 {font-size: inherit;}
-h1,h2,h3,h4,h5,h6,.largeFZ {
-        font-family: var(--HFF);
-        font-weight: var(--HFW);
-        line-height: var(--HLH);
-        letter-spacing: var(--HLS);
-}
-
-.wid {width: var(--wid);}
-.PX {padding-inline: var(--PX);}
-.PY {padding-block: var(--PY);}
-.PX2 {padding-inline: var(--PX2);}
-.MY {margin-block: var(--MY);}
-.gap{gap: var(--gap);}
-.gapH{gap: var(--gapH);}
-
-
-:where(.BorderT) {border-top   : var(--line);}
-:where(.BorderB) {border-bottom: var(--line);}
-:where(.BorderL) {border-left  : var(--line);}
-:where(.BorderR) {border-right : var(--line);}
-:where(.BorderY) {border-block : var(--line);}
-:where(.BorderX) {border-inline: var(--line);} 
-:where(.BorderXY) {border: var(--line);} 
-:where(.BorderXY2) {border: var(--line2);} 
-:where(.BorderXY3) {border: var(--line3);} 
-.TS {text-shadow: var(--TS);}
-.DS {filter: drop-shadow(var(--DS));}
-.BS {box-shadow: var(--BS);}
-.WTS {-webkit-text-stroke: var(--WTS);paint-order: stroke;}
-.BGgrad {background: var(--BGgrad);}
-.TS2 {text-shadow: var(--TS2);}
-.DS2 {filter: drop-shadow(var(--DS2));}
-.BS2 {box-shadow: var(--BS2);}
-.WTS2 {-webkit-text-stroke: var(--ST2);paint-order: stroke;}
-.BGgrad2 {background: var(--BGgrad2);}
-.TS3 {text-shadow: var(--TS3);}
-.DS3 {filter: drop-shadow(var(--DS3));}
-.BS3 {box-shadow: var(--BS3);}
-.WTS3 {-webkit-text-stroke: var(--ST3);paint-order: stroke;}
-.BGgrad3 {background: var(--BGgrad3);}
-
-
-
 dialog{
         top: 0;
         opacity: 0;
         pointer-events: none;
-        &:not(.BBox *){
-                display: block;
-        }
+        display: block;
 
         transition: 0s;
         &[open]{
@@ -326,13 +245,216 @@ dialog{
         }
 }
 
-.BtnBase {
-        // --gradStart: var(--WH);
-        // --gradEnd: var(--SC10); 
-        @apply  border-2  [border-image-source:linear-gradient(160deg,var(--gradStart),var(--gradEnd))] [border-image-slice:1] text-sm font-medium transition disabled:cursor-not-allowed;
+@layer components{//初期設定クラス
+        h1,.h1FZ {font-size: var(--h1FZ);}
+        h2,.h2FZ {font-size: var(--h2FZ);}
+        h3,.h3FZ {font-size: var(--h3FZ);}
+        .largeFZ {font-size: var(--largeFZ);}
+        h4,h5,h6 {font-size: inherit;}
+        h1,h2,h3,h4,h5,h6,.largeFZ {
+                font-family: var(--HFF);
+                font-weight: var(--HFW);
+                line-height: var(--HLH);
+                letter-spacing: var(--HLS);
+        }
+        .wid {width: var(--wid);}
+        .PX {padding-inline: var(--PX);}
+        .PY {padding-block: var(--PY);}
+        .PX2 {padding-inline: var(--PX2);}
+        .MY {margin-block: var(--MY);}
+        .gap{gap: var(--gap);}
+        .gapH{gap: var(--gapH);}
+        .BorderT {border-top   : var(--line);}
+        .BorderB {border-bottom: var(--line);}
+        .BorderL {border-left  : var(--line);}
+        .BorderR {border-right : var(--line);}
+        .BorderY {border-block : var(--line);}
+        .BorderX {border-inline: var(--line);} 
+        .BorderXY {border: var(--line);} 
+        .BorderXY2 {border: var(--line2);} 
+        .BorderXY3 {border: var(--line3);} 
+        .TS {text-shadow: var(--TS);}
+        .DS {filter: drop-shadow(var(--DS));}
+        .BS {box-shadow: var(--BS);}
+        .WTS {-webkit-text-stroke: var(--WTS);paint-order: stroke;}
+        .BGgrad {background: var(--BGgrad);}
+        .TS2 {text-shadow: var(--TS2);}
+        .DS2 {filter: drop-shadow(var(--DS2));}
+        .BS2 {box-shadow: var(--BS2);}
+        .WTS2 {-webkit-text-stroke: var(--ST2);paint-order: stroke;}
+        .BGgrad2 {background: var(--BGgrad2);}
+        .TS3 {text-shadow: var(--TS3);}
+        .DS3 {filter: drop-shadow(var(--DS3));}
+        .BS3 {box-shadow: var(--BS3);}
+        .WTS3 {-webkit-text-stroke: var(--ST3);paint-order: stroke;}
+        .BGgrad3 {background: var(--BGgrad3);}
+        .inline-size {container-type: inline-size;}
+        .rtl {direction: rtl;}
+        .ltr {direction: ltr;}
+        .text-align-last-justify{text-align-last: justify;}
+        .translateYH{translate: 0 -50%;}
+        .translateXH{translate: -50% 0;}
+        .translateXYH{translate: -50% -50%;}
 }
-.ArrowBG {
-        --gradStart: var(--WH);
-        --gradEnd: var(--SC05); 
-        @apply  [background-image:linear-gradient(135deg,var(--gradStart),var(--gradEnd))] ;
+@layer components{//CustomClass:プロジェクト固有クラス
+        .corner-bevel{corner-shape: bevel;}
+        .BabelRightDown{
+                border-radius: var(--rad) 0 var(--rad) 0;
+                corner-shape: bevel;
+        }
+        .BabelLeft{
+                border-radius: var(--rad) 0 0 var(--rad) ;
+                corner-shape: bevel;
+        }
+        .ArrowBG {
+                --gradStart: var(--WH);
+                --gradEnd: var(--SC05); 
+                background-image:linear-gradient(135deg,var(--gradStart),var(--gradEnd));
+        }
+        .BtnBase,
+        .BtnLg,
+        .BtnSm,
+        .BtnDanger  {
+                --gradStart: var(--WH);
+                --gradEnd: var(--SC10); 
+                border-image-source:linear-gradient(160deg,var(--gradStart),var(--gradEnd));
+                border-image-slice:1;
+                border-width: 2px;
+                // @apply  disabled:cursor-not-allowed;
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+                transition: 150ms ease;
+                &:disabled {
+                        cursor: not-allowed;
+                        opacity: 0.6;
+                }
+        }
+        .BtnTR {
+                --gradStart: var(--TR);
+                --gradEnd: var(--TR); 
+                border-image-source:linear-gradient(160deg,var(--gradStart),var(--gradEnd));
+                border-image-slice:1;
+                border-width: 2px;
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+                transition: 150ms ease;
+                &:disabled {
+                        cursor: not-allowed;
+                        opacity: 0.6;
+                }
+        }
+        .BtnLg,
+        .BtnSm {
+                color: var(--SC);
+                font-weight: 500;
+                &:hover {
+                        background-color: var(--SC);
+                        color: var(--WH);
+                }
+        }
+        .BtnLg {
+                padding: 0.75rem 1rem;
+        }
+        .BtnSm {
+                padding: 0.5rem 0.75rem;
+        }
+
+        .DeleteIconButton {
+                display: inline-flex;
+                width: 1.75rem;
+                height: 1.75rem;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid var(--TR);
+                background-color: transparent;
+                color: var(--SC);
+                transition: 150ms ease;
+                &:hover {
+                        background-color: var(--AC50);
+                }
+        }
+        .BtnDanger {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.25rem;
+                padding: 0.5rem 1rem;
+                background-color: transparent;
+                color: var(--SC);
+                &:hover {
+                        background-color: var(--AC50);
+                }
+        }
+        .FormatBtn,
+        .FormatBtnActive {
+                border-radius: 0.375rem;
+                border: 1px solid;
+                padding: 0.125rem 0.5rem;
+                font-size: 0.75rem;
+                line-height: 1rem;
+        }
+        .FormatBtn {
+                border-color: var(--TC20);
+                color: var(--GR);
+                transition: background-color 150ms ease;
+                &:hover {
+                        background-color: var(--TC10);
+                }
+        }
+        .FormatBtnActive {
+                border-color: var(--SC70);
+                background-color: var(--SC30);
+        }
+        // Migrated from TS class definitions
+        .FieldControl,
+        .FieldControlCompact,
+        .FieldControlTextarea {
+                width: 100%;
+                border: var(--line);
+                border-radius: 0.375rem;
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+                outline: none;
+                transition: 150ms ease;
+                padding: 0.5rem 0.5rem;
+                &::placeholder {
+                        color: var(--GR);
+                }
+                &:focus {
+                        border-color: var(--SC);
+                        box-shadow: 0 0 0 2px var(--SC30);
+                }
+        }
+        .FieldControlCompact {
+                margin-top: 0.5rem;
+                padding: 0.5rem 0.75rem;
+        }
+        .FieldControlTextarea {
+                margin-top: 0.5rem;
+                min-height: 8rem;
+        }
+        .Panel {
+                border-bottom: var(--line);
+        }
+        .PanelInset {
+                border: var(--line);
+                border-radius: 0.375rem;
+        }
+        .BadgeRequired {
+                border-radius: 9999px;
+                background-color: var(--SC30);
+                padding: 0.125rem 0.5rem;
+                font-size: 0.75rem;
+                line-height: 1rem;
+        }
+        .BadgeSuccess {
+                padding: 0.25rem 0.75rem;
+                font-size: 0.75rem;
+                line-height: 1rem;
+        }
+        .TintInfo {
+                border-radius: 0.375rem;
+                border: 1px solid var(--SC40);
+        }
+
 }

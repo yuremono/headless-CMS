@@ -2,7 +2,6 @@
 
 import { X } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
-import { adminDeleteIconButton } from '@/components/admin-layout/admin-ui-classes';
 import { adminFetch, type ApiAssetRecord } from '@/components/admin-data/admin-api';
 
 interface AssetGridProps {
@@ -239,7 +238,7 @@ export function AssetGrid({
 					{allowDelete ? (
 									<button
 										type="button"
-										className={`absolute right-2 top-2 z-10 ${adminDeleteIconButton} disabled:cursor-not-allowed disabled:opacity-60`}
+										className={`absolute right-2 top-2 z-10 DeleteIconButton disabled:cursor-not-allowed disabled:opacity-60`}
 										onClick={(event) => {
 								event.preventDefault();
 								event.stopPropagation();

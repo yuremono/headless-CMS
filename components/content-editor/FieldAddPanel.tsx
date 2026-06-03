@@ -5,12 +5,6 @@ import { useMemo, useState } from 'react';
 import type { CmsAuthProvider } from '@/lib/auth/production-config';
 import { LogoutButton } from '@/components/admin-layout/LogoutButton';
 import {
-  adminFieldControl,
-  adminBtnLg,
-  adminBtnSm,
-  adminPanel,
-} from '@/components/admin-layout/admin-ui-classes';
-import {
   createFieldsFromSelection,
   normalizePrefix,
   previewPathsForSelection,
@@ -97,7 +91,7 @@ export function FieldAddPanel({
       <label className="mt-4 block">
         <span className="text-sm font-medium text-GR">Field name</span>
         <input
-          className={adminFieldControl}
+          className="FieldControl"
           value={prefix}
           onChange={(event) => setPrefix(event.target.value)}
           placeholder="例: hero"
@@ -205,7 +199,7 @@ export function FieldAddPanel({
 
       <button
         type="button"
-        className={`mt-4 ${adminBtnSm}`}
+        className="mt-4 BtnSm"
         onClick={handleAdd}
         disabled={!canAdd}
       >
@@ -217,7 +211,7 @@ export function FieldAddPanel({
         <div data-l="FormActions" className="flex flex-wrap gap-3">
         <button
           type="button"
-          className={adminBtnLg}
+          className="BtnLg"
           onClick={() => onSave?.()}
           disabled={isPending}
         >
@@ -225,7 +219,7 @@ export function FieldAddPanel({
         </button>
         <button
           type="button"
-          className={adminBtnLg}
+          className="BtnLg"
           onClick={() => onPublish?.()}
           disabled={isPending}
         >
@@ -236,7 +230,7 @@ export function FieldAddPanel({
             href={previewUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={adminBtnLg}
+            className="BtnLg"
             >
               プレビューを開く
             </a>
