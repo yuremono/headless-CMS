@@ -352,6 +352,18 @@ dialog{
                         color: var(--WH);
                 }
         }
+        .BtnDanger {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.25rem;
+                padding: 0.5rem 0.75rem;
+                color: var(--SC);
+                font-weight: 500;
+                &:hover {
+                        background-color: var(--AC50);
+                }
+        }
         .BtnLg {
                 padding: 0.75rem 1rem;
         }
@@ -373,18 +385,7 @@ dialog{
                         background-color: var(--AC50);
                 }
         }
-        .BtnDanger {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.25rem;
-                padding: 0.5rem 1rem;
-                background-color: transparent;
-                color: var(--SC);
-                &:hover {
-                        background-color: var(--AC50);
-                }
-        }
+
         .FormatBtn,
         .FormatBtnActive {
                 border-radius: 0.375rem;
@@ -417,6 +418,7 @@ dialog{
                 outline: none;
                 transition: 150ms ease;
                 padding: 0.5rem 0.5rem;
+                background-color: var(--WH);
                 &::placeholder {
                         color: var(--GR);
                 }

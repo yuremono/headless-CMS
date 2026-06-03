@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { writeFieldValue } from "@/components/admin-data/admin-api";
 import {
+	buildArrayElementJsonPath,
 	buildRepeatableArrayValue,
 	type ComposableFieldFormat,
 	type ComposableFieldGroup,
@@ -329,9 +330,7 @@ export function mergeGroupsWithDefinitions(
 	dataGroups: ComposableFieldGroup[],
 	definitionGroups: ComposableFieldGroup[],
 ): ComposableFieldGroup[] {
-	if (definitionGroups.length === 0) {
-		return dataGroups;
-	}
+	if (definitionGroups.length === 0) return dataGroups;
 
 	const byPrefix = new Map(
 		dataGroups.map((group) => [getGroupPrefix(group), group]),
@@ -344,18 +343,64 @@ export function mergeGroupsWithDefinitions(
 			continue;
 		}
 
-		const existingSuffixes = new Set(
-			current.fields.map((field) => field.suffix),
+		const currentFieldsBySuffix = new Map(
+			current.fields.map((field) => [field.suffix, field]),
 		);
-		const missingFields = definitionGroup.fields.filter(
-			(field) => !existingSuffixes.has(field.suffix),
-		);
-		if (missingFields.length > 0) {
+		const nextFields = definitionGroup.fields.map((definitionField) => {
+			const currentField = currentFieldsBySuffix.get(definitionField.suffix);
+			if (!currentField) return definitionField;
+			return {
+				...definitionField,
+				value: currentField.value,
+			};
+		});
+
+		if (!definitionGroup.repeatable) {
 			byPrefix.set(prefix, {
-				...current,
-				fields: [...current.fields, ...missingFields],
+				...definitionGroup,
+				id: current.id,
+				fields: nextFields,
 			});
+			continue;
 		}
+
+		const nextItems = (current.items ?? []).map((item, index) => {
+			const itemFieldsBySuffix = new Map(
+				item.fields.map((field) => [field.suffix, field]),
+			);
+			return {
+				...item,
+				fields: definitionGroup.fields.map((definitionField) => {
+					const currentField = itemFieldsBySuffix.get(definitionField.suffix);
+					if (!currentField) {
+						return {
+							...definitionField,
+							jsonPath: buildArrayElementJsonPath(
+								prefix,
+								index,
+								definitionField.suffix,
+							),
+						};
+					}
+
+					return {
+						...definitionField,
+						jsonPath: buildArrayElementJsonPath(
+							prefix,
+							index,
+							definitionField.suffix,
+						),
+						value: currentField.value,
+					};
+				}),
+			};
+		});
+
+		byPrefix.set(prefix, {
+			...definitionGroup,
+			id: current.id,
+			items: nextItems,
+		});
 	}
 
 	return Array.from(byPrefix.values()).sort((left, right) =>
@@ -389,11 +434,29 @@ export function mergeDataForSave(
 	const merged = structuredClone(baseData) as Record<string, unknown>;
 	const nextPrefixes = new Set(uniqueStrings(groups.map(getGroupPrefix)));
 	const previousGroups = restoreGroupsFromData(baseData, createGroupId);
+	const currentGroupsByPrefix = new Map(
+		groups.map((group) => [getGroupPrefix(group), group]),
+	);
 
 	for (const previousGroup of previousGroups) {
 		const previousPrefix = getGroupPrefix(previousGroup);
 		if (previousPrefix && !nextPrefixes.has(previousPrefix)) {
 			deleteFieldValue(merged, previousPrefix);
+			continue;
+		}
+
+		const currentGroup = currentGroupsByPrefix.get(previousPrefix);
+		if (!currentGroup || currentGroup.repeatable || previousGroup.repeatable) {
+			continue;
+		}
+
+		const nextSuffixes = new Set(
+			currentGroup.fields.map((field) => field.suffix),
+		);
+		for (const field of previousGroup.fields) {
+			if (!nextSuffixes.has(field.suffix)) {
+				deleteFieldValue(merged, buildJsonPath(previousPrefix, field.suffix));
+			}
 		}
 	}
 

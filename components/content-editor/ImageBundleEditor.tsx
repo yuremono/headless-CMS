@@ -38,6 +38,9 @@ export function ImageBundleEditor({
 	onFieldsChange,
 }: ImageBundleEditorProps) {
 	const bundleFields = fields.filter((field) => field.bundle === "image");
+	if (bundleFields.length === 0) {
+	  return null;
+	}
 	const urlField = bundleFields.find((field) => field.type === "imageUrl");
 	const altField = bundleFields.find((field) => field.type === "imageAlt");
 	const hrefFields = bundleFields.filter((field) => field.type === "href");

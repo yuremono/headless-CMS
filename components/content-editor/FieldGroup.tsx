@@ -283,24 +283,30 @@ export function FieldGroup({
   }
 
   function renderArrayItemFields(item: ComposableArrayItem) {
-    const itemScalars = item.fields.filter((field) => field.bundle !== 'image');
+  const itemScalars = item.fields.filter((field) => field.bundle !== 'image');
+  const itemImageBundleFields = item.fields.filter((field) => field.bundle === 'image');
 
-    return (
-      <>
-        {itemScalars.map((field, fieldIndex) =>
-          renderScalarField(field, fieldIndex, false, (jsonPath, value) =>
-            handleArrayItemFieldChange(item.id, jsonPath, value),
-          ),
-        )}
-        {renderImageBundleForFields(item.fields, (nextFields) => {
-          const items = (group.items ?? []).map((entry) =>
-            entry.id === item.id ? { ...entry, fields: nextFields } : entry,
-          );
-          onChange({ ...group, items });
-        }, '')}
-      </>
-    );
-  }
+  return (
+    <>
+      {itemScalars.map((field, fieldIndex) =>
+        renderScalarField(
+          field,
+          fieldIndex,
+          false,
+          (jsonPath, value) => handleArrayItemFieldChange(item.id, jsonPath, value),
+        ),
+      )}
+      {itemImageBundleFields.length > 0
+        ? renderImageBundleForFields(item.fields, (nextFields) => {
+            const items = (group.items ?? []).map((entry) =>
+              entry.id === item.id ? { ...entry, fields: nextFields } : entry,
+            );
+            onChange({ ...group, items });
+          })
+        : null}
+    </>
+  );
+}
 
   return (
 		<>

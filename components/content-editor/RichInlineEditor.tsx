@@ -115,7 +115,7 @@ export function RichInlineEditor({ value, onChange, readOnly = false, ariaLabel 
       <div
         data-l="EditorArea"
         ref={editorRef}
-        className="FieldControl min-h-[3rem]"
+        className="FieldControlTextarea"
         contentEditable={!readOnly}
         suppressContentEditableWarning
         role="textbox"

@@ -4,7 +4,6 @@ import { getFieldKey } from '@/components/admin-data/admin-api';
 import type { FieldDefinition } from '@/components/admin-data/admin-data-types';
 import type { FieldDraftValue, ImageFieldValue } from '@/components/admin-data/admin-api';
 import { ImageFieldInput } from '@/components/media-library/ImageFieldInput';
-import { SectionEditor } from '@/components/content-editor/SectionEditor';
 
 interface FieldRendererProps {
   siteId: string;
@@ -32,23 +31,6 @@ export function FieldRenderer({ siteId, field, value, sectionTemplates, onChange
     </div>
   );
 
-  if (field.type === 'sectionArray') {
-    const sectionValue =
-      typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
-        ? value
-        : JSON.stringify(value ?? '');
-
-    return (
-      <SectionEditor
-        label={field.label}
-        value={sectionValue}
-        sectionTemplates={sectionTemplates}
-        helpText={field.helpText}
-        onChange={(nextValue) => onChange(fieldKey, nextValue)}
-        readOnly={readOnly}
-      />
-    );
-  }
 
   if (field.type === 'image') {
     const imageValue = isImageFieldValue(value) ? value : { url: String(value ?? ''), alt: '' };

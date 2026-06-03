@@ -6,7 +6,6 @@ import { AdminPageHeader } from '@/components/admin-layout/AdminPageHeader';
 import { AdminApiNotice } from '@/components/admin-layout/AdminApiNotice';
 import { ComposableContentForm } from '@/components/content-editor/ComposableContentForm';
 import type { ComposableFieldDefinitions, ComposableFieldDirectories } from '@/components/content-editor/ComposableContentForm.model';
-import { ContentForm } from '@/components/content-editor/ContentForm';
 import { PreviewLink } from '@/components/admin-layout/PreviewLink';
 import { loadContent, resolveContentTypeDefinition, resolveSiteSummary } from '@/components/admin-data/AdminData';
 import { buildPreviewUrl } from '@/lib/preview';
@@ -182,28 +181,19 @@ export async function ContentEditView({
     <AdminLayout site={site} hideSidebar={isComposable ? true : hideSidebar}>
 
       <AdminApiNotice source={record.meta.source} error={record.meta.error} endpoint={record.meta.endpoint} />
-      {isComposable ? (
-        <ComposableContentForm
-          siteId={siteId}
-          contentType={definition}
-          record={record.data}
-          previewUrl={previewUrl}
-          fieldFormats={composableMetadata.fieldFormats}
-          fieldDirectories={composableMetadata.fieldDirectories}
-          fieldDefinitions={composableMetadata.fieldDefinitions}
-          authProvider={authProvider}
-          showLogout={isComposable || hideSidebar}
-          manualMarkdown={manualMarkdown}
-        />
-      ) : (
-        <ContentForm
-          siteId={siteId}
-          contentType={definition}
-          record={record.data}
-          mode="edit"
-          previewUrl={previewUrl}
-        />
-      )}
+      <ComposableContentForm
+        siteId={siteId}
+        contentType={definition}
+        record={record.data}
+        previewUrl={previewUrl}
+        fieldFormats={composableMetadata.fieldFormats}
+        fieldDirectories={composableMetadata.fieldDirectories}
+        fieldDefinitions={composableMetadata.fieldDefinitions}
+        authProvider={authProvider}
+        showLogout={isComposable || hideSidebar}
+        manualMarkdown={manualMarkdown}
+      />
+
     </AdminLayout>
   );
 }
