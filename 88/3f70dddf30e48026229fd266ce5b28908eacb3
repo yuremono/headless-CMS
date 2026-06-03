@@ -1,0 +1,30 @@
+components/content-editor/RichInlineEditor.tsx
+  h_53dad1e32c3c71 118
+components/content-editor/ComposableContentForm.model.test.ts
+  s_5563707d9a716c::t_b6da6f32d17d52 1-147
+scss/index.scss
+  h_53dad1e32c3c71 355-366,388,421
+components/content-editor/ContentEditView.tsx
+  h_53dad1e32c3c71 196
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "883f70dddf30e48026229fd266ce5b28908eacb3",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_5563707d9a716c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019e8c2e-87d7-7a53-a3b7-bb72f50a2e28",
+        "model": "gpt-5.4-mini"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
