@@ -1,5 +1,6 @@
+import { cache } from "react";
 import { prisma } from "@/lib/db/prisma";
-import { resolveSiteId } from "@/lib/db/site-resolver";
+import { resolveSite, resolveSiteId } from "@/lib/db/site-resolver";
 import { toAdminContentRecord, toAdminContentTypeDefinition } from "@/lib/content/mappers";
 import type { AdminContentRecord, DashboardSnapshot, SiteSummary } from "@/lib/content/types";
 
@@ -37,12 +38,7 @@ export async function listSiteSummaries(): Promise<SiteSummary[]> {
 }
 
 export async function getSiteSummary(siteIdOrSlug: string): Promise<SiteSummary | null> {
-  const siteId = await resolveSiteId(siteIdOrSlug);
-  if (!siteId) {
-    return null;
-  }
-
-  const site = await prisma.site.findUnique({ where: { id: siteId } });
+  const site = await resolveSite(siteIdOrSlug);
   if (!site) {
     return null;
   }
@@ -64,7 +60,7 @@ export async function listAdminContentTypes(siteIdOrSlug: string) {
   return models.map(toAdminContentTypeDefinition);
 }
 
-export async function listAdminContents(siteIdOrSlug: string, contentType: string): Promise<AdminContentRecord[]> {
+async function fetchAdminContents(siteIdOrSlug: string, contentType: string): Promise<AdminContentRecord[]> {
   const siteId = await resolveSiteId(siteIdOrSlug);
   if (!siteId) {
     return [];
@@ -96,6 +92,9 @@ export async function listAdminContents(siteIdOrSlug: string, contentType: strin
 
   return rows.map((row) => toAdminContentRecord(row, contentType, row.creator));
 }
+
+/** 同一リクエスト内でダッシュボード集計と個別取得が重複しないよう cache する */
+export const listAdminContents = cache(fetchAdminContents);
 
 export async function getAdminContent(
   siteIdOrSlug: string,

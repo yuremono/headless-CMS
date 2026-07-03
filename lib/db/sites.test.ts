@@ -24,10 +24,11 @@ vi.mock("./prisma", () => ({
 
 vi.mock("./site-resolver", () => ({
   resolveSiteId: vi.fn(),
+  resolveSite: vi.fn(),
 }));
 
 import { prisma } from "./prisma";
-import { resolveSiteId } from "./site-resolver";
+import { resolveSite, resolveSiteId } from "./site-resolver";
 import {
   getAdminContent,
   getDashboardSnapshot,
@@ -38,8 +39,8 @@ import {
 } from "./sites";
 
 const mockedResolveSiteId = vi.mocked(resolveSiteId);
+const mockedResolveSite = vi.mocked(resolveSite);
 const mockedSiteFindMany = vi.mocked(prisma.site.findMany);
-const mockedSiteFindUnique = vi.mocked(prisma.site.findUnique);
 const mockedContentCount = vi.mocked(prisma.content.count);
 const mockedAssetCount = vi.mocked(prisma.asset.count);
 const mockedModelFindMany = vi.mocked(prisma.contentModel.findMany);
@@ -139,14 +140,13 @@ describe("getSiteSummary", () => {
   });
 
   it("サイト未解決時は null", async () => {
-    mockedResolveSiteId.mockResolvedValue(null);
+    mockedResolveSite.mockResolvedValue(null);
 
     expect(await getSiteSummary("unknown")).toBeNull();
   });
 
   it("サイトが存在すればサマリーを返す", async () => {
-    mockedResolveSiteId.mockResolvedValue("site-1");
-    mockedSiteFindUnique.mockResolvedValue(makeSite());
+    mockedResolveSite.mockResolvedValue(makeSite());
 
     const summary = await getSiteSummary("main-site");
 
