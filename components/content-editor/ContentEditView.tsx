@@ -143,15 +143,24 @@ export async function ContentEditView({
   formLayout = 'schema',
   hideSidebar = false,
 }: ContentEditViewProps) {
-  const site = await resolveSiteSummary(siteId);
-  const definitionResult = await resolveContentTypeDefinition(siteId, contentType);
+  const isComposable = formLayout === 'composable';
+
+  const [site, definitionResult, record, access, composableMetadata, manualMarkdown] = await Promise.all([
+    resolveSiteSummary(siteId),
+    resolveContentTypeDefinition(siteId, contentType),
+    loadContent(siteId, contentType, id),
+    getAdminUiAccess(siteId),
+    isComposable
+      ? loadComposableMetadata(siteId, contentType)
+      : Promise.resolve({ fieldFormats: {}, fieldDirectories: undefined, fieldDefinitions: undefined }),
+    isComposable ? loadUserManualMarkdown() : Promise.resolve(''),
+  ]);
   const definition = definitionResult.data;
 
   if (!site || !definition) {
     notFound();
   }
 
-  const record = await loadContent(siteId, contentType, id);
   if (!record.data) {
     notFound();
   }
@@ -163,14 +172,8 @@ export async function ContentEditView({
     contentId: definition.kind === 'single' ? record.data.id : undefined,
     slug: definition.kind === 'collection' ? record.data.slug : undefined,
   });
-  const access = await getAdminUiAccess(siteId);
   const authProvider = getAuthProvider();
 
-  const isComposable = formLayout === 'composable';
-	const composableMetadata = isComposable
-		? await loadComposableMetadata(siteId, contentType)
-		: { fieldFormats: {}, fieldDirectories: undefined, fieldDefinitions: undefined };
-	const manualMarkdown = isComposable ? await loadUserManualMarkdown() : '';
 	const pageTitle = isComposable
 		? 'ページ名'
 		: access.readOnly

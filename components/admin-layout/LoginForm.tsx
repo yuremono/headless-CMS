@@ -20,6 +20,8 @@ interface LoginFormProps {
   authProvider?: CmsAuthProvider;
 }
 
+type SessionCheckState = 'checking' | 'redirecting' | 'ready';
+
 export function LoginForm({
   email,
   readonlyPassword,
@@ -32,7 +34,7 @@ export function LoginForm({
   const [formPassword, setFormPassword] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [initialSessionChecked, setInitialSessionChecked] = useState(false);
+  const [sessionCheck, setSessionCheck] = useState<SessionCheckState>('checking');
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -42,11 +44,12 @@ export function LoginForm({
     router.prefetch(redirectTo);
 
     if (hasPersistedAdminSession()) {
+      setSessionCheck('redirecting');
       router.replace(redirectTo);
       return;
     }
 
-    setInitialSessionChecked(true);
+    setSessionCheck('ready');
   }, [redirectTo, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -96,11 +99,21 @@ export function LoginForm({
     }
   }
 
+	if (sessionCheck !== 'ready') {
+    return (
+      <div className="LoginForm flex min-h-[320px] items-center justify-center border border-TC/20 bg-WH p-6 shadow-sm">
+        <span
+          className="block h-8 w-8 animate-spin rounded-full border-2 border-TC/20 border-t-TC"
+          role="status"
+          aria-label={sessionCheck === 'redirecting' ? 'ログイン済みのため画面を切り替えています' : '確認しています'}
+        />
+      </div>
+    );
+  }
+
 	return (
     <form
-      className={`LoginForm space-y-5 border border-TC/20 bg-WH p-6 shadow-sm transition-opacity duration-300 ${
-        initialSessionChecked ? 'opacity-100' : 'opacity-0'
-      }`}
+      className="LoginForm space-y-5 border border-TC/20 bg-WH p-6 shadow-sm"
       onSubmit={handleSubmit}
     >
       <div>
