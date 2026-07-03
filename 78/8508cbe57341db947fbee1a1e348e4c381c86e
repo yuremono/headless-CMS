@@ -1,0 +1,32 @@
+lib/db/site-resolver.ts
+  s_307f1656d06deb::t_2e04656824b847 1,5,13-14
+  s_307f1656d06deb::t_a3fc3a043c182f 15
+components/content-editor/ContentEditView.tsx
+  s_307f1656d06deb::t_b9cab8c3da3677 146-157
+components/admin-layout/LoginForm.tsx
+  s_307f1656d06deb::t_1983de3478515a 23-24,37,47,52
+  s_307f1656d06deb::t_cefa9eeda77041 102-113,116
+next-env.d.ts
+  s_307f1656d06deb::t_0381a22f75560a 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.9",
+  "base_commit_sha": "788508cbe57341db947fbee1a1e348e4c381c86e",
+  "prompts": {},
+  "humans": {
+    "h_53dad1e32c3c71": {
+      "author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_307f1656d06deb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0c935dba-f076-486e-adff-e831b5cb5702",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "yuremono <5alviaofficinali50@gmail.com>"
+    }
+  }
+}
